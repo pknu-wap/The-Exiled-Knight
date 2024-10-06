@@ -13,7 +13,7 @@ AEKPlayer::AEKPlayer()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	AEKPlayer::GetCapsuleComponent()->InitCapsuleSize(95, 34);
+	AEKPlayer::GetCapsuleComponent()->InitCapsuleSize(34.f, 95.f);
 
 	PlayerStatusComponent = CreateDefaultSubobject<UEKPlayerStatusComponent>(TEXT("PlayerStatusComponent"));
 
