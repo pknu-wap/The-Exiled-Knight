@@ -10,7 +10,6 @@
 
 AEKPlayer::AEKPlayer()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	AEKPlayer::GetCapsuleComponent()->InitCapsuleSize(34.f, 95.f);
@@ -37,7 +36,6 @@ AEKPlayer::AEKPlayer()
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
-
 }
 
 void AEKPlayer::BeginPlay()
