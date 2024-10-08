@@ -12,10 +12,10 @@
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
-	ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCDefaultFinder(TEXT("/Game/EKPlayer/Input/IMC_EK_Default"));
-	if (IMCDefaultFinder.Succeeded())
+	ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCGreatSwordFinder(TEXT("/Game/EKPlayer/Input/IMC_EK_GreatSword"));
+	if (IMCGreatSwordFinder.Succeeded())
 	{
-		IMCDefault = IMCDefaultFinder.Object;
+		IMCGreatSword = IMCGreatSwordFinder.Object;
 	}
 
 	ConstructorHelpers::FObjectFinder<UInputAction> IAMoveFinder(TEXT("/Game/EKPlayer/Input/IA_EK_Move"));
@@ -35,6 +35,18 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	{
 		IAJump = IAJumpFinder.Object;
 	}
+
+	ConstructorHelpers::FObjectFinder<UInputAction> IAGreatSwordAttackFinder(TEXT("/Game/EKPlayer/Input/GreatSword/IA_EK_GreatSword_Attack"));
+	if (IAGreatSwordAttackFinder.Succeeded())
+	{
+		IAGreatSwordAttack = IAGreatSwordAttackFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/GreatSwordAttack/EKPlayer_Combo1"));
+	if (GreatSwordAttackAnimFinder.Succeeded())
+	{
+		GreatSwordAttackAnim = GreatSwordAttackAnimFinder.Object;
+	}
 }
 
 void AEKPlayerController::BeginPlay()
@@ -45,7 +57,7 @@ void AEKPlayerController::BeginPlay()
 
 	if (auto* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
-		Subsystem->AddMappingContext(IMCDefault, 0);
+		Subsystem->AddMappingContext(IMCGreatSword, 0);
 	}
 }
 
@@ -97,4 +109,12 @@ void AEKPlayerController::LookAction(const FInputActionValue& InputValue)
 void AEKPlayerController::JumpAction(const FInputActionValue& InputValue)
 {
 	EKPlayer->Jump();
+}
+
+void AEKPlayerController::GreatSwordAttackAction(const FInputActionValue& InputValue)
+{
+	if (GreatSwordAttackAnim)
+	{
+		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim, 1.0);
+	}
 }
