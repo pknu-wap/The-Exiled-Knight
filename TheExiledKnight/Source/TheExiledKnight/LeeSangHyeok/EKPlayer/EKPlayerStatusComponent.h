@@ -24,6 +24,7 @@ public:
 	void GetPlayerFinalDamage();
 	void SetPlayerFinalDamage();
 
+	void LevelUp();
 	void LevelUpVitality();
 	void LevelUpMental();
 	void LevelUpEndurance();
@@ -59,10 +60,10 @@ protected:
 protected:
 	// Upgrade status
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Upgrade")
-	uint8 Level;
+	uint8 MaxLevel;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Upgrade")
-	uint8 MaxLevel;
+	uint8 Level;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Upgrade")
 	uint8 Vitality;
