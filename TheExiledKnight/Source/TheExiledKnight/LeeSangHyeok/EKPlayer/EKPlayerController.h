@@ -27,10 +27,11 @@ private:
 	void MoveAction(const FInputActionValue& InputValue);
 	void LookAction(const FInputActionValue& InputValue);
 	void JumpAction(const FInputActionValue& InputValue);
+	void GreatSwordAttackAction(const FInputActionValue& InputValue);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	TObjectPtr<UInputMappingContext> IMCDefault;
+	TObjectPtr<UInputMappingContext> IMCGreatSword;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> IAMove;
@@ -41,7 +42,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> IAJump;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<UInputAction> IAGreatSwordAttack;
+
 protected:
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TObjectPtr<class AEKPlayer> EKPlayer;
+
+protected:
+	UPROPERTY(VisibleAnywhere)
+	UAnimMontage* GreatSwordAttackAnim;
 };
