@@ -14,13 +14,13 @@ class AEKPlayer : public ACharacter
 public:
 	AEKPlayer();
 
-protected:
+public:
 	virtual void BeginPlay() override;
-
-public:	
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+public:
+	void OnDamaged();
+	void OnDead();
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
