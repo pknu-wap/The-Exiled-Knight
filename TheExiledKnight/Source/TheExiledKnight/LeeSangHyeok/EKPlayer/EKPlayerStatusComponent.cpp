@@ -25,4 +25,3 @@ void UEKPlayerStatusComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 	
 }
-

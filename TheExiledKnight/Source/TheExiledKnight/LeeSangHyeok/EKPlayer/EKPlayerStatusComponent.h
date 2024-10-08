@@ -14,11 +14,22 @@ class UEKPlayerStatusComponent : public UActorComponent
 public:	
 	UEKPlayerStatusComponent();
 
-protected:
+public:
 	virtual void BeginPlay() override;
-
-public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+public:
+	void GetPlayerDefaultDamage();
+	void SetPlayerDefaultDamage();
+	void GetPlayerFinalDamage();
+	void SetPlayerFinalDamage();
+
+	void LevelUpVitality();
+	void LevelUpMental();
+	void LevelUpEndurance();
+	void LevelUpStrength();
+	void LevelUpAbility();
+	void LevelUpIntelligence();
 
 protected:
 	// Basic status
@@ -40,8 +51,19 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Basic")
 	uint8 Stamina;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Basic")
+	uint8 DefaultDamage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Basic")
+	uint8 FinalDamage;
 protected:
 	// Upgrade status
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Upgrade")
+	uint8 Level;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Upgrade")
+	uint8 MaxLevel;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Upgrade")
 	uint8 Vitality;
 	
@@ -59,5 +81,4 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Upgrade")
 	uint8 Intelligence;
-
 };

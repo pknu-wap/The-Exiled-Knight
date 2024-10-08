@@ -7,6 +7,7 @@
 #include "InputMappingContext.h"
 #include "InputAction.h"
 #include "EKPlayer.h"
+#include "Kismet/KismetMathLibrary.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -70,11 +71,19 @@ void AEKPlayerController::MoveAction(const FInputActionValue& InputValue)
 {
 	FVector2D MovementVector = InputValue.Get<FVector2D>();
 
-	FVector ForwardDirection = EKPlayer->GetActorForwardVector() * MovementVector.X;
-	FVector RightDirection = EKPlayer->GetActorRightVector() * MovementVector.Y;
+	if (MovementVector.X != 0)
+	{
+		FRotator Rotator = GetControlRotation();
+		FVector Direction = UKismetMathLibrary::GetForwardVector(FRotator(0, Rotator.Yaw, 0));
+		GetPawn()->AddMovementInput(Direction, MovementVector.X);
+	}
 
-	EKPlayer->AddMovementInput(ForwardDirection, 1.f);
-	EKPlayer->AddMovementInput(RightDirection, 1.f);
+	if (MovementVector.Y != 0)
+	{
+		FRotator Rotator = GetControlRotation();
+		FVector Direction = UKismetMathLibrary::GetRightVector(FRotator(0, Rotator.Yaw, 0));
+		GetPawn()->AddMovementInput(Direction, MovementVector.Y);
+	}
 }
 
 void AEKPlayerController::LookAction(const FInputActionValue& InputValue)
