@@ -8,6 +8,7 @@
 #include "InputAction.h"
 #include "EKPlayer.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/PawnMovementComponent.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -78,24 +79,42 @@ void AEKPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
+	if (EKPlayer->GetPlayerCurrentState() == EEKPlayerBehaviorState::Jump && !EKPlayer->GetMovementComponent()->IsFalling())
+	{
+		EKPlayer->SetPlayerCurrentState(EEKPlayerBehaviorState::Idle);
+	}
 }
 
 void AEKPlayerController::MoveAction(const FInputActionValue& InputValue)
 {
-	FVector2D MovementVector = InputValue.Get<FVector2D>();
-
-	if (MovementVector.X != 0)
+	if (EKPlayer->GetPlayerCurrentState() == EEKPlayerBehaviorState::Attack)
 	{
-		FRotator Rotator = GetControlRotation();
-		FVector Direction = UKismetMathLibrary::GetForwardVector(FRotator(0, Rotator.Yaw, 0));
-		GetPawn()->AddMovementInput(Direction, MovementVector.X);
+		return;
 	}
 
-	if (MovementVector.Y != 0)
+	FVector2D MovementVector = InputValue.Get<FVector2D>();
+
+	if (MovementVector.X == 0 && MovementVector.Y == 0)
 	{
+		EKPlayer->SetPlayerCurrentState(EEKPlayerBehaviorState::Move);
+
 		FRotator Rotator = GetControlRotation();
-		FVector Direction = UKismetMathLibrary::GetRightVector(FRotator(0, Rotator.Yaw, 0));
-		GetPawn()->AddMovementInput(Direction, MovementVector.Y);
+
+		if (MovementVector.X != 0)
+		{
+			FVector Direction = UKismetMathLibrary::GetForwardVector(FRotator(0, Rotator.Yaw, 0));
+			GetPawn()->AddMovementInput(Direction, MovementVector.X);
+		}
+
+		if (MovementVector.Y != 0)
+		{
+			FVector Direction = UKismetMathLibrary::GetRightVector(FRotator(0, Rotator.Yaw, 0));
+			GetPawn()->AddMovementInput(Direction, MovementVector.Y);
+		}
+	}
+	else
+	{
+		EKPlayer->SetPlayerCurrentState(EEKPlayerBehaviorState::Idle);
 	}
 }
 
@@ -109,11 +128,25 @@ void AEKPlayerController::LookAction(const FInputActionValue& InputValue)
 
 void AEKPlayerController::JumpAction(const FInputActionValue& InputValue)
 {
+	if (EKPlayer->GetPlayerCurrentState() == EEKPlayerBehaviorState::Attack)
+	{
+		return;
+	}
+
+	EKPlayer->SetPlayerCurrentState(EEKPlayerBehaviorState::Jump);
+
 	EKPlayer->Jump();
 }
 
 void AEKPlayerController::GreatSwordAttackAction(const FInputActionValue& InputValue)
 {
+	if (EKPlayer->GetPlayerCurrentState() != EEKPlayerBehaviorState::Idle)
+	{
+		return;
+	}
+
+	EKPlayer->SetPlayerCurrentState(EEKPlayerBehaviorState::Attack);
+
 	if (GreatSwordAttackAnim)
 	{
 		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim);
