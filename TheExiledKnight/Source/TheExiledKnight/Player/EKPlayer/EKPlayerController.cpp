@@ -70,6 +70,7 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAMove, ETriggerEvent::Triggered, this, &ThisClass::MoveAction);
 		EnhancedInputComponent->BindAction(IALook, ETriggerEvent::Triggered, this, &ThisClass::LookAction);
 		EnhancedInputComponent->BindAction(IAJump, ETriggerEvent::Triggered, this, &ThisClass::JumpAction);
+		EnhancedInputComponent->BindAction(IAGreatSwordAttack, ETriggerEvent::Triggered, this, &ThisClass::GreatSwordAttackAction);
 	}
 }
 
@@ -115,6 +116,6 @@ void AEKPlayerController::GreatSwordAttackAction(const FInputActionValue& InputV
 {
 	if (GreatSwordAttackAnim)
 	{
-		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim, 1.0);
+		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim);
 	}
 }

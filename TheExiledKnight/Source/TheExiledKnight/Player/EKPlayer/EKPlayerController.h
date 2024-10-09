@@ -51,5 +51,5 @@ protected:
 
 protected:
 	UPROPERTY(VisibleAnywhere)
-	UAnimMontage* GreatSwordAttackAnim;
+	TObjectPtr<class UAnimMontage> GreatSwordAttackAnim;
 };
