@@ -7,6 +7,8 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Engine/SkeletalMesh.h"
+#include "Engine/StaticMesh.h"
+#include "../Weapon/GreatSword.h"
 
 AEKPlayer::AEKPlayer()
 {
@@ -43,16 +45,50 @@ AEKPlayer::AEKPlayer()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
+
+	ConstructorHelpers::FClassFinder<AGreatSword> GreatSwordClassFinder(TEXT("/Game/EKPlayer/Blueprint/Weapon/BP_GreatSword.BP_GreatSword_C"));
+	if (GreatSwordClassFinder.Succeeded())
+	{
+		GreatSwordClass = GreatSwordClassFinder.Class;
+	}
 }
 
 void AEKPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (GreatSwordClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		CurrentWeapon = GetWorld()->SpawnActor<AGreatSword>(GreatSwordClass, SpawnParams);
+		AttachGreatSwordToSocket(CurrentWeapon);
+	}
 }
 
 void AEKPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+EEKPlayerBehaviorState AEKPlayer::GetPlayerCurrentState()
+{
+	return PlayerCurrentState;
+}
+
+void AEKPlayer::SetPlayerCurrentState(EEKPlayerBehaviorState Change)
+{
+	PlayerCurrentState = Change;
+}
+
+void AEKPlayer::AttachGreatSwordToSocket(TObjectPtr<AGreatSword> Weapon)
+{
+	if (Weapon)
+	{
+		USkeletalMeshComponent* MeshComp = GetMesh();
+		if (MeshComp)
+		{
+			Weapon->AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("weapon_r_socket"));
+		}
+	}
 }
