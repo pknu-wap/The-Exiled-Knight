@@ -18,6 +18,9 @@ public:
 	FGameplayTag UI_Layer_GameMenu;		// Inventory, Quest . . .
 	FGameplayTag UI_Layer_Menu;			// Option . . .
 
+	FGameplayTag UI_Widget_Inventory;	// Inventory
+	FGameplayTag UI_Widget_Equipment;	// Equipment
+
 private:
 	static FEKGameplayTags GameplayTags;
 };
