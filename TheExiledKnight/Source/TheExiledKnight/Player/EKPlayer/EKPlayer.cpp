@@ -24,7 +24,7 @@ AEKPlayer::AEKPlayer()
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
-	SpringArm->TargetArmLength = 500.0f;
+	SpringArm->TargetArmLength = 400.0f;
 	SpringArm->bUsePawnControlRotation = true;
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -34,7 +34,7 @@ AEKPlayer::AEKPlayer()
 	GetCharacterMovement()->GravityScale = 3.f;
 	GetCharacterMovement()->JumpZVelocity = 800.f;
 	GetCharacterMovement()->AirControl = 0.2f;
-	GetCharacterMovement()->MaxWalkSpeed = 600.f;
+	GetCharacterMovement()->MaxWalkSpeed = 300.f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
@@ -61,7 +61,7 @@ void AEKPlayer::BeginPlay()
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AGreatSword>(GreatSwordClass, SpawnParams);
-		AttachGreatSwordToSocket(CurrentWeapon);
+		AttachGreatSwordToEquipSocket(CurrentWeapon);
 	}
 }
 
@@ -81,14 +81,31 @@ void AEKPlayer::SetPlayerCurrentState(EEKPlayerBehaviorState Change)
 	PlayerCurrentState = Change;
 }
 
-void AEKPlayer::AttachGreatSwordToSocket(TObjectPtr<AGreatSword> Weapon)
+TObjectPtr<AGreatSword> AEKPlayer::GetCurrentWeapon()
+{
+	return CurrentWeapon;
+}
+
+void AEKPlayer::AttachGreatSwordToEquipSocket(TObjectPtr<AGreatSword> Weapon)
 {
 	if (Weapon)
 	{
 		USkeletalMeshComponent* MeshComp = GetMesh();
 		if (MeshComp)
 		{
-			Weapon->AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("weapon_r_socket"));
+			Weapon->AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("weapon_equip_socket"));
+		}
+	}
+}
+
+void AEKPlayer::AttachGreatSwordToHandSocket(TObjectPtr<class AGreatSword> Weapon)
+{
+	if (Weapon)
+	{
+		USkeletalMeshComponent* MeshComp = GetMesh();
+		if (MeshComp)
+		{
+			Weapon->AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("weapon_right_hand_socket"));
 		}
 	}
 }
