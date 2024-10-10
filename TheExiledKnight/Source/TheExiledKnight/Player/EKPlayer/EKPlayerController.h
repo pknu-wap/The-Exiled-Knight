@@ -27,11 +27,14 @@ private:
 	void MoveAction(const FInputActionValue& InputValue);
 	void LookAction(const FInputActionValue& InputValue);
 	void JumpAction(const FInputActionValue& InputValue);
+	void WeaponChangeAction(const FInputActionValue& InputValue);
+	void SprintAndDodgeAction(const FInputActionValue& InputValue);
+	void SprintAndDodgeRelease(const FInputActionValue& InputValue);
 	void GreatSwordAttackAction(const FInputActionValue& InputValue);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	TObjectPtr<UInputMappingContext> IMCGreatSword;
+	TObjectPtr<UInputMappingContext> IMCDefault;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> IAMove;
@@ -43,6 +46,12 @@ protected:
 	TObjectPtr<UInputAction> IAJump;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<UInputAction> IAWeaponChange;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<UInputAction> IASprintAndDodge;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> IAGreatSwordAttack;
 
 protected:
@@ -52,4 +61,19 @@ protected:
 protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UAnimMontage> GreatSwordAttackAnim;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<class UAnimMontage> GreatSwordEquipAnim;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<class UAnimMontage> GreatSwordUnEquipAnim;
+
+public:
+	bool bIsEquipGreatSword = false;
+
+	UPROPERTY()
+	float FollowTime;
+
+	UPROPERTY()
+	float ShortPressThreshold = 0.3f;
 };
