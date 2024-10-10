@@ -36,8 +36,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UnRegisterLayer(FGameplayTag LayerTag);
 
-	UFUNCTION()
-	void RemoveWidget(FGameplayTag WidgetTag);
+	UFUNCTION(BlueprintCallable)
+	void RegisterWidget(FGameplayTag WidgetTag, UUserWidget* Widget);
+
+	UFUNCTION(BlueprintCallable)
+	void UnRegisterWidget(FGameplayTag WidgetTag);
+
+	UFUNCTION(BlueprintCallable)
+	void SetLayerVisibility(FGameplayTag LayerTag, ESlateVisibility Visibility);
 
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetVisibility(FGameplayTag WidgetTag, ESlateVisibility Visibility);
