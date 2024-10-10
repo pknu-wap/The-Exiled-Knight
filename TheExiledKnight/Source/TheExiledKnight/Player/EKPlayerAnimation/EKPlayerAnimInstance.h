@@ -10,7 +10,7 @@ UCLASS()
 class UEKPlayerAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
-	
+
 public:
 	UEKPlayerAnimInstance(const FObjectInitializer& ObjectInitializer);
 
@@ -21,6 +21,10 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")
 	TObjectPtr<class AEKPlayer> EKPlayer;
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class AEKPlayerController> EKPlayerController;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")
 	TObjectPtr<class UCharacterMovementComponent> EKMovementComponent;
