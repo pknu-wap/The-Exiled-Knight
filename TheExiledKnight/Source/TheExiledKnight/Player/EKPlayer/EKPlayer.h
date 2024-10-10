@@ -23,6 +23,8 @@ public:
 	EEKPlayerBehaviorState GetPlayerCurrentState();
 	void SetPlayerCurrentState(EEKPlayerBehaviorState Change);
 
+	TObjectPtr<class AGreatSword> GetCurrentWeapon();
+
 	void OnDamaged();
 	void OnDead();
 
@@ -40,7 +42,8 @@ protected:
 	TObjectPtr<class UCameraComponent> Camera;
 
 public:
-	void AttachGreatSwordToSocket(TObjectPtr<class AGreatSword> Weapon);
+	void AttachGreatSwordToEquipSocket(TObjectPtr<class AGreatSword> Weapon);
+	void AttachGreatSwordToHandSocket(TObjectPtr<class AGreatSword> Weapon);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class AGreatSword> GreatSwordClass;
