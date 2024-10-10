@@ -17,7 +17,7 @@ void UUISubsystem::Deinitialize()
 
 void UUISubsystem::RegisterLayer(FGameplayTag LayerTag, UUserWidget* Widget)
 {
-	UUserWidget* layer = *(LayerMap.Find(LayerTag));
+	UUserWidget** layer = LayerMap.Find(LayerTag);
 	if (layer) return;
 
 	if(Widget)
@@ -26,28 +26,45 @@ void UUISubsystem::RegisterLayer(FGameplayTag LayerTag, UUserWidget* Widget)
 
 void UUISubsystem::UnRegisterLayer(FGameplayTag LayerTag)
 {
-	UUserWidget* layer = *(LayerMap.Find(LayerTag));
+	UUserWidget** layer = LayerMap.Find(LayerTag);
 	if (!layer) return;
 
-	layer->RemoveFromParent();
+	(*layer)->RemoveFromParent();
 	LayerMap.Remove(LayerTag);
 }
 
-void UUISubsystem::RemoveWidget(FGameplayTag WidgetTag)
+void UUISubsystem::RegisterWidget(FGameplayTag WidgetTag, UUserWidget* Widget)
 {
-	UUserWidget* widget = *(WidgetMap.Find(WidgetTag));
+	UUserWidget** widget = WidgetMap.Find(WidgetTag);
+	if (widget) return;
+
+	WidgetMap.Add(WidgetTag, Widget);
+}
+
+void UUISubsystem::UnRegisterWidget(FGameplayTag WidgetTag)
+{
+	UUserWidget** widget = WidgetMap.Find(WidgetTag);
 	if (widget)
 	{
-		widget->RemoveFromParent();
+		(*widget)->RemoveFromParent();
 		WidgetMap.Remove(WidgetTag);
+	}
+}
+
+void UUISubsystem::SetLayerVisibility(FGameplayTag LayerTag, ESlateVisibility Visibility)
+{
+	UUserWidget** layer = WidgetMap.Find(LayerTag);
+	if (layer)
+	{
+		(*layer)->SetVisibility(Visibility);
 	}
 }
 
 void UUISubsystem::SetWidgetVisibility(FGameplayTag WidgetTag, ESlateVisibility Visibility)
 {
-	UUserWidget* widget = *(WidgetMap.Find(WidgetTag));
+	UUserWidget** widget = WidgetMap.Find(WidgetTag);
 	if (widget)
 	{
-		widget->SetVisibility(Visibility);
+		(*widget)->SetVisibility(Visibility);
 	}
 }
