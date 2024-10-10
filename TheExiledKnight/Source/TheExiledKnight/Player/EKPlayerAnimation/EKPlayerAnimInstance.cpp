@@ -4,6 +4,7 @@
 #include "EKPlayerAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../EKPlayer/EKPlayer.h"
+#include "../EKPlayer/EKPlayerController.h"
 
 UEKPlayerAnimInstance::UEKPlayerAnimInstance(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -16,8 +17,10 @@ void UEKPlayerAnimInstance::NativeInitializeAnimation()
 	Super::NativeInitializeAnimation();
 
 	EKPlayer = Cast<AEKPlayer>(GetOwningActor());
+
 	if (EKPlayer)
 	{
+		EKPlayerController = Cast<AEKPlayerController>(EKPlayer->GetController());
 		EKMovementComponent = Cast<UCharacterMovementComponent>(EKPlayer->GetCharacterMovement());
 	}
 }
