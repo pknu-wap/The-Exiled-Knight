@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
-#include "UnEquipEnd.generated.h"
+#include "EquipSpear.generated.h"
 
 UCLASS()
-class THEEXILEDKNIGHT_API UUnEquipEnd : public UAnimNotify
+class THEEXILEDKNIGHT_API UEquipSpear : public UAnimNotify
 {
 	GENERATED_BODY()
 	
@@ -17,4 +17,7 @@ public:
 protected:
 	UPROPERTY()
 	TObjectPtr<class AEKPlayer> EKPlayer;
+
+	UPROPERTY()
+	TObjectPtr<class AEKPlayerController> EKPlayerController;
 };

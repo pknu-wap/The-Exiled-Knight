@@ -82,8 +82,16 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UAnimMontage> SpearAttackAnim;
 
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<class UAnimMontage> SpearEquipAnim;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<class UAnimMontage> SpearUnEquipAnim;
+
 public:
 	bool bIsEquipGreatSword = false;
+
+	bool bIsEquipSpear = false;
 
 	UPROPERTY()
 	float FollowTime;

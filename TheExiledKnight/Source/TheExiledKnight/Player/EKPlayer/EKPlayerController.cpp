@@ -11,6 +11,7 @@
 #include "GameFramework/PawnMovementComponent.h"
 #include "../Weapon/GreatSword.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "../Enum/EKPlayerEquipWeapon.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -69,7 +70,7 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		IASpearAttack = IASpearAttackFinder.Object;
 	}
 
-	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/GreatSwordAttack/EKPlayer_Combo1"));
+	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/Attack/EKPlayer_Combo1"));
 	if (GreatSwordAttackAnimFinder.Succeeded())
 	{
 		GreatSwordAttackAnim = GreatSwordAttackAnimFinder.Object;
@@ -91,6 +92,18 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	if (SpearAttackAnimFinder.Succeeded())
 	{
 		SpearAttackAnim = SpearAttackAnimFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> SpearEquipAnimFinder(TEXT("/Game/EKPlayer/Animation/Spear/Equip/EKPlayer_Equip_Spear"));
+	if (SpearEquipAnimFinder.Succeeded())
+	{
+		SpearEquipAnim = SpearEquipAnimFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> SpearUnEquipAnimFinder(TEXT("/Game/EKPlayer/Animation/Spear/Equip/EKPlayer_UnEquip_Spear"));
+	if (SpearUnEquipAnimFinder.Succeeded())
+	{
+		SpearUnEquipAnim = SpearUnEquipAnimFinder.Object;
 	}
 }
 
@@ -126,6 +139,8 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Canceled, this, &ThisClass::SprintAndDodgeRelease);
 
 		EnhancedInputComponent->BindAction(IAGreatSwordAttack, ETriggerEvent::Triggered, this, &ThisClass::GreatSwordAttackAction);
+
+		EnhancedInputComponent->BindAction(IASpearAttack, ETriggerEvent::Triggered, this, &ThisClass::SpearAttackAction);
 	}
 }
 
@@ -197,13 +212,27 @@ void AEKPlayerController::WeaponChangeAction(const FInputActionValue& InputValue
 	if (!bIsEquipGreatSword && GreatSwordEquipAnim)
 	{
 		EKPlayer->PlayAnimMontage(GreatSwordEquipAnim);
-		bIsEquipGreatSword = true;
 	}
 	else if (bIsEquipGreatSword && GreatSwordUnEquipAnim)
 	{
 		EKPlayer->PlayAnimMontage(GreatSwordUnEquipAnim);
-		bIsEquipGreatSword = false;
 	}
+
+	/*if (EKPlayer->GetPlayerCurrentWeapon() == EEKPlayerEquipWeapon::None)
+	{
+		EKPlayer->SetPlayerCurrentWeapon(EEKPlayerEquipWeapon::GreatSword);
+
+	}
+	else if (EKPlayer->GetPlayerCurrentWeapon() == EEKPlayerEquipWeapon::GreatSword)
+	{
+		EKPlayer->SetPlayerCurrentWeapon(EEKPlayerEquipWeapon::Spear);
+
+	}
+	else if (EKPlayer->GetPlayerCurrentWeapon() == EEKPlayerEquipWeapon::Spear)
+	{
+		EKPlayer->SetPlayerCurrentWeapon(EEKPlayerEquipWeapon::None);
+
+	}*/
 }
 
 void AEKPlayerController::SprintAndDodgeAction(const FInputActionValue& InputValue)
@@ -244,5 +273,13 @@ void AEKPlayerController::GreatSwordAttackAction(const FInputActionValue& InputV
 
 void AEKPlayerController::SpearAttackAction(const FInputActionValue& InputValue)
 {
+	if (!bIsEquipSpear)
+	{
+		return;
+	}
 
+	if (GreatSwordAttackAnim)
+	{
+		EKPlayer->PlayAnimMontage(SpearAttackAnim);
+	}
 }
