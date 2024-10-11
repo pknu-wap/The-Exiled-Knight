@@ -9,6 +9,7 @@
 #include "Engine/SkeletalMesh.h"
 #include "Engine/StaticMesh.h"
 #include "../Weapon/GreatSword.h"
+#include "Animation/AnimInstance.h"
 
 AEKPlayer::AEKPlayer()
 {
@@ -45,6 +46,20 @@ AEKPlayer::AEKPlayer()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
+
+	ConstructorHelpers::FClassFinder<UAnimInstance> ABPGreatSwordFinder(TEXT("/Game/EKPlayer/Blueprint/AnimationBlueprint/ABP_GreatSword.ABP_GreatSword_C"));
+	if (ABPGreatSwordFinder.Succeeded())
+	{
+		ABPGreatSword = ABPGreatSwordFinder.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UAnimInstance> ABPSpearFinder(TEXT("/Game/EKPlayer/Blueprint/AnimationBlueprint/ABP_Spear.ABP_Spear_C"));
+	if (ABPSpearFinder.Succeeded())
+	{
+		ABPSpear = ABPSpearFinder.Class;
+	}
+
+	GetMesh()->AnimClass = ABPGreatSword;
 
 	ConstructorHelpers::FClassFinder<AGreatSword> GreatSwordClassFinder(TEXT("/Game/EKPlayer/Blueprint/Weapon/BP_GreatSword.BP_GreatSword_C"));
 	if (GreatSwordClassFinder.Succeeded())
