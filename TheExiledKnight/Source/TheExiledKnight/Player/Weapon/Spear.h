@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "GreatSword.generated.h"
+#include "Spear.generated.h"
 
 UCLASS()
-class THEEXILEDKNIGHT_API AGreatSword : public AActor
+class THEEXILEDKNIGHT_API ASpear : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	AGreatSword();
+	ASpear();
 
 protected:
 	virtual void BeginPlay() override;
@@ -22,8 +22,8 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TObjectPtr<class UStaticMeshComponent> GreatSword;
+	TObjectPtr<class USkeletalMeshComponent> Spear;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TObjectPtr<class UStaticMesh> GreatSwordMesh;
+	TObjectPtr<class USkeletalMesh> SpearMesh;
 };
