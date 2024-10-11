@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "../EKPlayerBehaviorState.h"
+#include "../Enum/EKPlayerBehaviorState.h"
+#include "../Enum/EKPlayerEquipWeapon.h"
 #include "EKPlayer.generated.h"
 
 UCLASS()
@@ -23,7 +24,10 @@ public:
 	EEKPlayerBehaviorState GetPlayerCurrentState();
 	void SetPlayerCurrentState(EEKPlayerBehaviorState Change);
 
-	TObjectPtr<class AGreatSword> GetCurrentWeapon();
+	EEKPlayerEquipWeapon GetPlayerCurrentWeapon();
+	void SetPlayerCurrentWeapon(EEKPlayerEquipWeapon Change);
+
+	TObjectPtr<class AEKPlayerWeapon> GetCurrentWeapon();
 
 	void OnDamaged();
 	void OnDead();
@@ -31,6 +35,11 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	EEKPlayerBehaviorState PlayerCurrentState = EEKPlayerBehaviorState::Idle;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	EEKPlayerEquipWeapon PlayerCurrentWeapon = EEKPlayerEquipWeapon::None;
+
+protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UEKPlayerStatusComponent> PlayerStatusComponent;
@@ -42,15 +51,18 @@ protected:
 	TObjectPtr<class UCameraComponent> Camera;
 
 public:
-	void AttachGreatSwordToEquipSocket(TObjectPtr<class AGreatSword> Weapon);
-	void AttachGreatSwordToHandSocket(TObjectPtr<class AGreatSword> Weapon);
+	void AttachGreatSwordToEquipSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
+	void AttachGreatSwordToHandSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class AGreatSword> GreatSwordClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TSubclassOf<class ASpear> SpearClass;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TObjectPtr<class AGreatSword> CurrentWeapon;
+	TObjectPtr<class AEKPlayerWeapon> CurrentWeapon;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")

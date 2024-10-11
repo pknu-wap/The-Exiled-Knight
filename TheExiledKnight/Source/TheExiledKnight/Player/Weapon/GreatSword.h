@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "EKPlayerWeapon.h"
 #include "GreatSword.generated.h"
 
 UCLASS()
-class THEEXILEDKNIGHT_API AGreatSword : public AActor
+class THEEXILEDKNIGHT_API AGreatSword : public AEKPlayerWeapon
 {
 	GENERATED_BODY()
 	

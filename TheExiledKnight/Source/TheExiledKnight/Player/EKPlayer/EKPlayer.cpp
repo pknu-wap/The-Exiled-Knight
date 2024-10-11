@@ -9,6 +9,7 @@
 #include "Engine/SkeletalMesh.h"
 #include "Engine/StaticMesh.h"
 #include "../Weapon/GreatSword.h"
+#include "../Weapon/Spear.h"
 #include "Animation/AnimInstance.h"
 
 AEKPlayer::AEKPlayer()
@@ -66,16 +67,30 @@ AEKPlayer::AEKPlayer()
 	{
 		GreatSwordClass = GreatSwordClassFinder.Class;
 	}
+
+	ConstructorHelpers::FClassFinder<ASpear> SpearClassFinder(TEXT("/Game/EKPlayer/Blueprint/Weapon/BP_Spear.BP_Spear_C"));
+	if (SpearClassFinder.Succeeded())
+	{
+		SpearClass = SpearClassFinder.Class;
+	}
 }
 
 void AEKPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (GreatSwordClass)
+	// test GreatSword
+	/*if (GreatSwordClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AGreatSword>(GreatSwordClass, SpawnParams);
+		AttachGreatSwordToEquipSocket(CurrentWeapon);
+	}*/
+	
+	// test Spear
+	if (SpearClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		CurrentWeapon = GetWorld()->SpawnActor<ASpear>(SpearClass, SpawnParams);
 		AttachGreatSwordToEquipSocket(CurrentWeapon);
 	}
 }
@@ -96,12 +111,22 @@ void AEKPlayer::SetPlayerCurrentState(EEKPlayerBehaviorState Change)
 	PlayerCurrentState = Change;
 }
 
-TObjectPtr<AGreatSword> AEKPlayer::GetCurrentWeapon()
+EEKPlayerEquipWeapon AEKPlayer::GetPlayerCurrentWeapon()
+{
+	return PlayerCurrentWeapon;
+}
+
+void AEKPlayer::SetPlayerCurrentWeapon(EEKPlayerEquipWeapon Change)
+{
+	PlayerCurrentWeapon = Change;
+}
+
+TObjectPtr<AEKPlayerWeapon> AEKPlayer::GetCurrentWeapon()
 {
 	return CurrentWeapon;
 }
 
-void AEKPlayer::AttachGreatSwordToEquipSocket(TObjectPtr<AGreatSword> Weapon)
+void AEKPlayer::AttachGreatSwordToEquipSocket(TObjectPtr<AEKPlayerWeapon> Weapon)
 {
 	if (Weapon)
 	{
@@ -113,7 +138,7 @@ void AEKPlayer::AttachGreatSwordToEquipSocket(TObjectPtr<AGreatSword> Weapon)
 	}
 }
 
-void AEKPlayer::AttachGreatSwordToHandSocket(TObjectPtr<class AGreatSword> Weapon)
+void AEKPlayer::AttachGreatSwordToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon)
 {
 	if (Weapon)
 	{
