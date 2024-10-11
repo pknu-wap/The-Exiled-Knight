@@ -23,13 +23,18 @@ void FEKGameplayTags::InitializeNativeGameplayTags()
 		FString("Option . . .")
 	);
 
-	GameplayTags.UI_Widget_Inventory = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("UI.Widget.Inventory"),
+	GameplayTags.UI_Widget_GameMenu_GameMenu = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("UI.Widget.GameMenu.GameMenu"),
+		FString("GameMenu")
+	);
+
+	GameplayTags.UI_Widget_GameMenu_Inventory = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("UI.Widget.GameMenu.Inventory"),
 		FString("Inventory")
 	);
 
-	GameplayTags.UI_Widget_Equipment = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("UI.Widget.Equipment"),
+	GameplayTags.UI_Widget_GameMenu_Equipment = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("UI.Widget.GameMenu.Equipment"),
 		FString("Equipment")
 	);
 	
