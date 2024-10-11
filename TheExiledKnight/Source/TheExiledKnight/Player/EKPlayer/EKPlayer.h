@@ -49,6 +49,13 @@ public:
 	TSubclassOf<class AGreatSword> GreatSwordClass;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TObjectPtr<class AGreatSword> CurrentWeapon;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
+	TSubclassOf<class UAnimInstance> ABPGreatSword;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
+	TSubclassOf<class UAnimInstance> ABPSpear;
 };
