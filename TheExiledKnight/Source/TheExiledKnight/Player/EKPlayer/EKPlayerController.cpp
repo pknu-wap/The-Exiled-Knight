@@ -18,7 +18,13 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCGreatSwordFinder(TEXT("/Game/EKPlayer/Input/GreatSword/IMC_EK_GreatSword"));
 	if (IMCGreatSwordFinder.Succeeded())
 	{
-		IMCDefault = IMCGreatSwordFinder.Object;
+		IMCGreatSword = IMCGreatSwordFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCSpearFinder(TEXT("/Game/EKPlayer/Input/Spear/IMC_EK_Spear"));
+	if (IMCSpearFinder.Succeeded())
+	{
+		IMCSpear = IMCSpearFinder.Object;
 	}
 
 	ConstructorHelpers::FObjectFinder<UInputAction> IAMoveFinder(TEXT("/Game/EKPlayer/Input/IA_EK_Move"));
@@ -57,6 +63,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		IAGreatSwordAttack = IAGreatSwordAttackFinder.Object;
 	}
 
+	ConstructorHelpers::FObjectFinder<UInputAction> IASpearAttackFinder(TEXT("/Game/EKPlayer/Input/Spear/IA_EK_Spear_Attack"));
+	if (IASpearAttackFinder.Succeeded())
+	{
+		IASpearAttack = IASpearAttackFinder.Object;
+	}
+
 	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/GreatSwordAttack/EKPlayer_Combo1"));
 	if (GreatSwordAttackAnimFinder.Succeeded())
 	{
@@ -74,6 +86,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	{
 		GreatSwordUnEquipAnim = GreatSwordUnEquipAnimFinder.Object;
 	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> SpearAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/Spear/Attack/EKPlayer_Attack_Spear_Montage"));
+	if (SpearAttackAnimFinder.Succeeded())
+	{
+		SpearAttackAnim = SpearAttackAnimFinder.Object;
+	}
 }
 
 void AEKPlayerController::BeginPlay()
@@ -81,6 +99,8 @@ void AEKPlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	EKPlayer = Cast<AEKPlayer>(GetPawn());
+
+	IMCDefault = IMCGreatSword;
 
 	if (auto* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
@@ -220,4 +240,9 @@ void AEKPlayerController::GreatSwordAttackAction(const FInputActionValue& InputV
 	{
 		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim);
 	}
+}
+
+void AEKPlayerController::SpearAttackAction(const FInputActionValue& InputValue)
+{
+
 }
