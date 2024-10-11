@@ -31,10 +31,17 @@ private:
 	void SprintAndDodgeAction(const FInputActionValue& InputValue);
 	void SprintAndDodgeRelease(const FInputActionValue& InputValue);
 	void GreatSwordAttackAction(const FInputActionValue& InputValue);
+	void SpearAttackAction(const FInputActionValue& InputValue);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputMappingContext> IMCDefault;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<UInputMappingContext> IMCGreatSword;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<UInputMappingContext> IMCSpear;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> IAMove;
@@ -54,6 +61,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> IAGreatSwordAttack;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<UInputAction> IASpearAttack;
+
 protected:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TObjectPtr<class AEKPlayer> EKPlayer;
@@ -67,6 +77,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UAnimMontage> GreatSwordUnEquipAnim;
+
+protected:
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<class UAnimMontage> SpearAttackAnim;
 
 public:
 	bool bIsEquipGreatSword = false;
