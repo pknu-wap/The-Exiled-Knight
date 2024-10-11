@@ -48,6 +48,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetVisibility(FGameplayTag WidgetTag, ESlateVisibility Visibility);
 
+	UFUNCTION(BlueprintCallable)
+	UUserWidget* GetLayer(FGameplayTag LayerTag);
+
+	UFUNCTION(BlueprintCallable)
+	UUserWidget* GetWidget(FGameplayTag WidgetTag);
+
+
 private:
 	// Layers Map
 	TMap<FGameplayTag, UUserWidget*> LayerMap;
