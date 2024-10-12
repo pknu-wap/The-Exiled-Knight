@@ -32,6 +32,7 @@ private:
 	void SprintAndDodgeRelease(const FInputActionValue& InputValue);
 	void GreatSwordAttackAction(const FInputActionValue& InputValue);
 	void SpearAttackAction(const FInputActionValue& InputValue);
+	void StaffAttackAction(const FInputActionValue& InputValue);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
@@ -42,6 +43,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputMappingContext> IMCSpear;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<UInputMappingContext> IMCStaff;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> IAMove;
@@ -63,6 +67,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> IASpearAttack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<UInputAction> IAStaffAttack;
 
 protected:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
@@ -88,10 +95,22 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UAnimMontage> SpearUnEquipAnim;
 
+protected:
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<class UAnimMontage> StaffAttackAnim;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<class UAnimMontage> StaffEquipAnim;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<class UAnimMontage> StaffUnEquipAnim;
+
 public:
 	bool bIsEquipGreatSword = false;
 
 	bool bIsEquipSpear = false;
+
+	bool bIsEquipStaff = false;
 
 	UPROPERTY()
 	float FollowTime;
