@@ -10,6 +10,7 @@
 #include "Engine/StaticMesh.h"
 #include "../Weapon/GreatSword.h"
 #include "../Weapon/Spear.h"
+#include "../Weapon/Staff.h"
 #include "Animation/AnimInstance.h"
 
 AEKPlayer::AEKPlayer()
@@ -22,7 +23,7 @@ AEKPlayer::AEKPlayer()
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> SkeletalMeshFinder(TEXT("/AssetShare/Character/DARK_C_KNIGHT/MESHES/UE5/SK_DC_Knight_UE5_full_Silver"));
 	AEKPlayer::GetMesh()->SetSkeletalMesh(SkeletalMeshFinder.Object);
-	AEKPlayer::GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -88), FRotator(0, -90, 0));
+	AEKPlayer::GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -100), FRotator(0, -90, 0));
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
@@ -36,7 +37,7 @@ AEKPlayer::AEKPlayer()
 	GetCharacterMovement()->GravityScale = 3.f;
 	GetCharacterMovement()->JumpZVelocity = 800.f;
 	GetCharacterMovement()->AirControl = 0.2f;
-	GetCharacterMovement()->MaxWalkSpeed = 300.f;
+	GetCharacterMovement()->MaxWalkSpeed = 200.f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
@@ -60,7 +61,11 @@ AEKPlayer::AEKPlayer()
 		ABPSpear = ABPSpearFinder.Class;
 	}
 
-	GetMesh()->AnimClass = ABPGreatSword;
+	ConstructorHelpers::FClassFinder<UAnimInstance> ABPStaffFinder(TEXT("/Game/EKPlayer/Blueprint/AnimationBlueprint/ABP_Staff.ABP_Staff_C"));
+	if (ABPStaffFinder.Succeeded())
+	{
+		ABPStaff = ABPStaffFinder.Class;
+	}
 
 	ConstructorHelpers::FClassFinder<AGreatSword> GreatSwordClassFinder(TEXT("/Game/EKPlayer/Blueprint/Weapon/BP_GreatSword.BP_GreatSword_C"));
 	if (GreatSwordClassFinder.Succeeded())
@@ -73,26 +78,43 @@ AEKPlayer::AEKPlayer()
 	{
 		SpearClass = SpearClassFinder.Class;
 	}
+
+	ConstructorHelpers::FClassFinder<AStaff> StaffClassFinder(TEXT("/Game/EKPlayer/Blueprint/Weapon/BP_Staff.BP_Staff_C"));
+	if (StaffClassFinder.Succeeded())
+	{
+		StaffClass = StaffClassFinder.Class;
+	}
 }
 
 void AEKPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	// test GreatSword
+	// Test GreatSword
 	/*if (GreatSwordClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AGreatSword>(GreatSwordClass, SpawnParams);
-		AttachGreatSwordToEquipSocket(CurrentWeapon);
+		AttachWeaponToSpineSocket(CurrentWeapon);
+		GetMesh()->AnimClass = ABPGreatSword;
 	}*/
 	
-	// test Spear
+	// Test Spear
 	if (SpearClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<ASpear>(SpearClass, SpawnParams);
-		AttachGreatSwordToEquipSocket(CurrentWeapon);
+		AttachWeaponToSpineSocket(CurrentWeapon);
+		GetMesh()->AnimClass = ABPSpear;
 	}
+
+	// Test Staff
+	/*if (StaffClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		CurrentWeapon = GetWorld()->SpawnActor<AStaff>(StaffClass, SpawnParams);
+		AttachWeaponToSpineSocket(CurrentWeapon);
+		GetMesh()->AnimClass = ABPStaff;
+	}*/
 }
 
 void AEKPlayer::Tick(float DeltaTime)
@@ -126,7 +148,7 @@ TObjectPtr<AEKPlayerWeapon> AEKPlayer::GetCurrentWeapon()
 	return CurrentWeapon;
 }
 
-void AEKPlayer::AttachGreatSwordToEquipSocket(TObjectPtr<AEKPlayerWeapon> Weapon)
+void AEKPlayer::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon)
 {
 	if (Weapon)
 	{
@@ -138,7 +160,7 @@ void AEKPlayer::AttachGreatSwordToEquipSocket(TObjectPtr<AEKPlayerWeapon> Weapon
 	}
 }
 
-void AEKPlayer::AttachGreatSwordToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon)
+void AEKPlayer::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon)
 {
 	if (Weapon)
 	{
