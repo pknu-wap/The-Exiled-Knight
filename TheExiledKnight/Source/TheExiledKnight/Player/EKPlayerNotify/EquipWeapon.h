@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
-#include "EquipGreatSword.generated.h"
+#include "EquipWeapon.generated.h"
 
 UCLASS()
-class THEEXILEDKNIGHT_API UEquipGreatSword : public UAnimNotify
+class THEEXILEDKNIGHT_API UEquipWeapon : public UAnimNotify
 {
 	GENERATED_BODY()
 	
