@@ -22,12 +22,12 @@ void UEquipSpear::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* An
 			{
 				if (EKPlayerController->bIsEquipSpear == false)
 				{
-					EKPlayer->AttachGreatSwordToHandSocket(EKPlayer->GetCurrentWeapon());
+					EKPlayer->AttachWeaponToHandSocket(EKPlayer->GetCurrentWeapon());
 					EKPlayerController->bIsEquipSpear = true;
 				}
 				else if (EKPlayerController->bIsEquipSpear == true)
 				{
-					EKPlayer->AttachGreatSwordToEquipSocket(EKPlayer->GetCurrentWeapon());
+					EKPlayer->AttachWeaponToSpineSocket(EKPlayer->GetCurrentWeapon());
 					EKPlayerController->bIsEquipSpear = false;
 				}
 			}
