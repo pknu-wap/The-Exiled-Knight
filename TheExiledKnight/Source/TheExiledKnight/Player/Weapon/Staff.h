@@ -4,26 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "EKPlayerWeapon.h"
-#include "GreatSword.generated.h"
+#include "Staff.generated.h"
 
 UCLASS()
-class THEEXILEDKNIGHT_API AGreatSword : public AEKPlayerWeapon
+class THEEXILEDKNIGHT_API AStaff : public AEKPlayerWeapon
 {
 	GENERATED_BODY()
 	
-public:	
-	AGreatSword();
-
+public:
+	AStaff();
 protected:
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TObjectPtr<class UStaticMeshComponent> GreatSword;
+	TObjectPtr<class UStaticMeshComponent> Staff;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TObjectPtr<class UStaticMesh> GreatSwordMesh;
+	TObjectPtr<class UStaticMesh> StaffMesh;
 };
