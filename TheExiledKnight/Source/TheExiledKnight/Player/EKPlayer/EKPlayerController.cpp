@@ -16,6 +16,12 @@
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
+	ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCDefaultFinder(TEXT("/Game/EKPlayer/Input/IMC_EK_Default"));
+	if (IMCDefaultFinder.Succeeded())
+	{
+		IMCDefault = IMCDefaultFinder.Object;
+	}
+
 	ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCGreatSwordFinder(TEXT("/Game/EKPlayer/Input/GreatSword/IMC_EK_GreatSword"));
 	if (IMCGreatSwordFinder.Succeeded())
 	{
@@ -26,6 +32,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	if (IMCSpearFinder.Succeeded())
 	{
 		IMCSpear = IMCSpearFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCStaffFinder(TEXT("/Game/EKPlayer/Input/Staff/IMC_EK_Staff"));
+	if (IMCStaffFinder.Succeeded())
+	{
+		IMCStaff = IMCStaffFinder.Object;
 	}
 
 	ConstructorHelpers::FObjectFinder<UInputAction> IAMoveFinder(TEXT("/Game/EKPlayer/Input/IA_EK_Move"));
@@ -70,6 +82,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		IASpearAttack = IASpearAttackFinder.Object;
 	}
 
+	ConstructorHelpers::FObjectFinder<UInputAction> IAStaffAttackFinder(TEXT("/Game/EKPlayer/Input/Staff/IA_EK_Staff_Attack"));
+	if (IAStaffAttackFinder.Succeeded())
+	{
+		IAStaffAttack = IAStaffAttackFinder.Object;
+	}
+
 	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/Attack/EKPlayer_Combo1"));
 	if (GreatSwordAttackAnimFinder.Succeeded())
 	{
@@ -105,6 +123,24 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	{
 		SpearUnEquipAnim = SpearUnEquipAnimFinder.Object;
 	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> StaffAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/Staff/Attack/EKPlayer_Attack_Staff_Montage"));
+	if (StaffAttackAnimFinder.Succeeded())
+	{
+		StaffAttackAnim = StaffAttackAnimFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> StaffEquipAnimFinder(TEXT("/Game/EKPlayer/Animation/Staff/Equip/EKPlayer_Equip_Staff_Montage"));
+	if (StaffEquipAnimFinder.Succeeded())
+	{
+		StaffEquipAnim = StaffEquipAnimFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> StaffUnEquipAnimFinder(TEXT("/Game/EKPlayer/Animation/Staff/Equip/EKPlayer_UnEquip_Staff_Montage"));
+	if (StaffUnEquipAnimFinder.Succeeded())
+	{
+		StaffUnEquipAnim = StaffUnEquipAnimFinder.Object;
+	}
 }
 
 void AEKPlayerController::BeginPlay()
@@ -112,8 +148,6 @@ void AEKPlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	EKPlayer = Cast<AEKPlayer>(GetPawn());
-
-	IMCDefault = IMCGreatSword;
 
 	if (auto* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
@@ -141,6 +175,8 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAGreatSwordAttack, ETriggerEvent::Triggered, this, &ThisClass::GreatSwordAttackAction);
 
 		EnhancedInputComponent->BindAction(IASpearAttack, ETriggerEvent::Triggered, this, &ThisClass::SpearAttackAction);
+
+		EnhancedInputComponent->BindAction(IAStaffAttack, ETriggerEvent::Triggered, this, &ThisClass::StaffAttackAction);
 	}
 }
 
@@ -247,7 +283,7 @@ void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputVa
 {
 	if (EKPlayer)
 	{
-		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = 300;
+		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = 200;
 	}
 }
 
@@ -278,8 +314,21 @@ void AEKPlayerController::SpearAttackAction(const FInputActionValue& InputValue)
 		return;
 	}
 
-	if (GreatSwordAttackAnim)
+	if (SpearAttackAnim)
 	{
 		EKPlayer->PlayAnimMontage(SpearAttackAnim);
+	}
+}
+
+void AEKPlayerController::StaffAttackAction(const FInputActionValue& InputValue)
+{
+	if (!bIsEquipStaff)
+	{
+		return;
+	}
+
+	if (StaffAttackAnim)
+	{
+		EKPlayer->PlayAnimMontage(StaffAttackAnim);
 	}
 }

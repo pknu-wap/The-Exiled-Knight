@@ -22,12 +22,12 @@ void UEquipGreatSword::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBas
 			{
 				if (EKPlayerController->bIsEquipGreatSword == false)
 				{
-					EKPlayer->AttachGreatSwordToHandSocket(EKPlayer->GetCurrentWeapon());
+					EKPlayer->AttachWeaponToHandSocket(EKPlayer->GetCurrentWeapon());
 					EKPlayerController->bIsEquipGreatSword = true;
 				}
 				else if (EKPlayerController->bIsEquipGreatSword == true)
 				{
-					EKPlayer->AttachGreatSwordToEquipSocket(EKPlayer->GetCurrentWeapon());
+					EKPlayer->AttachWeaponToSpineSocket(EKPlayer->GetCurrentWeapon());
 					EKPlayerController->bIsEquipGreatSword = false;
 				}
 			}

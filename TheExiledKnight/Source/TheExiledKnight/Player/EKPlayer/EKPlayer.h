@@ -51,14 +51,17 @@ protected:
 	TObjectPtr<class UCameraComponent> Camera;
 
 public:
-	void AttachGreatSwordToEquipSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
-	void AttachGreatSwordToHandSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
+	void AttachWeaponToSpineSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
+	void AttachWeaponToHandSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class AGreatSword> GreatSwordClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class ASpear> SpearClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TSubclassOf<class AStaff> StaffClass;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
@@ -70,4 +73,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
 	TSubclassOf<class UAnimInstance> ABPSpear;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
+	TSubclassOf<class UAnimInstance> ABPStaff;
 };
