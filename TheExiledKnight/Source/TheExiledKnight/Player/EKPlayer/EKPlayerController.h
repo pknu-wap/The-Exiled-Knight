@@ -30,6 +30,7 @@ private:
 	void WeaponChangeAction(const FInputActionValue& InputValue);
 	void SprintAndDodgeAction(const FInputActionValue& InputValue);
 	void SprintAndDodgeRelease(const FInputActionValue& InputValue);
+	void UsePotionAction(const FInputActionValue& InputValue);
 	void GreatSwordAttackAction(const FInputActionValue& InputValue);
 	void SpearAttackAction(const FInputActionValue& InputValue);
 	void StaffAttackAction(const FInputActionValue& InputValue);
@@ -63,6 +64,9 @@ protected:
 	TObjectPtr<UInputAction> IASprintAndDodge;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<UInputAction> IAUsePotion;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> IAGreatSwordAttack;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
@@ -76,33 +80,37 @@ protected:
 	TObjectPtr<class AEKPlayer> EKPlayer;
 
 protected:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
+	TObjectPtr<class UAnimMontage> UsePotionAnim;
+
+protected:
+	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
 	TObjectPtr<class UAnimMontage> GreatSwordAttackAnim;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
 	TObjectPtr<class UAnimMontage> GreatSwordEquipAnim;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
 	TObjectPtr<class UAnimMontage> GreatSwordUnEquipAnim;
 
 protected:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
 	TObjectPtr<class UAnimMontage> SpearAttackAnim;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
 	TObjectPtr<class UAnimMontage> SpearEquipAnim;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
 	TObjectPtr<class UAnimMontage> SpearUnEquipAnim;
 
 protected:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
 	TObjectPtr<class UAnimMontage> StaffAttackAnim;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
 	TObjectPtr<class UAnimMontage> StaffEquipAnim;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
 	TObjectPtr<class UAnimMontage> StaffUnEquipAnim;
 
 public:

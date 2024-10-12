@@ -70,6 +70,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		IASprintAndDodge = IASprintAndDodgeFinder.Object;
 	}
 
+	ConstructorHelpers::FObjectFinder<UInputAction> IAUsePotionFinder(TEXT("/Game/EKPlayer/Input/IA_EK_UsePotion"));
+	if (IAUsePotionFinder.Succeeded())
+	{
+		IAUsePotion = IAUsePotionFinder.Object;
+	}
+
 	ConstructorHelpers::FObjectFinder<UInputAction> IAGreatSwordAttackFinder(TEXT("/Game/EKPlayer/Input/GreatSword/IA_EK_GreatSword_Attack"));
 	if (IAGreatSwordAttackFinder.Succeeded())
 	{
@@ -86,6 +92,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	if (IAStaffAttackFinder.Succeeded())
 	{
 		IAStaffAttack = IAStaffAttackFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> UsePotionAnimFinder(TEXT("/Game/EKPlayer/Animation/Common/EKPlayer_Drink_Common_Montage"));
+	if (UsePotionAnimFinder.Succeeded())
+	{
+		UsePotionAnim = UsePotionAnimFinder.Object;
 	}
 
 	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/Attack/EKPlayer_Combo1"));
@@ -166,6 +178,7 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAJump, ETriggerEvent::Triggered, this, &ThisClass::JumpAction);
 
 		EnhancedInputComponent->BindAction(IAWeaponChange, ETriggerEvent::Triggered, this, &ThisClass::WeaponChangeAction);
+		EnhancedInputComponent->BindAction(IAUsePotion, ETriggerEvent::Triggered, this, &ThisClass::UsePotionAction);
 
 		//EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Started, this, &ThisClass::SprintAndDodgeAction);
 		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Triggered, this, &ThisClass::SprintAndDodgeAction);
@@ -284,6 +297,14 @@ void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputVa
 	if (EKPlayer)
 	{
 		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = 200;
+	}
+}
+
+void AEKPlayerController::UsePotionAction(const FInputActionValue& InputValue)
+{
+	if (UsePotionAnim)
+	{
+		EKPlayer->PlayAnimMontage(UsePotionAnim);
 	}
 }
 
