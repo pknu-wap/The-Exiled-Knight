@@ -168,14 +168,17 @@ void AEKPlayerController::BeginPlay()
 		// Test Version
 		if (EKPlayer->GetMesh()->AnimClass == EKPlayer->ABPGreatSword)
 		{
+			Subsystem->ClearAllMappings();
 			Subsystem->AddMappingContext(IMCGreatSword, 0);
 		}
 		else if (EKPlayer->GetMesh()->AnimClass == EKPlayer->ABPSpear)
 		{
+			Subsystem->ClearAllMappings();
 			Subsystem->AddMappingContext(IMCSpear, 0);
 		}
 		else if (EKPlayer->GetMesh()->AnimClass == EKPlayer->ABPStaff)
 		{
+			Subsystem->ClearAllMappings();
 			Subsystem->AddMappingContext(IMCStaff, 0);
 		}
 	}
