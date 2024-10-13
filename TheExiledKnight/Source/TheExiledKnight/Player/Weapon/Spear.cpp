@@ -4,6 +4,8 @@
 #include "Spear.h"
 #include "Engine/SkeletalMesh.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "../EKPlayer/EKPlayer.h"
+#include "../EKPlayer/EKPlayerController.h"
 
 ASpear::ASpear()
 {
@@ -32,3 +34,27 @@ void ASpear::Tick(float DeltaTime)
 
 }
 
+void ASpear::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	if (EKPlayer && EKPlayerController)
+	{
+		if (!EKPlayerController->bIsEquipWeapon && EKPlayerController->GetEquipAnimSpear())
+		{
+			EKPlayer->PlayAnimMontage(EKPlayerController->GetEquipAnimSpear());
+		}
+		else if (EKPlayerController->bIsEquipWeapon && EKPlayerController->GetUnEquipAnimSpear())
+		{
+			EKPlayer->PlayAnimMontage(EKPlayerController->GetUnEquipAnimSpear());
+		}
+	}
+}
+
+void ASpear::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<class AEKPlayer> EKPlayer)
+{
+	Super::AttachWeaponToSpineSocket(Weapon, EKPlayer);
+}
+
+void ASpear::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<class AEKPlayer> EKPlayer)
+{
+	Super::AttachWeaponToHandSocket(Weapon, EKPlayer);
+}
