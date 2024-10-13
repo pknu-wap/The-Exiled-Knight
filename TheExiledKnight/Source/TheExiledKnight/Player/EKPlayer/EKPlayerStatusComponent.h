@@ -5,13 +5,16 @@
 #include "Components/ActorComponent.h"
 #include "EKPlayerStatusComponent.generated.h"
 
+#define PlayerMaxHp 10000
+#define PlayerMaxMp 10000
+#define PlayerMaxStamina 10000
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class UEKPlayerStatusComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	UEKPlayerStatusComponent();
 
 public:
@@ -19,9 +22,24 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	void GetPlayerDefaultDamage();
+	uint32 GetMaxHp();
+	uint32 GetHp();
+	uint32 GetMaxMp();
+	uint32 GetMp();
+	uint32 GetMaxStamina();
+	uint32 GetStamina();
+
+	void SetMaxHp(int32 SetData);
+	void SetHp(int32 SetData);
+	void SetMaxMp(int32 SetData);
+	void SetMp(int32 SetData);
+	void SetMaxStamina(int32 SetData);
+	void SetStamina(int32 SetData);
+
+public:
+	uint32 GetPlayerDefaultDamage();
 	void SetPlayerDefaultDamage();
-	void GetPlayerFinalDamage();
+	uint32 GetPlayerFinalDamage();
 	void SetPlayerFinalDamage();
 
 	void LevelUp();
@@ -34,52 +52,53 @@ public:
 
 protected:
 	// Basic status
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Basic")
-	uint8 MaxHp;
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
+	uint32 MaxHp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Basic")
-	uint8 Hp;
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
+	uint32 Hp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Basic")
-	uint8 MaxMp;
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
+	uint32 MaxMp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Basic")
-	uint8 Mp;
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
+	uint32 Mp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Basic")
-	uint8 MaxStamina;
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
+	uint32 MaxStamina;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Basic")
-	uint8 Stamina;
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
+	uint32 Stamina;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Basic")
-	uint8 DefaultDamage;
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
+	uint32 DefaultDamage;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Basic")
-	uint8 FinalDamage;
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
+	uint32 FinalDamage;
+
 protected:
 	// Upgrade status
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Upgrade")
-	uint8 MaxLevel;
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
+	uint32 MaxLevel;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Upgrade")
-	uint8 Level;
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
+	uint32 Level;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Upgrade")
-	uint8 Vitality;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Upgrade")
-	uint8 Mental;
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
+	uint32 Vitality;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Upgrade")
-	uint8 Endurance;
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
+	uint32 Mental;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Upgrade")
-	uint8 Strength;
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
+	uint32 Endurance;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Upgrade")
-	uint8 Ability;
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
+	uint32 Strength;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Statment|Upgrade")
-	uint8 Intelligence;
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
+	uint32 Ability;
+
+	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
+	uint32 Intelligence;
 };
