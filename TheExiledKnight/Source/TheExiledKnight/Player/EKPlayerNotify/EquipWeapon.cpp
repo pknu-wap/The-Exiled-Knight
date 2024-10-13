@@ -20,15 +20,15 @@ void UEquipWeapon::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* A
 			EKPlayerController = Cast<AEKPlayerController>(EKPlayer->GetController());
 			if (EKPlayerController)
 			{
-				if (EKPlayerController->bIsEquipGreatSword == false)
+				if (EKPlayerController->bIsEquipWeapon == false)
 				{
 					EKPlayer->AttachWeaponToHandSocket(EKPlayer->GetCurrentWeapon());
-					EKPlayerController->bIsEquipGreatSword = true;
+					EKPlayerController->bIsEquipWeapon = true;
 				}
-				else if (EKPlayerController->bIsEquipGreatSword == true)
+				else if (EKPlayerController->bIsEquipWeapon == true)
 				{
 					EKPlayer->AttachWeaponToSpineSocket(EKPlayer->GetCurrentWeapon());
-					EKPlayerController->bIsEquipGreatSword = false;
+					EKPlayerController->bIsEquipWeapon = false;
 				}
 			}
 		}
