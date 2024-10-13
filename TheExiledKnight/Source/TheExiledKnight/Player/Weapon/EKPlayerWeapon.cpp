@@ -2,6 +2,8 @@
 
 
 #include "EKPlayerWeapon.h"
+#include "../EKPlayer/EKPlayer.h"
+#include "../EKPlayer/EKPlayerController.h"
 
 AEKPlayerWeapon::AEKPlayerWeapon()
 {
@@ -21,3 +23,31 @@ void AEKPlayerWeapon::Tick(float DeltaTime)
 
 }
 
+void AEKPlayerWeapon::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+
+}
+
+void AEKPlayerWeapon::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
+{
+	if (Weapon)
+	{
+		USkeletalMeshComponent* MeshComp = EKPlayer->GetMesh();
+		if (MeshComp)
+		{
+			Weapon->AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("weapon_equip_socket"));
+		}
+	}
+}
+
+void AEKPlayerWeapon::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
+{
+	if (Weapon)
+	{
+		USkeletalMeshComponent* MeshComp = EKPlayer->GetMesh();
+		if (MeshComp)
+		{
+			Weapon->AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("weapon_right_hand_socket"));
+		}
+	}
+}

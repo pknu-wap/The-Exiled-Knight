@@ -27,13 +27,24 @@ private:
 	void MoveAction(const FInputActionValue& InputValue);
 	void LookAction(const FInputActionValue& InputValue);
 	void JumpAction(const FInputActionValue& InputValue);
+
 	void WeaponChangeAction(const FInputActionValue& InputValue);
 	void SprintAndDodgeAction(const FInputActionValue& InputValue);
 	void SprintAndDodgeRelease(const FInputActionValue& InputValue);
+	void UsePotionStart(const FInputActionValue& InputValue);
 	void UsePotionAction(const FInputActionValue& InputValue);
+
 	void GreatSwordAttackAction(const FInputActionValue& InputValue);
 	void SpearAttackAction(const FInputActionValue& InputValue);
 	void StaffAttackAction(const FInputActionValue& InputValue);
+
+public:
+	TObjectPtr<class UAnimMontage> GetEquipAnimGreatSword();
+	TObjectPtr<class UAnimMontage> GetUnEquipAnimGreatSword();
+	TObjectPtr<class UAnimMontage> GetEquipAnimSpear();
+	TObjectPtr<class UAnimMontage> GetUnEquipAnimSpear();
+	TObjectPtr<class UAnimMontage> GetEquipAnimStaff();
+	TObjectPtr<class UAnimMontage> GetUnEquipAnimStaff();
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
@@ -114,15 +125,5 @@ protected:
 	TObjectPtr<class UAnimMontage> StaffUnEquipAnim;
 
 public:
-	bool bIsEquipGreatSword = false;
-
-	bool bIsEquipSpear = false;
-
-	bool bIsEquipStaff = false;
-
-	UPROPERTY()
-	float FollowTime;
-
-	UPROPERTY()
-	float ShortPressThreshold = 0.3f;
+	bool bIsEquipWeapon = false;
 };
