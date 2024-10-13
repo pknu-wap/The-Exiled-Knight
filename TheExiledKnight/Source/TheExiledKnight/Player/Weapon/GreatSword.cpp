@@ -2,6 +2,8 @@
 
 
 #include "GreatSword.h"
+#include "../EKPlayer/EKPlayer.h"
+#include "../EKPlayer/EKPlayerController.h"
 
 AGreatSword::AGreatSword()
 {
@@ -28,4 +30,29 @@ void AGreatSword::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AGreatSword::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	if (EKPlayer && EKPlayerController)
+	{
+		if (!EKPlayerController->bIsEquipWeapon && EKPlayerController->GetEquipAnimGreatSword())
+		{
+			EKPlayer->PlayAnimMontage(EKPlayerController->GetEquipAnimGreatSword());
+		}
+		else if (EKPlayerController->bIsEquipWeapon && EKPlayerController->GetUnEquipAnimGreatSword())
+		{
+			EKPlayer->PlayAnimMontage(EKPlayerController->GetUnEquipAnimGreatSword());
+		}
+	}
+}
+
+void AGreatSword::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<class AEKPlayer> EKPlayer)
+{
+	Super::AttachWeaponToSpineSocket(Weapon, EKPlayer);
+}
+
+void AGreatSword::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<class AEKPlayer> EKPlayer)
+{
+	Super::AttachWeaponToHandSocket(Weapon, EKPlayer);
 }
