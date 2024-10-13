@@ -94,33 +94,30 @@ void AEKPlayer::BeginPlay()
 
 	// Test GreatSword Version
 
-	/*if (GreatSwordClass)
+	if (GreatSwordClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AGreatSword>(GreatSwordClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
-		GetMesh()->AnimClass = ABPGreatSword;
-	}*/
+	}
 	
 	// Test Spear Version
 
-	if (SpearClass)
+	/*if (SpearClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<ASpear>(SpearClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
-		GetMesh()->AnimClass = ABPSpear;
 		GetCharacterMovement()->JumpZVelocity = 1000.f;
-	}
+	}*/
 
-	// Test Staff Version
+	// Test Staff Version Don't Select This
 
 	/*if (StaffClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AStaff>(StaffClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
-		GetMesh()->AnimClass = ABPStaff;
 	}*/
 }
 
@@ -129,8 +126,8 @@ void AEKPlayer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// Test
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Cyan, FString::Printf(TEXT("HP : %d / %d"), PlayerStatusComponent->GetHp(), PlayerStatusComponent->GetMaxHp()));
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Cyan, FString::Printf(TEXT("MP : %d / %d"), PlayerStatusComponent->GetMp(), PlayerStatusComponent->GetMaxMp()));
+	//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("HP : %d / %d"), PlayerStatusComponent->GetHp(), PlayerStatusComponent->GetMaxHp()));
+	//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("MP : %d / %d"), PlayerStatusComponent->GetMp(), PlayerStatusComponent->GetMaxMp()));
 }
 
 TObjectPtr<AEKPlayerWeapon> AEKPlayer::GetCurrentWeapon()
