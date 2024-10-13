@@ -89,7 +89,11 @@ AEKPlayer::AEKPlayer()
 void AEKPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	// Test GreatSword
+
+	// Test Change Weapon
+
+	// Test GreatSword Version
+
 	/*if (GreatSwordClass)
 	{
 		FActorSpawnParameters SpawnParams;
@@ -98,16 +102,19 @@ void AEKPlayer::BeginPlay()
 		GetMesh()->AnimClass = ABPGreatSword;
 	}*/
 	
-	// Test Spear
+	// Test Spear Version
+
 	if (SpearClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<ASpear>(SpearClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetMesh()->AnimClass = ABPSpear;
+		GetCharacterMovement()->JumpZVelocity = 1000.f;
 	}
 
-	// Test Staff
+	// Test Staff Version
+
 	/*if (StaffClass)
 	{
 		FActorSpawnParameters SpawnParams;
@@ -121,26 +128,9 @@ void AEKPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
-
-EEKPlayerBehaviorState AEKPlayer::GetPlayerCurrentState()
-{
-	return PlayerCurrentState;
-}
-
-void AEKPlayer::SetPlayerCurrentState(EEKPlayerBehaviorState Change)
-{
-	PlayerCurrentState = Change;
-}
-
-EEKPlayerEquipWeapon AEKPlayer::GetPlayerCurrentWeapon()
-{
-	return PlayerCurrentWeapon;
-}
-
-void AEKPlayer::SetPlayerCurrentWeapon(EEKPlayerEquipWeapon Change)
-{
-	PlayerCurrentWeapon = Change;
+	// Test
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Cyan, FString::Printf(TEXT("HP : %d / %d"), PlayerStatusComponent->GetHp(), PlayerStatusComponent->GetMaxHp()));
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Cyan, FString::Printf(TEXT("MP : %d / %d"), PlayerStatusComponent->GetMp(), PlayerStatusComponent->GetMaxMp()));
 }
 
 TObjectPtr<AEKPlayerWeapon> AEKPlayer::GetCurrentWeapon()
@@ -148,15 +138,16 @@ TObjectPtr<AEKPlayerWeapon> AEKPlayer::GetCurrentWeapon()
 	return CurrentWeapon;
 }
 
+TObjectPtr<UEKPlayerStatusComponent> AEKPlayer::GetPlayerStatusComponent()
+{
+	return PlayerStatusComponent;
+}
+
 void AEKPlayer::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon)
 {
 	if (Weapon)
 	{
-		USkeletalMeshComponent* MeshComp = GetMesh();
-		if (MeshComp)
-		{
-			Weapon->AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("weapon_equip_socket"));
-		}
+		Weapon->AttachWeaponToSpineSocket(Weapon, this);
 	}
 }
 
@@ -164,10 +155,6 @@ void AEKPlayer::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon)
 {
 	if (Weapon)
 	{
-		USkeletalMeshComponent* MeshComp = GetMesh();
-		if (MeshComp)
-		{
-			Weapon->AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("weapon_right_hand_socket"));
-		}
+		Weapon->AttachWeaponToHandSocket(Weapon, this);
 	}
 }

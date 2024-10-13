@@ -3,7 +3,6 @@
 
 #include "AttackEnd.h"
 #include "../../EKPlayer/EKPlayer.h"
-#include "../../Enum/EKPlayerBehaviorState.h"
 
 void UAttackEnd::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
