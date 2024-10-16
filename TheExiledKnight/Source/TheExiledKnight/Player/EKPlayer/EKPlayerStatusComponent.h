@@ -50,6 +50,16 @@ public:
 	void LevelUpAbility();
 	void LevelUpIntelligence();
 
+public:
+	bool bCanStaminaRecovery = true;
+
+protected:
+	UPROPERTY()
+	TObjectPtr<class AEKPlayer> EKPlayer;
+
+	UPROPERTY()
+	TObjectPtr<class AEKPlayerController> EKPlayerController;
+
 protected:
 	// Basic status
 	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
