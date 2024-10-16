@@ -192,11 +192,10 @@ void AEKPlayerController::SetupInputComponent()
 	{
 		EnhancedInputComponent->BindAction(IAMove, ETriggerEvent::Triggered, this, &ThisClass::MoveAction);
 		EnhancedInputComponent->BindAction(IALook, ETriggerEvent::Triggered, this, &ThisClass::LookAction);
-		EnhancedInputComponent->BindAction(IAJump, ETriggerEvent::Triggered, this, &ThisClass::JumpAction);
+		EnhancedInputComponent->BindAction(IAJump, ETriggerEvent::Started, this, &ThisClass::JumpStart);
 
 		EnhancedInputComponent->BindAction(IAWeaponChange, ETriggerEvent::Triggered, this, &ThisClass::WeaponChangeAction);
 		EnhancedInputComponent->BindAction(IAUsePotion, ETriggerEvent::Started, this, &ThisClass::UsePotionStart);
-		EnhancedInputComponent->BindAction(IAUsePotion, ETriggerEvent::Triggered, this, &ThisClass::UsePotionAction);
 
 		//EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Started, this, &ThisClass::SprintAndDodgeAction);
 		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Triggered, this, &ThisClass::SprintAndDodgeAction);
@@ -247,12 +246,22 @@ void AEKPlayerController::LookAction(const FInputActionValue& InputValue)
 	}
 }
 
-void AEKPlayerController::JumpAction(const FInputActionValue& InputValue)
+void AEKPlayerController::JumpStart(const FInputActionValue& InputValue)
 {
-	if (EKPlayer)
+	if (!EKPlayer)
 	{
-		EKPlayer->Jump();
+		return;
 	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < JumpStamina)
+	{
+		return;
+	}
+
+	EKPlayer->Jump();
+	EKPlayer->GetPlayerStatusComponent()->bCanStaminaRecovery = false;
+	EKPlayer->GetPlayerStatusComponent()->SetStamina(-JumpStamina);
+	GetWorldTimerManager().SetTimer(StaminaRecoveryHandle, this, &ThisClass::SetStaminaRecoveryTime, StaminaRecoveryTime, false);
 }
 
 void AEKPlayerController::WeaponChangeAction(const FInputActionValue& InputValue)
@@ -265,10 +274,21 @@ void AEKPlayerController::WeaponChangeAction(const FInputActionValue& InputValue
 
 void AEKPlayerController::SprintAndDodgeAction(const FInputActionValue& InputValue)
 {
-	if (EKPlayer)
+	if (!EKPlayer)
 	{
-		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = 600;
+		return;
 	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < SprintStamina)
+	{
+		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = 200;
+		return;
+	}
+
+	EKPlayer->GetCharacterMovement()->MaxWalkSpeed = 600;
+	EKPlayer->GetPlayerStatusComponent()->SetStamina(-SprintStamina);
+	EKPlayer->GetPlayerStatusComponent()->bCanStaminaRecovery = false;
+	GetWorldTimerManager().SetTimer(StaminaRecoveryHandle, this, &ThisClass::SetStaminaRecoveryTime, StaminaRecoveryTime, false);
 }
 
 void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputValue)
@@ -286,10 +306,7 @@ void AEKPlayerController::UsePotionStart(const FInputActionValue& InputValue)
 		EKPlayer->GetPlayerStatusComponent()->SetHp(10);
 		EKPlayer->GetPlayerStatusComponent()->SetMp(10);
 	}
-}
 
-void AEKPlayerController::UsePotionAction(const FInputActionValue& InputValue)
-{
 	if (UsePotionAnim)
 	{
 		EKPlayer->PlayAnimMontage(UsePotionAnim);
@@ -335,32 +352,37 @@ void AEKPlayerController::StaffAttackAction(const FInputActionValue& InputValue)
 	}
 }
 
-TObjectPtr<class UAnimMontage> AEKPlayerController::GetEquipAnimGreatSword()
+TObjectPtr<UAnimMontage> AEKPlayerController::GetEquipAnimGreatSword()
 {
 	return GreatSwordEquipAnim;
 }
 
-TObjectPtr<class UAnimMontage> AEKPlayerController::GetUnEquipAnimGreatSword()
+TObjectPtr<UAnimMontage> AEKPlayerController::GetUnEquipAnimGreatSword()
 {
 	return GreatSwordUnEquipAnim;
 }
 
-TObjectPtr<class UAnimMontage> AEKPlayerController::GetEquipAnimSpear()
+TObjectPtr<UAnimMontage> AEKPlayerController::GetEquipAnimSpear()
 {
 	return SpearEquipAnim;
 }
 
-TObjectPtr<class UAnimMontage> AEKPlayerController::GetUnEquipAnimSpear()
+TObjectPtr<UAnimMontage> AEKPlayerController::GetUnEquipAnimSpear()
 {
 	return SpearUnEquipAnim;
 }
 
-TObjectPtr<class UAnimMontage> AEKPlayerController::GetEquipAnimStaff()
+TObjectPtr<UAnimMontage> AEKPlayerController::GetEquipAnimStaff()
 {
 	return StaffEquipAnim;
 }
 
-TObjectPtr<class UAnimMontage> AEKPlayerController::GetUnEquipAnimStaff()
+TObjectPtr<UAnimMontage> AEKPlayerController::GetUnEquipAnimStaff()
 {
 	return StaffUnEquipAnim;
+}
+
+void AEKPlayerController::SetStaminaRecoveryTime()
+{
+	EKPlayer->GetPlayerStatusComponent()->bCanStaminaRecovery = true;
 }

@@ -2,6 +2,8 @@
 
 
 #include "EKPlayerStatusComponent.h"
+#include "EKPlayer.h"
+#include "EKPlayerController.h"
 
 UEKPlayerStatusComponent::UEKPlayerStatusComponent()
 {
@@ -34,7 +36,12 @@ void UEKPlayerStatusComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
+	EKPlayer = Cast<AEKPlayer>(GetOwner());
+
+	if (EKPlayer)
+	{
+		EKPlayerController = Cast<AEKPlayerController>(EKPlayer->GetController());
+	}
 }
 
 
@@ -42,7 +49,10 @@ void UEKPlayerStatusComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	
+	if (bCanStaminaRecovery)
+	{
+		SetStamina(2);
+	}
 }
 
 uint32 UEKPlayerStatusComponent::GetMaxHp()
@@ -103,4 +113,14 @@ void UEKPlayerStatusComponent::SetMaxStamina(int32 SetData)
 void UEKPlayerStatusComponent::SetStamina(int32 SetData)
 {
 	Stamina = FMath::Clamp(Stamina + SetData, 0, MaxStamina);
+}
+
+uint32 UEKPlayerStatusComponent::GetPlayerDefaultDamage()
+{
+	return DefaultDamage;
+}
+
+uint32 UEKPlayerStatusComponent::GetPlayerFinalDamage()
+{
+	return FinalDamage;
 }
