@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotifyState.h"
-#include "GreatSwordAttack1.generated.h"
+#include "StaffAttack1.generated.h"
 
 UCLASS()
-class THEEXILEDKNIGHT_API UGreatSwordAttack1 : public UAnimNotifyState
+class THEEXILEDKNIGHT_API UStaffAttack1 : public UAnimNotifyState
 {
 	GENERATED_BODY()
 	

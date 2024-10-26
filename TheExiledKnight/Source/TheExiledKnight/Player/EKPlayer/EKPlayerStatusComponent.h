@@ -50,6 +50,19 @@ public:
 	void LevelUpAbility();
 	void LevelUpIntelligence();
 
+	// About Weapon Attack Combo
+	uint32 GetGreatSwordCombo();
+	void SetGreatSwordCombo();
+	void ResetGreatSwordCombo();
+
+	uint32 GetSpearCombo();
+	void SetSpearCombo();
+	void ResetSpearCombo();
+
+	uint32 GetStaffCombo();
+	void SetStaffCombo();
+	void ResetStaffCombo();
+
 public:
 	bool bCanStaminaRecovery = true;
 
@@ -111,4 +124,14 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
 	uint32 Intelligence;
+
+protected:
+	UPROPERTY()
+	uint32 GreatSwordCombo = 1;
+
+	UPROPERTY()
+	uint32 SpearCombo = 1;
+
+	UPROPERTY()
+	uint32 StaffCombo = 1;
 };
