@@ -13,6 +13,9 @@ class UInputAction;
 // Edit Stamina Consumption Here
 #define SprintStamina 1
 #define JumpStamina 100
+#define GreatSwordAttackStamina 100
+#define SpearAttackStamina 50
+#define StaffAttackStamina 80
 
 UCLASS()
 class AEKPlayerController : public APlayerController
@@ -132,9 +135,23 @@ public:
 
 protected:
 	FTimerHandle StaminaRecoveryHandle;
+	FTimerHandle AttackNextHandle;
+	FTimerHandle AttackEndHandle;
 
 	UPROPERTY(EditAnywhere, Category = "Timer")
 	float StaminaRecoveryTime = 2.5f;
 
+	UPROPERTY(EditAnywhere, Category = "Timer")
+	float AttackNextTime = 0.5f;
+
 	void SetStaminaRecoveryTime();
+	void SetStaminaAndTimer(int32 Stamina);
+
+	bool bCanAttackNext = false;
+
+public:
+	void SetAttackNextTime();
+	void SetAttackNextAndTimer();
+	void SetAttackEndTime();
+	void SetAttackEndTimer(float Time);
 };
