@@ -1,10 +1,10 @@
 // Made by Somalia Pirate
 
-#include "GreatSwordAttack1.h"
+#include "StaffAttack4.h"
 #include "../../EKPlayer/EKPlayer.h"
 #include "../../EKPlayer/EKPlayerController.h"
 
-void UGreatSwordAttack1::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
+void UStaffAttack4::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 
@@ -15,17 +15,17 @@ void UGreatSwordAttack1::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequ
 
 	if (EKPlayerController)
 	{
-		EKPlayerController->SetAttackEndTimer(2.27f);
+		EKPlayerController->SetAttackEndTimer(2.67f);
 	}
 }
 
-void UGreatSwordAttack1::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
+void UStaffAttack4::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime, EventReference);
 
 }
 
-void UGreatSwordAttack1::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
+void UStaffAttack4::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 
