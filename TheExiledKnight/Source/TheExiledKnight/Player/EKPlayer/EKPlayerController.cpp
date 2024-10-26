@@ -102,7 +102,7 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		UsePotionAnim = UsePotionAnimFinder.Object;
 	}
 
-	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/Attack/EKPlayer_Combo1"));
+	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/Attack/EKPlayer_Combo"));
 	if (GreatSwordAttackAnimFinder.Succeeded())
 	{
 		GreatSwordAttackAnim = GreatSwordAttackAnimFinder.Object;
@@ -202,11 +202,11 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Completed, this, &ThisClass::SprintAndDodgeRelease);
 		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Canceled, this, &ThisClass::SprintAndDodgeRelease);
 
-		EnhancedInputComponent->BindAction(IAGreatSwordAttack, ETriggerEvent::Triggered, this, &ThisClass::GreatSwordAttackAction);
+		EnhancedInputComponent->BindAction(IAGreatSwordAttack, ETriggerEvent::Started, this, &ThisClass::GreatSwordAttackAction);
 
-		EnhancedInputComponent->BindAction(IASpearAttack, ETriggerEvent::Triggered, this, &ThisClass::SpearAttackAction);
+		EnhancedInputComponent->BindAction(IASpearAttack, ETriggerEvent::Started, this, &ThisClass::SpearAttackAction);
 
-		EnhancedInputComponent->BindAction(IAStaffAttack, ETriggerEvent::Triggered, this, &ThisClass::StaffAttackAction);
+		EnhancedInputComponent->BindAction(IAStaffAttack, ETriggerEvent::Started, this, &ThisClass::StaffAttackAction);
 	}
 }
 
@@ -259,10 +259,8 @@ void AEKPlayerController::JumpStart(const FInputActionValue& InputValue)
 	}
 
 	EKPlayer->Jump();
-	EKPlayer->GetPlayerStatusComponent()->bCanStaminaRecovery = false;
-	EKPlayer->GetPlayerStatusComponent()->SetStamina(-JumpStamina);
-	GetWorldTimerManager().SetTimer(StaminaRecoveryHandle, this, &ThisClass::SetStaminaRecoveryTime, StaminaRecoveryTime, false);
-}
+	SetStaminaAndTimer(JumpStamina);
+	}
 
 void AEKPlayerController::WeaponChangeAction(const FInputActionValue& InputValue)
 {
@@ -286,10 +284,8 @@ void AEKPlayerController::SprintAndDodgeAction(const FInputActionValue& InputVal
 	}
 
 	EKPlayer->GetCharacterMovement()->MaxWalkSpeed = 600;
-	EKPlayer->GetPlayerStatusComponent()->SetStamina(-SprintStamina);
-	EKPlayer->GetPlayerStatusComponent()->bCanStaminaRecovery = false;
-	GetWorldTimerManager().SetTimer(StaminaRecoveryHandle, this, &ThisClass::SetStaminaRecoveryTime, StaminaRecoveryTime, false);
-}
+	SetStaminaAndTimer(SprintStamina);
+	}
 
 void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputValue)
 {
@@ -315,41 +311,98 @@ void AEKPlayerController::UsePotionStart(const FInputActionValue& InputValue)
 
 void AEKPlayerController::GreatSwordAttackAction(const FInputActionValue& InputValue)
 {
-	if (!bIsEquipWeapon)
+	if (!bIsEquipWeapon || !GreatSwordAttackAnim)
 	{
 		return;
 	}
 
-	if (GreatSwordAttackAnim)
+	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < GreatSwordAttackStamina)
 	{
-		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim);
+		return;
 	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordCombo() == 1)
+	{
+		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim, 1.0f, FName("Attack1"));
+	}
+	else if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordCombo() == 2 && bCanAttackNext == true)
+	{
+		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim, 1.0f, FName("Attack2"));
+	}
+	else if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordCombo() == 3 && bCanAttackNext == true)
+	{
+		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim, 1.0f, FName("Attack3"));
+	}
+
+	SetStaminaAndTimer(GreatSwordAttackStamina);
 }
 
 void AEKPlayerController::SpearAttackAction(const FInputActionValue& InputValue)
 {
-	if (!bIsEquipWeapon)
+	if (!bIsEquipWeapon || !SpearAttackAnim)
 	{
 		return;
 	}
 
-	if (SpearAttackAnim)
+	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < SpearAttackStamina)
 	{
-		EKPlayer->PlayAnimMontage(SpearAttackAnim);
+		return;
 	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 1)
+	{
+		EKPlayer->PlayAnimMontage(SpearAttackAnim, 1.0f, FName("Attack1"));
+	}
+	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 2 && bCanAttackNext == true)
+	{
+		EKPlayer->PlayAnimMontage(SpearAttackAnim, 1.0f, FName("Attack2"));
+	}
+	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 3 && bCanAttackNext == true)
+	{
+		EKPlayer->PlayAnimMontage(SpearAttackAnim, 1.0f, FName("Attack3"));
+	}
+	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 4 && bCanAttackNext == true)
+	{
+		EKPlayer->PlayAnimMontage(SpearAttackAnim, 1.0f, FName("Attack4"));
+	}
+	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 5 && bCanAttackNext == true)
+	{
+		EKPlayer->PlayAnimMontage(SpearAttackAnim, 1.0f, FName("Attack5"));
+	}
+
+	SetStaminaAndTimer(SpearAttackStamina);
 }
 
 void AEKPlayerController::StaffAttackAction(const FInputActionValue& InputValue)
 {
-	if (!bIsEquipWeapon)
+	if (!bIsEquipWeapon || !StaffAttackAnim)
 	{
 		return;
 	}
 
-	if (StaffAttackAnim)
+	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < StaffAttackStamina)
 	{
-		EKPlayer->PlayAnimMontage(StaffAttackAnim);
+		return;
 	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 1)
+	{
+		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack1"));
+	}
+	else if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 2 && bCanAttackNext == true)
+	{
+		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack2"));
+	}
+	else if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 3 && bCanAttackNext == true)
+	{
+		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack3"));
+	}
+	else if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 4 && bCanAttackNext == true)
+	{
+		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack4"));
+	}
+
+	SetStaminaAndTimer(StaffAttackStamina);
 }
 
 TObjectPtr<UAnimMontage> AEKPlayerController::GetEquipAnimGreatSword()
@@ -385,4 +438,37 @@ TObjectPtr<UAnimMontage> AEKPlayerController::GetUnEquipAnimStaff()
 void AEKPlayerController::SetStaminaRecoveryTime()
 {
 	EKPlayer->GetPlayerStatusComponent()->bCanStaminaRecovery = true;
+}
+
+void AEKPlayerController::SetStaminaAndTimer(int32 Stamina)
+{
+	EKPlayer->GetPlayerStatusComponent()->SetStamina(-Stamina);
+	EKPlayer->GetPlayerStatusComponent()->bCanStaminaRecovery = false;
+	GetWorldTimerManager().SetTimer(StaminaRecoveryHandle, this, &ThisClass::SetStaminaRecoveryTime, StaminaRecoveryTime, false);
+}
+
+void AEKPlayerController::SetAttackNextTime()
+{
+	bCanAttackNext = false;
+}
+
+void AEKPlayerController::SetAttackNextAndTimer()
+{
+	bCanAttackNext = true;
+	EKPlayer->GetPlayerStatusComponent()->SetGreatSwordCombo();
+	EKPlayer->GetPlayerStatusComponent()->SetSpearCombo();
+	EKPlayer->GetPlayerStatusComponent()->SetStaffCombo();
+	GetWorldTimerManager().SetTimer(AttackNextHandle, this, &ThisClass::SetAttackNextTime, AttackNextTime, false);
+}
+
+void AEKPlayerController::SetAttackEndTime()
+{
+	EKPlayer->GetPlayerStatusComponent()->ResetGreatSwordCombo();
+	EKPlayer->GetPlayerStatusComponent()->ResetSpearCombo();
+	EKPlayer->GetPlayerStatusComponent()->ResetStaffCombo();
+}
+
+void AEKPlayerController::SetAttackEndTimer(float Time)
+{
+	GetWorldTimerManager().SetTimer(AttackEndHandle, this, &ThisClass::SetAttackEndTime, Time, false);
 }
