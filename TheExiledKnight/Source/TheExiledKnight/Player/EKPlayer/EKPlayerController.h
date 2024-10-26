@@ -10,8 +10,13 @@ struct FInputActionValue;
 class UInputMappingContext;
 class UInputAction;
 
+// Edit Walk and Sprint Speed Here
+#define EKPlayerWalkSpeed 200.f
+#define EKPlayerSprintSpeed 600.f
+
 // Edit Stamina Consumption Here
 #define SprintStamina 1
+#define DodgeStamina 100
 #define JumpStamina 100
 #define GreatSwordAttackStamina 100
 #define SpearAttackStamina 50
@@ -36,6 +41,7 @@ private:
 	void JumpStart(const FInputActionValue& InputValue);
 
 	void WeaponChangeAction(const FInputActionValue& InputValue);
+	void SprintAndDodgeBegin(const FInputActionValue& InputValue);
 	void SprintAndDodgeAction(const FInputActionValue& InputValue);
 	void SprintAndDodgeRelease(const FInputActionValue& InputValue);
 	void UsePotionStart(const FInputActionValue& InputValue);
@@ -100,6 +106,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
 	TObjectPtr<class UAnimMontage> UsePotionAnim;
 
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
+	TObjectPtr<class UAnimMontage> DodgeAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
+	TObjectPtr<class UAnimMontage> BackStepAnim;
+
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
 	TObjectPtr<class UAnimMontage> GreatSwordAttackAnim;
@@ -154,4 +166,10 @@ public:
 	void SetAttackNextAndTimer();
 	void SetAttackEndTime();
 	void SetAttackEndTimer(float Time);
+
+protected:
+	// About Sprint And Dodge
+	float SpaceKeyPressStart = 0.f;
+	float NeedDodgeThresholdTime = 0.2f;
+	float KeyPressDuration = 0.f;
 };
