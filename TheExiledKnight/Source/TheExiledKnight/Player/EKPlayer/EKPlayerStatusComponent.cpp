@@ -9,7 +9,7 @@ UEKPlayerStatusComponent::UEKPlayerStatusComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
-	
+
 	// Edit Basic Status Value Here
 	MaxHp = 100;
 	Hp = 50;
@@ -123,4 +123,72 @@ uint32 UEKPlayerStatusComponent::GetPlayerDefaultDamage()
 uint32 UEKPlayerStatusComponent::GetPlayerFinalDamage()
 {
 	return FinalDamage;
+}
+
+// About Weapon Attack Combo
+
+uint32 UEKPlayerStatusComponent::GetGreatSwordCombo()
+{
+	return GreatSwordCombo;
+}
+
+void UEKPlayerStatusComponent::SetGreatSwordCombo()
+{
+	if (GreatSwordCombo < 3)
+	{
+		GreatSwordCombo++;
+	}
+	else
+	{
+		ResetGreatSwordCombo();
+	}
+}
+
+void UEKPlayerStatusComponent::ResetGreatSwordCombo()
+{
+	GreatSwordCombo = 1;
+}
+
+uint32 UEKPlayerStatusComponent::GetSpearCombo()
+{
+	return SpearCombo;
+}
+
+void UEKPlayerStatusComponent::SetSpearCombo()
+{
+	if (SpearCombo < 5)
+	{
+		SpearCombo++;
+	}
+	else
+	{
+		ResetSpearCombo();
+	}
+}
+
+void UEKPlayerStatusComponent::ResetSpearCombo()
+{
+	SpearCombo = 1;
+}
+
+uint32 UEKPlayerStatusComponent::GetStaffCombo()
+{
+	return StaffCombo;
+}
+
+void UEKPlayerStatusComponent::SetStaffCombo()
+{
+	if (StaffCombo < 5)
+	{
+		StaffCombo++;
+	}
+	else
+	{
+		ResetStaffCombo();
+	}
+}
+
+void UEKPlayerStatusComponent::ResetStaffCombo()
+{
+	StaffCombo = 1;
 }
