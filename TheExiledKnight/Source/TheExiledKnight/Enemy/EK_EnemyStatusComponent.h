@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "EK_EnemyStatusComponent.generated.h"
 
-
+DECLARE_MULTICAST_DELEGATE(FOnHPIsZeroDelegate);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class THEEXILEDKNIGHT_API UEK_EnemyStatusComponent : public UActorComponent
@@ -28,24 +28,50 @@ public:
 	float  GetCurrentPoise();
 	UFUNCTION(BlueprintCallable)
 	bool  GetIsDead();
+	
 	UFUNCTION(BlueprintCallable)
+	void SetPoiseLevel(uint8 amount);
+
+	UFUNCTION(BlueprintCallable)
+	void SetMaxHealth(float amount);
+
+	UFUNCTION(BlueprintCallable)
+	void SetCurrentHealth(float amount);
+
+	UFUNCTION(BlueprintCallable)
+	void SetMaxPoise(float amount);
+
+	UFUNCTION(BlueprintCallable)
+	void SetCurrentPoise(float amount);
+
+	UFUNCTION(BlueprintCallable)
+	void SetIsDead(bool isDead);
+
+	UFUNCTION(BlueprintCallable)
+
 	virtual void TakeDamage(float amount);
 	
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "EnemyStat")
+	FOnHPIsZeroDelegate OnHPIsZero;
+private:
+	UPROPERTY(VisibleAnywhere,Category=Stat,Meta  =(AllowPrivteAccess=true))
 	uint8 PoiseLevel;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EnemyStat")
+	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
+
 	float MaxHealth;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EnemyStat")
+	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
+
 	float CurrentHealth;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EnemyStat")
+	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
+
 	float MaxPosie;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EnemyStat")
+	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
+
 	float CurrentPosie;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EnemyStat")
+	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
+
 	bool bIsDead;
 
 	
