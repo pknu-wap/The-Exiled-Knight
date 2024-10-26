@@ -96,10 +96,22 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		IAStaffAttack = IAStaffAttackFinder.Object;
 	}
 
-	ConstructorHelpers::FObjectFinder<UAnimMontage> UsePotionAnimFinder(TEXT("/Game/EKPlayer/Animation/Common/EKPlayer_Drink_Common_Montage"));
+	ConstructorHelpers::FObjectFinder<UAnimMontage> UsePotionAnimFinder(TEXT("/Game/EKPlayer/Animation/Common/UseItem/EKPlayer_Drink_Common_Montage"));
 	if (UsePotionAnimFinder.Succeeded())
 	{
 		UsePotionAnim = UsePotionAnimFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> DodgeAnimFinder(TEXT("/Game/EKPlayer/Animation/Common/Step/EKPlayer_Dodge_Montage"));
+	if (DodgeAnimFinder.Succeeded())
+	{
+		DodgeAnim = DodgeAnimFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> BackStepAnimFinder(TEXT("/Game/EKPlayer/Animation/Common/Step/EKPlayer_BackStep_Montage"));
+	if (BackStepAnimFinder.Succeeded())
+	{
+		BackStepAnim = BackStepAnimFinder.Object;
 	}
 
 	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/Attack/EKPlayer_Combo"));
@@ -197,7 +209,7 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAWeaponChange, ETriggerEvent::Triggered, this, &ThisClass::WeaponChangeAction);
 		EnhancedInputComponent->BindAction(IAUsePotion, ETriggerEvent::Started, this, &ThisClass::UsePotionStart);
 
-		//EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Started, this, &ThisClass::SprintAndDodgeAction);
+		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Started, this, &ThisClass::SprintAndDodgeBegin);
 		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Triggered, this, &ThisClass::SprintAndDodgeAction);
 		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Completed, this, &ThisClass::SprintAndDodgeRelease);
 		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Canceled, this, &ThisClass::SprintAndDodgeRelease);
@@ -260,7 +272,7 @@ void AEKPlayerController::JumpStart(const FInputActionValue& InputValue)
 
 	EKPlayer->Jump();
 	SetStaminaAndTimer(JumpStamina);
-	}
+}
 
 void AEKPlayerController::WeaponChangeAction(const FInputActionValue& InputValue)
 {
@@ -268,6 +280,11 @@ void AEKPlayerController::WeaponChangeAction(const FInputActionValue& InputValue
 	{
 		EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
 	}
+}
+
+void AEKPlayerController::SprintAndDodgeBegin(const FInputActionValue& InputValue)
+{
+	SpaceKeyPressStart = GetWorld()->GetTimeSeconds();
 }
 
 void AEKPlayerController::SprintAndDodgeAction(const FInputActionValue& InputValue)
@@ -279,20 +296,33 @@ void AEKPlayerController::SprintAndDodgeAction(const FInputActionValue& InputVal
 
 	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < SprintStamina)
 	{
-		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = 200;
+		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = EKPlayerWalkSpeed;
 		return;
 	}
 
-	EKPlayer->GetCharacterMovement()->MaxWalkSpeed = 600;
-	SetStaminaAndTimer(SprintStamina);
+	KeyPressDuration = GetWorld()->GetTimeSeconds() - SpaceKeyPressStart;
+	
+	if (KeyPressDuration >= NeedDodgeThresholdTime) // Sprint
+	{
+		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = EKPlayerSprintSpeed;
+		SetStaminaAndTimer(SprintStamina);
 	}
+}
 
 void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputValue)
 {
-	if (EKPlayer)
+	if (!EKPlayer)
 	{
-		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = 200;
+		return;
 	}
+
+	if (KeyPressDuration < NeedDodgeThresholdTime && EKPlayer->GetPlayerStatusComponent()->GetStamina() >= DodgeStamina)
+	{
+		EKPlayer->PlayAnimMontage(DodgeAnim);
+		SetStaminaAndTimer(DodgeStamina);
+	}
+
+	EKPlayer->GetCharacterMovement()->MaxWalkSpeed = EKPlayerWalkSpeed;
 }
 
 void AEKPlayerController::UsePotionStart(const FInputActionValue& InputValue)
