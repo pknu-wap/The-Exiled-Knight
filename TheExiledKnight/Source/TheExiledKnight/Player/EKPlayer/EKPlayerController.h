@@ -37,19 +37,23 @@ protected:
 	virtual void PlayerTick(float DeltaTime) override;
 
 private:
-	void MoveAction(const FInputActionValue& InputValue);
-	void LookAction(const FInputActionValue& InputValue);
-	void JumpStart(const FInputActionValue& InputValue);
+	void MoveTriggered(const FInputActionValue& InputValue);
+	void LookTriggered(const FInputActionValue& InputValue);
+	void JumpStarted(const FInputActionValue& InputValue);
 
-	void WeaponChangeAction(const FInputActionValue& InputValue);
-	void SprintAndDodgeBegin(const FInputActionValue& InputValue);
-	void SprintAndDodgeAction(const FInputActionValue& InputValue);
+	void WeaponChangeStarted(const FInputActionValue& InputValue);
+
+	void SprintAndDodgeStarted(const FInputActionValue& InputValue);
+	void SprintAndDodgeTriggered(const FInputActionValue& InputValue);
 	void SprintAndDodgeRelease(const FInputActionValue& InputValue);
-	void UsePotionStart(const FInputActionValue& InputValue);
 
-	void GreatSwordAttackAction(const FInputActionValue& InputValue);
-	void SpearAttackAction(const FInputActionValue& InputValue);
-	void StaffAttackAction(const FInputActionValue& InputValue);
+	void UsePotionStarted(const FInputActionValue& InputValue);
+
+	void WeaponAttackStarted(const FInputActionValue& InputValue);
+
+	void WeaponDefenseStarted(const FInputActionValue& InputValue);
+	void WeaponDefenseTriggered(const FInputActionValue& InputValue);
+	void WeaponDefenseRelease(const FInputActionValue& InputValue);
 
 public:
 	TObjectPtr<class UAnimMontage> GetEquipAnimGreatSword();
@@ -59,18 +63,18 @@ public:
 	TObjectPtr<class UAnimMontage> GetEquipAnimStaff();
 	TObjectPtr<class UAnimMontage> GetUnEquipAnimStaff();
 
+	TObjectPtr<class UAnimMontage> GetGreatSwordAttackAnim();
+	TObjectPtr<class UAnimMontage> GetSpearAttackAnim();
+	TObjectPtr<class UAnimMontage> GetStaffAttackAnim();
+
+	TObjectPtr<class UAnimMontage> GetGreatSwordDefenseAnim();
+	TObjectPtr<class UAnimMontage> GetSpearDefenseAnim();
+	TObjectPtr<class UAnimMontage> GetStaffDefenseAnim();
+
 protected:
+	// Common Input And Input Mapping Context
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|MappingContext")
 	TObjectPtr<UInputMappingContext> IMCDefault;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|MappingContext")
-	TObjectPtr<UInputMappingContext> IMCGreatSword;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|MappingContext")
-	TObjectPtr<UInputMappingContext> IMCSpear;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|MappingContext")
-	TObjectPtr<UInputMappingContext> IMCStaff;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IAMove;
@@ -90,20 +94,18 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IAUsePotion;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|GreatSword")
-	TObjectPtr<UInputAction> IAGreatSwordAttack;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IAWeaponAttack;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Spear")
-	TObjectPtr<UInputAction> IASpearAttack;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Staff")
-	TObjectPtr<UInputAction> IAStaffAttack;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IAWeaponDefense;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class AEKPlayer> EKPlayer;
 
 protected:
+	// Common Animation Montage
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
 	TObjectPtr<class UAnimMontage> UsePotionAnim;
 
@@ -114,8 +116,12 @@ protected:
 	TObjectPtr<class UAnimMontage> BackStepAnim;
 
 protected:
+	// GreatSword Animation Montage
 	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
 	TObjectPtr<class UAnimMontage> GreatSwordAttackAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
+	TObjectPtr<class UAnimMontage> GreatSwordDefenseAnim;
 
 	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
 	TObjectPtr<class UAnimMontage> GreatSwordEquipAnim;
@@ -124,8 +130,12 @@ protected:
 	TObjectPtr<class UAnimMontage> GreatSwordUnEquipAnim;
 
 protected:
+	// Spear Animation Montage
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
 	TObjectPtr<class UAnimMontage> SpearAttackAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
+	TObjectPtr<class UAnimMontage> SpearDefenseAnim;
 
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
 	TObjectPtr<class UAnimMontage> SpearEquipAnim;
@@ -134,8 +144,12 @@ protected:
 	TObjectPtr<class UAnimMontage> SpearUnEquipAnim;
 
 protected:
+	// Staff Animation Montage
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
 	TObjectPtr<class UAnimMontage> StaffAttackAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
+	TObjectPtr<class UAnimMontage> StaffDefenseAnim;
 
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
 	TObjectPtr<class UAnimMontage> StaffEquipAnim;
@@ -145,6 +159,7 @@ protected:
 
 public:
 	bool bIsEquipWeapon = false;
+	bool bCanAttackNext = false;
 
 protected:
 	FTimerHandle StaminaRecoveryHandle;
@@ -157,12 +172,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Timer")
 	float AttackNextTime = 0.5f;
 
+public:
 	void SetStaminaRecoveryTime();
 	void SetStaminaAndTimer(int32 Stamina);
-
-	bool bCanAttackNext = false;
-
-public:
 	void SetAttackNextTime();
 	void SetAttackNextAndTimer();
 	void SetAttackEndTime();
