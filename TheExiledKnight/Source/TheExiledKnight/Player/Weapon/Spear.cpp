@@ -6,6 +6,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "../EKPlayer/EKPlayer.h"
 #include "../EKPlayer/EKPlayerController.h"
+#include "../EKPlayer/EKPlayerStatusComponent.h"
 
 ASpear::ASpear()
 {
@@ -49,12 +50,78 @@ void ASpear::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 	}
 }
 
-void ASpear::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<class AEKPlayer> EKPlayer)
+void ASpear::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	if (!EKPlayerController->bIsEquipWeapon || !EKPlayerController->GetSpearAttackAnim())
+	{
+		return;
+	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < SpearAttackStamina)
+	{
+		return;
+	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 1)
+	{
+		EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearAttackAnim(), 1.0f, FName("Attack1"));
+	}
+	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 2 && EKPlayerController->bCanAttackNext == true)
+	{
+		EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearAttackAnim(), 1.0f, FName("Attack2"));
+	}
+	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 3 && EKPlayerController->bCanAttackNext == true)
+	{
+		EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearAttackAnim(), 1.0f, FName("Attack3"));
+	}
+	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 4 && EKPlayerController->bCanAttackNext == true)
+	{
+		EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearAttackAnim(), 1.0f, FName("Attack4"));
+	}
+	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 5 && EKPlayerController->bCanAttackNext == true)
+	{
+		EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearAttackAnim(), 1.0f, FName("Attack5"));
+	}
+
+	EKPlayerController->SetStaminaAndTimer(SpearAttackStamina);
+}
+
+void ASpear::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	if (!EKPlayer || !EKPlayerController)
+	{
+		return;
+	}
+
+	EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearDefenseAnim(), 1.f, FName("Start"));
+}
+
+void ASpear::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	if (!EKPlayer || !EKPlayerController)
+	{
+		return;
+	}
+
+	EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearDefenseAnim(), 1.f, FName("Loop"));
+}
+
+void ASpear::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	if (!EKPlayer || !EKPlayerController)
+	{
+		return;
+	}
+
+	EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearDefenseAnim(), 1.f, FName("End"));
+}
+
+void ASpear::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
 {
 	Super::AttachWeaponToSpineSocket(Weapon, EKPlayer);
 }
 
-void ASpear::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<class AEKPlayer> EKPlayer)
+void ASpear::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
 {
 	Super::AttachWeaponToHandSocket(Weapon, EKPlayer);
 }

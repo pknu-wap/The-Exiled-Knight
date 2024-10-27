@@ -18,30 +18,14 @@
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
+	// Input Mapping Context
 	ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCDefaultFinder(TEXT("/Game/EKPlayer/Input/IMC_EK_Default"));
 	if (IMCDefaultFinder.Succeeded())
 	{
 		IMCDefault = IMCDefaultFinder.Object;
 	}
 
-	ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCGreatSwordFinder(TEXT("/Game/EKPlayer/Input/GreatSword/IMC_EK_GreatSword"));
-	if (IMCGreatSwordFinder.Succeeded())
-	{
-		IMCGreatSword = IMCGreatSwordFinder.Object;
-	}
-
-	ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCSpearFinder(TEXT("/Game/EKPlayer/Input/Spear/IMC_EK_Spear"));
-	if (IMCSpearFinder.Succeeded())
-	{
-		IMCSpear = IMCSpearFinder.Object;
-	}
-
-	ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCStaffFinder(TEXT("/Game/EKPlayer/Input/Staff/IMC_EK_Staff"));
-	if (IMCStaffFinder.Succeeded())
-	{
-		IMCStaff = IMCStaffFinder.Object;
-	}
-
+	// Common Input
 	ConstructorHelpers::FObjectFinder<UInputAction> IAMoveFinder(TEXT("/Game/EKPlayer/Input/IA_EK_Move"));
 	if (IAMoveFinder.Succeeded())
 	{
@@ -78,24 +62,19 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		IAUsePotion = IAUsePotionFinder.Object;
 	}
 
-	ConstructorHelpers::FObjectFinder<UInputAction> IAGreatSwordAttackFinder(TEXT("/Game/EKPlayer/Input/GreatSword/IA_EK_GreatSword_Attack"));
-	if (IAGreatSwordAttackFinder.Succeeded())
+	ConstructorHelpers::FObjectFinder<UInputAction> IAWeaponAttackFinder(TEXT("/Game/EKPlayer/Input/IA_EK_Attack"));
+	if (IAWeaponAttackFinder.Succeeded())
 	{
-		IAGreatSwordAttack = IAGreatSwordAttackFinder.Object;
+		IAWeaponAttack = IAWeaponAttackFinder.Object;
 	}
 
-	ConstructorHelpers::FObjectFinder<UInputAction> IASpearAttackFinder(TEXT("/Game/EKPlayer/Input/Spear/IA_EK_Spear_Attack"));
-	if (IASpearAttackFinder.Succeeded())
+	ConstructorHelpers::FObjectFinder<UInputAction> IAWeaponDefenseFinder(TEXT("/Game/EKPlayer/Input/IA_EK_Defense"));
+	if (IAWeaponDefenseFinder.Succeeded())
 	{
-		IASpearAttack = IASpearAttackFinder.Object;
+		IAWeaponDefense = IAWeaponDefenseFinder.Object;
 	}
 
-	ConstructorHelpers::FObjectFinder<UInputAction> IAStaffAttackFinder(TEXT("/Game/EKPlayer/Input/Staff/IA_EK_Staff_Attack"));
-	if (IAStaffAttackFinder.Succeeded())
-	{
-		IAStaffAttack = IAStaffAttackFinder.Object;
-	}
-
+	// Common Animation Montage
 	ConstructorHelpers::FObjectFinder<UAnimMontage> UsePotionAnimFinder(TEXT("/Game/EKPlayer/Animation/Common/UseItem/EKPlayer_Drink_Common_Montage"));
 	if (UsePotionAnimFinder.Succeeded())
 	{
@@ -114,10 +93,17 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		BackStepAnim = BackStepAnimFinder.Object;
 	}
 
+	// GreatSword Animation Montage
 	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/Attack/EKPlayer_Combo"));
 	if (GreatSwordAttackAnimFinder.Succeeded())
 	{
 		GreatSwordAttackAnim = GreatSwordAttackAnimFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordDefenseAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/Defense/EKPlayer_GreatSword_Defense_Montage"));
+	if (GreatSwordDefenseAnimFinder.Succeeded())
+	{
+		GreatSwordDefenseAnim = GreatSwordDefenseAnimFinder.Object;
 	}
 
 	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordEquipAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/Equip/EKPlayer_Equip_GreatSword_Montage"));
@@ -132,10 +118,17 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		GreatSwordUnEquipAnim = GreatSwordUnEquipAnimFinder.Object;
 	}
 
+	// Spear Animation Montage
 	ConstructorHelpers::FObjectFinder<UAnimMontage> SpearAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/Spear/Attack/EKPlayer_Attack_Spear_Montage"));
 	if (SpearAttackAnimFinder.Succeeded())
 	{
 		SpearAttackAnim = SpearAttackAnimFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> SpearDefenseAnimFinder(TEXT("/Game/EKPlayer/Animation/Spear/Defense/EKPlayer_Spear_Defense_Montage"));
+	if (SpearDefenseAnimFinder.Succeeded())
+	{
+		SpearDefenseAnim = SpearDefenseAnimFinder.Object;
 	}
 
 	ConstructorHelpers::FObjectFinder<UAnimMontage> SpearEquipAnimFinder(TEXT("/Game/EKPlayer/Animation/Spear/Equip/EKPlayer_Equip_Spear"));
@@ -150,10 +143,17 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		SpearUnEquipAnim = SpearUnEquipAnimFinder.Object;
 	}
 
+	// Staff Animation Montage
 	ConstructorHelpers::FObjectFinder<UAnimMontage> StaffAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/Staff/Attack/EKPlayer_Attack_Staff_Montage"));
 	if (StaffAttackAnimFinder.Succeeded())
 	{
 		StaffAttackAnim = StaffAttackAnimFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> StaffDefenseAnimFinder(TEXT("/Game/EKPlayer/Animation/Staff/Defense/EKPlayer_Staff_Defense_Montage"));
+	if (StaffDefenseAnimFinder.Succeeded())
+	{
+		StaffDefenseAnim = StaffDefenseAnimFinder.Object;
 	}
 
 	ConstructorHelpers::FObjectFinder<UAnimMontage> StaffEquipAnimFinder(TEXT("/Game/EKPlayer/Animation/Staff/Equip/EKPlayer_Equip_Staff_Montage"));
@@ -177,22 +177,7 @@ void AEKPlayerController::BeginPlay()
 
 	if (auto* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
-		// Test Version
-		if (EKPlayer->GetMesh()->AnimClass == EKPlayer->ABPGreatSword)
-		{
-			Subsystem->ClearAllMappings();
-			Subsystem->AddMappingContext(IMCGreatSword, 0);
-		}
-		else if (EKPlayer->GetMesh()->AnimClass == EKPlayer->ABPSpear)
-		{
-			Subsystem->ClearAllMappings();
-			Subsystem->AddMappingContext(IMCSpear, 0);
-		}
-		else if (EKPlayer->GetMesh()->AnimClass == EKPlayer->ABPStaff)
-		{
-			Subsystem->ClearAllMappings();
-			Subsystem->AddMappingContext(IMCStaff, 0);
-		}
+		Subsystem->AddMappingContext(IMCDefault, 0);
 	}
 }
 
@@ -202,23 +187,24 @@ void AEKPlayerController::SetupInputComponent()
 
 	if (auto* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
-		EnhancedInputComponent->BindAction(IAMove, ETriggerEvent::Triggered, this, &ThisClass::MoveAction);
-		EnhancedInputComponent->BindAction(IALook, ETriggerEvent::Triggered, this, &ThisClass::LookAction);
-		EnhancedInputComponent->BindAction(IAJump, ETriggerEvent::Started, this, &ThisClass::JumpStart);
+		EnhancedInputComponent->BindAction(IAMove, ETriggerEvent::Triggered, this, &ThisClass::MoveTriggered);
+		EnhancedInputComponent->BindAction(IALook, ETriggerEvent::Triggered, this, &ThisClass::LookTriggered);
+		EnhancedInputComponent->BindAction(IAJump, ETriggerEvent::Started, this, &ThisClass::JumpStarted);
 
-		EnhancedInputComponent->BindAction(IAWeaponChange, ETriggerEvent::Triggered, this, &ThisClass::WeaponChangeAction);
-		EnhancedInputComponent->BindAction(IAUsePotion, ETriggerEvent::Started, this, &ThisClass::UsePotionStart);
+		EnhancedInputComponent->BindAction(IAWeaponChange, ETriggerEvent::Triggered, this, &ThisClass::WeaponChangeStarted);
+		EnhancedInputComponent->BindAction(IAUsePotion, ETriggerEvent::Started, this, &ThisClass::UsePotionStarted);
 
-		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Started, this, &ThisClass::SprintAndDodgeBegin);
-		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Triggered, this, &ThisClass::SprintAndDodgeAction);
+		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Started, this, &ThisClass::SprintAndDodgeStarted);
+		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Triggered, this, &ThisClass::SprintAndDodgeTriggered);
 		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Completed, this, &ThisClass::SprintAndDodgeRelease);
 		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Canceled, this, &ThisClass::SprintAndDodgeRelease);
 
-		EnhancedInputComponent->BindAction(IAGreatSwordAttack, ETriggerEvent::Started, this, &ThisClass::GreatSwordAttackAction);
+		EnhancedInputComponent->BindAction(IAWeaponAttack, ETriggerEvent::Started, this, &ThisClass::WeaponAttackStarted);
 
-		EnhancedInputComponent->BindAction(IASpearAttack, ETriggerEvent::Started, this, &ThisClass::SpearAttackAction);
-
-		EnhancedInputComponent->BindAction(IAStaffAttack, ETriggerEvent::Started, this, &ThisClass::StaffAttackAction);
+		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Started, this, &ThisClass::WeaponDefenseStarted);
+		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Triggered, this, &ThisClass::WeaponDefenseTriggered);
+		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Completed, this, &ThisClass::WeaponDefenseRelease);
+		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Canceled, this, &ThisClass::WeaponDefenseRelease);
 	}
 }
 
@@ -228,7 +214,7 @@ void AEKPlayerController::PlayerTick(float DeltaTime)
 
 }
 
-void AEKPlayerController::MoveAction(const FInputActionValue& InputValue)
+void AEKPlayerController::MoveTriggered(const FInputActionValue& InputValue)
 {
 	FVector2D MovementVector = InputValue.Get<FVector2D>();
 
@@ -247,7 +233,7 @@ void AEKPlayerController::MoveAction(const FInputActionValue& InputValue)
 	}
 }
 
-void AEKPlayerController::LookAction(const FInputActionValue& InputValue)
+void AEKPlayerController::LookTriggered(const FInputActionValue& InputValue)
 {
 	FVector2D LookAxisVector = InputValue.Get<FVector2D>();
 
@@ -258,7 +244,7 @@ void AEKPlayerController::LookAction(const FInputActionValue& InputValue)
 	}
 }
 
-void AEKPlayerController::JumpStart(const FInputActionValue& InputValue)
+void AEKPlayerController::JumpStarted(const FInputActionValue& InputValue)
 {
 	if (!EKPlayer)
 	{
@@ -274,7 +260,7 @@ void AEKPlayerController::JumpStart(const FInputActionValue& InputValue)
 	SetStaminaAndTimer(JumpStamina);
 }
 
-void AEKPlayerController::WeaponChangeAction(const FInputActionValue& InputValue)
+void AEKPlayerController::WeaponChangeStarted(const FInputActionValue& InputValue)
 {
 	if (EKPlayer)
 	{
@@ -282,12 +268,12 @@ void AEKPlayerController::WeaponChangeAction(const FInputActionValue& InputValue
 	}
 }
 
-void AEKPlayerController::SprintAndDodgeBegin(const FInputActionValue& InputValue)
+void AEKPlayerController::SprintAndDodgeStarted(const FInputActionValue& InputValue)
 {
 	SpaceKeyPressStart = GetWorld()->GetTimeSeconds();
 }
 
-void AEKPlayerController::SprintAndDodgeAction(const FInputActionValue& InputValue)
+void AEKPlayerController::SprintAndDodgeTriggered(const FInputActionValue& InputValue)
 {
 	if (!EKPlayer)
 	{
@@ -335,7 +321,7 @@ void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputVa
 	EKPlayer->GetCharacterMovement()->MaxWalkSpeed = EKPlayerWalkSpeed;
 }
 
-void AEKPlayerController::UsePotionStart(const FInputActionValue& InputValue)
+void AEKPlayerController::UsePotionStarted(const FInputActionValue& InputValue)
 {
 	if (EKPlayer)
 	{
@@ -349,100 +335,36 @@ void AEKPlayerController::UsePotionStart(const FInputActionValue& InputValue)
 	}
 }
 
-void AEKPlayerController::GreatSwordAttackAction(const FInputActionValue& InputValue)
+void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValue)
 {
-	if (!bIsEquipWeapon || !GreatSwordAttackAnim)
+	if (EKPlayer)
 	{
-		return;
+		EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
 	}
-
-	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < GreatSwordAttackStamina)
-	{
-		return;
-	}
-
-	if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordCombo() == 1)
-	{
-		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim, 1.0f, FName("Attack1"));
-	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordCombo() == 2 && bCanAttackNext == true)
-	{
-		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim, 1.0f, FName("Attack2"));
-	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordCombo() == 3 && bCanAttackNext == true)
-	{
-		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim, 1.0f, FName("Attack3"));
-	}
-
-	SetStaminaAndTimer(GreatSwordAttackStamina);
 }
 
-void AEKPlayerController::SpearAttackAction(const FInputActionValue& InputValue)
+void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputValue)
 {
-	if (!bIsEquipWeapon || !SpearAttackAnim)
+	if (EKPlayer)
 	{
-		return;
+		EKPlayer->GetCurrentWeapon()->PlayDefenseStartAnimMontage(EKPlayer, this);
 	}
-
-	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < SpearAttackStamina)
-	{
-		return;
-	}
-
-	if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 1)
-	{
-		EKPlayer->PlayAnimMontage(SpearAttackAnim, 1.0f, FName("Attack1"));
-	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 2 && bCanAttackNext == true)
-	{
-		EKPlayer->PlayAnimMontage(SpearAttackAnim, 1.0f, FName("Attack2"));
-	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 3 && bCanAttackNext == true)
-	{
-		EKPlayer->PlayAnimMontage(SpearAttackAnim, 1.0f, FName("Attack3"));
-	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 4 && bCanAttackNext == true)
-	{
-		EKPlayer->PlayAnimMontage(SpearAttackAnim, 1.0f, FName("Attack4"));
-	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 5 && bCanAttackNext == true)
-	{
-		EKPlayer->PlayAnimMontage(SpearAttackAnim, 1.0f, FName("Attack5"));
-	}
-
-	SetStaminaAndTimer(SpearAttackStamina);
 }
 
-void AEKPlayerController::StaffAttackAction(const FInputActionValue& InputValue)
+void AEKPlayerController::WeaponDefenseTriggered(const FInputActionValue& InputValue)
 {
-	if (!bIsEquipWeapon || !StaffAttackAnim)
+	if (EKPlayer)
 	{
-		return;
+		EKPlayer->GetCurrentWeapon()->PlayDefenseTriggerAnimMontage(EKPlayer, this);
 	}
+}
 
-	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < StaffAttackStamina)
+void AEKPlayerController::WeaponDefenseRelease(const FInputActionValue& InputValue)
+{
+	if (EKPlayer)
 	{
-		return;
+		EKPlayer->GetCurrentWeapon()->PlayDefenseReleaseAnimMontage(EKPlayer, this);
 	}
-
-	if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 1)
-	{
-		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack1"));
-	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 2 && bCanAttackNext == true)
-	{
-		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack2"));
-	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 3 && bCanAttackNext == true)
-	{
-		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack3"));
-	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 4 && bCanAttackNext == true)
-	{
-		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack4"));
-	}
-
-	SetStaminaAndTimer(StaffAttackStamina);
 }
 
 TObjectPtr<UAnimMontage> AEKPlayerController::GetEquipAnimGreatSword()
@@ -473,6 +395,36 @@ TObjectPtr<UAnimMontage> AEKPlayerController::GetEquipAnimStaff()
 TObjectPtr<UAnimMontage> AEKPlayerController::GetUnEquipAnimStaff()
 {
 	return StaffUnEquipAnim;
+}
+
+TObjectPtr<UAnimMontage> AEKPlayerController::GetGreatSwordAttackAnim()
+{
+	return GreatSwordAttackAnim;
+}
+
+TObjectPtr<UAnimMontage> AEKPlayerController::GetSpearAttackAnim()
+{
+	return SpearAttackAnim;
+}
+
+TObjectPtr<UAnimMontage> AEKPlayerController::GetStaffAttackAnim()
+{
+	return StaffAttackAnim;
+}
+
+TObjectPtr<UAnimMontage> AEKPlayerController::GetGreatSwordDefenseAnim()
+{
+	return GreatSwordDefenseAnim;
+}
+
+TObjectPtr<UAnimMontage> AEKPlayerController::GetSpearDefenseAnim()
+{
+	return SpearDefenseAnim;
+}
+
+TObjectPtr<UAnimMontage> AEKPlayerController::GetStaffDefenseAnim()
+{
+	return StaffDefenseAnim;
 }
 
 void AEKPlayerController::SetStaminaRecoveryTime()
