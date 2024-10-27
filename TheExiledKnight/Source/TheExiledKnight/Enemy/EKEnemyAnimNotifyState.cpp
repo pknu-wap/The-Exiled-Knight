@@ -2,7 +2,7 @@
 
 
 #include "EKEnemyAnimNotifyState.h"
-
+#include "EK_EnemyBase.h"
 UEKEnemyAnimNotifyState::UEKEnemyAnimNotifyState()
 {
 	MoveDistancePerSec = 0;
@@ -43,6 +43,12 @@ void UEKEnemyAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnim
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime);
 	if (Owner != nullptr)
 	{
+		AEK_EnemyBase* EnemyBase = Cast<AEK_EnemyBase>(Owner);
+		if (EnemyBase)
+		{
+			// 매 프레임마다 공격 판정을 수행
+			EnemyBase->AttackHitCheck();
+		}
 		if (Owner->GetWorld()->GetTimerManager().IsTimerActive(MoveTimerHandle))
 		{
 			float ElapsedTime = Owner->GetWorld()->GetTimerManager().GetTimerElapsed(MoveTimerHandle);
