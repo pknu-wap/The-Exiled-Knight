@@ -302,7 +302,7 @@ void AEKPlayerController::SprintAndDodgeAction(const FInputActionValue& InputVal
 
 	KeyPressDuration = GetWorld()->GetTimeSeconds() - SpaceKeyPressStart;
 	
-	if (KeyPressDuration >= NeedDodgeThresholdTime) // Sprint
+	if (KeyPressDuration >= NeedDodgeThresholdTime)
 	{
 		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = EKPlayerSprintSpeed;
 		SetStaminaAndTimer(SprintStamina);
@@ -316,10 +316,20 @@ void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputVa
 		return;
 	}
 
+	FVector MoveInput = EKPlayer->GetLastMovementInputVector();
+
 	if (KeyPressDuration < NeedDodgeThresholdTime && EKPlayer->GetPlayerStatusComponent()->GetStamina() >= DodgeStamina)
 	{
-		EKPlayer->PlayAnimMontage(DodgeAnim);
-		SetStaminaAndTimer(DodgeStamina);
+		if (MoveInput.IsNearlyZero())
+		{
+			EKPlayer->PlayAnimMontage(BackStepAnim);
+			SetStaminaAndTimer(BackStepStamina);
+		}
+		else
+		{
+			EKPlayer->PlayAnimMontage(DodgeAnim);
+			SetStaminaAndTimer(DodgeStamina);
+		}
 	}
 
 	EKPlayer->GetCharacterMovement()->MaxWalkSpeed = EKPlayerWalkSpeed;
