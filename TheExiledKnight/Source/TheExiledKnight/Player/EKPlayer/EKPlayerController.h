@@ -17,6 +17,7 @@ class UInputAction;
 // Edit Stamina Consumption Here
 #define SprintStamina 1
 #define DodgeStamina 100
+#define BackStepStamina 100
 #define JumpStamina 100
 #define GreatSwordAttackStamina 100
 #define SpearAttackStamina 50
