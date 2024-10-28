@@ -9,6 +9,10 @@
 #define PlayerMaxMp 10000
 #define PlayerMaxStamina 10000
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHpUpdated, int32, MaxHP, int32, CurrentHP);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnStaminaUpdated, int32, MaxStamina, int32, CurrentStamina);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnMpUpdated, int32, MaxMP, int32, CurrentMP);
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class UEKPlayerStatusComponent : public UActorComponent
 {
