@@ -22,11 +22,13 @@ void UWidget_GameMenu_Button::MenuButtonClicked()
 	{
 	case EGameMenuCategory::Inventory:
 	{
+		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_GameMenu, ESlateVisibility::Collapsed);
 		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Inventory, ESlateVisibility::Visible);
 		break;
 	}
 	case EGameMenuCategory::Equipment:
 	{
+		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_GameMenu, ESlateVisibility::Collapsed);
 		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Equipment, ESlateVisibility::Visible);
 		break;
 	}
