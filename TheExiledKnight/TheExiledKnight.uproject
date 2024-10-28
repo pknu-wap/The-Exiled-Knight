@@ -10,8 +10,9 @@
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
 				"AIModule",
-				"Engine",
 				"GameplayTags"
+				"UMG",
+				"Engine"
 			]
 		}
 	],
