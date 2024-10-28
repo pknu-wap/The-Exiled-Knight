@@ -104,24 +104,24 @@ void AEKPlayer::BeginPlay()
 	
 	// Test Spear Version
 
-	if (SpearClass)
+	/*if (SpearClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<ASpear>(SpearClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetCharacterMovement()->JumpZVelocity = 1000.f;
 		GetMesh()->SetAnimInstanceClass(ABPSpear);
-	}
+	}*/
 
 	// Test Staff Version Don't Select This
 
-	/*if (StaffClass)
+	if (StaffClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AStaff>(StaffClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetMesh()->SetAnimInstanceClass(ABPStaff);
-	}*/
+	}
 }
 
 void AEKPlayer::Tick(float DeltaTime)
