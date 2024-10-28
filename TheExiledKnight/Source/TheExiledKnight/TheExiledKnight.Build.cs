@@ -10,7 +10,7 @@ public class TheExiledKnight : ModuleRules
 
 		PublicDependencyModuleNames.AddRange(new string[] 
         { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput",
-        "AIModule", "GameplayTasks", "MovieScene", "LevelSequence", "NavigationSystem", "GameplayTags"});
+        "AIModule", "GameplayTasks", "MovieScene", "LevelSequence", "NavigationSystem", "GameplayTags", "UMG"});
 
         PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 
