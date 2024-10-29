@@ -7,6 +7,8 @@
 namespace EKPlayerGameplayTags
 {
 	// About EKPlayer Current State
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_BattleState);
+
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_Move);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_Look);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_Sprint);
@@ -15,4 +17,5 @@ namespace EKPlayerGameplayTags
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_Defense);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_Dodge);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_UseItem);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_SitDown);
 }
