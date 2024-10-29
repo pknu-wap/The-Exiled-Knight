@@ -53,11 +53,22 @@ void UUISubsystem::UnRegisterWidget(FGameplayTag WidgetTag)
 
 void UUISubsystem::SetLayerVisibility(FGameplayTag LayerTag, ESlateVisibility Visibility)
 {
-	UUserWidget** layer = WidgetMap.Find(LayerTag);
+	UUserWidget** layer = LayerMap.Find(LayerTag);
 	if (layer)
 	{
 		(*layer)->SetVisibility(Visibility);
 	}
+}
+
+ESlateVisibility UUISubsystem::GetLayerVisibility(FGameplayTag LayerTag)
+{
+	UUserWidget** layer = LayerMap.Find(LayerTag);
+	if (layer)
+	{
+		return (*layer)->GetVisibility();
+	}
+
+	return ESlateVisibility::SelfHitTestInvisible;
 }
 
 void UUISubsystem::SetWidgetVisibility(FGameplayTag WidgetTag, ESlateVisibility Visibility)
