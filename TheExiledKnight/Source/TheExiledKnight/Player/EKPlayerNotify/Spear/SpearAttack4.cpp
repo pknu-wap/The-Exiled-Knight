@@ -38,5 +38,7 @@ void USpearAttack4::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBas
 	if (EKPlayer)
 	{
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+		EKPlayer->bUseControllerRotationYaw = false;
+
 	}
 }
