@@ -17,6 +17,7 @@
 #include "UI/UISubsystem.h"
 #include "EKGameplayTags.h"
 #include "Blueprint/UserWidget.h"
+#include "../EKPlayerGameplayTags.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -191,8 +192,15 @@ void AEKPlayerController::SetupInputComponent()
 	if (auto* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
 		EnhancedInputComponent->BindAction(IAMove, ETriggerEvent::Triggered, this, &ThisClass::MoveTriggered);
+		EnhancedInputComponent->BindAction(IAMove, ETriggerEvent::Completed, this, &ThisClass::MoveRelease);
+		EnhancedInputComponent->BindAction(IAMove, ETriggerEvent::Canceled, this, &ThisClass::MoveRelease);
+
 		EnhancedInputComponent->BindAction(IALook, ETriggerEvent::Triggered, this, &ThisClass::LookTriggered);
+		EnhancedInputComponent->BindAction(IALook, ETriggerEvent::Completed, this, &ThisClass::LookRelease);
+		EnhancedInputComponent->BindAction(IALook, ETriggerEvent::Canceled, this, &ThisClass::LookRelease);
+
 		EnhancedInputComponent->BindAction(IAJump, ETriggerEvent::Started, this, &ThisClass::JumpStarted);
+		EnhancedInputComponent->BindAction(IAJump, ETriggerEvent::Triggered, this, &ThisClass::JumpTriggered);
 
 		EnhancedInputComponent->BindAction(IAWeaponChange, ETriggerEvent::Triggered, this, &ThisClass::WeaponChangeStarted);
 		EnhancedInputComponent->BindAction(IAUsePotion, ETriggerEvent::Started, this, &ThisClass::UsePotionStarted);
@@ -221,6 +229,13 @@ void AEKPlayerController::PlayerTick(float DeltaTime)
 
 void AEKPlayerController::MoveTriggered(const FInputActionValue& InputValue)
 {
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack))
+	{
+		return;
+	}
+
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Move);
+
 	FVector2D MovementVector = InputValue.Get<FVector2D>();
 
 	FRotator Rotator = GetControlRotation();
@@ -238,15 +253,27 @@ void AEKPlayerController::MoveTriggered(const FInputActionValue& InputValue)
 	}
 }
 
+void AEKPlayerController::MoveRelease(const FInputActionValue& InputValue)
+{
+	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Move);
+}
+
 void AEKPlayerController::LookTriggered(const FInputActionValue& InputValue)
 {
 	FVector2D LookAxisVector = InputValue.Get<FVector2D>();
+
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Look);
 
 	if (EKPlayer)
 	{
 		EKPlayer->AddControllerYawInput(LookAxisVector.X);
 		EKPlayer->AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AEKPlayerController::LookRelease(const FInputActionValue& InputValue)
+{
+	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Look);
 }
 
 void AEKPlayerController::JumpStarted(const FInputActionValue& InputValue)
@@ -261,16 +288,41 @@ void AEKPlayerController::JumpStarted(const FInputActionValue& InputValue)
 		return;
 	}
 
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Dodge))
+	{
+		return;
+	}
+
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Jump);
+
 	EKPlayer->Jump();
+
 	SetStaminaAndTimer(JumpStamina);
+}
+
+void AEKPlayerController::JumpTriggered(const FInputActionValue& InputValue)
+{
+	if (!EKPlayer)
+	{
+		return;
+	}
+
+	if (!EKPlayer->GetMovementComponent()->IsFalling())
+	{
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Jump);
+	}
 }
 
 void AEKPlayerController::WeaponChangeStarted(const FInputActionValue& InputValue)
 {
-	if (EKPlayer)
+	if (!EKPlayer)
 	{
-		EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
+		return;
 	}
+
+	EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
 }
 
 void AEKPlayerController::SprintAndDodgeStarted(const FInputActionValue& InputValue)
@@ -295,6 +347,7 @@ void AEKPlayerController::SprintAndDodgeTriggered(const FInputActionValue& Input
 	
 	if (KeyPressDuration >= NeedDodgeThresholdTime)
 	{
+		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Sprint);
 		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = EKPlayerSprintSpeed;
 		SetStaminaAndTimer(SprintStamina);
 	}
@@ -307,17 +360,30 @@ void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputVa
 		return;
 	}
 
+	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Sprint);
+
 	FVector MoveInput = EKPlayer->GetLastMovementInputVector();
 
 	if (KeyPressDuration < NeedDodgeThresholdTime && EKPlayer->GetPlayerStatusComponent()->GetStamina() >= DodgeStamina)
 	{
+		if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump) ||
+			EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
+			EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense) ||
+			EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Dodge) ||
+			EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_UseItem))
+		{
+			return;
+		}
+
 		if (MoveInput.IsNearlyZero())
 		{
+			EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Dodge);
 			EKPlayer->PlayAnimMontage(BackStepAnim);
 			SetStaminaAndTimer(BackStepStamina);
 		}
 		else
 		{
+			EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Dodge);
 			EKPlayer->PlayAnimMontage(DodgeAnim);
 			SetStaminaAndTimer(DodgeStamina);
 		}
@@ -328,32 +394,55 @@ void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputVa
 
 void AEKPlayerController::UsePotionStarted(const FInputActionValue& InputValue)
 {
-	if (EKPlayer)
+	if (!EKPlayer || !UsePotionAnim)
 	{
-		EKPlayer->GetPlayerStatusComponent()->SetHp(10);
-		EKPlayer->GetPlayerStatusComponent()->SetMp(10);
+		return;
 	}
 
-	if (UsePotionAnim)
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Dodge) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_UseItem))
 	{
-		EKPlayer->PlayAnimMontage(UsePotionAnim);
+		return;
 	}
+
+	EKPlayer->GetPlayerStatusComponent()->SetHp(10);
+	EKPlayer->GetPlayerStatusComponent()->SetMp(10);
+	EKPlayer->PlayAnimMontage(UsePotionAnim);
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_UseItem);
 }
 
 void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValue)
 {
-	if (EKPlayer)
+	if (!EKPlayer || !bIsEquipWeapon)
 	{
-		EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
+		return;
 	}
+
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Dodge))
+	{
+		return;
+	}
+
+	EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
+
+	EKPlayer->bUseControllerRotationYaw = true;
+
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 }
 
 void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputValue)
 {
-	if (EKPlayer)
+	if (!EKPlayer)
 	{
-		EKPlayer->GetCurrentWeapon()->PlayDefenseStartAnimMontage(EKPlayer, this);
+		return;
 	}
+
+	EKPlayer->GetCurrentWeapon()->PlayDefenseStartAnimMontage(EKPlayer, this);
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
 }
 
 void AEKPlayerController::WeaponDefenseTriggered(const FInputActionValue& InputValue)
@@ -366,10 +455,12 @@ void AEKPlayerController::WeaponDefenseTriggered(const FInputActionValue& InputV
 
 void AEKPlayerController::WeaponDefenseRelease(const FInputActionValue& InputValue)
 {
-	if (EKPlayer)
+	if (!EKPlayer)
 	{
-		EKPlayer->GetCurrentWeapon()->PlayDefenseReleaseAnimMontage(EKPlayer, this);
+		return;
 	}
+	EKPlayer->GetCurrentWeapon()->PlayDefenseReleaseAnimMontage(EKPlayer, this);
+	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
 }
 
 TObjectPtr<UAnimMontage> AEKPlayerController::GetEquipAnimGreatSword()
