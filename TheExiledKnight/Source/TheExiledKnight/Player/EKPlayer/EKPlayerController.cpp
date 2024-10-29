@@ -424,6 +424,8 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 
 	EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
 
+	EKPlayer->bUseControllerRotationYaw = true;
+
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 }
 
