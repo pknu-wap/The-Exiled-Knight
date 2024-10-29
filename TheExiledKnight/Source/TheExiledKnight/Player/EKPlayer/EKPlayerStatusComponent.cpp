@@ -51,7 +51,7 @@ void UEKPlayerStatusComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 	if (bCanStaminaRecovery)
 	{
-		SetStamina(2);
+		SetStamina(4);
 	}
 }
 
