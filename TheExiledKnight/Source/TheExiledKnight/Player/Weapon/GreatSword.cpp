@@ -78,17 +78,19 @@ void AGreatSword::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TOb
 
 void AGreatSword::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController)
+	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
 	{
 		return;
 	}
 
 	EKPlayer->PlayAnimMontage(EKPlayerController->GetGreatSwordDefenseAnim(), 1.f, FName("Start"));
+
+	AttachToDefenseSocket(this, EKPlayer);
 }
 
 void AGreatSword::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController)
+	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
 	{
 		return;
 	}
@@ -98,12 +100,26 @@ void AGreatSword::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, 
 
 void AGreatSword::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController)
+	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
 	{
 		return;
 	}
 
 	EKPlayer->PlayAnimMontage(EKPlayerController->GetGreatSwordDefenseAnim(), 1.f, FName("End"));
+
+	AttachWeaponToHandSocket(this, EKPlayer);
+}
+
+void AGreatSword::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
+{
+	if (Weapon)
+	{
+		USkeletalMeshComponent* MeshComp = EKPlayer->GetMesh();
+		if (MeshComp)
+		{
+			Weapon->AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("greatsword_defense_socket"));
+		}
+	}
 }
 
 void AGreatSword::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
