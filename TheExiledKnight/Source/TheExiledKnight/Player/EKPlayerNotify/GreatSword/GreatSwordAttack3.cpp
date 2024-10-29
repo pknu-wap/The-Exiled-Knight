@@ -3,6 +3,7 @@
 #include "GreatSwordAttack3.h"
 #include "../../EKPlayer/EKPlayer.h"
 #include "../../EKPlayer/EKPlayerController.h"
+#include "../../EKPlayerGameplayTags.h"
 
 void UGreatSwordAttack3::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
@@ -32,5 +33,10 @@ void UGreatSwordAttack3::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequen
 	if (EKPlayerController)
 	{
 		EKPlayerController->SetAttackNextAndTimer();
+	}
+
+	if (EKPlayer)
+	{
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 	}
 }
