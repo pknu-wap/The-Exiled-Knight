@@ -3,6 +3,7 @@
 #include "StaffAttack4.h"
 #include "../../EKPlayer/EKPlayer.h"
 #include "../../EKPlayer/EKPlayerController.h"
+#include "../../EKPlayerGameplayTags.h"
 
 void UStaffAttack4::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
@@ -32,5 +33,10 @@ void UStaffAttack4::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBas
 	if (EKPlayerController)
 	{
 		EKPlayerController->SetAttackNextAndTimer();
+	}
+
+	if (EKPlayer)
+	{
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 	}
 }
