@@ -12,6 +12,7 @@
 #include "../Weapon/Spear.h"
 #include "../Weapon/Staff.h"
 #include "Animation/AnimInstance.h"
+#include "../EKPlayerGameplayTags.h"
 
 AEKPlayer::AEKPlayer()
 {
