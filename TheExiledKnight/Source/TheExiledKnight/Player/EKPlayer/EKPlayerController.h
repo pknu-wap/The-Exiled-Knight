@@ -100,6 +100,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IAWeaponDefense;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IAGameMenu;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class AEKPlayer> EKPlayer;
@@ -185,4 +188,7 @@ protected:
 	float SpaceKeyPressStart = 0.f;
 	float NeedDodgeThresholdTime = 0.2f;
 	float KeyPressDuration = 0.f;
+
+public:
+	void OnPressed_GameMenu(const FInputActionValue& InputValue);
 };
