@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameplayTagContainer.h"
 #include "EKPlayer.generated.h"
 
 UCLASS()
@@ -23,9 +24,6 @@ public:
 
 	TObjectPtr<class UEKPlayerStatusComponent> GetPlayerStatusComponent();
 
-	void OnDamaged();
-	void OnDead();
-
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UEKPlayerStatusComponent> PlayerStatusComponent;
@@ -40,6 +38,7 @@ public:
 	void AttachWeaponToSpineSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
 	void AttachWeaponToHandSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
 
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class AGreatSword> GreatSwordClass;
 
@@ -53,7 +52,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TObjectPtr<class AEKPlayerWeapon> CurrentWeapon;
 
-public:
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
 	TSubclassOf<class UAnimInstance> ABPGreatSword;
 
@@ -62,4 +61,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
 	TSubclassOf<class UAnimInstance> ABPStaff;
+
+public:
+	UPROPERTY()
+	FGameplayTagContainer EKPlayerStateContainer;
 };

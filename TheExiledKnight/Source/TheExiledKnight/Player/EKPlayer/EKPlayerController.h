@@ -17,7 +17,7 @@ class UInputAction;
 // Edit Stamina Consumption Here
 #define SprintStamina 1
 #define DodgeStamina 100
-#define BackStepStamina 100
+#define BackStepStamina 50
 #define JumpStamina 100
 #define GreatSwordAttackStamina 100
 #define SpearAttackStamina 50
@@ -38,8 +38,13 @@ protected:
 
 private:
 	void MoveTriggered(const FInputActionValue& InputValue);
+	void MoveRelease(const FInputActionValue& InputValue);
+
 	void LookTriggered(const FInputActionValue& InputValue);
+	void LookRelease(const FInputActionValue& InputValue);
+
 	void JumpStarted(const FInputActionValue& InputValue);
+	void JumpTriggered(const FInputActionValue& InputValue);
 
 	void WeaponChangeStarted(const FInputActionValue& InputValue);
 
