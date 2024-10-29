@@ -226,7 +226,6 @@ void AEKPlayerController::MoveTriggered(const FInputActionValue& InputValue)
 {
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack state active, movement blocked."));
 		return;
 	}
 
