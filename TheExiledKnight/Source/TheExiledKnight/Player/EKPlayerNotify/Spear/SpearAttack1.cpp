@@ -3,6 +3,7 @@
 #include "SpearAttack1.h"
 #include "../../EKPlayer/EKPlayer.h"
 #include "../../EKPlayer/EKPlayerController.h"
+#include "../../EKPlayerGameplayTags.h"
 
 void USpearAttack1::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
@@ -32,5 +33,12 @@ void USpearAttack1::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBas
 	if (EKPlayerController)
 	{
 		EKPlayerController->SetAttackNextAndTimer();
+	}
+
+	if (EKPlayer)
+	{
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+		EKPlayer->bUseControllerRotationYaw = false;
+
 	}
 }
