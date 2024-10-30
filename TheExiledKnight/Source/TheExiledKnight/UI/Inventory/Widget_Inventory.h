@@ -5,33 +5,45 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "EKEnums.h"
-#include "Widget_EquipSelectWindow.generated.h"
+#include "Widget_Inventory.generated.h"
 
-class UTextBlock;
-class UImage;
-class UWidget_EquipSelect_ContentList;
+class UButton;
+class UScrollBox;
+class UWidget_InvContentList;
+class UWidget_Inventory_CategorySlot;
 
 UCLASS()
-class THEEXILEDKNIGHT_API UWidget_EquipSelectWindow : public UUserWidget
+class THEEXILEDKNIGHT_API UWidget_Inventory : public UUserWidget
 {
 	GENERATED_BODY()
 
-public:
+protected:
 	virtual void NativeConstruct() override;
 
 public:
 	void UpdateContents(EItemCategory Category);
 
 public:
+	UFUNCTION()
+	void ShowBeforeCategory();
+
+	UFUNCTION()
+	void ShowNextCategory();
+
+public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
-	UTextBlock* Text_Category;
+	UWidget_InvContentList* ContentList;
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
-	UTextBlock* Text_SelectedItem;
+	UScrollBox* ScrollBox_Category;
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
-	UImage* Image_Item;
+	UButton* Button_BeforeCategory;
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
-	UWidget_EquipSelect_ContentList* ContentList;
+	UButton* Button_NextCategory;
+
+private:
+	TArray<UWidget_Inventory_CategorySlot*> CategorySlots;
+	int CurrentCategoryIdx;
 };
