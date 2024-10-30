@@ -3,6 +3,7 @@
 
 #include "EK_EnemyBase.h"
 #include "EK_EnemyStatusComponent.h"
+#include"Player/EKPlayer/EKPlayer.h"
 // Sets default values
 AEK_EnemyBase::AEK_EnemyBase()
 {
@@ -11,6 +12,7 @@ AEK_EnemyBase::AEK_EnemyBase()
 
 void AEK_EnemyBase::AttackHitCheck()
 {
+	if (GetAttackHitCheck())return;
 	USkeletalMeshComponent* SkeletalMeshComp = FindComponentByClass<USkeletalMeshComponent>();
 	if (!SkeletalMeshComp)
 	{
@@ -39,14 +41,33 @@ void AEK_EnemyBase::AttackHitCheck()
 	{
 		for (auto& Hit : HitResults)
 		{
-			AActor* HitActor = Hit.GetActor();
-			if (HitActor)
+			
+			AActor* HitActor = Hit.GetActor(); 
+			if (HitActor) 
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *HitActor->GetName());
+				//UE_LOG(LogTemp, Warning, TEXT("Detected Actor Class: %s"), *HitActor->GetClass()->GetName()); 
+				AEKPlayer* detectPlayer = Cast<AEKPlayer>(HitActor); 
+				if (detectPlayer)
+				{
+					SetAttackHitCheck(true);
+					UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *HitActor->GetName());
+				}
+				
 			}
 		}
 	}
 }
+
+void AEK_EnemyBase::SetAttackHitCheck(bool check)
+{
+	bAttackHitCheck = check; 
+}
+
+bool AEK_EnemyBase::GetAttackHitCheck()
+{
+	return bAttackHitCheck;
+}
+
 
 
 
