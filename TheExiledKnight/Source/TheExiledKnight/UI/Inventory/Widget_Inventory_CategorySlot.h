@@ -4,35 +4,36 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Structs/InventorySlotStruct.h"
-#include "Widget_InvContentSlot.generated.h"
+#include "EKEnums.h"
+#include "Widget_Inventory_CategorySlot.generated.h"
 
 class UButton;
 class UImage;
-class UTextBlock;
 
 UCLASS()
-class THEEXILEDKNIGHT_API UWidget_InvContentSlot : public UUserWidget
+class THEEXILEDKNIGHT_API UWidget_Inventory_CategorySlot : public UUserWidget
 {
 	GENERATED_BODY()
-
-public:
-	virtual void NativeConstruct() override;
-	
-public:
-	void UpdateSlot(const FInventorySlot& inData);
 
 protected:
 	UFUNCTION(BlueprintCallable)
 	FEventReply RedirectMouseDownToWidget(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 
 public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void Hover();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void UnHover();
+
+public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	EItemCategory Category;
+
+public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
-	UButton* Button_Slot;
+	UButton* Button_Category;
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
-	UImage* Image_Item;
-
-	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
-	UTextBlock* Text_Quantity;
+	UImage* Image_Category;
 };
