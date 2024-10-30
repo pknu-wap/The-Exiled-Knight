@@ -101,18 +101,6 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		BackStepAnim = BackStepAnimFinder.Object;
 	}
 
-	ConstructorHelpers::FObjectFinder<UAnimMontage> SitDownAnimFinder(TEXT("/Game/EKPlayer/Animation/Common/SitDown/EKPlayer_SitDown_Montage"));
-	if (SitDownAnimFinder.Succeeded())
-	{
-		SitDownAnim = SitDownAnimFinder.Object;
-	}
-
-	ConstructorHelpers::FObjectFinder<UAnimMontage> SitDownWalkAnimFinder(TEXT("/Game/EKPlayer/Animation/Common/SitDown/EKPlayer_SitDown_Walk_Montage"));
-	if (SitDownWalkAnimFinder.Succeeded())
-	{
-		SitDownWalkAnim = SitDownWalkAnimFinder.Object;
-	}
-
 	// GreatSword Animation Montage
 	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/Attack/EKPlayer_Combo"));
 	if (GreatSwordAttackAnimFinder.Succeeded())
@@ -315,6 +303,7 @@ void AEKPlayerController::JumpStarted(const FInputActionValue& InputValue)
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_SitDown) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Dodge))
 	{
 		return;
@@ -372,6 +361,11 @@ void AEKPlayerController::SprintAndDodgeTriggered(const FInputActionValue& Input
 	
 	if (KeyPressDuration >= NeedDodgeThresholdTime)
 	{
+		if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_SitDown) ||
+			EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack))
+		{
+			return;
+		}
 		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Sprint);
 		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = EKPlayerSprintSpeed;
 		SetStaminaAndTimer(SprintStamina);
@@ -395,6 +389,7 @@ void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputVa
 			EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
 			EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense) ||
 			EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Dodge) ||
+			EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_SitDown) ||
 			EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_UseItem))
 		{
 			return;
@@ -506,12 +501,12 @@ void AEKPlayerController::SitDownStarted(const FInputActionValue& InputValue)
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_SitDown))
 	{
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
-
+		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = 200.f;
 	}
 	else
 	{
 		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
-
+		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = 100.f;
 	}
 }
 

@@ -18,7 +18,7 @@ class UInputAction;
 #define SprintStamina 1
 #define DodgeStamina 100
 #define BackStepStamina 50
-#define JumpStamina 100
+#define JumpStamina 50
 #define GreatSwordAttackStamina 100
 #define SpearAttackStamina 50
 #define StaffAttackStamina 80
@@ -124,12 +124,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
 	TObjectPtr<class UAnimMontage> BackStepAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
-	TObjectPtr<class UAnimMontage> SitDownAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
-	TObjectPtr<class UAnimMontage> SitDownWalkAnim;
 
 protected:
 	// GreatSword Animation Montage
