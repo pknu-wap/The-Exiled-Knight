@@ -18,4 +18,5 @@ namespace EKPlayerGameplayTags
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_Dodge);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_UseItem);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_SitDown);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_Enhance);
 }

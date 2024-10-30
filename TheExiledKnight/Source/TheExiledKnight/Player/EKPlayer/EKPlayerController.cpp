@@ -82,6 +82,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		IASitDown = IASitDownFinder.Object;
 	}
 
+	ConstructorHelpers::FObjectFinder<UInputAction> IAEnhanceFinder(TEXT("/Game/EKPlayer/Input/IA_EK_Enhance"));
+	if (IAEnhanceFinder.Succeeded())
+	{
+		IAEnhance = IAEnhanceFinder.Object;
+	}
+
 	// Common Animation Montage
 	ConstructorHelpers::FObjectFinder<UAnimMontage> UsePotionAnimFinder(TEXT("/Game/EKPlayer/Animation/Common/UseItem/EKPlayer_Drink_Common_Montage"));
 	if (UsePotionAnimFinder.Succeeded())
@@ -106,6 +112,18 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	if (GreatSwordAttackAnimFinder.Succeeded())
 	{
 		GreatSwordAttackAnim = GreatSwordAttackAnimFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordEnhancedAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/Attack/EnhancedAttack/EKPlayer_GreatSword_Enhanced_Attack"));
+	if (GreatSwordEnhancedAttackAnimFinder.Succeeded())
+	{
+		GreatSwordEnhancedAttackAnim = GreatSwordEnhancedAttackAnimFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordJumpAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/Attack/EnhancedAttack/EKPlayer_GreatSword_Jump_Attack"));
+	if (GreatSwordJumpAttackAnimFinder.Succeeded())
+	{
+		GreatSwordJumpAttackAnim = GreatSwordJumpAttackAnimFinder.Object;
 	}
 
 	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordDefenseAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/Defense/EKPlayer_GreatSword_Defense_Montage"));
@@ -224,6 +242,10 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Canceled, this, &ThisClass::WeaponDefenseRelease);
 
 		EnhancedInputComponent->BindAction(IASitDown, ETriggerEvent::Started, this, &ThisClass::SitDownStarted);
+
+		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Started, this, &ThisClass::EnhanceStarted);
+		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Completed, this, &ThisClass::EnhanceRelease);
+		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Canceled, this, &ThisClass::EnhanceRelease);
 	}
 }
 
@@ -447,11 +469,18 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 		return;
 	}
 
-	EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Enhance))
+	{
+		EKPlayer->GetCurrentWeapon()->PlayEnhancedAttackStartAnimMontage(EKPlayer, this);
+	}
+	else
+	{
+		EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
+	}
 
 	EKPlayer->bUseControllerRotationYaw = true;
-
-	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 }
 
 void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputValue)
@@ -510,6 +539,16 @@ void AEKPlayerController::SitDownStarted(const FInputActionValue& InputValue)
 	}
 }
 
+void AEKPlayerController::EnhanceStarted(const FInputActionValue& InputValue)
+{
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Enhance);
+}
+
+void AEKPlayerController::EnhanceRelease(const FInputActionValue& InputValue)
+{
+	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Enhance);
+}
+
 TObjectPtr<UAnimMontage> AEKPlayerController::GetEquipAnimGreatSword()
 {
 	return GreatSwordEquipAnim;
@@ -543,6 +582,16 @@ TObjectPtr<UAnimMontage> AEKPlayerController::GetUnEquipAnimStaff()
 TObjectPtr<UAnimMontage> AEKPlayerController::GetGreatSwordAttackAnim()
 {
 	return GreatSwordAttackAnim;
+}
+
+TObjectPtr<UAnimMontage> AEKPlayerController::GetGreatSwordEnhancedAttackAnim()
+{
+	return GreatSwordEnhancedAttackAnim;
+}
+
+TObjectPtr<UAnimMontage> AEKPlayerController::GetGreatSwordJumpAttackAnim()
+{
+	return GreatSwordJumpAttackAnim;
 }
 
 TObjectPtr<UAnimMontage> AEKPlayerController::GetSpearAttackAnim()
@@ -593,6 +642,9 @@ void AEKPlayerController::SetAttackNextAndTimer()
 	EKPlayer->GetPlayerStatusComponent()->SetGreatSwordCombo();
 	EKPlayer->GetPlayerStatusComponent()->SetSpearCombo();
 	EKPlayer->GetPlayerStatusComponent()->SetStaffCombo();
+	EKPlayer->GetPlayerStatusComponent()->SetGreatSwordEnhancedCombo();
+	EKPlayer->GetPlayerStatusComponent()->SetSpearEnhancedCombo();
+	EKPlayer->GetPlayerStatusComponent()->SetStaffEnhancedCombo();
 	GetWorldTimerManager().SetTimer(AttackNextHandle, this, &ThisClass::SetAttackNextTime, AttackNextTime, false);
 }
 
@@ -601,6 +653,9 @@ void AEKPlayerController::SetAttackEndTime()
 	EKPlayer->GetPlayerStatusComponent()->ResetGreatSwordCombo();
 	EKPlayer->GetPlayerStatusComponent()->ResetSpearCombo();
 	EKPlayer->GetPlayerStatusComponent()->ResetStaffCombo();
+	EKPlayer->GetPlayerStatusComponent()->ResetGreatSwordEnhancedCombo();
+	EKPlayer->GetPlayerStatusComponent()->ResetSpearEnhancedCombo();
+	EKPlayer->GetPlayerStatusComponent()->ResetStaffEnhancedCombo();
 }
 
 void AEKPlayerController::SetAttackEndTimer(float Time)

@@ -19,9 +19,18 @@ class UInputAction;
 #define DodgeStamina 100
 #define BackStepStamina 50
 #define JumpStamina 50
+
 #define GreatSwordAttackStamina 100
+#define GreatSwordEnhancedAttackStamina 200
+#define GreatSwordJumpAttackStamina 100
+
 #define SpearAttackStamina 50
+#define SpearEnhancedAttackStamina 50
+#define SpearJumpAttackStamina 50
+
 #define StaffAttackStamina 80
+#define StaffEnhancedAttackStamina 80
+#define StaffJumpAttackStamina 80
 
 UCLASS()
 class AEKPlayerController : public APlayerController
@@ -62,6 +71,9 @@ private:
 
 	void SitDownStarted(const FInputActionValue& InputValue);
 
+	void EnhanceStarted(const FInputActionValue& InputValue);
+	void EnhanceRelease(const FInputActionValue& InputValue);
+
 public:
 	TObjectPtr<class UAnimMontage> GetEquipAnimGreatSword();
 	TObjectPtr<class UAnimMontage> GetUnEquipAnimGreatSword();
@@ -71,6 +83,8 @@ public:
 	TObjectPtr<class UAnimMontage> GetUnEquipAnimStaff();
 
 	TObjectPtr<class UAnimMontage> GetGreatSwordAttackAnim();
+	TObjectPtr<class UAnimMontage> GetGreatSwordEnhancedAttackAnim();
+	TObjectPtr<class UAnimMontage> GetGreatSwordJumpAttackAnim();
 	TObjectPtr<class UAnimMontage> GetSpearAttackAnim();
 	TObjectPtr<class UAnimMontage> GetStaffAttackAnim();
 
@@ -110,6 +124,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IASitDown;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IAEnhance;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class AEKPlayer> EKPlayer;
@@ -129,6 +146,12 @@ protected:
 	// GreatSword Animation Montage
 	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
 	TObjectPtr<class UAnimMontage> GreatSwordAttackAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
+	TObjectPtr<class UAnimMontage> GreatSwordEnhancedAttackAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
+	TObjectPtr<class UAnimMontage> GreatSwordJumpAttackAnim;
 
 	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
 	TObjectPtr<class UAnimMontage> GreatSwordDefenseAnim;
