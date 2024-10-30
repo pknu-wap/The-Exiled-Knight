@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "EKEnums.h"
 #include "Widget_EquipSelect_ContentList.generated.h"
 
 class UListView;
@@ -12,6 +13,9 @@ UCLASS()
 class THEEXILEDKNIGHT_API UWidget_EquipSelect_ContentList : public UUserWidget
 {
 	GENERATED_BODY()
+
+public:
+	void UpdateContents(EItemCategory Category);
 
 public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
