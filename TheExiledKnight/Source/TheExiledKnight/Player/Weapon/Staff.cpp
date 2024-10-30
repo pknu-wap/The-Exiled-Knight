@@ -81,17 +81,19 @@ void AStaff::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 
 void AStaff::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController)
+	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
 	{
 		return;
 	}
 
 	EKPlayer->PlayAnimMontage(EKPlayerController->GetStaffDefenseAnim(), 1.f, FName("Start"));
+
+	AttachToDefenseSocket(this, EKPlayer);
 }
 
 void AStaff::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController)
+	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
 	{
 		return;
 	}
@@ -101,12 +103,26 @@ void AStaff::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObje
 
 void AStaff::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController)
+	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
 	{
 		return;
 	}
 
 	EKPlayer->PlayAnimMontage(EKPlayerController->GetStaffDefenseAnim(), 1.f, FName("End"));
+
+	AttachWeaponToHandSocket(this, EKPlayer);
+}
+
+void AStaff::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
+{
+	if (Weapon)
+	{
+		USkeletalMeshComponent* MeshComp = EKPlayer->GetMesh();
+		if (MeshComp)
+		{
+			Weapon->AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("staff_defense_socket"));
+		}
+	}
 }
 
 void AStaff::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
