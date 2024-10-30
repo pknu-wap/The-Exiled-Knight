@@ -22,12 +22,17 @@ protected:
 public:	
 	UPROPERTY(VisibleAnywhere, Category = Stat)
 	class UEK_EnemyStatusComponent* EnemyStat;
+	
 	virtual void AttackHitCheck();
+
+	virtual void SetAttackHitCheck(bool check);
+	virtual bool GetAttackHitCheck();
 private:
 	
 	UPROPERTY(EditAnywhere, Category = Attack, Meta = (AllowPrivteAccess = true))
 	float  AttackRadius;
 	UPROPERTY(EditAnywhere, Category = Attack, Meta = (AllowPrivteAccess = true))
 	float AttackHalfHeight;
-
+	UPROPERTY(EditAnywhere, Category = Attack, Meta = (AllowPrivteAccess = true))
+	bool bAttackHitCheck;
 };
