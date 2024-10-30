@@ -14,6 +14,9 @@
 #include "../Weapon/Staff.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "EKPlayerStatusComponent.h"
+#include "UI/UISubsystem.h"
+#include "EKGameplayTags.h"
+#include "Blueprint/UserWidget.h"
 #include "../EKPlayerGameplayTags.h"
 #include "Components/InventoryComponent.h"
 
@@ -234,6 +237,8 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Triggered, this, &ThisClass::WeaponDefenseTriggered);
 		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Completed, this, &ThisClass::WeaponDefenseRelease);
 		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Canceled, this, &ThisClass::WeaponDefenseRelease);
+	
+		EnhancedInputComponent->BindAction(IAGameMenu, ETriggerEvent::Started, this, &ThisClass::OnPressed_GameMenu);
 
 		EnhancedInputComponent->BindAction(IASitDown, ETriggerEvent::Started, this, &ThisClass::SitDownStarted);
 	}
@@ -611,4 +616,25 @@ void AEKPlayerController::SetAttackEndTime()
 void AEKPlayerController::SetAttackEndTimer(float Time)
 {
 	GetWorldTimerManager().SetTimer(AttackEndHandle, this, &ThisClass::SetAttackEndTime, Time, false);
+}
+
+void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue)
+{
+	UUISubsystem* UISystem = GetGameInstance()->GetSubsystem<UUISubsystem>();
+	if (!UISystem) return;
+	
+	UUserWidget* layer_GameMenu = UISystem->GetLayer(FEKGameplayTags::Get().UI_Layer_GameMenu);
+	UUserWidget* widget_GameMenu = UISystem->GetWidget(FEKGameplayTags::Get().UI_Widget_GameMenu_GameMenu);
+	
+	if (layer_GameMenu && layer_GameMenu->GetVisibility() == ESlateVisibility::Collapsed)
+	{
+		layer_GameMenu->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+		widget_GameMenu->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+	}
+	else if(widget_GameMenu && widget_GameMenu->GetVisibility() == ESlateVisibility::SelfHitTestInvisible)
+	{
+		layer_GameMenu->SetVisibility(ESlateVisibility::Collapsed);
+		widget_GameMenu->SetVisibility(ESlateVisibility::Collapsed);
+	}
+	
 }
