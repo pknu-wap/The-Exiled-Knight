@@ -18,8 +18,8 @@ enum class EItemCategory : uint8
 {
 	None,
 	Weapon,
-	Artifacts,	// defense or specific effect
+	Shard,	// defense or specific effect
 	Hunting,	// monster drop item
 	Upgrades,	// weapon & potion upgrade
-	Shard,	// Special skill
+	Rune,	// Special skill
 };
