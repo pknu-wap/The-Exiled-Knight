@@ -5,33 +5,32 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "EKEnums.h"
-#include "Widget_EquipSelectWindow.generated.h"
+#include "Widget_Equipment_Slot.generated.h"
 
-class UTextBlock;
+class UButton;
 class UImage;
-class UWidget_EquipSelect_ContentList;
+class UTextBlock;
 
 UCLASS()
-class THEEXILEDKNIGHT_API UWidget_EquipSelectWindow : public UUserWidget
+class THEEXILEDKNIGHT_API UWidget_Equipment_Slot : public UUserWidget
 {
 	GENERATED_BODY()
+	
+protected:
+	UFUNCTION(BlueprintCallable)
+	FEventReply RedirectMouseDownToWidget(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 
 public:
-	virtual void NativeConstruct() override;
-
-public:
-	void UpdateContents(EItemCategory Category);
+	UPROPERTY(BlueprintReadWrite, Editanywhere)
+	EItemCategory Category = EItemCategory::None;
 
 public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
-	UTextBlock* Text_Category;
-
-	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
-	UTextBlock* Text_SelectedItem;
+	UButton* Button_Slot;
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
 	UImage* Image_Item;
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
-	UWidget_EquipSelect_ContentList* ContentList;
+	UTextBlock* Text_Quantity;
 };
