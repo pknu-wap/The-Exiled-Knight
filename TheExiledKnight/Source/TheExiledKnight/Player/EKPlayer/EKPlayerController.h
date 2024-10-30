@@ -60,6 +60,8 @@ private:
 	void WeaponDefenseTriggered(const FInputActionValue& InputValue);
 	void WeaponDefenseRelease(const FInputActionValue& InputValue);
 
+	void SitDownStarted(const FInputActionValue& InputValue);
+
 public:
 	TObjectPtr<class UAnimMontage> GetEquipAnimGreatSword();
 	TObjectPtr<class UAnimMontage> GetUnEquipAnimGreatSword();
@@ -105,6 +107,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IAWeaponDefense;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IASitDown;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class AEKPlayer> EKPlayer;
@@ -119,6 +124,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
 	TObjectPtr<class UAnimMontage> BackStepAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
+	TObjectPtr<class UAnimMontage> SitDownAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
+	TObjectPtr<class UAnimMontage> SitDownWalkAnim;
 
 protected:
 	// GreatSword Animation Montage
