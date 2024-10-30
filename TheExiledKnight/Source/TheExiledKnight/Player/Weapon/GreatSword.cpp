@@ -76,6 +76,35 @@ void AGreatSword::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TOb
 	EKPlayerController->SetStaminaAndTimer(GreatSwordAttackStamina);
 }
 
+void AGreatSword::PlayEnhancedAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	if (!EKPlayerController->bIsEquipWeapon || !EKPlayerController->GetGreatSwordAttackAnim())
+	{
+		return;
+	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < GreatSwordEnhancedAttackStamina)
+	{
+		return;
+	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordEnhancedCombo() == 1)
+	{
+		EKPlayer->PlayAnimMontage(EKPlayerController->GetGreatSwordEnhancedAttackAnim(), 1.f, FName("Attack1"));
+	}
+	else if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordEnhancedCombo() == 2)
+	{
+		EKPlayer->PlayAnimMontage(EKPlayerController->GetGreatSwordEnhancedAttackAnim(), 1.f, FName("Attack2"));
+	}
+
+	EKPlayerController->SetStaminaAndTimer(GreatSwordEnhancedAttackStamina);
+}
+
+void AGreatSword::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+
+}
+
 void AGreatSword::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
 	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)

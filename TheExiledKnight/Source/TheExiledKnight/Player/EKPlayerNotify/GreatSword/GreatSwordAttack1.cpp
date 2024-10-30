@@ -39,6 +39,5 @@ void UGreatSwordAttack1::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequen
 	{
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 		EKPlayer->bUseControllerRotationYaw = false;
-
 	}
 }

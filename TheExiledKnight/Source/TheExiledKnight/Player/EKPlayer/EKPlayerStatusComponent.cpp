@@ -192,3 +192,69 @@ void UEKPlayerStatusComponent::ResetStaffCombo()
 {
 	StaffCombo = 1;
 }
+
+uint32 UEKPlayerStatusComponent::GetGreatSwordEnhancedCombo()
+{
+	return GreatSwordEnhancedCombo;
+}
+
+void UEKPlayerStatusComponent::SetGreatSwordEnhancedCombo()
+{
+	if (GreatSwordEnhancedCombo < 2)
+	{
+		GreatSwordEnhancedCombo++;
+	}
+	else
+	{
+		ResetGreatSwordEnhancedCombo();
+	}
+}
+
+void UEKPlayerStatusComponent::ResetGreatSwordEnhancedCombo()
+{
+	GreatSwordEnhancedCombo = 1;
+}
+
+uint32 UEKPlayerStatusComponent::GetSpearEnhancedCombo()
+{
+	return SpearEnhancedCombo;
+}
+
+void UEKPlayerStatusComponent::SetSpearEnhancedCombo()
+{
+	if (SpearEnhancedCombo < 5)
+	{
+		SpearEnhancedCombo++;
+	}
+	else
+	{
+		ResetSpearEnhancedCombo();
+	}
+}
+
+void UEKPlayerStatusComponent::ResetSpearEnhancedCombo()
+{
+	SpearEnhancedCombo = 1;
+}
+
+uint32 UEKPlayerStatusComponent::GetStaffEnhancedCombo()
+{
+	return StaffEnhancedCombo;
+}
+
+void UEKPlayerStatusComponent::SetStaffEnhancedCombo()
+{
+	if (StaffEnhancedCombo < 5)
+	{
+		StaffEnhancedCombo++;
+	}
+	else
+	{
+		ResetStaffEnhancedCombo();
+	}
+}
+
+void UEKPlayerStatusComponent::ResetStaffEnhancedCombo()
+{
+	StaffEnhancedCombo = 1;
+}
