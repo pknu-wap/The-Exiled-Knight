@@ -77,6 +77,13 @@ void UUISubsystem::SetWidgetVisibility(FGameplayTag WidgetTag, ESlateVisibility 
 	if (widget)
 	{
 		(*widget)->SetVisibility(Visibility);
+
+		if (Visibility == ESlateVisibility::SelfHitTestInvisible 
+			|| Visibility == ESlateVisibility::HitTestInvisible
+			|| Visibility == ESlateVisibility::Visible)
+		{
+			(*widget)->SetFocus();
+		}
 	}
 }
 
