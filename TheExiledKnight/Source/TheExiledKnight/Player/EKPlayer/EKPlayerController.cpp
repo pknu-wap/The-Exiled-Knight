@@ -76,6 +76,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		IAWeaponDefense = IAWeaponDefenseFinder.Object;
 	}
 
+	ConstructorHelpers::FObjectFinder<UInputAction> IASitDownFinder(TEXT("/Game/EKPlayer/Input/IA_EK_SitDown"));
+	if (IASitDownFinder.Succeeded())
+	{
+		IASitDown = IASitDownFinder.Object;
+	}
+
 	// Common Animation Montage
 	ConstructorHelpers::FObjectFinder<UAnimMontage> UsePotionAnimFinder(TEXT("/Game/EKPlayer/Animation/Common/UseItem/EKPlayer_Drink_Common_Montage"));
 	if (UsePotionAnimFinder.Succeeded())
@@ -93,6 +99,18 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	if (BackStepAnimFinder.Succeeded())
 	{
 		BackStepAnim = BackStepAnimFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> SitDownAnimFinder(TEXT("/Game/EKPlayer/Animation/Common/SitDown/EKPlayer_SitDown_Montage"));
+	if (SitDownAnimFinder.Succeeded())
+	{
+		SitDownAnim = SitDownAnimFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> SitDownWalkAnimFinder(TEXT("/Game/EKPlayer/Animation/Common/SitDown/EKPlayer_SitDown_Walk_Montage"));
+	if (SitDownWalkAnimFinder.Succeeded())
+	{
+		SitDownWalkAnim = SitDownWalkAnimFinder.Object;
 	}
 
 	// GreatSword Animation Montage
@@ -216,6 +234,8 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Triggered, this, &ThisClass::WeaponDefenseTriggered);
 		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Completed, this, &ThisClass::WeaponDefenseRelease);
 		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Canceled, this, &ThisClass::WeaponDefenseRelease);
+
+		EnhancedInputComponent->BindAction(IASitDown, ETriggerEvent::Started, this, &ThisClass::SitDownStarted);
 	}
 }
 
@@ -227,7 +247,8 @@ void AEKPlayerController::PlayerTick(float DeltaTime)
 
 void AEKPlayerController::MoveTriggered(const FInputActionValue& InputValue)
 {
-	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack))
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense))
 	{
 		return;
 	}
@@ -237,6 +258,11 @@ void AEKPlayerController::MoveTriggered(const FInputActionValue& InputValue)
 	FVector2D MovementVector = InputValue.Get<FVector2D>();
 
 	FRotator Rotator = GetControlRotation();
+
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Dodge))
+	{
+		return;
+	}
 
 	if (MovementVector.X != 0)
 	{
@@ -288,6 +314,7 @@ void AEKPlayerController::JumpStarted(const FInputActionValue& InputValue)
 
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Dodge))
 	{
 		return;
@@ -459,6 +486,33 @@ void AEKPlayerController::WeaponDefenseRelease(const FInputActionValue& InputVal
 	}
 	EKPlayer->GetCurrentWeapon()->PlayDefenseReleaseAnimMontage(EKPlayer, this);
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
+}
+
+void AEKPlayerController::SitDownStarted(const FInputActionValue& InputValue)
+{
+	if (!EKPlayer)
+	{
+		return;
+	}
+
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Dodge) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_UseItem))
+	{
+		return;
+	}
+
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_SitDown))
+	{
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
+
+	}
+	else
+	{
+		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
+
+	}
 }
 
 TObjectPtr<UAnimMontage> AEKPlayerController::GetEquipAnimGreatSword()
