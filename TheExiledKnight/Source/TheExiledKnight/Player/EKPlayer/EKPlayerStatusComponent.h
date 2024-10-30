@@ -63,6 +63,18 @@ public:
 	void SetStaffCombo();
 	void ResetStaffCombo();
 
+	uint32 GetGreatSwordEnhancedCombo();
+	void SetGreatSwordEnhancedCombo();
+	void ResetGreatSwordEnhancedCombo();
+
+	uint32 GetSpearEnhancedCombo();
+	void SetSpearEnhancedCombo();
+	void ResetSpearEnhancedCombo();
+
+	uint32 GetStaffEnhancedCombo();
+	void SetStaffEnhancedCombo();
+	void ResetStaffEnhancedCombo();
+
 public:
 	bool bCanStaminaRecovery = true;
 
@@ -134,4 +146,13 @@ protected:
 
 	UPROPERTY()
 	uint32 StaffCombo = 1;
+
+	UPROPERTY()
+	uint32 GreatSwordEnhancedCombo = 1;
+
+	UPROPERTY()
+	uint32 SpearEnhancedCombo = 1;
+
+	UPROPERTY()
+	uint32 StaffEnhancedCombo = 1;
 };
