@@ -5,6 +5,8 @@
 #include "Components/Button.h"
 #include "UI/UISubsystem.h"
 #include "EKGameplayTags.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 void UWidget_GameMenu_Button::NativeConstruct()
 {
@@ -23,13 +25,13 @@ void UWidget_GameMenu_Button::MenuButtonClicked()
 	case EGameMenuCategory::Inventory:
 	{
 		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_GameMenu, ESlateVisibility::Collapsed);
-		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Inventory, ESlateVisibility::Visible);
+		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Inventory, ESlateVisibility::SelfHitTestInvisible);
 		break;
 	}
 	case EGameMenuCategory::Equipment:
 	{
 		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_GameMenu, ESlateVisibility::Collapsed);
-		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Equipment, ESlateVisibility::Visible);
+		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Equipment, ESlateVisibility::SelfHitTestInvisible);
 		break;
 	}
 	case EGameMenuCategory::Option:
@@ -38,7 +40,7 @@ void UWidget_GameMenu_Button::MenuButtonClicked()
 	}
 	case EGameMenuCategory::Quit:
 	{
-
+		UKismetSystemLibrary::QuitGame(GetWorld(), UGameplayStatics::GetPlayerController(GetWorld(), 0), EQuitPreference::Type::Quit, false);
 		break;
 	}
 	default:

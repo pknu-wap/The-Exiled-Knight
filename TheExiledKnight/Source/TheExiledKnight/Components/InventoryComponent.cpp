@@ -33,6 +33,11 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
+const TArray<FInventorySlot>& UInventoryComponent::GetContents(EItemCategory Category)
+{
+	return Inventory;
+}
+
 int UInventoryComponent::GetIndexToAdd(uint8 ID)
 {
 	for (int index = 0; index < Inventory_Size; index++)

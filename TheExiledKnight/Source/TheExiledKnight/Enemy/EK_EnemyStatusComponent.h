@@ -74,7 +74,4 @@ private:
 
 	bool bIsDead;
 
-	
-
-
 };

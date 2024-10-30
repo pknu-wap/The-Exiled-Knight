@@ -108,6 +108,9 @@ protected:
 	TObjectPtr<UInputAction> IAWeaponDefense;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IAGameMenu;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IASitDown;
 
 protected:
@@ -202,6 +205,10 @@ protected:
 	float NeedDodgeThresholdTime = 0.2f;
 	float KeyPressDuration = 0.f;
 
+public:
+	void OnPressed_GameMenu(const FInputActionValue& InputValue);
+
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInventoryComponent> InventoryComponent;
 };
