@@ -15,6 +15,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "EKPlayerStatusComponent.h"
 #include "../EKPlayerGameplayTags.h"
+#include "Components/InventoryComponent.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -168,6 +169,8 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	{
 		StaffUnEquipAnim = StaffUnEquipAnimFinder.Object;
 	}
+
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 }
 
 void AEKPlayerController::BeginPlay()
