@@ -190,4 +190,7 @@ protected:
 	float SpaceKeyPressStart = 0.f;
 	float NeedDodgeThresholdTime = 0.2f;
 	float KeyPressDuration = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInventoryComponent> InventoryComponent;
 };
