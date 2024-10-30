@@ -37,5 +37,19 @@ void FEKGameplayTags::InitializeNativeGameplayTags()
 		FName("UI.Widget.GameMenu.Equipment"),
 		FString("Equipment")
 	);
-	
+
+	GameplayTags.UI_Widget_GameMenu_EquipSelect = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("UI.Widget.GameMenu.EquipSelect"),
+		FString("EquipSelect")
+	);
+
+	GameplayTags.UI_Widget_Game_Status = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("UI.Widget.Game.Status"),
+		FString("Status")
+	);
+
+	GameplayTags.UI_Widget_Game_QuickSlots = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("UI.Widget.Game.QuickSlots"),
+		FString("QuickSlots")
+	);
 }
