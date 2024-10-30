@@ -86,6 +86,16 @@ void ASpear::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 	EKPlayerController->SetStaminaAndTimer(SpearAttackStamina);
 }
 
+void ASpear::PlayEnhancedAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+
+}
+
+void ASpear::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+
+}
+
 void ASpear::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
 	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
