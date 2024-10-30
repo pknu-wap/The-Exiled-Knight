@@ -30,7 +30,7 @@ public:
 	const TArray<FInventorySlot>& GetContents(EItemCategory Category);
 
 	void SortInventory();
-	int GetIndexToAdd(EItemCategory Category, uint8 ID);
+	int GetIndexToAdd(uint8 ID);
 	int GetDupSlotIndex(uint8 ID, int MaxStack);
 	int GetEmptySlotIndex();
 
@@ -55,5 +55,5 @@ private:
 	TArray<FInventorySlot> Inventory;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	int Inventory_Size = 20;
+	int Inventory_Size = 5;
 };

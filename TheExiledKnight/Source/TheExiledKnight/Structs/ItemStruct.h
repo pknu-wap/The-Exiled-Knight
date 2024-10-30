@@ -24,6 +24,7 @@ struct FItemStruct : public FTableRowBase
         Icon = Other.Icon;
         MaxStackSize = Other.MaxStackSize;
         ItemValue = Other.ItemValue;
+        bUseable = Other.bUseable;
         StaticMesh = Other.StaticMesh;
         SkeletonMesh = Other.SkeletonMesh;
     }
@@ -48,6 +49,9 @@ struct FItemStruct : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int ItemValue;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    bool bUseable = false;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     UStaticMesh* StaticMesh;
