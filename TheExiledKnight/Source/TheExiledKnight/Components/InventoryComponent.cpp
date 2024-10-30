@@ -2,6 +2,7 @@
 
 
 #include "Components/InventoryComponent.h"
+#include "Subsystems/InventorySubsystem.h"
 
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
@@ -30,14 +31,6 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
-}
-
-void UInventoryComponent::SortInventory()
-{
-	/*
-	카테고리별로 우선 구분하고
-	그 다음 id로 구분
-	*/
 }
 
 int UInventoryComponent::GetIndexToAdd(uint8 ID)
@@ -77,10 +70,10 @@ int UInventoryComponent::GetEmptySlotIndex()
 
 void UInventoryComponent::InitializeInventory()
 {
-	ItemDB = LoadObject<UDataTable>(this, TEXT("/Script/Engine.DataTable'/Game/TheExiledKnight/Inventory/DataTables/DT_Item.DT_Item'"));
+	UInventorySubsystem* InventorySubsystem = this->GetWorld()->GetGameInstance()->GetSubsystem<UInventorySubsystem>();
+	ItemDB = InventorySubsystem->GetItemDB();
 
-	FItemStruct* InitItem;
-	InitItem = ItemDB->FindRow<FItemStruct>(FName("Empty"), TEXT("Empty Item"));
+	FItemStruct* InitItem = ItemDB->FindRow<FItemStruct>(FName("Empty"), TEXT("Empty Item"));;
 
 	for (int i = 0; i < Inventory_Size; i++)
 	{

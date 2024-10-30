@@ -27,7 +27,6 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	void SortInventory();
 	int GetIndexToAdd(uint8 ID);
 	int GetDupSlotIndex(uint8 ID, int MaxStack);
 	int GetEmptySlotIndex();
