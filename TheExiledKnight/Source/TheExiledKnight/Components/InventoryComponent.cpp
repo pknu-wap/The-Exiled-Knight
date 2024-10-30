@@ -32,11 +32,16 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
+const TArray<FInventorySlot>& UInventoryComponent::GetContents(EItemCategory Category)
+{
+	return Inventory;
+}
+
 void UInventoryComponent::SortInventory()
 {
 	/*
-	Ä«Å×°í¸®º°·Î ¿ì¼± ±¸ºÐÇÏ°í
-	±× ´ÙÀ½ id·Î ±¸ºÐ
+	Ä«ï¿½×°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ì¼± ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½
+	ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ idï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	*/
 }
 
