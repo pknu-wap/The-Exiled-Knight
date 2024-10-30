@@ -40,17 +40,17 @@ void UInventoryComponent::SortInventory()
 	*/
 }
 
-int UInventoryComponent::GetIndexToAdd(EItemCategory Category, uint8 ID)
+int UInventoryComponent::GetIndexToAdd(uint8 ID)
 {
 	for (int index = 0; index < Inventory_Size; index++)
 	{
-		if (Inventory[index].Item.ItemCategory < Category)
+		if (Inventory[index].Item.ID == 1)
 			return index;
-		else if (Inventory[index].Item.ItemCategory == Category && Inventory[index].Item.ID < ID)
+		else if (Inventory[index].Item.ID > ID)
 			return index;
 	}
 
-	return -1;
+	return 0;
 }
 
 int UInventoryComponent::GetDupSlotIndex(uint8 ID, int MaxStackSize)
@@ -116,18 +116,19 @@ bool UInventoryComponent::AddItem(FItemStruct ItemToAdd)
 	else // if empty slot exists
 	{
 		// Sort
-		//indexToAdd = GetIndexToAdd(ItemToAdd.ItemCategory, ItemToAdd.ID);
+		indexToAdd = GetIndexToAdd(ItemToAdd.ID);
 
-		//FInventorySlot temp = Inventory[indexToAdd];
-
-		//for (int index = indexToAdd; index < Inventory_Size - 1; index++)
-		//{
-		//	Inventory[index] = Inventory[index + 1];
-		//	temp = Inventory[index + 1];
-		//}
-		
+		FInventorySlot tmp1, tmp2 = Inventory[indexToAdd];
 		Inventory[indexToAdd].Item = ItemToAdd;
-		Inventory[indexToAdd].Amount++;
+		Inventory[indexToAdd].Amount = 1;
+
+		for (int index = indexToAdd + 1; index < Inventory_Size; index++)
+		{
+			tmp1 = Inventory[index];
+			Inventory[index] = tmp2;
+			tmp2 = tmp1;
+		}
+		
 		UE_LOG(LogTemp, Warning, TEXT("add new empty slot"));
 	}
 
