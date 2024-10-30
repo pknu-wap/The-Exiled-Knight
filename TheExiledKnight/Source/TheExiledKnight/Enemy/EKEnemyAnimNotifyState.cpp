@@ -54,9 +54,10 @@ void UEKEnemyAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnim
 			float ElapsedTime = Owner->GetWorld()->GetTimerManager().GetTimerElapsed(MoveTimerHandle);
 			float Ratio = ElapsedTime / TotalTime;
 
-			FVector TargetLocation = StartLocation + Owner->GetActorForwardVector() * Ratio * TotalDistance;
+			
 
-			Owner->AddActorWorldOffset(Owner->GetActorForwardVector() * FrameDeltaTime * MoveDistancePerSec, true);
+			FVector TargetLocation = StartLocation + Owner->GetActorForwardVector() * Ratio * TotalDistance;
+			Owner->SetActorLocation(TargetLocation);
 
 		}
 	}
@@ -65,4 +66,9 @@ void UEKEnemyAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnim
 void UEKEnemyAnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
 	Super::NotifyEnd(MeshComp, Animation);
+	if (Owner != nullptr)
+	{
+		FVector FinalLocation = StartLocation + Owner->GetActorForwardVector() * TotalDistance;
+		Owner->SetActorLocation(FinalLocation);
+	}
 }
