@@ -71,6 +71,9 @@ private:
 
 	void SitDownStarted(const FInputActionValue& InputValue);
 
+	void Interact(const FInputActionValue& InputValue);
+	void FindInteractableObjects();
+	
 	void EnhanceStarted(const FInputActionValue& InputValue);
 	void EnhanceRelease(const FInputActionValue& InputValue);
 
