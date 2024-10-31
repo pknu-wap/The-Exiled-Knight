@@ -2,9 +2,6 @@
 
 
 #include "GreatSword.h"
-#include "../EKPlayer/EKPlayer.h"
-#include "../EKPlayer/EKPlayerController.h"
-#include "../EKPlayer/EKPlayerStatusComponent.h"
 
 AGreatSword::AGreatSword()
 {
@@ -19,6 +16,11 @@ AGreatSword::AGreatSword()
 		GreatSwordMesh = GreatSwordMeshFinder.Object;
 	}
 	GreatSword->SetStaticMesh(GreatSwordMesh);
+
+	WeaponCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
+	WeaponCapsuleComponent->SetupAttachment(RootComponent);
+	WeaponCapsuleComponent->SetRelativeLocationAndRotation(FVector(60, 0, 0), FRotator(-90, 0, 0));
+	WeaponCapsuleComponent->SetRelativeScale3D(FVector(1.f, 1.f, 3.f));
 }
 
 void AGreatSword::BeginPlay()
@@ -76,6 +78,35 @@ void AGreatSword::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TOb
 	EKPlayerController->SetStaminaAndTimer(GreatSwordAttackStamina);
 }
 
+void AGreatSword::PlayEnhancedAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	if (!EKPlayerController->bIsEquipWeapon || !EKPlayerController->GetGreatSwordAttackAnim())
+	{
+		return;
+	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < GreatSwordEnhancedAttackStamina)
+	{
+		return;
+	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordEnhancedCombo() == 1)
+	{
+		EKPlayer->PlayAnimMontage(EKPlayerController->GetGreatSwordEnhancedAttackAnim(), 1.f, FName("Attack1"));
+	}
+	else if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordEnhancedCombo() == 2)
+	{
+		EKPlayer->PlayAnimMontage(EKPlayerController->GetGreatSwordEnhancedAttackAnim(), 1.f, FName("Attack2"));
+	}
+
+	EKPlayerController->SetStaminaAndTimer(GreatSwordEnhancedAttackStamina);
+}
+
+void AGreatSword::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+
+}
+
 void AGreatSword::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
 	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
@@ -110,6 +141,15 @@ void AGreatSword::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, 
 	AttachWeaponToHandSocket(this, EKPlayer);
 }
 
+void AGreatSword::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	if (!EKPlayer || !EKPlayerController)
+	{
+		return;
+	}
+	EKPlayer->PlayAnimMontage(EKPlayerController->GetGreatSwordHitAnim());
+}
+
 void AGreatSword::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
 {
 	if (Weapon)
@@ -130,4 +170,14 @@ void AGreatSword::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon, 
 void AGreatSword::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
 {
 	Super::AttachWeaponToHandSocket(Weapon, EKPlayer);
+}
+
+TObjectPtr<UCapsuleComponent> AGreatSword::GetWeaponCapsuleComponent()
+{
+	return WeaponCapsuleComponent;
+}
+
+void AGreatSword::AttackHit(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<UCapsuleComponent> WeaponCC)
+{
+	Super::AttackHit(EKPlayer, GetWeaponCapsuleComponent());
 }

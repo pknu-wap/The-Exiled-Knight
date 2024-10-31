@@ -24,6 +24,12 @@ void USpearAttack3::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBa
 {
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime, EventReference);
 
+	if (!EKPlayer || EKPlayer->bIsHitOnce)
+	{
+		return;
+	}
+
+	EKPlayer->AttackHit();
 }
 
 void USpearAttack3::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
@@ -39,6 +45,7 @@ void USpearAttack3::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBas
 	{
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 		EKPlayer->bUseControllerRotationYaw = false;
+		EKPlayer->bIsHitOnce = false;
 
 	}
 }
