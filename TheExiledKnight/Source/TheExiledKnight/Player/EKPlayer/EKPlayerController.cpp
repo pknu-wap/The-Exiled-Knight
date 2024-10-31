@@ -630,6 +630,7 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 	{
 		layer_GameMenu->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 		widget_GameMenu->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+		widget_GameMenu->SetFocus();
 
 		FInputModeUIOnly UIInputMode;
 		SetInputMode(UIInputMode);
