@@ -16,7 +16,6 @@ class THEEXILEDKNIGHT_API AEKItem_Base : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AEKItem_Base();
-	AEKItem_Base(FName RowName);
 
 protected:
 	// Called when the game starts or when spawned
@@ -27,10 +26,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 
-private:
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	FItemStruct ItemInfo;
+	uint8 ID = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<UDataTable> ItemDB;
+	FItemStruct ItemInfo;
 };
