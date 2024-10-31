@@ -74,6 +74,8 @@ private:
 	void EnhanceStarted(const FInputActionValue& InputValue);
 	void EnhanceRelease(const FInputActionValue& InputValue);
 
+	void TestStarted(const FInputActionValue& InputValue);
+
 public:
 	TObjectPtr<class UAnimMontage> GetEquipAnimGreatSword();
 	TObjectPtr<class UAnimMontage> GetUnEquipAnimGreatSword();
@@ -91,6 +93,10 @@ public:
 	TObjectPtr<class UAnimMontage> GetGreatSwordDefenseAnim();
 	TObjectPtr<class UAnimMontage> GetSpearDefenseAnim();
 	TObjectPtr<class UAnimMontage> GetStaffDefenseAnim();
+
+	TObjectPtr<class UAnimMontage> GetGreatSwordHitAnim();
+	TObjectPtr<class UAnimMontage> GetSpearHitAnim();
+	TObjectPtr<class UAnimMontage> GetStaffHitAnim();
 
 protected:
 	// Common Input And Input Mapping Context
@@ -127,6 +133,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IAEnhance;
 
+	// Test Input
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Test")
+	TObjectPtr<UInputAction> IATest;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class AEKPlayer> EKPlayer;
@@ -141,6 +151,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
 	TObjectPtr<class UAnimMontage> BackStepAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
+	TObjectPtr<class UAnimMontage> DieAnim;
 
 protected:
 	// GreatSword Animation Montage
@@ -162,6 +175,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
 	TObjectPtr<class UAnimMontage> GreatSwordUnEquipAnim;
 
+	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
+	TObjectPtr<class UAnimMontage> GreatSwordHitAnim;
+
 protected:
 	// Spear Animation Montage
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
@@ -176,6 +192,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
 	TObjectPtr<class UAnimMontage> SpearUnEquipAnim;
 
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
+	TObjectPtr<class UAnimMontage> SpearHitAnim;
+
 protected:
 	// Staff Animation Montage
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
@@ -189,6 +208,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
 	TObjectPtr<class UAnimMontage> StaffUnEquipAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
+	TObjectPtr<class UAnimMontage> StaffHitAnim;
 
 public:
 	bool bIsEquipWeapon = false;
