@@ -4,10 +4,16 @@
 #include "EK_EnemyBase.h"
 #include "EK_EnemyStatusComponent.h"
 #include"Player/EKPlayer/EKPlayer.h"
+#include"Player/EKPlayer//EKPlayerStatusComponent.h"
 // Sets default values
 AEK_EnemyBase::AEK_EnemyBase()
 {
 	EnemyStat = CreateDefaultSubobject<UEK_EnemyStatusComponent>(TEXT("EnemyStat"));
+}
+
+TObjectPtr<UEK_EnemyStatusComponent> AEK_EnemyBase::GetStatusComponent()
+{
+	return EnemyStat;
 }
 
 void AEK_EnemyBase::AttackHitCheck()
@@ -29,7 +35,7 @@ void AEK_EnemyBase::AttackHitCheck()
 	TArray<FHitResult> HitResults;
 	FCollisionQueryParams CollisionParams(NAME_None, false, this);
 	
-	bool bHit = GetWorld()->SweepMultiByChannel(
+	bool bHit = GetWorld()->SweepMultiByChannel( 
 		HitResults,
 		AttackRangeStart,
 		AttackRangeEnd,
@@ -50,7 +56,7 @@ void AEK_EnemyBase::AttackHitCheck()
 				if (detectPlayer)
 				{
 					SetAttackHitCheck(true);
-					UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *HitActor->GetName());
+					detectPlayer->GetPlayerStatusComponent()->TakeDamage(10);
 				}
 				
 			}
