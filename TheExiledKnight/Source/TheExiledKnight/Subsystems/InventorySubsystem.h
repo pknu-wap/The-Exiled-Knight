@@ -17,6 +17,9 @@ class THEEXILEDKNIGHT_API UInventorySubsystem : public UGameInstanceSubsystem
 	
 public:
 	UInventorySubsystem();
+
+	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+
 	TObjectPtr<UDataTable> GetItemDB() { return ItemDB; };
 	FItemStruct* GetItemRow(FName RowName);
 	FItemStruct* GetItemInfo(uint8 ID);

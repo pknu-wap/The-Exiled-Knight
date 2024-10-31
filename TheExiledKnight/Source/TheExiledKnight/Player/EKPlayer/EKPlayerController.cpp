@@ -587,6 +587,11 @@ void AEKPlayerController::TestStarted(const FInputActionValue& InputValue)
 	EKPlayer->GetPlayerStatusComponent()->TakeDamage(1);
 }
 
+void AEKPlayerController::FindInteractableObjects()
+{
+
+}
+
 TObjectPtr<UAnimMontage> AEKPlayerController::GetEquipAnimGreatSword()
 {
 	return GreatSwordEquipAnim;
