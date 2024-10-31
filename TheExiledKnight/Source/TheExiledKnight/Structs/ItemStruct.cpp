@@ -3,3 +3,7 @@
 //
 #include "Structs/ItemStruct.h"
 
+FItemStruct::FItemStruct()
+{
+
+}
