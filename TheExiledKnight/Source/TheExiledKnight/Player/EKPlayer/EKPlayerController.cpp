@@ -646,11 +646,19 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 	{
 		layer_GameMenu->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 		widget_GameMenu->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+
+		FInputModeUIOnly UIInputMode;
+		SetInputMode(UIInputMode);
+		SetShowMouseCursor(true);
 	}
 	else if(widget_GameMenu && widget_GameMenu->GetVisibility() == ESlateVisibility::SelfHitTestInvisible)
 	{
 		layer_GameMenu->SetVisibility(ESlateVisibility::Collapsed);
 		widget_GameMenu->SetVisibility(ESlateVisibility::Collapsed);
+
+		FInputModeGameOnly GameInputMode;
+		SetInputMode(GameInputMode);
+		SetShowMouseCursor(false);
 	}
 	
 }
