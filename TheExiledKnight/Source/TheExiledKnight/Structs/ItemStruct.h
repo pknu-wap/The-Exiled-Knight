@@ -14,7 +14,7 @@ struct FItemStruct : public FTableRowBase
 {
     GENERATED_BODY()
 
-    FItemStruct() {};
+    FItemStruct();
     FItemStruct(const FItemStruct& Other)
     {
         ID = Other.ID;
@@ -27,7 +27,7 @@ struct FItemStruct : public FTableRowBase
         bUseable = Other.bUseable;
         StaticMesh = Other.StaticMesh;
         SkeletonMesh = Other.SkeletonMesh;
-    }
+    };
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     uint8 ID = 0;

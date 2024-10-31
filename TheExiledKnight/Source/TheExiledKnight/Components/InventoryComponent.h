@@ -29,7 +29,6 @@ public:
 public:
 	const TArray<FInventorySlot>& GetContents(EItemCategory Category);
 
-	void SortInventory();
 	int GetIndexToAdd(uint8 ID);
 	int GetDupSlotIndex(uint8 ID, int MaxStack);
 	int GetEmptySlotIndex();
