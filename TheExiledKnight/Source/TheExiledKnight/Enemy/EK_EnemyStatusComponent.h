@@ -6,9 +6,10 @@
 #include "Components/ActorComponent.h"
 #include "EK_EnemyStatusComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnHPIsZeroDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHPIsZero);  
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDamageTaken);    
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent)) 
 
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class THEEXILEDKNIGHT_API UEK_EnemyStatusComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -47,11 +48,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetIsDead(bool isDead);
 
-	UFUNCTION(BlueprintCallable)
+	UPROPERTY(BlueprintAssignable, Category = "Status")
+	FOnDamageTaken OnDamageTaken;
+
+	UPROPERTY(BlueprintAssignable, Category = "Status")
+	FOnHPIsZero OnHPIsZero;
+
+	UFUNCTION(BlueprintCallable,  Category="Status")
 
 	virtual void TakeDamage(float amount);
+
 	
-	FOnHPIsZeroDelegate OnHPIsZero;
 private:
 	UPROPERTY(VisibleAnywhere,Category=Stat,Meta  =(AllowPrivteAccess=true))
 	uint8 PoiseLevel;
