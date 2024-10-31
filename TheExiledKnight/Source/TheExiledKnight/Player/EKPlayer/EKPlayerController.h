@@ -101,6 +101,9 @@ public:
 	TObjectPtr<class UAnimMontage> GetSpearHitAnim();
 	TObjectPtr<class UAnimMontage> GetStaffHitAnim();
 
+public:
+	void OnPressed_GameMenu(const FInputActionValue& InputValue);
+
 protected:
 	// Common Input And Input Mapping Context
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|MappingContext")
