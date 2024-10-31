@@ -86,3 +86,51 @@ void AEKPlayerWeapon::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapo
 		}
 	}
 }
+
+void AEKPlayerWeapon::AttackHit(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<UCapsuleComponent> WeaponCC)
+{
+	FVector CapsuleLocation = WeaponCC->GetComponentLocation();
+	FRotator CapsuleRotation = WeaponCC->GetComponentRotation();
+	float CapsuleHalfHeight = WeaponCC->GetScaledCapsuleHalfHeight();
+	float CapsuleRadius = WeaponCC->GetScaledCapsuleRadius();
+
+	FCollisionQueryParams Params(NAME_None, false, this);
+	TArray<FHitResult> HitResults;
+
+	//DrawDebugCapsule(GetWorld(), CapsuleLocation, CapsuleHalfHeight, CapsuleRadius, CapsuleRotation.Quaternion(), FColor::Red, false, 0.3f);
+
+	EKPlayer->bIsHit = GetWorld()->SweepMultiByChannel(
+		HitResults,
+		CapsuleLocation,
+		CapsuleLocation,
+		CapsuleRotation.Quaternion(),
+		ECC_Pawn,
+		FCollisionShape::MakeCapsule(CapsuleRadius, CapsuleHalfHeight),
+		Params
+	);
+
+	if (!EKPlayer->bIsHit)
+	{
+		return;
+	}
+
+	for (auto& Hit : HitResults)
+	{
+		AActor* HitActor = Hit.GetActor();
+		if (HitActor)
+		{
+			TObjectPtr<AEK_EnemyBase> HitEnemy = Cast<AEK_EnemyBase>(HitActor);
+			if (HitEnemy)
+			{
+				// Here Insert About Damage function
+				EKPlayer->bIsHitOnce = true;
+				GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Attack!!!"));
+			}
+		}
+	}
+}
+
+TObjectPtr<UCapsuleComponent> AEKPlayerWeapon::GetWeaponCapsuleComponent()
+{
+	return nullptr;
+}

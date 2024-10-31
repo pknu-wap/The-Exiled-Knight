@@ -35,6 +35,10 @@ protected:
 	TObjectPtr<class UCameraComponent> Camera;
 
 public:
+	void AttackHit();
+	bool bIsHit = false;
+	bool bIsHitOnce = false;
+
 	void AttachWeaponToSpineSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
 	void AttachWeaponToHandSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
 

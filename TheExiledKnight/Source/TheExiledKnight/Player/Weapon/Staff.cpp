@@ -1,9 +1,6 @@
 // Made by Somalia Pirate
 
 #include "Staff.h"
-#include "../EKPlayer/EKPlayer.h"
-#include "../EKPlayer/EKPlayerController.h"
-#include "../EKPlayer/EKPlayerStatusComponent.h"
 
 AStaff::AStaff()
 {
@@ -18,6 +15,11 @@ AStaff::AStaff()
 		StaffMesh = StaffMeshFinder.Object;
 	}
 	Staff->SetStaticMesh(StaffMesh);
+
+	WeaponCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
+	WeaponCapsuleComponent->SetupAttachment(RootComponent);
+	WeaponCapsuleComponent->SetRelativeLocationAndRotation(FVector(60, 0, 0), FRotator(-90, 0, 0));
+	WeaponCapsuleComponent->SetRelativeScale3D(FVector(1.f, 1.f, 3.f));
 }
 
 void AStaff::BeginPlay()
@@ -157,4 +159,14 @@ void AStaff::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjec
 			Weapon->AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("staff_right_hand_socket"));
 		}
 	}
+}
+
+TObjectPtr<UCapsuleComponent> AStaff::GetWeaponCapsuleComponent()
+{
+	return WeaponCapsuleComponent;
+}
+
+void AStaff::AttackHit(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<UCapsuleComponent> WeaponCC)
+{
+	Super::AttackHit(EKPlayer, GetWeaponCapsuleComponent());
 }
