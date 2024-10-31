@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Structs/InventorySlotStruct.h"
 #include "Widget_InvContentSlot.generated.h"
 
 class UButton;
@@ -17,6 +18,9 @@ class THEEXILEDKNIGHT_API UWidget_InvContentSlot : public UUserWidget
 
 public:
 	virtual void NativeConstruct() override;
+	
+public:
+	void UpdateSlot(const FInventorySlot& inData);
 
 protected:
 	UFUNCTION(BlueprintCallable)
