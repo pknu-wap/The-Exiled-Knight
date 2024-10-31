@@ -22,6 +22,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
+	void TakeDamage(float Damage);
+
+public:
 	uint32 GetMaxHp();
 	uint32 GetHp();
 	uint32 GetMaxMp();

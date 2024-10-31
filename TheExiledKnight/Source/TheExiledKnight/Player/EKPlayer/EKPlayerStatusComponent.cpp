@@ -4,6 +4,8 @@
 #include "EKPlayerStatusComponent.h"
 #include "EKPlayer.h"
 #include "EKPlayerController.h"
+#include "../Weapon/EKPlayerWeapon.h"
+#include "../EKPlayerGameplayTags.h"
 
 UEKPlayerStatusComponent::UEKPlayerStatusComponent()
 {
@@ -53,6 +55,18 @@ void UEKPlayerStatusComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	{
 		SetStamina(4);
 	}
+}
+
+void UEKPlayerStatusComponent::TakeDamage(float Damage)
+{
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Hit))
+	{
+		return;
+	}
+
+	SetHp(-Damage);
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Hit);
+	EKPlayer->GetCurrentWeapon()->PlayHitAnimMontage(EKPlayer, EKPlayerController);
 }
 
 uint32 UEKPlayerStatusComponent::GetMaxHp()
