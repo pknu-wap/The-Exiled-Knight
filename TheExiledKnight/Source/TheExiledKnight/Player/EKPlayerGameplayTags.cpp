@@ -17,4 +17,5 @@ namespace EKPlayerGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_State_UseItem, "EKPlayer.State.UseItem");
 	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_State_SitDown, "EKPlayer.State.SitDown");
 	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_State_Enhance, "EKPlayer.State.Enhance");
+	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_State_Hit, "EKPlayer.State.Hit");
 }
