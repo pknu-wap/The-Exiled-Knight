@@ -18,10 +18,19 @@ class UInputAction;
 #define SprintStamina 1
 #define DodgeStamina 100
 #define BackStepStamina 50
-#define JumpStamina 100
+#define JumpStamina 50
+
 #define GreatSwordAttackStamina 100
+#define GreatSwordEnhancedAttackStamina 200
+#define GreatSwordJumpAttackStamina 100
+
 #define SpearAttackStamina 50
+#define SpearEnhancedAttackStamina 50
+#define SpearJumpAttackStamina 50
+
 #define StaffAttackStamina 80
+#define StaffEnhancedAttackStamina 80
+#define StaffJumpAttackStamina 80
 
 UCLASS()
 class AEKPlayerController : public APlayerController
@@ -62,6 +71,14 @@ private:
 
 	void SitDownStarted(const FInputActionValue& InputValue);
 
+	void Interact(const FInputActionValue& InputValue);
+	void FindInteractableObjects();
+	
+	void EnhanceStarted(const FInputActionValue& InputValue);
+	void EnhanceRelease(const FInputActionValue& InputValue);
+
+	void TestStarted(const FInputActionValue& InputValue);
+
 public:
 	TObjectPtr<class UAnimMontage> GetEquipAnimGreatSword();
 	TObjectPtr<class UAnimMontage> GetUnEquipAnimGreatSword();
@@ -71,12 +88,18 @@ public:
 	TObjectPtr<class UAnimMontage> GetUnEquipAnimStaff();
 
 	TObjectPtr<class UAnimMontage> GetGreatSwordAttackAnim();
+	TObjectPtr<class UAnimMontage> GetGreatSwordEnhancedAttackAnim();
+	TObjectPtr<class UAnimMontage> GetGreatSwordJumpAttackAnim();
 	TObjectPtr<class UAnimMontage> GetSpearAttackAnim();
 	TObjectPtr<class UAnimMontage> GetStaffAttackAnim();
 
 	TObjectPtr<class UAnimMontage> GetGreatSwordDefenseAnim();
 	TObjectPtr<class UAnimMontage> GetSpearDefenseAnim();
 	TObjectPtr<class UAnimMontage> GetStaffDefenseAnim();
+
+	TObjectPtr<class UAnimMontage> GetGreatSwordHitAnim();
+	TObjectPtr<class UAnimMontage> GetSpearHitAnim();
+	TObjectPtr<class UAnimMontage> GetStaffHitAnim();
 
 protected:
 	// Common Input And Input Mapping Context
@@ -108,10 +131,14 @@ protected:
 	TObjectPtr<UInputAction> IAWeaponDefense;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
-	TObjectPtr<UInputAction> IAGameMenu;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IASitDown;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IAEnhance;
+
+	// Test Input
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Test")
+	TObjectPtr<UInputAction> IATest;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -129,15 +156,18 @@ protected:
 	TObjectPtr<class UAnimMontage> BackStepAnim;
 
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
-	TObjectPtr<class UAnimMontage> SitDownAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
-	TObjectPtr<class UAnimMontage> SitDownWalkAnim;
+	TObjectPtr<class UAnimMontage> DieAnim;
 
 protected:
 	// GreatSword Animation Montage
 	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
 	TObjectPtr<class UAnimMontage> GreatSwordAttackAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
+	TObjectPtr<class UAnimMontage> GreatSwordEnhancedAttackAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
+	TObjectPtr<class UAnimMontage> GreatSwordJumpAttackAnim;
 
 	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
 	TObjectPtr<class UAnimMontage> GreatSwordDefenseAnim;
@@ -147,6 +177,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
 	TObjectPtr<class UAnimMontage> GreatSwordUnEquipAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
+	TObjectPtr<class UAnimMontage> GreatSwordHitAnim;
 
 protected:
 	// Spear Animation Montage
@@ -162,6 +195,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
 	TObjectPtr<class UAnimMontage> SpearUnEquipAnim;
 
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
+	TObjectPtr<class UAnimMontage> SpearHitAnim;
+
 protected:
 	// Staff Animation Montage
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
@@ -175,6 +211,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
 	TObjectPtr<class UAnimMontage> StaffUnEquipAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
+	TObjectPtr<class UAnimMontage> StaffHitAnim;
 
 public:
 	bool bIsEquipWeapon = false;
@@ -205,10 +244,6 @@ protected:
 	float NeedDodgeThresholdTime = 0.2f;
 	float KeyPressDuration = 0.f;
 
-public:
-	void OnPressed_GameMenu(const FInputActionValue& InputValue);
-
-protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInventoryComponent> InventoryComponent;
 };
