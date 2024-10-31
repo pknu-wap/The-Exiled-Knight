@@ -23,6 +23,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Stat)
 	class UEK_EnemyStatusComponent* EnemyStat;
 	
+	virtual TObjectPtr <UEK_EnemyStatusComponent> GetStatusComponent();
 	virtual void AttackHitCheck();
 
 	virtual void SetAttackHitCheck(bool check);
