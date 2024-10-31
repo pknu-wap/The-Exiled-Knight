@@ -5,6 +5,8 @@
 #include "../EKPlayer/EKPlayer.h"
 #include "../EKPlayer/EKPlayerController.h"
 #include "Subsystems/InventorySubsystem.h"
+#include "../../Enemy/EK_EnemyStatusComponent.h"
+#include "../../Enemy/EK_EnemyBase.h"
 
 AEKPlayerWeapon::AEKPlayerWeapon()
 {
@@ -128,7 +130,7 @@ void AEKPlayerWeapon::AttackHit(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<UCaps
 			TObjectPtr<AEK_EnemyBase> HitEnemy = Cast<AEK_EnemyBase>(HitActor);
 			if (HitEnemy)
 			{
-				// Here Insert About Damage function
+				HitEnemy->GetStatusComponent()->TakeDamage(1);
 				EKPlayer->bIsHitOnce = true;
 				GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Attack!!!"));
 			}
