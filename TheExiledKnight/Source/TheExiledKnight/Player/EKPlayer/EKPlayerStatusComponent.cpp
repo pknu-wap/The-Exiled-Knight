@@ -4,6 +4,8 @@
 #include "EKPlayerStatusComponent.h"
 #include "EKPlayer.h"
 #include "EKPlayerController.h"
+#include "../Weapon/EKPlayerWeapon.h"
+#include "../EKPlayerGameplayTags.h"
 
 UEKPlayerStatusComponent::UEKPlayerStatusComponent()
 {
@@ -55,6 +57,18 @@ void UEKPlayerStatusComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	}
 }
 
+void UEKPlayerStatusComponent::TakeDamage(float Damage)
+{
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Hit))
+	{
+		return;
+	}
+
+	SetHp(-Damage);
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Hit);
+	EKPlayer->GetCurrentWeapon()->PlayHitAnimMontage(EKPlayer, EKPlayerController);
+}
+
 uint32 UEKPlayerStatusComponent::GetMaxHp()
 {
 	return MaxHp;
@@ -93,6 +107,7 @@ void UEKPlayerStatusComponent::SetMaxHp(int32 SetData)
 void UEKPlayerStatusComponent::SetHp(int32 SetData)
 {
 	Hp = FMath::Clamp(Hp + SetData, 0, MaxHp);
+	Delegate_HPUpdated.Broadcast(MaxHp, Hp);
 }
 
 void UEKPlayerStatusComponent::SetMaxMp(int32 SetData)
@@ -103,6 +118,7 @@ void UEKPlayerStatusComponent::SetMaxMp(int32 SetData)
 void UEKPlayerStatusComponent::SetMp(int32 SetData)
 {
 	Mp = FMath::Clamp(Mp + SetData, 0, MaxMp);
+	Delegate_MPUpdated.Broadcast(MaxMp, Mp);
 }
 
 void UEKPlayerStatusComponent::SetMaxStamina(int32 SetData)
@@ -113,6 +129,7 @@ void UEKPlayerStatusComponent::SetMaxStamina(int32 SetData)
 void UEKPlayerStatusComponent::SetStamina(int32 SetData)
 {
 	Stamina = FMath::Clamp(Stamina + SetData, 0, MaxStamina);
+	Delegate_StaminaUpdated.Broadcast(MaxStamina, Stamina);
 }
 
 uint32 UEKPlayerStatusComponent::GetPlayerDefaultDamage()
@@ -191,4 +208,70 @@ void UEKPlayerStatusComponent::SetStaffCombo()
 void UEKPlayerStatusComponent::ResetStaffCombo()
 {
 	StaffCombo = 1;
+}
+
+uint32 UEKPlayerStatusComponent::GetGreatSwordEnhancedCombo()
+{
+	return GreatSwordEnhancedCombo;
+}
+
+void UEKPlayerStatusComponent::SetGreatSwordEnhancedCombo()
+{
+	if (GreatSwordEnhancedCombo < 2)
+	{
+		GreatSwordEnhancedCombo++;
+	}
+	else
+	{
+		ResetGreatSwordEnhancedCombo();
+	}
+}
+
+void UEKPlayerStatusComponent::ResetGreatSwordEnhancedCombo()
+{
+	GreatSwordEnhancedCombo = 1;
+}
+
+uint32 UEKPlayerStatusComponent::GetSpearEnhancedCombo()
+{
+	return SpearEnhancedCombo;
+}
+
+void UEKPlayerStatusComponent::SetSpearEnhancedCombo()
+{
+	if (SpearEnhancedCombo < 5)
+	{
+		SpearEnhancedCombo++;
+	}
+	else
+	{
+		ResetSpearEnhancedCombo();
+	}
+}
+
+void UEKPlayerStatusComponent::ResetSpearEnhancedCombo()
+{
+	SpearEnhancedCombo = 1;
+}
+
+uint32 UEKPlayerStatusComponent::GetStaffEnhancedCombo()
+{
+	return StaffEnhancedCombo;
+}
+
+void UEKPlayerStatusComponent::SetStaffEnhancedCombo()
+{
+	if (StaffEnhancedCombo < 5)
+	{
+		StaffEnhancedCombo++;
+	}
+	else
+	{
+		ResetStaffEnhancedCombo();
+	}
+}
+
+void UEKPlayerStatusComponent::ResetStaffEnhancedCombo()
+{
+	StaffEnhancedCombo = 1;
 }
