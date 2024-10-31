@@ -4,9 +4,6 @@
 #include "Spear.h"
 #include "Engine/SkeletalMesh.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "../EKPlayer/EKPlayer.h"
-#include "../EKPlayer/EKPlayerController.h"
-#include "../EKPlayer/EKPlayerStatusComponent.h"
 
 ASpear::ASpear()
 {
@@ -21,6 +18,11 @@ ASpear::ASpear()
 		SpearMesh = SpearMeshFinder.Object;
 	}
 	Spear->SetSkeletalMesh(SpearMesh);
+
+	WeaponCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
+	WeaponCapsuleComponent->SetupAttachment(RootComponent);
+	WeaponCapsuleComponent->SetRelativeLocationAndRotation(FVector(60, 0, 0), FRotator(-90, 0, 0));
+	WeaponCapsuleComponent->SetRelativeScale3D(FVector(1.f, 1.f, 3.f));
 }
 
 void ASpear::BeginPlay()
@@ -86,6 +88,16 @@ void ASpear::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 	EKPlayerController->SetStaminaAndTimer(SpearAttackStamina);
 }
 
+void ASpear::PlayEnhancedAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+
+}
+
+void ASpear::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+
+}
+
 void ASpear::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
 	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
@@ -120,6 +132,15 @@ void ASpear::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObje
 	AttachWeaponToHandSocket(this, EKPlayer);
 }
 
+void ASpear::PlayHitAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController)
+{
+	if (!EKPlayer || !EKPlayerController)
+	{
+		return;
+	}
+	EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearHitAnim());
+}
+
 void ASpear::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
 {
 	if (Weapon)
@@ -140,4 +161,14 @@ void ASpear::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObje
 void ASpear::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
 {
 	Super::AttachWeaponToHandSocket(Weapon, EKPlayer);
+}
+
+TObjectPtr<UCapsuleComponent> ASpear::GetWeaponCapsuleComponent()
+{
+	return WeaponCapsuleComponent;
+}
+
+void ASpear::AttackHit(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<UCapsuleComponent> WeaponCC)
+{
+	Super::AttackHit(EKPlayer, GetWeaponCapsuleComponent());
 }
