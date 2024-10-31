@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Item/EKItem_Base.h"
 #include "EKPlayerWeapon.generated.h"
 
 UCLASS()
-class THEEXILEDKNIGHT_API AEKPlayerWeapon : public AActor
+class THEEXILEDKNIGHT_API AEKPlayerWeapon : public AEKItem_Base
 {
 	GENERATED_BODY()
 	
