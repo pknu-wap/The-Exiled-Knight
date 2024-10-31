@@ -88,6 +88,13 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		IAEnhance = IAEnhanceFinder.Object;
 	}
 
+	// Test Input
+	ConstructorHelpers::FObjectFinder<UInputAction> IATestFinder(TEXT("/Game/EKPlayer/Input/IA_EK_Test"));
+	if (IATestFinder.Succeeded())
+	{
+		IATest = IATestFinder.Object;
+	}
+
 	// Common Animation Montage
 	ConstructorHelpers::FObjectFinder<UAnimMontage> UsePotionAnimFinder(TEXT("/Game/EKPlayer/Animation/Common/UseItem/EKPlayer_Drink_Common_Montage"));
 	if (UsePotionAnimFinder.Succeeded())
@@ -105,6 +112,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	if (BackStepAnimFinder.Succeeded())
 	{
 		BackStepAnim = BackStepAnimFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> DieAnimFinder(TEXT("/Game/EKPlayer/Animation/Common/Die/EKPlayer_Die_Montage"));
+	if (DieAnimFinder.Succeeded())
+	{
+		DieAnim = DieAnimFinder.Object;
 	}
 
 	// GreatSword Animation Montage
@@ -144,6 +157,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		GreatSwordUnEquipAnim = GreatSwordUnEquipAnimFinder.Object;
 	}
 
+	ConstructorHelpers::FObjectFinder<UAnimMontage> GreatSwordHitAnimFinder(TEXT("/Game/EKPlayer/Animation/GreatSword/Hit/EKPlayer_GreatSword_Hit"));
+	if (GreatSwordHitAnimFinder.Succeeded())
+	{
+		GreatSwordHitAnim = GreatSwordHitAnimFinder.Object;
+	}
+
 	// Spear Animation Montage
 	ConstructorHelpers::FObjectFinder<UAnimMontage> SpearAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/Spear/Attack/EKPlayer_Attack_Spear_Montage"));
 	if (SpearAttackAnimFinder.Succeeded())
@@ -169,6 +188,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		SpearUnEquipAnim = SpearUnEquipAnimFinder.Object;
 	}
 
+	ConstructorHelpers::FObjectFinder<UAnimMontage> SpearHitAnimFinder(TEXT("/Game/EKPlayer/Animation/Spear/Hit/EKPlayer_Spear_Hit"));
+	if (SpearHitAnimFinder.Succeeded())
+	{
+		SpearHitAnim = SpearHitAnimFinder.Object;
+	}
+
 	// Staff Animation Montage
 	ConstructorHelpers::FObjectFinder<UAnimMontage> StaffAttackAnimFinder(TEXT("/Game/EKPlayer/Animation/Staff/Attack/EKPlayer_Attack_Staff_Montage"));
 	if (StaffAttackAnimFinder.Succeeded())
@@ -192,6 +217,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	if (StaffUnEquipAnimFinder.Succeeded())
 	{
 		StaffUnEquipAnim = StaffUnEquipAnimFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> StaffHitAnimFinder(TEXT("/Game/EKPlayer/Animation/Staff/Hit/EKPlayer_Staff_Hit"));
+	if (StaffHitAnimFinder.Succeeded())
+	{
+		StaffHitAnim = StaffHitAnimFinder.Object;
 	}
 
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
@@ -246,6 +277,8 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Started, this, &ThisClass::EnhanceStarted);
 		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Completed, this, &ThisClass::EnhanceRelease);
 		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Canceled, this, &ThisClass::EnhanceRelease);
+
+		EnhancedInputComponent->BindAction(IATest, ETriggerEvent::Started, this, &ThisClass::TestStarted);
 	}
 }
 
@@ -549,6 +582,11 @@ void AEKPlayerController::EnhanceRelease(const FInputActionValue& InputValue)
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Enhance);
 }
 
+void AEKPlayerController::TestStarted(const FInputActionValue& InputValue)
+{
+	EKPlayer->GetPlayerStatusComponent()->TakeDamage(1);
+}
+
 TObjectPtr<UAnimMontage> AEKPlayerController::GetEquipAnimGreatSword()
 {
 	return GreatSwordEquipAnim;
@@ -617,6 +655,21 @@ TObjectPtr<UAnimMontage> AEKPlayerController::GetSpearDefenseAnim()
 TObjectPtr<UAnimMontage> AEKPlayerController::GetStaffDefenseAnim()
 {
 	return StaffDefenseAnim;
+}
+
+TObjectPtr<class UAnimMontage> AEKPlayerController::GetGreatSwordHitAnim()
+{
+	return GreatSwordHitAnim;
+}
+
+TObjectPtr<class UAnimMontage> AEKPlayerController::GetSpearHitAnim()
+{
+	return SpearHitAnim;
+}
+
+TObjectPtr<class UAnimMontage> AEKPlayerController::GetStaffHitAnim()
+{
+	return StaffHitAnim;
 }
 
 void AEKPlayerController::SetStaminaRecoveryTime()
