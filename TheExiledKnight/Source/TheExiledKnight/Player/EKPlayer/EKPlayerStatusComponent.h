@@ -9,10 +9,6 @@
 #define PlayerMaxMp 10000
 #define PlayerMaxStamina 10000
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHPUpdated, int32, MaxHP, int32, CurrentHP);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnStaminaUpdated, int32, MaxStamina, int32, CurrentStamina);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnMPUpdated, int32, MaxMP, int32, CurrentMP);
-
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class UEKPlayerStatusComponent : public UActorComponent
 {
@@ -24,6 +20,9 @@ public:
 public:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+public:
+	void TakeDamage(float Damage);
 
 public:
 	uint32 GetMaxHp();
@@ -66,6 +65,18 @@ public:
 	uint32 GetStaffCombo();
 	void SetStaffCombo();
 	void ResetStaffCombo();
+
+	uint32 GetGreatSwordEnhancedCombo();
+	void SetGreatSwordEnhancedCombo();
+	void ResetGreatSwordEnhancedCombo();
+
+	uint32 GetSpearEnhancedCombo();
+	void SetSpearEnhancedCombo();
+	void ResetSpearEnhancedCombo();
+
+	uint32 GetStaffEnhancedCombo();
+	void SetStaffEnhancedCombo();
+	void ResetStaffEnhancedCombo();
 
 public:
 	bool bCanStaminaRecovery = true;
@@ -139,14 +150,12 @@ protected:
 	UPROPERTY()
 	uint32 StaffCombo = 1;
 
+	UPROPERTY()
+	uint32 GreatSwordEnhancedCombo = 1;
 
-public:
-	UPROPERTY(BlueprintAssignable)
-	FOnHPUpdated Delegate_HPUpdated;
+	UPROPERTY()
+	uint32 SpearEnhancedCombo = 1;
 
-	UPROPERTY(BlueprintAssignable)
-	FOnMPUpdated Delegate_MPUpdated;
-
-	UPROPERTY(BlueprintAssignable)
-	FOnStaminaUpdated Delegate_StaminaUpdated;
+	UPROPERTY()
+	uint32 StaffEnhancedCombo = 1;
 };
