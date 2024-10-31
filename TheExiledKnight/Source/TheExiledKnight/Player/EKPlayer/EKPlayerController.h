@@ -62,6 +62,8 @@ private:
 
 	void SitDownStarted(const FInputActionValue& InputValue);
 
+	void Interact(const FInputActionValue& InputValue);
+
 public:
 	TObjectPtr<class UAnimMontage> GetEquipAnimGreatSword();
 	TObjectPtr<class UAnimMontage> GetUnEquipAnimGreatSword();
@@ -112,6 +114,9 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IASitDown;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IAInteract;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
