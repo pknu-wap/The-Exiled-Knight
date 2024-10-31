@@ -60,6 +60,10 @@ private:
 	void WeaponDefenseTriggered(const FInputActionValue& InputValue);
 	void WeaponDefenseRelease(const FInputActionValue& InputValue);
 
+	void SitDownStarted(const FInputActionValue& InputValue);
+
+	void Interact(const FInputActionValue& InputValue);
+
 public:
 	TObjectPtr<class UAnimMontage> GetEquipAnimGreatSword();
 	TObjectPtr<class UAnimMontage> GetUnEquipAnimGreatSword();
@@ -105,6 +109,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IAWeaponDefense;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IAGameMenu;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IASitDown;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IAInteract;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class AEKPlayer> EKPlayer;
@@ -119,6 +132,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
 	TObjectPtr<class UAnimMontage> BackStepAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
+	TObjectPtr<class UAnimMontage> SitDownAnim;
+
+	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
+	TObjectPtr<class UAnimMontage> SitDownWalkAnim;
 
 protected:
 	// GreatSword Animation Montage
@@ -190,4 +209,11 @@ protected:
 	float SpaceKeyPressStart = 0.f;
 	float NeedDodgeThresholdTime = 0.2f;
 	float KeyPressDuration = 0.f;
+
+public:
+	void OnPressed_GameMenu(const FInputActionValue& InputValue);
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInventoryComponent> InventoryComponent;
 };
