@@ -91,6 +91,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		IAEnhance = IAEnhanceFinder.Object;
 	}
 
+	ConstructorHelpers::FObjectFinder<UInputAction> IAInteractFinder(TEXT("/Script/EnhancedInput.InputAction'/Game/EKPlayer/Input/IA_EK_Interact.IA_EK_Interact'"));
+	if (IAInteractFinder.Succeeded())
+	{
+		IAInteract = IAInteractFinder.Object;
+	}
+
 	// Test Input
 	ConstructorHelpers::FObjectFinder<UInputAction> IATestFinder(TEXT("/Game/EKPlayer/Input/IA_EK_Test"));
 	if (IATestFinder.Succeeded())
@@ -276,6 +282,8 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Canceled, this, &ThisClass::WeaponDefenseRelease);
 
 		EnhancedInputComponent->BindAction(IASitDown, ETriggerEvent::Started, this, &ThisClass::SitDownStarted);
+
+		EnhancedInputComponent->BindAction(IAInteract, ETriggerEvent::Started, this, &ThisClass::Interact);
 
 		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Started, this, &ThisClass::EnhanceStarted);
 		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Completed, this, &ThisClass::EnhanceRelease);
@@ -590,6 +598,11 @@ void AEKPlayerController::TestStarted(const FInputActionValue& InputValue)
 	EKPlayer->GetPlayerStatusComponent()->TakeDamage(1);
 }
 
+void AEKPlayerController::Interact(const FInputActionValue& InputValue)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Interact"));
+}
+
 void AEKPlayerController::FindInteractableObjects()
 {
 
@@ -728,10 +741,10 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 {
 	UUISubsystem* UISystem = GetGameInstance()->GetSubsystem<UUISubsystem>();
 	if (!UISystem) return;
-	
+
 	UUserWidget* layer_GameMenu = UISystem->GetLayer(FEKGameplayTags::Get().UI_Layer_GameMenu);
 	UUserWidget* widget_GameMenu = UISystem->GetWidget(FEKGameplayTags::Get().UI_Widget_GameMenu_GameMenu);
-	
+
 	if (layer_GameMenu && layer_GameMenu->GetVisibility() == ESlateVisibility::Collapsed)
 	{
 		layer_GameMenu->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
@@ -742,7 +755,7 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 		SetInputMode(UIInputMode);
 		SetShowMouseCursor(true);
 	}
-	else if(widget_GameMenu && widget_GameMenu->GetVisibility() == ESlateVisibility::SelfHitTestInvisible)
+	else if (widget_GameMenu && widget_GameMenu->GetVisibility() == ESlateVisibility::SelfHitTestInvisible)
 	{
 		layer_GameMenu->SetVisibility(ESlateVisibility::Collapsed);
 		widget_GameMenu->SetVisibility(ESlateVisibility::Collapsed);
@@ -751,5 +764,5 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 		SetInputMode(GameInputMode);
 		SetShowMouseCursor(false);
 	}
-	
+
 }
