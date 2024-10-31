@@ -136,6 +136,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IAEnhance;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IAInteract;
+
 	// Test Input
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Test")
 	TObjectPtr<UInputAction> IATest;
