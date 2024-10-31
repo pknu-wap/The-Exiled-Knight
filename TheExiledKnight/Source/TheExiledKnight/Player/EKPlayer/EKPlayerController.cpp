@@ -16,6 +16,9 @@
 #include "EKPlayerStatusComponent.h"
 #include "../EKPlayerGameplayTags.h"
 #include "Components/InventoryComponent.h"
+#include "UI/UISubsystem.h"
+#include "Blueprint/UserWidget.h"
+#include "EKGameplayTags.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -725,10 +728,10 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 {
 	UUISubsystem* UISystem = GetGameInstance()->GetSubsystem<UUISubsystem>();
 	if (!UISystem) return;
-	
+
 	UUserWidget* layer_GameMenu = UISystem->GetLayer(FEKGameplayTags::Get().UI_Layer_GameMenu);
 	UUserWidget* widget_GameMenu = UISystem->GetWidget(FEKGameplayTags::Get().UI_Widget_GameMenu_GameMenu);
-	
+
 	if (layer_GameMenu && layer_GameMenu->GetVisibility() == ESlateVisibility::Collapsed)
 	{
 		layer_GameMenu->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
@@ -739,7 +742,7 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 		SetInputMode(UIInputMode);
 		SetShowMouseCursor(true);
 	}
-	else if(widget_GameMenu && widget_GameMenu->GetVisibility() == ESlateVisibility::SelfHitTestInvisible)
+	else if (widget_GameMenu && widget_GameMenu->GetVisibility() == ESlateVisibility::SelfHitTestInvisible)
 	{
 		layer_GameMenu->SetVisibility(ESlateVisibility::Collapsed);
 		widget_GameMenu->SetVisibility(ESlateVisibility::Collapsed);
@@ -748,5 +751,5 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 		SetInputMode(GameInputMode);
 		SetShowMouseCursor(false);
 	}
-	
+
 }
