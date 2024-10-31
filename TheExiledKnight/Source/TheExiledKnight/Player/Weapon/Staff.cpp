@@ -125,6 +125,15 @@ void AStaff::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObje
 	AttachWeaponToHandSocket(this, EKPlayer);
 }
 
+void AStaff::PlayHitAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController)
+{
+	if (!EKPlayer || !EKPlayerController)
+	{
+		return;
+	}
+	EKPlayer->PlayAnimMontage(EKPlayerController->GetStaffHitAnim());
+}
+
 void AStaff::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
 {
 	if (Weapon)

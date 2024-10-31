@@ -141,6 +141,15 @@ void AGreatSword::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, 
 	AttachWeaponToHandSocket(this, EKPlayer);
 }
 
+void AGreatSword::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	if (!EKPlayer || !EKPlayerController)
+	{
+		return;
+	}
+	EKPlayer->PlayAnimMontage(EKPlayerController->GetGreatSwordHitAnim());
+}
+
 void AGreatSword::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
 {
 	if (Weapon)
