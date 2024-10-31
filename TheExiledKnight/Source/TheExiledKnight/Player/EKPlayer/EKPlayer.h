@@ -35,6 +35,12 @@ protected:
 	TObjectPtr<class UCameraComponent> Camera;
 
 public:
+	void AttackHit();
+	bool bIsHit = false;
+	bool bIsHitOnce = false;
+
+	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 	void AttachWeaponToSpineSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
 	void AttachWeaponToHandSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
 
