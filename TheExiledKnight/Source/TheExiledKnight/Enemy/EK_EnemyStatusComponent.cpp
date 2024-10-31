@@ -20,9 +20,14 @@ UEK_EnemyStatusComponent::UEK_EnemyStatusComponent()
 void UEK_EnemyStatusComponent::TakeDamage(float amount)
 {
 	SetCurrentHealth(FMath::Clamp<float>(GetCurrentHealth() - amount, 0.0f, GetMaxHealth()));
+	
 	if (CurrentHealth <= 0.0f)
 	{
 		OnHPIsZero.Broadcast();
+	}
+	else
+	{
+		OnDamageTaken.Broadcast();
 	}
 
 }
