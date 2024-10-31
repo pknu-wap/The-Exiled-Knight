@@ -4,6 +4,7 @@
 #include "EKPlayerWeapon.h"
 #include "../EKPlayer/EKPlayer.h"
 #include "../EKPlayer/EKPlayerController.h"
+#include "Subsystems/InventorySubsystem.h"
 
 AEKPlayerWeapon::AEKPlayerWeapon()
 {
@@ -14,7 +15,7 @@ AEKPlayerWeapon::AEKPlayerWeapon()
 void AEKPlayerWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 void AEKPlayerWeapon::Tick(float DeltaTime)
@@ -28,7 +29,17 @@ void AEKPlayerWeapon::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer,
 
 }
 
-void AEKPlayerWeapon::PlayAttackStartAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController)
+void AEKPlayerWeapon::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+
+}
+
+void AEKPlayerWeapon::PlayEnhancedAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+
+}
+
+void AEKPlayerWeapon::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
 
 }
@@ -44,6 +55,11 @@ void AEKPlayerWeapon::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlay
 }
 
 void AEKPlayerWeapon::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+
+}
+
+void AEKPlayerWeapon::PlayHitAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController)
 {
 
 }
@@ -75,4 +91,52 @@ void AEKPlayerWeapon::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapo
 			Weapon->AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("weapon_right_hand_socket"));
 		}
 	}
+}
+
+void AEKPlayerWeapon::AttackHit(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<UCapsuleComponent> WeaponCC)
+{
+	FVector CapsuleLocation = WeaponCC->GetComponentLocation();
+	FRotator CapsuleRotation = WeaponCC->GetComponentRotation();
+	float CapsuleHalfHeight = WeaponCC->GetScaledCapsuleHalfHeight();
+	float CapsuleRadius = WeaponCC->GetScaledCapsuleRadius();
+
+	FCollisionQueryParams Params(NAME_None, false, this);
+	TArray<FHitResult> HitResults;
+
+	//DrawDebugCapsule(GetWorld(), CapsuleLocation, CapsuleHalfHeight, CapsuleRadius, CapsuleRotation.Quaternion(), FColor::Red, false, 0.3f);
+
+	EKPlayer->bIsHit = GetWorld()->SweepMultiByChannel(
+		HitResults,
+		CapsuleLocation,
+		CapsuleLocation,
+		CapsuleRotation.Quaternion(),
+		ECC_Pawn,
+		FCollisionShape::MakeCapsule(CapsuleRadius, CapsuleHalfHeight),
+		Params
+	);
+
+	if (!EKPlayer->bIsHit)
+	{
+		return;
+	}
+
+	for (auto& Hit : HitResults)
+	{
+		AActor* HitActor = Hit.GetActor();
+		if (HitActor)
+		{
+			TObjectPtr<AEK_EnemyBase> HitEnemy = Cast<AEK_EnemyBase>(HitActor);
+			if (HitEnemy)
+			{
+				// Here Insert About Damage function
+				EKPlayer->bIsHitOnce = true;
+				GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Attack!!!"));
+			}
+		}
+	}
+}
+
+TObjectPtr<UCapsuleComponent> AEKPlayerWeapon::GetWeaponCapsuleComponent()
+{
+	return nullptr;
 }
