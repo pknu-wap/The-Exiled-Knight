@@ -238,6 +238,9 @@ public:
 	void SetAttackEndTime();
 	void SetAttackEndTimer(float Time);
 
+public:
+	void OnPressed_GameMenu(const FInputActionValue& InputValue);
+
 protected:
 	// About Sprint And Dodge
 	float SpaceKeyPressStart = 0.f;
