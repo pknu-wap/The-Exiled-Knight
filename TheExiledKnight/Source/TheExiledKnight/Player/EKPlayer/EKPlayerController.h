@@ -63,6 +63,7 @@ private:
 	void SitDownStarted(const FInputActionValue& InputValue);
 
 	void Interact(const FInputActionValue& InputValue);
+	void FindInteractableObjects();
 
 public:
 	TObjectPtr<class UAnimMontage> GetEquipAnimGreatSword();

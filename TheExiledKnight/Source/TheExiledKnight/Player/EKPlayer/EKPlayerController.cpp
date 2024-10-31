@@ -536,6 +536,11 @@ void AEKPlayerController::Interact(const FInputActionValue& InputValue)
 	UE_LOG(LogTemp, Warning, TEXT("IA Interact"))
 }
 
+void AEKPlayerController::FindInteractableObjects()
+{
+
+}
+
 TObjectPtr<UAnimMontage> AEKPlayerController::GetEquipAnimGreatSword()
 {
 	return GreatSwordEquipAnim;
