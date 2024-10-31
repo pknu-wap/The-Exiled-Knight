@@ -16,6 +16,9 @@
 #include "EKPlayerStatusComponent.h"
 #include "../EKPlayerGameplayTags.h"
 #include "Components/InventoryComponent.h"
+#include "UI/UISubsystem.h"
+#include "Blueprint/UserWidget.h"
+#include "EKGameplayTags.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -587,6 +590,11 @@ void AEKPlayerController::TestStarted(const FInputActionValue& InputValue)
 	EKPlayer->GetPlayerStatusComponent()->TakeDamage(1);
 }
 
+void AEKPlayerController::FindInteractableObjects()
+{
+
+}
+
 TObjectPtr<UAnimMontage> AEKPlayerController::GetEquipAnimGreatSword()
 {
 	return GreatSwordEquipAnim;
@@ -714,4 +722,34 @@ void AEKPlayerController::SetAttackEndTime()
 void AEKPlayerController::SetAttackEndTimer(float Time)
 {
 	GetWorldTimerManager().SetTimer(AttackEndHandle, this, &ThisClass::SetAttackEndTime, Time, false);
+}
+
+void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue)
+{
+	UUISubsystem* UISystem = GetGameInstance()->GetSubsystem<UUISubsystem>();
+	if (!UISystem) return;
+
+	UUserWidget* layer_GameMenu = UISystem->GetLayer(FEKGameplayTags::Get().UI_Layer_GameMenu);
+	UUserWidget* widget_GameMenu = UISystem->GetWidget(FEKGameplayTags::Get().UI_Widget_GameMenu_GameMenu);
+
+	if (layer_GameMenu && layer_GameMenu->GetVisibility() == ESlateVisibility::Collapsed)
+	{
+		layer_GameMenu->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+		widget_GameMenu->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+		widget_GameMenu->SetFocus();
+
+		FInputModeUIOnly UIInputMode;
+		SetInputMode(UIInputMode);
+		SetShowMouseCursor(true);
+	}
+	else if (widget_GameMenu && widget_GameMenu->GetVisibility() == ESlateVisibility::SelfHitTestInvisible)
+	{
+		layer_GameMenu->SetVisibility(ESlateVisibility::Collapsed);
+		widget_GameMenu->SetVisibility(ESlateVisibility::Collapsed);
+
+		FInputModeGameOnly GameInputMode;
+		SetInputMode(GameInputMode);
+		SetShowMouseCursor(false);
+	}
+
 }
