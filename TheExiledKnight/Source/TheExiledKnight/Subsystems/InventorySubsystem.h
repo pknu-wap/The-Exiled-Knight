@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "Structs/ItemStruct.h"
 #include "InventorySubsystem.generated.h"
 
 /**
@@ -17,8 +18,13 @@ class THEEXILEDKNIGHT_API UInventorySubsystem : public UGameInstanceSubsystem
 public:
 	UInventorySubsystem();
 	TObjectPtr<UDataTable> GetItemDB() { return ItemDB; };
+	FItemStruct* GetItemRow(FName RowName);
+	FItemStruct* GetItemInfo(uint8 ID);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<UDataTable> ItemDB;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TMap<uint8, FItemStruct> ItemDictionary;
 };

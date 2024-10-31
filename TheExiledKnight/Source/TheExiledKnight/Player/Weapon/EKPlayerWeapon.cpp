@@ -4,6 +4,7 @@
 #include "EKPlayerWeapon.h"
 #include "../EKPlayer/EKPlayer.h"
 #include "../EKPlayer/EKPlayerController.h"
+#include "Subsystems/InventorySubsystem.h"
 
 AEKPlayerWeapon::AEKPlayerWeapon()
 {
@@ -14,7 +15,7 @@ AEKPlayerWeapon::AEKPlayerWeapon()
 void AEKPlayerWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 void AEKPlayerWeapon::Tick(float DeltaTime)
