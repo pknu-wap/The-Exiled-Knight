@@ -5,10 +5,20 @@
 
 UInventorySubsystem::UInventorySubsystem()
 {
+
+}
+
+void UInventorySubsystem::Initialize(FSubsystemCollectionBase& Collection)
+{
+	Super::Initialize(Collection);
+
 	ItemDB = LoadObject<UDataTable>(this, TEXT("/Script/Engine.DataTable'/Game/TheExiledKnight/Inventory/DataTables/DT_Item.DT_Item'"));
-	
+
 	if (ItemDB == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ItemDB is null"));
 		return;
+	}
 
 	uint8 ID = 0;
 
@@ -16,7 +26,10 @@ UInventorySubsystem::UInventorySubsystem()
 	{
 		ID++;
 		FItemStruct* ItemInfo = ItemDB->FindRow<FItemStruct>(RowName, TEXT("GetItemRow"));
-		ItemDictionary.Add(ID, *ItemInfo);
+		if (ItemInfo != nullptr)
+		{
+			ItemDictionary.Add(ID, *ItemInfo);
+		}
 	}
 }
 
