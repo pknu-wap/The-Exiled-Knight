@@ -11,6 +11,10 @@ void UWidget_InvContentSlot::NativeConstruct()
 	Super::NativeConstruct();
 }
 
+void UWidget_InvContentSlot::UpdateSlot(const FInventorySlot& inData)
+{
+}
+
 FEventReply UWidget_InvContentSlot::RedirectMouseDownToWidget(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	FEventReply Reply;
