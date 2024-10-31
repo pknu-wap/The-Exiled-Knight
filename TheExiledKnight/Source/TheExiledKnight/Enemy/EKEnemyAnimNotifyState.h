@@ -21,19 +21,19 @@ public:
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
 
 protected:
-	// ÃÊ´ç ÀÌµ¿°Å¸®
+	// ï¿½Ê´ï¿½ ï¿½Ìµï¿½ï¿½Å¸ï¿½
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Move)
 	float MoveDistancePerSec;
 
 private:
-	// ÀüÃ¼ ÀÌµ¿ °Å¸®
+	// ï¿½ï¿½Ã¼ ï¿½Ìµï¿½ ï¿½Å¸ï¿½
 	float TotalDistance;
-	// ÀüÃ¼ ½Ã°£
+	// ï¿½ï¿½Ã¼ ï¿½Ã°ï¿½
 	float TotalTime;
-	// ½ÃÀÛÀ§Ä¡
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡
 	FVector StartLocation;
-	// Ä³¸¯ÅÍ
+	// Ä³ï¿½ï¿½ï¿½ï¿½
 	AActor* Owner;
-	// ÀÌµ¿ Å¸ÀÌ¸Ó
+	// ï¿½Ìµï¿½ Å¸ï¿½Ì¸ï¿½
 	FTimerHandle MoveTimerHandle;
 };
