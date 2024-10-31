@@ -41,4 +41,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
 	bool bIsFalling = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
+	bool bIsSitted = false;
 };
