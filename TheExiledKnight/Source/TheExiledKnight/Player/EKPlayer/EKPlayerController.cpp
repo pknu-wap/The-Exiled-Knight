@@ -85,6 +85,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		IASitDown = IASitDownFinder.Object;
 	}
 
+	ConstructorHelpers::FObjectFinder<UInputAction> IAInteractFinder(TEXT("/Script/EnhancedInput.InputAction'/Game/EKPlayer/Input/IA_EK_Interact.IA_EK_Interact'"));
+	if (IAInteractFinder.Succeeded())
+	{
+		IAInteract = IAInteractFinder.Object;
+	}
+
 	// Common Animation Montage
 	ConstructorHelpers::FObjectFinder<UAnimMontage> UsePotionAnimFinder(TEXT("/Game/EKPlayer/Animation/Common/UseItem/EKPlayer_Drink_Common_Montage"));
 	if (UsePotionAnimFinder.Succeeded())
@@ -241,6 +247,8 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAGameMenu, ETriggerEvent::Started, this, &ThisClass::OnPressed_GameMenu);
 
 		EnhancedInputComponent->BindAction(IASitDown, ETriggerEvent::Started, this, &ThisClass::SitDownStarted);
+
+		EnhancedInputComponent->BindAction(IAInteract, ETriggerEvent::Started, this, &ThisClass::Interact);
 	}
 }
 
@@ -518,6 +526,14 @@ void AEKPlayerController::SitDownStarted(const FInputActionValue& InputValue)
 		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
 
 	}
+}
+
+void AEKPlayerController::Interact(const FInputActionValue& InputValue)
+{
+	if (!EKPlayer)
+		return;
+
+	UE_LOG(LogTemp, Warning, TEXT("IA Interact"))
 }
 
 TObjectPtr<UAnimMontage> AEKPlayerController::GetEquipAnimGreatSword()
