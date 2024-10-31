@@ -5,6 +5,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../EKPlayer/EKPlayer.h"
 #include "../EKPlayer/EKPlayerController.h"
+#include "../EKPlayerGameplayTags.h"
 
 UEKPlayerAnimInstance::UEKPlayerAnimInstance(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -42,4 +43,13 @@ void UEKPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	CurrentSpeed = Velocity.Size2D();
 	bShouldMove = (CurrentSpeed > 3.f && EKMovementComponent->GetCurrentAcceleration() != FVector(0, 0, 0));
 	bIsFalling = EKMovementComponent->IsFalling();
+
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_SitDown))
+	{
+		bIsSitted = true;
+	}
+	else
+	{
+		bIsSitted = false;
+	}
 }
