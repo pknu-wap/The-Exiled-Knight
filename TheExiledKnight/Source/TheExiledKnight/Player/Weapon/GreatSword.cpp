@@ -2,9 +2,6 @@
 
 
 #include "GreatSword.h"
-#include "../EKPlayer/EKPlayer.h"
-#include "../EKPlayer/EKPlayerController.h"
-#include "../EKPlayer/EKPlayerStatusComponent.h"
 
 AGreatSword::AGreatSword()
 {
@@ -19,6 +16,11 @@ AGreatSword::AGreatSword()
 		GreatSwordMesh = GreatSwordMeshFinder.Object;
 	}
 	GreatSword->SetStaticMesh(GreatSwordMesh);
+
+	WeaponCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
+	WeaponCapsuleComponent->SetupAttachment(RootComponent);
+	WeaponCapsuleComponent->SetRelativeLocationAndRotation(FVector(60, 0, 0), FRotator(-90, 0, 0));
+	WeaponCapsuleComponent->SetRelativeScale3D(FVector(1.f, 1.f, 3.f));
 }
 
 void AGreatSword::BeginPlay()
@@ -159,4 +161,14 @@ void AGreatSword::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon, 
 void AGreatSword::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
 {
 	Super::AttachWeaponToHandSocket(Weapon, EKPlayer);
+}
+
+TObjectPtr<UCapsuleComponent> AGreatSword::GetWeaponCapsuleComponent()
+{
+	return WeaponCapsuleComponent;
+}
+
+void AGreatSword::AttackHit(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<UCapsuleComponent> WeaponCC)
+{
+	Super::AttackHit(EKPlayer, GetWeaponCapsuleComponent());
 }

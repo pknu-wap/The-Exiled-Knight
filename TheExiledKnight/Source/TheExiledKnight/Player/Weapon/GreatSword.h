@@ -45,4 +45,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TObjectPtr<class UStaticMesh> GreatSwordMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TObjectPtr<UCapsuleComponent> WeaponCapsuleComponent;
+
+	virtual TObjectPtr<UCapsuleComponent> GetWeaponCapsuleComponent() override;
+
+public:
+	virtual void AttackHit(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<UCapsuleComponent> WeaponCC) override;
 };
