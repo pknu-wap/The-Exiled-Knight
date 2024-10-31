@@ -4,6 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "../../Enemy/EK_EnemyBase.h"
+#include "Components/CapsuleComponent.h"
+#include "../EKPlayer/EKPlayer.h"
+#include "../EKPlayer/EKPlayerController.h"
+#include "../EKPlayer/EKPlayerStatusComponent.h"
 #include "EKPlayerWeapon.generated.h"
 
 UCLASS()
@@ -38,4 +43,9 @@ public:
 public:
 	virtual void AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<class AEKPlayer> EKPlayer);
 	virtual void AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<class AEKPlayer> EKPlayer);
+
+public:
+	virtual void AttackHit(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<UCapsuleComponent> WeaponCC);
+
+	virtual TObjectPtr<UCapsuleComponent> GetWeaponCapsuleComponent();
 };
