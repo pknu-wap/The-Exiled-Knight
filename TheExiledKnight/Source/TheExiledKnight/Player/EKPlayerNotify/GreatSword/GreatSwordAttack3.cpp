@@ -24,6 +24,12 @@ void UGreatSwordAttack3::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSeque
 {
 	Super::NotifyBegin(MeshComp, Animation, FrameDeltaTime, EventReference);
 
+	if (!EKPlayer || EKPlayer->bIsHitOnce)
+	{
+		return;
+	}
+
+	EKPlayer->AttackHit();
 }
 
 void UGreatSwordAttack3::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
@@ -39,6 +45,7 @@ void UGreatSwordAttack3::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequen
 	{
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 		EKPlayer->bUseControllerRotationYaw = false;
+		EKPlayer->bIsHitOnce = false;
 
 	}
 }
