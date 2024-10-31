@@ -93,6 +93,7 @@ void UEKPlayerStatusComponent::SetMaxHp(int32 SetData)
 void UEKPlayerStatusComponent::SetHp(int32 SetData)
 {
 	Hp = FMath::Clamp(Hp + SetData, 0, MaxHp);
+	Delegate_HPUpdated.Broadcast(MaxHp, Hp);
 }
 
 void UEKPlayerStatusComponent::SetMaxMp(int32 SetData)
@@ -103,6 +104,7 @@ void UEKPlayerStatusComponent::SetMaxMp(int32 SetData)
 void UEKPlayerStatusComponent::SetMp(int32 SetData)
 {
 	Mp = FMath::Clamp(Mp + SetData, 0, MaxMp);
+	Delegate_MPUpdated.Broadcast(MaxMp, Mp);
 }
 
 void UEKPlayerStatusComponent::SetMaxStamina(int32 SetData)
@@ -113,6 +115,7 @@ void UEKPlayerStatusComponent::SetMaxStamina(int32 SetData)
 void UEKPlayerStatusComponent::SetStamina(int32 SetData)
 {
 	Stamina = FMath::Clamp(Stamina + SetData, 0, MaxStamina);
+	Delegate_StaminaUpdated.Broadcast(MaxStamina, Stamina);
 }
 
 uint32 UEKPlayerStatusComponent::GetPlayerDefaultDamage()
