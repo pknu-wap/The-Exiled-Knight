@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotifyState.h"
-#include "StaffAttack1.generated.h"
+#include "WeaponBaseAttack.generated.h"
 
 UCLASS()
-class THEEXILEDKNIGHT_API UStaffAttack1 : public UAnimNotifyState
+class THEEXILEDKNIGHT_API UWeaponBaseAttack : public UAnimNotifyState
 {
 	GENERATED_BODY()
 	
@@ -21,5 +21,5 @@ protected:
 	TObjectPtr<class AEKPlayer> EKPlayer;
 
 	UPROPERTY()
-	TObjectPtr<class AEKPlayerController > EKPlayerController;
+	TObjectPtr<class AEKPlayerController> EKPlayerController;
 };

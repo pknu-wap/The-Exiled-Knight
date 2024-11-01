@@ -63,19 +63,27 @@ void AStaff::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 
 	if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 1)
 	{
+		EKPlayer->StopAnimMontage(EKPlayerController->GetStaffAttackAnim());
 		EKPlayer->PlayAnimMontage(EKPlayerController->GetStaffAttackAnim(), 1.0f, FName("Attack1"));
+		EKPlayerController->SetAttackEndTimer(2.33f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 2 && EKPlayerController->bCanAttackNext == true)
+	else if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 2)
 	{
+		EKPlayer->StopAnimMontage(EKPlayerController->GetStaffAttackAnim());
 		EKPlayer->PlayAnimMontage(EKPlayerController->GetStaffAttackAnim(), 1.0f, FName("Attack2"));
+		EKPlayerController->SetAttackEndTimer(2.67f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 3 && EKPlayerController->bCanAttackNext == true)
+	else if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 3)
 	{
+		EKPlayer->StopAnimMontage(EKPlayerController->GetStaffAttackAnim());
 		EKPlayer->PlayAnimMontage(EKPlayerController->GetStaffAttackAnim(), 1.0f, FName("Attack3"));
+		EKPlayerController->SetAttackEndTimer(3.33f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 4 && EKPlayerController->bCanAttackNext == true)
+	else if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 4)
 	{
+		EKPlayer->StopAnimMontage(EKPlayerController->GetStaffAttackAnim());
 		EKPlayer->PlayAnimMontage(EKPlayerController->GetStaffAttackAnim(), 1.0f, FName("Attack4"));
+		EKPlayerController->SetAttackEndTimer(2.67f);
 	}
 
 	EKPlayerController->SetStaminaAndTimer(StaffAttackStamina);
