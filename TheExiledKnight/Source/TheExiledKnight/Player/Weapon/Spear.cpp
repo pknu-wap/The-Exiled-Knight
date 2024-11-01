@@ -66,23 +66,33 @@ void ASpear::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 
 	if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 1)
 	{
+		EKPlayer->StopAnimMontage(EKPlayerController->GetSpearAttackAnim());
 		EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearAttackAnim(), 1.0f, FName("Attack1"));
+		EKPlayerController->SetAttackEndTimer(1.0f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 2 && EKPlayerController->bCanAttackNext == true)
+	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 2)
 	{
+		EKPlayer->StopAnimMontage(EKPlayerController->GetSpearAttackAnim());
 		EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearAttackAnim(), 1.0f, FName("Attack2"));
+		EKPlayerController->SetAttackEndTimer(1.0f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 3 && EKPlayerController->bCanAttackNext == true)
+	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 3)
 	{
+		EKPlayer->StopAnimMontage(EKPlayerController->GetSpearAttackAnim());
 		EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearAttackAnim(), 1.0f, FName("Attack3"));
+		EKPlayerController->SetAttackEndTimer(0.83f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 4 && EKPlayerController->bCanAttackNext == true)
+	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 4)
 	{
+		EKPlayer->StopAnimMontage(EKPlayerController->GetSpearAttackAnim());
 		EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearAttackAnim(), 1.0f, FName("Attack4"));
+		EKPlayerController->SetAttackEndTimer(1.25f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 5 && EKPlayerController->bCanAttackNext == true)
+	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 5)
 	{
+		EKPlayer->StopAnimMontage(EKPlayerController->GetSpearAttackAnim());
 		EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearAttackAnim(), 1.0f, FName("Attack5"));
+		EKPlayerController->SetAttackEndTimer(1.33f);
 	}
 
 	EKPlayerController->SetStaminaAndTimer(SpearAttackStamina);

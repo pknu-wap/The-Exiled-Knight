@@ -1,11 +1,11 @@
 // Made by Somalia Pirate
 
-#include "SpearAttack1.h"
+#include "WeaponBaseAttack.h"
 #include "../../EKPlayer/EKPlayer.h"
 #include "../../EKPlayer/EKPlayerController.h"
 #include "../../EKPlayerGameplayTags.h"
 
-void USpearAttack1::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
+void UWeaponBaseAttack::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 
@@ -13,14 +13,9 @@ void USpearAttack1::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceB
 	{
 		EKPlayerController = Cast<AEKPlayerController>(EKPlayer->GetController());
 	}
-
-	if (EKPlayerController)
-	{
-		EKPlayerController->SetAttackEndTimer(1.0f);
-	}
 }
 
-void USpearAttack1::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
+void UWeaponBaseAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime, EventReference);
 
@@ -32,7 +27,7 @@ void USpearAttack1::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBa
 	EKPlayer->AttackHit();
 }
 
-void USpearAttack1::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
+void UWeaponBaseAttack::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 
@@ -46,6 +41,5 @@ void USpearAttack1::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBas
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 		EKPlayer->bUseControllerRotationYaw = false;
 		EKPlayer->bIsHitOnce = false;
-
 	}
 }
