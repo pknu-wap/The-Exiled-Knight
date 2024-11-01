@@ -1,9 +1,9 @@
 // Made by Somalia Pirate
 
 #include "Dodge.h"
-#include "../EKPlayer/EKPlayer.h"
-#include "../EKPlayer/EKPlayerController.h"
-#include "../EKPlayerGameplayTags.h"
+#include "../../EKPlayer/EKPlayer.h"
+#include "../../EKPlayer/EKPlayerController.h"
+#include "../../EKPlayerGameplayTags.h"
 
 void UDodge::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
