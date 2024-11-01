@@ -705,21 +705,14 @@ void AEKPlayerController::SetStaminaAndTimer(int32 Stamina)
 	GetWorldTimerManager().SetTimer(StaminaRecoveryHandle, this, &ThisClass::SetStaminaRecoveryTime, StaminaRecoveryTime, false);
 }
 
-void AEKPlayerController::SetAttackNextTime()
-{
-	bCanAttackNext = false;
-}
-
 void AEKPlayerController::SetAttackNextAndTimer()
 {
-	bCanAttackNext = true;
 	EKPlayer->GetPlayerStatusComponent()->SetGreatSwordCombo();
 	EKPlayer->GetPlayerStatusComponent()->SetSpearCombo();
 	EKPlayer->GetPlayerStatusComponent()->SetStaffCombo();
 	EKPlayer->GetPlayerStatusComponent()->SetGreatSwordEnhancedCombo();
 	EKPlayer->GetPlayerStatusComponent()->SetSpearEnhancedCombo();
 	EKPlayer->GetPlayerStatusComponent()->SetStaffEnhancedCombo();
-	GetWorldTimerManager().SetTimer(AttackNextHandle, this, &ThisClass::SetAttackNextTime, AttackNextTime, false);
 }
 
 void AEKPlayerController::SetAttackEndTime()
@@ -764,5 +757,4 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 		SetInputMode(GameInputMode);
 		SetShowMouseCursor(false);
 	}
-
 }
