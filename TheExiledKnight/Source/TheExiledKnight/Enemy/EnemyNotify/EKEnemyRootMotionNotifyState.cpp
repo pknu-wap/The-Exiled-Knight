@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Enemy/EKEnemyRootMotionNotifyState.h"
+#include "EKEnemyRootMotionNotifyState.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h" 
-#include"EK_EnemyBase.h"
+#include"Enemy/EK_EnemyBase.h"
 
 void UEKEnemyRootMotionNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
