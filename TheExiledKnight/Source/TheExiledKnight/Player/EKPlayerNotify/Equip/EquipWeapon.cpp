@@ -2,9 +2,9 @@
 
 
 #include "EquipWeapon.h"
-#include "../EKPlayer/EKPlayer.h"
-#include "../EKPlayer/EKPlayerController.h"
-#include "../Weapon/GreatSword.h"
+#include "../../EKPlayer/EKPlayer.h"
+#include "../../EKPlayer/EKPlayerController.h"
+#include "../../Weapon/GreatSword.h"
 
 void UEquipWeapon::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
