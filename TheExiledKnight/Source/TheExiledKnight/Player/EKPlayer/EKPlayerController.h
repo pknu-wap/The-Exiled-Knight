@@ -223,7 +223,6 @@ protected:
 
 public:
 	bool bIsEquipWeapon = false;
-	bool bCanAttackNext = false;
 
 protected:
 	FTimerHandle StaminaRecoveryHandle;
@@ -239,13 +238,9 @@ protected:
 public:
 	void SetStaminaRecoveryTime();
 	void SetStaminaAndTimer(int32 Stamina);
-	void SetAttackNextTime();
 	void SetAttackNextAndTimer();
 	void SetAttackEndTime();
 	void SetAttackEndTimer(float Time);
-
-public:
-	void OnPressed_GameMenu(const FInputActionValue& InputValue);
 
 protected:
 	// About Sprint And Dodge

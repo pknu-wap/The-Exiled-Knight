@@ -95,13 +95,13 @@ void AEKPlayer::BeginPlay()
 
 	// Test GreatSword Version
 
-	/*if (GreatSwordClass)
+	if (GreatSwordClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AGreatSword>(GreatSwordClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetMesh()->SetAnimInstanceClass(ABPGreatSword);
-	}*/
+	}
 	
 	// Test Spear Version
 
@@ -116,13 +116,13 @@ void AEKPlayer::BeginPlay()
 
 	// Test Staff Version Don't Select This
 
-	if (StaffClass)
+	/*if (StaffClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AStaff>(StaffClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetMesh()->SetAnimInstanceClass(ABPStaff);
-	}
+	}*/
 }
 
 void AEKPlayer::Tick(float DeltaTime)
