@@ -64,15 +64,21 @@ void AGreatSword::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TOb
 
 	if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordCombo() == 1)
 	{
+		EKPlayer->StopAnimMontage(EKPlayerController->GetGreatSwordAttackAnim());
 		EKPlayer->PlayAnimMontage(EKPlayerController->GetGreatSwordAttackAnim(), 1.0f, FName("Attack1"));
+		EKPlayerController->SetAttackEndTimer(2.27f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordCombo() == 2 && EKPlayerController->bCanAttackNext == true)
+	else if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordCombo() == 2)
 	{
+		EKPlayer->StopAnimMontage(EKPlayerController->GetGreatSwordAttackAnim());
 		EKPlayer->PlayAnimMontage(EKPlayerController->GetGreatSwordAttackAnim(), 1.0f, FName("Attack2"));
+		EKPlayerController->SetAttackEndTimer(2.37f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordCombo() == 3 && EKPlayerController->bCanAttackNext == true)
+	else if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordCombo() == 3)
 	{
+		EKPlayer->StopAnimMontage(EKPlayerController->GetGreatSwordAttackAnim());
 		EKPlayer->PlayAnimMontage(EKPlayerController->GetGreatSwordAttackAnim(), 1.0f, FName("Attack3"));
+		EKPlayerController->SetAttackEndTimer(2.7f);
 	}
 
 	EKPlayerController->SetStaminaAndTimer(GreatSwordAttackStamina);
