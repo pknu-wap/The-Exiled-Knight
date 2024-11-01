@@ -2,7 +2,7 @@
 
 
 #include "EKEnemyAnimNotifyState.h"
-#include "EK_EnemyBase.h"
+#include "Enemy/EK_EnemyBase.h"
 UEKEnemyAnimNotifyState::UEKEnemyAnimNotifyState()
 {
 	MoveDistancePerSec = 0;
