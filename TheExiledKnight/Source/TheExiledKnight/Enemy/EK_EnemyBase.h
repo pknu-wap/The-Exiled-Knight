@@ -14,26 +14,19 @@ class THEEXILEDKNIGHT_API AEK_EnemyBase : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AEK_EnemyBase(); 
-
+	
+	
 protected:
-	// Called when the game starts or when spawned
 
+	
 
 public:	
 	UPROPERTY(VisibleAnywhere, Category = Stat)
 	class UEK_EnemyStatusComponent* EnemyStat;
 	
 	virtual TObjectPtr <UEK_EnemyStatusComponent> GetStatusComponent();
-	virtual void AttackHitCheck();
-
-	virtual void SetAttackHitCheck(bool check);
-	virtual bool GetAttackHitCheck();
+	
 private:
 	
-	UPROPERTY(EditAnywhere, Category = Attack, Meta = (AllowPrivteAccess = true))
-	float  AttackRadius;
-	UPROPERTY(EditAnywhere, Category = Attack, Meta = (AllowPrivteAccess = true))
-	float AttackHalfHeight;
-	UPROPERTY(EditAnywhere, Category = Attack, Meta = (AllowPrivteAccess = true))
-	bool bAttackHitCheck;
+	
 };

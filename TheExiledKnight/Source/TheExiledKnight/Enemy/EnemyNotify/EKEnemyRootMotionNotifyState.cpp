@@ -11,11 +11,8 @@ void UEKEnemyRootMotionNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration); 
 	Owner = MeshComp->GetOwner(); 
 	ACharacter* OwnerCharacter = Cast<ACharacter>(Owner); 
-	AEK_EnemyBase* OwnerCheck = Cast<AEK_EnemyBase>(Owner);
-	OwnerCheck->SetAttackHitCheck(false);
 	if (!OwnerCharacter)return;
 
-	  
 	if(OwnerCharacter->GetCharacterMovement())
 	{
 		UCharacterMovementComponent* MovementComponent = OwnerCharacter->GetCharacterMovement(); 
