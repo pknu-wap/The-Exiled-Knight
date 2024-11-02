@@ -91,12 +91,6 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 		IAEnhance = IAEnhanceFinder.Object;
 	}
 
-	ConstructorHelpers::FObjectFinder<UInputAction> IAInteractFinder(TEXT("/Script/EnhancedInput.InputAction'/Game/EKPlayer/Input/IA_EK_Interact.IA_EK_Interact'"));
-	if (IAInteractFinder.Succeeded())
-	{
-		IAInteract = IAInteractFinder.Object;
-	}
-
 	// Test Input
 	ConstructorHelpers::FObjectFinder<UInputAction> IATestFinder(TEXT("/Game/EKPlayer/Input/IA_EK_Test"));
 	if (IATestFinder.Succeeded())
@@ -282,8 +276,6 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Canceled, this, &ThisClass::WeaponDefenseRelease);
 
 		EnhancedInputComponent->BindAction(IASitDown, ETriggerEvent::Started, this, &ThisClass::SitDownStarted);
-
-		EnhancedInputComponent->BindAction(IAInteract, ETriggerEvent::Started, this, &ThisClass::Interact);
 
 		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Started, this, &ThisClass::EnhanceStarted);
 		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Completed, this, &ThisClass::EnhanceRelease);
@@ -596,11 +588,6 @@ void AEKPlayerController::EnhanceRelease(const FInputActionValue& InputValue)
 void AEKPlayerController::TestStarted(const FInputActionValue& InputValue)
 {
 	EKPlayer->GetPlayerStatusComponent()->TakeDamage(1);
-}
-
-void AEKPlayerController::Interact(const FInputActionValue& InputValue)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Interact"));
 }
 
 void AEKPlayerController::FindInteractableObjects()
