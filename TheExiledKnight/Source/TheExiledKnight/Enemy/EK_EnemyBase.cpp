@@ -10,11 +10,30 @@ AEK_EnemyBase::AEK_EnemyBase()
 	EnemyStat = CreateDefaultSubobject<UEK_EnemyStatusComponent>(TEXT("EnemyStat"));
 }
 
+float AEK_EnemyBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInvestigator, AActor* DmageCauser)
+{
+	const float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInvestigator, DmageCauser);
+	if (Damage > 0)
+	{
+		EnemyStat->ChangeCurrentHealth(Damage);
+		EnemyStat->OnDamageTaken.Broadcast();
+		if (EnemyStat->GetCurrentHealth() <= 0)
+		{
+			EnemyStat->OnHPIsZero.Broadcast();
+		}
+
+
+	}
+	return 0.0f;
+}
+
 
 TObjectPtr<UEK_EnemyStatusComponent> AEK_EnemyBase::GetStatusComponent()
 {
 	return EnemyStat;
 }
+
+
 
 
 
