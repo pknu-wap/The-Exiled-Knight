@@ -18,8 +18,10 @@ AStaff::AStaff()
 
 	WeaponCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
 	WeaponCapsuleComponent->SetupAttachment(RootComponent);
-	WeaponCapsuleComponent->SetRelativeLocationAndRotation(FVector(60, 0, 0), FRotator(-90, 0, 0));
-	WeaponCapsuleComponent->SetRelativeScale3D(FVector(1.f, 1.f, 3.f));
+	WeaponCapsuleComponent->SetRelativeLocationAndRotation(FVector(0, -20, 0), FRotator(-90, 0, 90));
+	WeaponCapsuleComponent->SetRelativeScale3D(FVector(1.f, 1.f, 2.f));
+	WeaponCapsuleComponent->SetCapsuleRadius(11.f);
+	WeaponCapsuleComponent->SetCapsuleHalfHeight(44.f);
 
 	MaxAttackCombo = 4;
 }
