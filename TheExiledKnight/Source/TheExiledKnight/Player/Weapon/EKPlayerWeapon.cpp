@@ -93,7 +93,19 @@ void AEKPlayerWeapon::AttackHit(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<UCaps
 	}
 }
 
-TObjectPtr<UCapsuleComponent> AEKPlayerWeapon::GetWeaponCapsuleComponent()
+void AEKPlayerWeapon::SetAttackComboNext(uint8 MaxCombo)
 {
-	return nullptr;
+	if (AttackCombo < MaxCombo)
+	{
+		AttackCombo++;
+	}
+	else
+	{
+		ResetAttackCombo();
+	}
+}
+
+void AEKPlayerWeapon::ResetAttackCombo()
+{
+	AttackCombo = 1;
 }
