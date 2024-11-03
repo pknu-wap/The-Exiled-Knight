@@ -80,71 +80,49 @@ private:
 	void TestStarted(const FInputActionValue& InputValue);
 
 public:
-	TObjectPtr<class UAnimMontage> GetEquipAnimGreatSword();
-	TObjectPtr<class UAnimMontage> GetUnEquipAnimGreatSword();
-	TObjectPtr<class UAnimMontage> GetEquipAnimSpear();
-	TObjectPtr<class UAnimMontage> GetUnEquipAnimSpear();
-	TObjectPtr<class UAnimMontage> GetEquipAnimStaff();
-	TObjectPtr<class UAnimMontage> GetUnEquipAnimStaff();
-
-	TObjectPtr<class UAnimMontage> GetGreatSwordAttackAnim();
-	TObjectPtr<class UAnimMontage> GetGreatSwordEnhancedAttackAnim();
-	TObjectPtr<class UAnimMontage> GetGreatSwordJumpAttackAnim();
-	TObjectPtr<class UAnimMontage> GetSpearAttackAnim();
-	TObjectPtr<class UAnimMontage> GetStaffAttackAnim();
-
-	TObjectPtr<class UAnimMontage> GetGreatSwordDefenseAnim();
-	TObjectPtr<class UAnimMontage> GetSpearDefenseAnim();
-	TObjectPtr<class UAnimMontage> GetStaffDefenseAnim();
-
-	TObjectPtr<class UAnimMontage> GetGreatSwordHitAnim();
-	TObjectPtr<class UAnimMontage> GetSpearHitAnim();
-	TObjectPtr<class UAnimMontage> GetStaffHitAnim();
-
-public:
 	void OnPressed_GameMenu(const FInputActionValue& InputValue);
 
 protected:
 	// Common Input And Input Mapping Context
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|MappingContext")
-	TObjectPtr<UInputMappingContext> IMCDefault;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|MappingContext")
+	UInputMappingContext* IMCDefault;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
-	TObjectPtr<UInputAction> IAMove;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
+	UInputAction* IAMove;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
-	TObjectPtr<UInputAction> IALook;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
+	UInputAction* IALook;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
-	TObjectPtr<UInputAction> IAJump;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
+	UInputAction* IAJump;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
-	TObjectPtr<UInputAction> IAWeaponChange;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
+	UInputAction* IAWeaponChange;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
-	TObjectPtr<UInputAction> IASprintAndDodge;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
+	UInputAction* IASprintAndDodge;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
-	TObjectPtr<UInputAction> IAUsePotion;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
+	UInputAction* IAUsePotion;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
-	TObjectPtr<UInputAction> IAWeaponAttack;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
+	UInputAction* IAWeaponAttack;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
-	TObjectPtr<UInputAction> IAWeaponDefense;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
+	UInputAction* IAWeaponDefense;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
-	TObjectPtr<UInputAction> IASitDown;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
+	UInputAction* IASitDown;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
-	TObjectPtr<UInputAction> IAEnhance;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
+	UInputAction* IAEnhance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
-	TObjectPtr<UInputAction> IAInteract;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
+	UInputAction* IAInteract;
 
 	// Test Input
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Test")
-	TObjectPtr<UInputAction> IATest;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Test")
+	UInputAction* IATest;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -152,94 +130,36 @@ protected:
 
 protected:
 	// Common Animation Montage
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
 	TObjectPtr<class UAnimMontage> UsePotionAnim;
 
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
 	TObjectPtr<class UAnimMontage> DodgeAnim;
 
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
 	TObjectPtr<class UAnimMontage> BackStepAnim;
 
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Common")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
 	TObjectPtr<class UAnimMontage> DieAnim;
-
-protected:
-	// GreatSword Animation Montage
-	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
-	TObjectPtr<class UAnimMontage> GreatSwordAttackAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
-	TObjectPtr<class UAnimMontage> GreatSwordEnhancedAttackAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
-	TObjectPtr<class UAnimMontage> GreatSwordJumpAttackAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
-	TObjectPtr<class UAnimMontage> GreatSwordDefenseAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
-	TObjectPtr<class UAnimMontage> GreatSwordEquipAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
-	TObjectPtr<class UAnimMontage> GreatSwordUnEquipAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|GreatSword")
-	TObjectPtr<class UAnimMontage> GreatSwordHitAnim;
-
-protected:
-	// Spear Animation Montage
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
-	TObjectPtr<class UAnimMontage> SpearAttackAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
-	TObjectPtr<class UAnimMontage> SpearDefenseAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
-	TObjectPtr<class UAnimMontage> SpearEquipAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
-	TObjectPtr<class UAnimMontage> SpearUnEquipAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Spear")
-	TObjectPtr<class UAnimMontage> SpearHitAnim;
-
-protected:
-	// Staff Animation Montage
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
-	TObjectPtr<class UAnimMontage> StaffAttackAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
-	TObjectPtr<class UAnimMontage> StaffDefenseAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
-	TObjectPtr<class UAnimMontage> StaffEquipAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
-	TObjectPtr<class UAnimMontage> StaffUnEquipAnim;
-
-	UPROPERTY(VisibleAnywhere, Category = "Animation|Staff")
-	TObjectPtr<class UAnimMontage> StaffHitAnim;
 
 public:
 	bool bIsEquipWeapon = false;
 
 protected:
 	FTimerHandle StaminaRecoveryHandle;
-	FTimerHandle AttackNextHandle;
 	FTimerHandle AttackEndHandle;
 
-	UPROPERTY(EditAnywhere, Category = "Timer")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Timer")
 	float StaminaRecoveryTime = 2.5f;
 
-	UPROPERTY(EditAnywhere, Category = "Timer")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Timer")
 	float AttackNextTime = 0.5f;
 
 public:
 	void SetStaminaRecoveryTime();
 	void SetStaminaAndTimer(int32 Stamina);
-	void SetAttackNextAndTimer();
-	void SetAttackEndTime();
+	void SetAttackComboNext();
+	void ResetAttackCombo();
 	void SetAttackEndTimer(float Time);
 
 protected:
