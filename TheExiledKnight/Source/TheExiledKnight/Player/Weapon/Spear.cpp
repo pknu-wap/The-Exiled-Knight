@@ -27,6 +27,8 @@ ASpear::ASpear()
 	WeaponCapsuleComponent->SetCapsuleHalfHeight(44.f);
 
 	MaxAttackCombo = 5;
+
+	WeaponAdditionalDamage = 10;
 }
 
 void ASpear::BeginPlay()

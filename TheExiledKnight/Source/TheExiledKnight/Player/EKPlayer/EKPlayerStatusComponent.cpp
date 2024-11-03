@@ -11,7 +11,6 @@ UEKPlayerStatusComponent::UEKPlayerStatusComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
-
 	// Edit Basic Status Value Here
 	MaxHp = 100;
 	Hp = 50;
@@ -19,9 +18,9 @@ UEKPlayerStatusComponent::UEKPlayerStatusComponent()
 	Mp = 50;
 	MaxStamina = 1000;
 	Stamina = 1000;
-	DefaultDamage = 0;
-	FinalDamage = 0;
-
+	DefaultDamage = 100.f;
+	FinalDamage = DefaultDamage;
+	
 	// Edit Basic Status Value Here
 	MaxLevel = 100;
 	Level = 1;
@@ -57,17 +56,7 @@ void UEKPlayerStatusComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	}
 }
 
-void UEKPlayerStatusComponent::TakeDamage(float Damage)
-{
-	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Hit))
-	{
-		return;
-	}
-
-	SetHp(-Damage);
-	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Hit);
-	EKPlayer->GetCurrentWeapon()->PlayHitAnimMontage(EKPlayer, EKPlayerController);
-}
+#pragma region Set Basic Status
 
 void UEKPlayerStatusComponent::SetMaxHp(int32 SetData)
 {
@@ -101,3 +90,42 @@ void UEKPlayerStatusComponent::SetStamina(int32 SetData)
 	Stamina = FMath::Clamp(Stamina + SetData, 0, MaxStamina);
 	Delegate_StaminaUpdated.Broadcast(MaxStamina, Stamina);
 }
+
+#pragma endregion
+
+#pragma region Damage
+
+void UEKPlayerStatusComponent::TakeDamage(float Damage)
+{
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Hit))
+	{
+		return;
+	}
+
+	SetHp(-Damage);
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Hit);
+	EKPlayer->GetCurrentWeapon()->PlayHitAnimMontage(EKPlayer, EKPlayerController);
+}
+
+void UEKPlayerStatusComponent::SetPlayerDefaultDamage()
+{
+
+}
+
+void UEKPlayerStatusComponent::SetPlayerFinalDamage()
+{
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword))
+	{
+		FinalDamage = DefaultDamage + Strength * 10 + Ability * 3 + EKPlayer->GetCurrentWeapon()->WeaponAdditionalDamage;
+	}
+	else if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear))
+	{
+		FinalDamage = DefaultDamage * 0.8 + Ability * 8 + Strength * 2 + EKPlayer->GetCurrentWeapon()->WeaponAdditionalDamage;
+	}
+	else if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff))
+	{
+		FinalDamage = DefaultDamage * 0.2 + Intelligence * 20 + EKPlayer->GetCurrentWeapon()->WeaponAdditionalDamage;
+	}
+}
+
+#pragma endregion

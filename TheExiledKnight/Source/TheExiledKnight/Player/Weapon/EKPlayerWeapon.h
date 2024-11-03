@@ -56,6 +56,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
 	uint8 AttackCombo = 1;
 
+	UPROPERTY(VisibleAnywhere, Category = "Weapon")
+	uint32 WeaponAdditionalDamage;
+
 	void SetAttackComboNext(uint8 MaxCombo);
 	void ResetAttackCombo();
 };
