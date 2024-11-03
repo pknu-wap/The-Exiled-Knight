@@ -4,6 +4,7 @@
 #include "EKEnemyAttackHitCheckNotfiyState.h"
 #include "Enemy/EK_EnemyBase.h"
 #include"Player/EKPlayer/EKPlayer.h"
+#include"Kismet/GameplayStatics.h"
 #include"Player/EKPlayer//EKPlayerStatusComponent.h"
 
 UEKEnemyAttackHitCheckNotfiyState::UEKEnemyAttackHitCheckNotfiyState()
@@ -54,12 +55,12 @@ void UEKEnemyAttackHitCheckNotfiyState::NotifyTick(USkeletalMeshComponent* MeshC
 		FVector AttackRangeStart = SocketLocation;
 		FVector AttackRangeEnd = SocketLocation + SocketForward * AttackHalfHeight * 2;
 
-		DrawDebugCapsule(GetWorld(), (AttackRangeStart + AttackRangeEnd) * 0.5f, AttackHalfHeight, AttackRadius, FRotationMatrix::MakeFromZ(AttackRangeEnd - AttackRangeStart).ToQuat(), FColor::Red, false, 0.2f);
+		DrawDebugCapsule(MeshComp->GetWorld(), (AttackRangeStart + AttackRangeEnd) * 0.5f, AttackHalfHeight, AttackRadius, FRotationMatrix::MakeFromZ(AttackRangeEnd - AttackRangeStart).ToQuat(), FColor::Red, false, 0.2f);
 		FCollisionQueryParams Params(NAME_None, false, Owner);
 		TArray<FHitResult> HitResults;
 		
-
-		bool bHit = GetWorld()->SweepMultiByChannel(
+		 //what 's  matter ? : GetWorld (): not object 
+		bool bHit = MeshComp->GetWorld()->SweepMultiByChannel( 
 			HitResults,
 			AttackRangeStart,
 			AttackRangeEnd,
@@ -70,7 +71,7 @@ void UEKEnemyAttackHitCheckNotfiyState::NotifyTick(USkeletalMeshComponent* MeshC
 
 		if (bHit)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("A"));
+			
 			for (const FHitResult& Hit : HitResults)
 			{
 				AActor* HitActor = Hit.GetActor();
@@ -79,7 +80,7 @@ void UEKEnemyAttackHitCheckNotfiyState::NotifyTick(USkeletalMeshComponent* MeshC
 					AEKPlayer* DetectedPlayer = Cast<AEKPlayer>(HitActor);
 					if (DetectedPlayer)
 					{
-						DetectedPlayer->GetPlayerStatusComponent()->TakeDamage(10);
+						UGameplayStatics::ApplyDamage(HitActor, 10, Hit.GetActor()->GetInstigatorController(), HitActor, NULL);
 						SetAttackHitCheck(true);
 
 					}
