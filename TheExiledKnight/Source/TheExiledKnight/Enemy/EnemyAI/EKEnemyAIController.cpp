@@ -42,80 +42,21 @@ AEKEnemyAIController::AEKEnemyAIController()
 
 	DamageSenseConfig = CreateDefaultSubobject<UAISenseConfig_Damage>(TEXT("DamageSenseConfig"));
 	AIPerception->ConfigureSense(*DamageSenseConfig);
-#pragma endregion
-
 }
-#pragma region Perception
 
 void AEKEnemyAIController::PerceptionUpdated(const TArray<AActor*>& UpdatedActors)
 {
 	for (AActor* UpdatedActor : UpdatedActors)
 	{
 		FAIStimulus AIStimulus;
-		AIStimulus = CanSenseActor(UpdatedActor, EAIPerceptionSense::SIGHT);
-		if (AIStimulus.WasSuccessfullySensed())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Sight Sensed!"));
-			HandleSensedSight(UpdatedActor);
-		}
-		AIStimulus = CanSenseActor(UpdatedActor, EAIPerceptionSense::HEARING);
-		if(AIStimulus.WasSuccessfullySensed())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Hearing Sensed!"));
-			HandleSensedHearing(AIStimulus.StimulusLocation);
-		}
-		AIStimulus = CanSenseActor(UpdatedActor, EAIPerceptionSense::DAMAGE);
-		if (AIStimulus.WasSuccessfullySensed())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Damgage Sensed!"));
-			HandleSensedDamage(UpdatedActor); 
-		}
+		
 	
 	}
 }
 
-FAIStimulus AEKEnemyAIController::CanSenseActor(AActor* Actor, EAIPerceptionSense AIPerceptionSense)
+FAIStimulus AEKEnemyAIController::CanSenseActor(AActor* Actor, EAIPerceptionSense AIPercetptionSense)
 {
-	FActorPerceptionBlueprintInfo ActorPerceptionBlueprintInfo;
-	FAIStimulus ResultStimulus;  
-
-	AIPerception->GetActorsPerception(Actor, ActorPerceptionBlueprintInfo);  
-
-	TSubclassOf<UAISense> QuerySenseClass;
-	switch (AIPerceptionSense)
-	{
-	case EAIPerceptionSense::NONE:
-		break;
-	case EAIPerceptionSense::SIGHT:
-		QuerySenseClass = UAISense_Sight::StaticClass();
-		break;
-	case EAIPerceptionSense::HEARING:
-		QuerySenseClass = UAISense_Hearing::StaticClass();
-		break;
-	case EAIPerceptionSense::DAMAGE:
-		QuerySenseClass = UAISense_Damage::StaticClass();
-		break;
-	
-	default:
-		break;
-	}
-
-	TSubclassOf<UAISense> LastSensedStimulusClass;
-
-	for (const FAIStimulus& AIStimulus : ActorPerceptionBlueprintInfo.LastSensedStimuli)
-	{
-		LastSensedStimulusClass = UAIPerceptionSystem::GetSenseClassForStimulus(this, AIStimulus);
-
-
-		if (QuerySenseClass == LastSensedStimulusClass)
-		{
-			ResultStimulus = AIStimulus;
-			return ResultStimulus;
-		}
-
-	}
-	return ResultStimulus;
-
+	return FAIStimulus();
 }
 
 void AEKEnemyAIController::HandleSensedSight(AActor* Actor)
@@ -126,30 +67,15 @@ void AEKEnemyAIController::HandleSensedHearing(FVector NoiseLocation)
 {
 }
 
-void AEKEnemyAIController::HandleSensedDamage(AActor* Actor)
+bool AEKEnemyAIController::GetPerceptionInfo(AActor* Actor, FActorPerceptionBlueprintInfo& OutInfo) const
 {
-}
-
-
-/*
-bool UAIPerceptionComponent::GetActorsPerception(AActor* Actor, FActorPerceptionBlueprintInfo& Info)
-{
-	bool bInfoFound = false;
-	if (Actor != nullptr && Actor->IsPendingKillPending() == false)
+	if (AIPerception)
 	{
-		const FActorPerceptionInfo* PerceivedInfo = GetActorInfo(*Actor);
-		if (PerceivedInfo)
-		{
-			Info = FActorPerceptionBlueprintInfo(*PerceivedInfo);
-			bInfoFound = true;
-		}
+		return AIPerception->GetActorsPerception(Actor, OutInfo);
 	}
-
-	return bInfoFound;
+	return false;
+	return false;
 }
-*/
-#pragma endregion
-
 
 
 
