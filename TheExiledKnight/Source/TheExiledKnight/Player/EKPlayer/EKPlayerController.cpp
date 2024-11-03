@@ -286,6 +286,7 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 	}
 
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
 
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Enhance))
 	{
@@ -322,6 +323,7 @@ void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputVal
 
 	EKPlayer->GetCurrentWeapon()->PlayDefenseStartAnimMontage(EKPlayer, this);
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
+	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
 }
 
 void AEKPlayerController::WeaponDefenseTriggered(const FInputActionValue& InputValue)
