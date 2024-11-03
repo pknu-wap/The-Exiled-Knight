@@ -7,71 +7,91 @@
 UEK_EnemyStatusComponent::UEK_EnemyStatusComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
+	SetPoiseLevel(1);
 	SetMaxHealth(100);
-	ChangeCurrentHealth(GetMaxHealth());
+	SetCurrentHealth(GetMaxHealth());
 	SetMaxPoise(10);
-	ChangeCurrentPoise(GetMaxPoise()); 
+	SetCurrentPoise(GetMaxPoise());
 	SetIsDead(false);
+	
 }
-#pragma region InitialSetting
 
-void UEK_EnemyStatusComponent::SetMaxHealth(float amount)
+
+void UEK_EnemyStatusComponent::TakeDamage(float amount)
 {
-	MaxHealth = amount;
+	SetCurrentHealth(FMath::Clamp<float>(GetCurrentHealth() - amount, 0.0f, GetMaxHealth()));
+	
+	if (CurrentHealth <= 0.0f)
+	{
+		OnHPIsZero.Broadcast();
+	}
+	else
+	{
+		OnDamageTaken.Broadcast();
+	}
+
 }
 
-void UEK_EnemyStatusComponent::SetMaxPoise(float amount)
+uint8 UEK_EnemyStatusComponent::GetPosieLevel()
 {
-	MaxPosie = amount;
+	return PoiseLevel;
 }
-void UEK_EnemyStatusComponent::SetIsDead(bool isDead)
-{
-	bIsDead = isDead;
-}
-#pragma endregion
-
-
-#pragma region GetStat
 
 float UEK_EnemyStatusComponent::GetMaxHealth()
 {
 	return MaxHealth;
 }
-float UEK_EnemyStatusComponent::GetMaxPoise()
-{
-	return MaxPosie;
-}
+
+
 float UEK_EnemyStatusComponent::GetCurrentHealth()
 {
 	return CurrentHealth;
 }
 
+float UEK_EnemyStatusComponent::GetMaxPoise()
+{
+	return MaxPosie;
+}
+
 float UEK_EnemyStatusComponent::GetCurrentPoise()
 {
-	return CurrentPoise;
+	return CurrentPosie;
 }
 
 bool UEK_EnemyStatusComponent::GetIsDead()
 {
 	return bIsDead;
 }
-#pragma endregion
 
-#pragma region ChangeStat
-void UEK_EnemyStatusComponent::ChangeCurrentPoise(float amount)
+void UEK_EnemyStatusComponent::SetPoiseLevel(uint8 amount)
 {
-	CurrentPoise -= amount;
+	PoiseLevel = amount;
 }
 
-void UEK_EnemyStatusComponent::ChangeCurrentHealth(float amount)
+void UEK_EnemyStatusComponent::SetMaxHealth(float amount)
 {
-	CurrentHealth -= amount;
+	MaxHealth = amount;
 }
 
-#pragma endregion
+void UEK_EnemyStatusComponent::SetCurrentHealth(float amount)
+{
+	CurrentHealth = amount;
+}
 
+void UEK_EnemyStatusComponent::SetMaxPoise(float amount)
+{
+	MaxPosie = amount;
+}
 
+void UEK_EnemyStatusComponent::SetCurrentPoise(float amount)
+{
+	CurrentPosie = amount;
+}
 
+void UEK_EnemyStatusComponent::SetIsDead(bool isDead)
+{
+	bIsDead = isDead;
+}
 
 
 
