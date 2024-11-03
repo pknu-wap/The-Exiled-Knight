@@ -20,6 +20,8 @@ AStaff::AStaff()
 	WeaponCapsuleComponent->SetupAttachment(RootComponent);
 	WeaponCapsuleComponent->SetRelativeLocationAndRotation(FVector(60, 0, 0), FRotator(-90, 0, 0));
 	WeaponCapsuleComponent->SetRelativeScale3D(FVector(1.f, 1.f, 3.f));
+
+	MaxAttackCombo = 4;
 }
 
 void AStaff::BeginPlay()
@@ -38,20 +40,20 @@ void AStaff::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 {
 	if (EKPlayer && EKPlayerController)
 	{
-		if (!EKPlayerController->bIsEquipWeapon && EKPlayerController->GetEquipAnimStaff())
+		if (!EKPlayerController->bIsEquipWeapon && StaffEquipAnim)
 		{
-			EKPlayer->PlayAnimMontage(EKPlayerController->GetEquipAnimStaff());
+			EKPlayer->PlayAnimMontage(StaffEquipAnim);
 		}
-		else if (EKPlayerController->bIsEquipWeapon && EKPlayerController->GetUnEquipAnimStaff())
+		else if (EKPlayerController->bIsEquipWeapon && StaffUnEquipAnim)
 		{
-			EKPlayer->PlayAnimMontage(EKPlayerController->GetUnEquipAnimStaff());
+			EKPlayer->PlayAnimMontage(StaffUnEquipAnim);
 		}
 	}
 }
 
 void AStaff::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayerController->bIsEquipWeapon || !EKPlayerController->GetStaffAttackAnim())
+	if (!EKPlayerController->bIsEquipWeapon || !StaffAttackAnim)
 	{
 		return;
 	}
@@ -61,28 +63,28 @@ void AStaff::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 		return;
 	}
 
-	if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 1)
+	if (AttackCombo == 1)
 	{
-		EKPlayer->StopAnimMontage(EKPlayerController->GetStaffAttackAnim());
-		EKPlayer->PlayAnimMontage(EKPlayerController->GetStaffAttackAnim(), 1.0f, FName("Attack1"));
+		EKPlayer->StopAnimMontage(StaffAttackAnim);
+		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack1"));
 		EKPlayerController->SetAttackEndTimer(2.33f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 2)
+	else if (AttackCombo == 2)
 	{
-		EKPlayer->StopAnimMontage(EKPlayerController->GetStaffAttackAnim());
-		EKPlayer->PlayAnimMontage(EKPlayerController->GetStaffAttackAnim(), 1.0f, FName("Attack2"));
+		EKPlayer->StopAnimMontage(StaffAttackAnim);
+		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack2"));
 		EKPlayerController->SetAttackEndTimer(2.67f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 3)
+	else if (AttackCombo == 3)
 	{
-		EKPlayer->StopAnimMontage(EKPlayerController->GetStaffAttackAnim());
-		EKPlayer->PlayAnimMontage(EKPlayerController->GetStaffAttackAnim(), 1.0f, FName("Attack3"));
+		EKPlayer->StopAnimMontage(StaffAttackAnim);
+		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack3"));
 		EKPlayerController->SetAttackEndTimer(3.33f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetStaffCombo() == 4)
+	else if (AttackCombo == 4)
 	{
-		EKPlayer->StopAnimMontage(EKPlayerController->GetStaffAttackAnim());
-		EKPlayer->PlayAnimMontage(EKPlayerController->GetStaffAttackAnim(), 1.0f, FName("Attack4"));
+		EKPlayer->StopAnimMontage(StaffAttackAnim);
+		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack4"));
 		EKPlayerController->SetAttackEndTimer(2.67f);
 	}
 
@@ -106,7 +108,7 @@ void AStaff::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObject
 		return;
 	}
 
-	EKPlayer->PlayAnimMontage(EKPlayerController->GetStaffDefenseAnim(), 1.f, FName("Start"));
+	EKPlayer->PlayAnimMontage(StaffDefenseAnim, 1.f, FName("Start"));
 
 	AttachToDefenseSocket(this, EKPlayer);
 }
@@ -118,7 +120,7 @@ void AStaff::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObje
 		return;
 	}
 
-	EKPlayer->PlayAnimMontage(EKPlayerController->GetStaffDefenseAnim(), 1.f, FName("Loop"));
+	EKPlayer->PlayAnimMontage(StaffDefenseAnim, 1.f, FName("Loop"));
 }
 
 void AStaff::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
@@ -128,7 +130,7 @@ void AStaff::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObje
 		return;
 	}
 
-	EKPlayer->PlayAnimMontage(EKPlayerController->GetStaffDefenseAnim(), 1.f, FName("End"));
+	EKPlayer->PlayAnimMontage(StaffDefenseAnim, 1.f, FName("End"));
 
 	AttachWeaponToHandSocket(this, EKPlayer);
 }
@@ -139,7 +141,7 @@ void AStaff::PlayHitAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr
 	{
 		return;
 	}
-	EKPlayer->PlayAnimMontage(EKPlayerController->GetStaffHitAnim());
+	EKPlayer->PlayAnimMontage(StaffHitAnim);
 }
 
 void AStaff::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
@@ -176,14 +178,4 @@ void AStaff::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjec
 			Weapon->AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("staff_right_hand_socket"));
 		}
 	}
-}
-
-TObjectPtr<UCapsuleComponent> AStaff::GetWeaponCapsuleComponent()
-{
-	return WeaponCapsuleComponent;
-}
-
-void AStaff::AttackHit(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<UCapsuleComponent> WeaponCC)
-{
-	Super::AttackHit(EKPlayer, GetWeaponCapsuleComponent());
 }
