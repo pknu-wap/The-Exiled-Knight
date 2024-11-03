@@ -49,5 +49,15 @@ public:
 public:
 	virtual void AttackHit(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<UCapsuleComponent> WeaponCC);
 
-	virtual TObjectPtr<UCapsuleComponent> GetWeaponCapsuleComponent();
+	virtual TObjectPtr<UCapsuleComponent> GetWeaponCapsuleComponent() { return nullptr; }
+
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
+	uint8 MaxAttackCombo;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
+	uint8 AttackCombo = 1;
+
+	void SetAttackComboNext(uint8 MaxCombo);
+	void ResetAttackCombo();
 };

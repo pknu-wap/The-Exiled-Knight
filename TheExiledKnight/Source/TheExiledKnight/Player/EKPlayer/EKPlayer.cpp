@@ -49,42 +49,6 @@ AEKPlayer::AEKPlayer()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
-
-	ConstructorHelpers::FClassFinder<UAnimInstance> ABPGreatSwordFinder(TEXT("/Game/EKPlayer/Blueprint/AnimationBlueprint/ABP_GreatSword.ABP_GreatSword_C"));
-	if (ABPGreatSwordFinder.Succeeded())
-	{
-		ABPGreatSword = ABPGreatSwordFinder.Class;
-	}
-
-	ConstructorHelpers::FClassFinder<UAnimInstance> ABPSpearFinder(TEXT("/Game/EKPlayer/Blueprint/AnimationBlueprint/ABP_Spear.ABP_Spear_C"));
-	if (ABPSpearFinder.Succeeded())
-	{
-		ABPSpear = ABPSpearFinder.Class;
-	}
-
-	ConstructorHelpers::FClassFinder<UAnimInstance> ABPStaffFinder(TEXT("/Game/EKPlayer/Blueprint/AnimationBlueprint/ABP_Staff.ABP_Staff_C"));
-	if (ABPStaffFinder.Succeeded())
-	{
-		ABPStaff = ABPStaffFinder.Class;
-	}
-
-	ConstructorHelpers::FClassFinder<AGreatSword> GreatSwordClassFinder(TEXT("/Game/EKPlayer/Blueprint/Weapon/BP_GreatSword.BP_GreatSword_C"));
-	if (GreatSwordClassFinder.Succeeded())
-	{
-		GreatSwordClass = GreatSwordClassFinder.Class;
-	}
-
-	ConstructorHelpers::FClassFinder<ASpear> SpearClassFinder(TEXT("/Game/EKPlayer/Blueprint/Weapon/BP_Spear.BP_Spear_C"));
-	if (SpearClassFinder.Succeeded())
-	{
-		SpearClass = SpearClassFinder.Class;
-	}
-
-	ConstructorHelpers::FClassFinder<AStaff> StaffClassFinder(TEXT("/Game/EKPlayer/Blueprint/Weapon/BP_Staff.BP_Staff_C"));
-	if (StaffClassFinder.Succeeded())
-	{
-		StaffClass = StaffClassFinder.Class;
-	}
 }
 
 void AEKPlayer::BeginPlay()
@@ -95,24 +59,24 @@ void AEKPlayer::BeginPlay()
 
 	// Test GreatSword Version
 
-	if (GreatSwordClass)
+	/*if (GreatSwordClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AGreatSword>(GreatSwordClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetMesh()->SetAnimInstanceClass(ABPGreatSword);
-	}
+	}*/
 	
 	// Test Spear Version
 
-	/*if (SpearClass)
+	if (SpearClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<ASpear>(SpearClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetCharacterMovement()->JumpZVelocity = 1000.f;
 		GetMesh()->SetAnimInstanceClass(ABPSpear);
-	}*/
+	}
 
 	// Test Staff Version Don't Select This
 
@@ -133,16 +97,6 @@ void AEKPlayer::Tick(float DeltaTime)
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("HP : %d / %d"), PlayerStatusComponent->GetHp(), PlayerStatusComponent->GetMaxHp()));
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("MP : %d / %d"), PlayerStatusComponent->GetMp(), PlayerStatusComponent->GetMaxMp()));
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("Stamina : %d / %d"), PlayerStatusComponent->GetStamina(), PlayerStatusComponent->GetMaxStamina()));
-}
-
-TObjectPtr<AEKPlayerWeapon> AEKPlayer::GetCurrentWeapon()
-{
-	return CurrentWeapon;
-}
-
-TObjectPtr<UEKPlayerStatusComponent> AEKPlayer::GetPlayerStatusComponent()
-{
-	return PlayerStatusComponent;
 }
 
 void AEKPlayer::AttackHit()
