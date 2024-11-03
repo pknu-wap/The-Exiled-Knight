@@ -46,7 +46,7 @@ void UWeaponBaseAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequen
 
 	DrawDebugCapsule(GetWorld(), CapsuleLocation, CapsuleHalfHeight, CapsuleRadius, CapsuleRotation.Quaternion(), FColor::Red, false, 0.3f);
 
-	bool bIsHit = GetWorld()->SweepMultiByChannel(
+	bool bIsHit = MeshComp->GetWorld()->SweepMultiByChannel(
 		HitResults,
 		CapsuleLocation,
 		CapsuleLocation,
