@@ -33,7 +33,7 @@ void UWeaponBaseAttack::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenc
 
 	if (EKPlayerController)
 	{
-		EKPlayerController->SetAttackNextAndTimer();
+		EKPlayerController->SetAttackComboNext();
 	}
 
 	if (EKPlayer)

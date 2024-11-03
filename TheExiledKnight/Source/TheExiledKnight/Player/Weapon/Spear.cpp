@@ -23,6 +23,8 @@ ASpear::ASpear()
 	WeaponCapsuleComponent->SetupAttachment(RootComponent);
 	WeaponCapsuleComponent->SetRelativeLocationAndRotation(FVector(60, 0, 0), FRotator(-90, 0, 0));
 	WeaponCapsuleComponent->SetRelativeScale3D(FVector(1.f, 1.f, 3.f));
+
+	MaxAttackCombo = 5;
 }
 
 void ASpear::BeginPlay()
@@ -41,20 +43,20 @@ void ASpear::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 {
 	if (EKPlayer && EKPlayerController)
 	{
-		if (!EKPlayerController->bIsEquipWeapon && EKPlayerController->GetEquipAnimSpear())
+		if (!EKPlayerController->bIsEquipWeapon && SpearEquipAnim)
 		{
-			EKPlayer->PlayAnimMontage(EKPlayerController->GetEquipAnimSpear());
+			EKPlayer->PlayAnimMontage(SpearEquipAnim);
 		}
-		else if (EKPlayerController->bIsEquipWeapon && EKPlayerController->GetUnEquipAnimSpear())
+		else if (EKPlayerController->bIsEquipWeapon && SpearUnEquipAnim)
 		{
-			EKPlayer->PlayAnimMontage(EKPlayerController->GetUnEquipAnimSpear());
+			EKPlayer->PlayAnimMontage(SpearUnEquipAnim);
 		}
 	}
 }
 
 void ASpear::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayerController->bIsEquipWeapon || !EKPlayerController->GetSpearAttackAnim())
+	if (!EKPlayerController->bIsEquipWeapon || !SpearAttackAnim)
 	{
 		return;
 	}
@@ -64,34 +66,34 @@ void ASpear::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 		return;
 	}
 
-	if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 1)
+	if (AttackCombo == 1)
 	{
-		EKPlayer->StopAnimMontage(EKPlayerController->GetSpearAttackAnim());
-		EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearAttackAnim(), 1.0f, FName("Attack1"));
+		EKPlayer->StopAnimMontage(SpearAttackAnim);
+		EKPlayer->PlayAnimMontage(SpearAttackAnim, 1.0f, FName("Attack1"));
 		EKPlayerController->SetAttackEndTimer(1.0f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 2)
+	else if (AttackCombo == 2)
 	{
-		EKPlayer->StopAnimMontage(EKPlayerController->GetSpearAttackAnim());
-		EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearAttackAnim(), 1.0f, FName("Attack2"));
+		EKPlayer->StopAnimMontage(SpearAttackAnim);
+		EKPlayer->PlayAnimMontage(SpearAttackAnim, 1.0f, FName("Attack2"));
 		EKPlayerController->SetAttackEndTimer(1.0f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 3)
+	else if (AttackCombo == 3)
 	{
-		EKPlayer->StopAnimMontage(EKPlayerController->GetSpearAttackAnim());
-		EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearAttackAnim(), 1.0f, FName("Attack3"));
+		EKPlayer->StopAnimMontage(SpearAttackAnim);
+		EKPlayer->PlayAnimMontage(SpearAttackAnim, 1.0f, FName("Attack3"));
 		EKPlayerController->SetAttackEndTimer(0.83f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 4)
+	else if (AttackCombo == 4)
 	{
-		EKPlayer->StopAnimMontage(EKPlayerController->GetSpearAttackAnim());
-		EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearAttackAnim(), 1.0f, FName("Attack4"));
+		EKPlayer->StopAnimMontage(SpearAttackAnim);
+		EKPlayer->PlayAnimMontage(SpearAttackAnim, 1.0f, FName("Attack4"));
 		EKPlayerController->SetAttackEndTimer(1.25f);
 	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetSpearCombo() == 5)
+	else if (AttackCombo == 5)
 	{
-		EKPlayer->StopAnimMontage(EKPlayerController->GetSpearAttackAnim());
-		EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearAttackAnim(), 1.0f, FName("Attack5"));
+		EKPlayer->StopAnimMontage(SpearAttackAnim);
+		EKPlayer->PlayAnimMontage(SpearAttackAnim, 1.0f, FName("Attack5"));
 		EKPlayerController->SetAttackEndTimer(1.33f);
 	}
 
@@ -115,7 +117,7 @@ void ASpear::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObject
 		return;
 	}
 
-	EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearDefenseAnim(), 1.f, FName("Start"));
+	EKPlayer->PlayAnimMontage(SpearDefenseAnim, 1.f, FName("Start"));
 
 	AttachToDefenseSocket(this, EKPlayer);
 }
@@ -127,7 +129,7 @@ void ASpear::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObje
 		return;
 	}
 
-	EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearDefenseAnim(), 1.f, FName("Loop"));
+	EKPlayer->PlayAnimMontage(SpearDefenseAnim, 1.f, FName("Loop"));
 }
 
 void ASpear::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
@@ -137,18 +139,18 @@ void ASpear::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObje
 		return;
 	}
 
-	EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearDefenseAnim(), 1.f, FName("End"));
+	EKPlayer->PlayAnimMontage(SpearDefenseAnim, 1.f, FName("End"));
 
 	AttachWeaponToHandSocket(this, EKPlayer);
 }
 
-void ASpear::PlayHitAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController)
+void ASpear::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
 	if (!EKPlayer || !EKPlayerController)
 	{
 		return;
 	}
-	EKPlayer->PlayAnimMontage(EKPlayerController->GetSpearHitAnim());
+	EKPlayer->PlayAnimMontage(SpearHitAnim);
 }
 
 void ASpear::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
@@ -161,24 +163,4 @@ void ASpear::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPt
 			Weapon->AttachToComponent(MeshComp, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("spear_defense_socket"));
 		}
 	}
-}
-
-void ASpear::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
-{
-	Super::AttachWeaponToSpineSocket(Weapon, EKPlayer);
-}
-
-void ASpear::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
-{
-	Super::AttachWeaponToHandSocket(Weapon, EKPlayer);
-}
-
-TObjectPtr<UCapsuleComponent> ASpear::GetWeaponCapsuleComponent()
-{
-	return WeaponCapsuleComponent;
-}
-
-void ASpear::AttackHit(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<UCapsuleComponent> WeaponCC)
-{
-	Super::AttackHit(EKPlayer, GetWeaponCapsuleComponent());
 }
