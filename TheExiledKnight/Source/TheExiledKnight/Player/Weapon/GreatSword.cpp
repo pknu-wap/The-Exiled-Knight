@@ -23,6 +23,8 @@ AGreatSword::AGreatSword()
 	WeaponCapsuleComponent->SetRelativeScale3D(FVector(1.f, 1.f, 3.f));
 
 	MaxAttackCombo = 3;
+
+	WeaponAdditionalDamage = 20;
 }
 
 void AGreatSword::BeginPlay()
