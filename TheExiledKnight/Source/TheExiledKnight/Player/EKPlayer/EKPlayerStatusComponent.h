@@ -44,9 +44,10 @@ public:
 	void SetStamina(int32 SetData);
 
 public:
-	uint32 GetPlayerDefaultDamage() { return DefaultDamage; }
+	float GetPlayerDefaultDamage() { return DefaultDamage; }
 	void SetPlayerDefaultDamage();
-	uint32 GetPlayerFinalDamage() { return FinalDamage; }
+
+	float GetPlayerFinalDamage() { return FinalDamage; }
 	void SetPlayerFinalDamage();
 
 	void LevelUp();
@@ -88,10 +89,10 @@ protected:
 	uint32 Stamina;
 
 	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 DefaultDamage;
+	float DefaultDamage;
 
 	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 FinalDamage;
+	float FinalDamage;
 
 protected:
 	// Upgrade status

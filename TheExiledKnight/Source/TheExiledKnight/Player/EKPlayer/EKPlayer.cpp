@@ -65,6 +65,7 @@ void AEKPlayer::BeginPlay()
 		CurrentWeapon = GetWorld()->SpawnActor<AGreatSword>(GreatSwordClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetMesh()->SetAnimInstanceClass(ABPGreatSword);
+		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword);
 	}
 	
 	// Test Spear Version
@@ -76,6 +77,7 @@ void AEKPlayer::BeginPlay()
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetCharacterMovement()->JumpZVelocity = 1000.f;
 		GetMesh()->SetAnimInstanceClass(ABPSpear);
+		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear);
 	}*/
 
 	// Test Staff Version Don't Select This
@@ -86,6 +88,7 @@ void AEKPlayer::BeginPlay()
 		CurrentWeapon = GetWorld()->SpawnActor<AStaff>(StaffClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetMesh()->SetAnimInstanceClass(ABPStaff);
+		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
 	}*/
 }
 
