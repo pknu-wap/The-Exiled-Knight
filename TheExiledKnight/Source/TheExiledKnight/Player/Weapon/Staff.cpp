@@ -24,6 +24,8 @@ AStaff::AStaff()
 	WeaponCapsuleComponent->SetCapsuleHalfHeight(44.f);
 
 	MaxAttackCombo = 4;
+
+	WeaponAdditionalDamage = 5;
 }
 
 void AStaff::BeginPlay()
