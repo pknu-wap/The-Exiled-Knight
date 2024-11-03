@@ -9,6 +9,7 @@
 #include "../../Weapon/Staff.h"
 #include "../../../Enemy/EK_EnemyStatusComponent.h"
 #include "../../../Enemy/EK_EnemyBase.h"
+#include "../../Weapon/DamageType/EKPlayerDamageType.h"
 
 void UWeaponBaseAttack::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
@@ -67,7 +68,8 @@ void UWeaponBaseAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequen
 			TObjectPtr<AEK_EnemyBase> HitEnemy = Cast<AEK_EnemyBase>(HitActor);
 			if (HitEnemy)
 			{
-				HitEnemy->GetStatusComponent()->TakeDamage(1);
+				TSubclassOf<UEKPlayerDamageType> PlayerDamageType = UEKPlayerDamageType::StaticClass();
+				UGameplayStatics::ApplyDamage(HitEnemy, 5.f, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
 				bIsHitOnce = true;
 				GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Attack!!!"));
 			}

@@ -101,6 +101,8 @@ void AEKPlayer::Tick(float DeltaTime)
 
 float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
 	GetPlayerStatusComponent()->TakeDamage(Damage);
 	return 0.f;
 }
