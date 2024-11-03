@@ -29,12 +29,12 @@ public:
 	void TakeDamage(float Damage);
 
 public:
-	uint32 GetMaxHp();
-	uint32 GetHp();
-	uint32 GetMaxMp();
-	uint32 GetMp();
-	uint32 GetMaxStamina();
-	uint32 GetStamina();
+	uint32 GetMaxHp() { return MaxHp; }
+	uint32 GetHp() { return Hp; }
+	uint32 GetMaxMp() { return MaxMp; }
+	uint32 GetMp() { return Mp; }
+	uint32 GetMaxStamina() { return MaxStamina; }
+	uint32 GetStamina() { return Stamina; }
 
 	void SetMaxHp(int32 SetData);
 	void SetHp(int32 SetData);
@@ -44,9 +44,9 @@ public:
 	void SetStamina(int32 SetData);
 
 public:
-	uint32 GetPlayerDefaultDamage();
+	uint32 GetPlayerDefaultDamage() { return DefaultDamage; }
 	void SetPlayerDefaultDamage();
-	uint32 GetPlayerFinalDamage();
+	uint32 GetPlayerFinalDamage() { return FinalDamage; }
 	void SetPlayerFinalDamage();
 
 	void LevelUp();
@@ -56,31 +56,6 @@ public:
 	void LevelUpStrength();
 	void LevelUpAbility();
 	void LevelUpIntelligence();
-
-	// About Weapon Attack Combo
-	uint32 GetGreatSwordCombo();
-	void SetGreatSwordCombo();
-	void ResetGreatSwordCombo();
-
-	uint32 GetSpearCombo();
-	void SetSpearCombo();
-	void ResetSpearCombo();
-
-	uint32 GetStaffCombo();
-	void SetStaffCombo();
-	void ResetStaffCombo();
-
-	uint32 GetGreatSwordEnhancedCombo();
-	void SetGreatSwordEnhancedCombo();
-	void ResetGreatSwordEnhancedCombo();
-
-	uint32 GetSpearEnhancedCombo();
-	void SetSpearEnhancedCombo();
-	void ResetSpearEnhancedCombo();
-
-	uint32 GetStaffEnhancedCombo();
-	void SetStaffEnhancedCombo();
-	void ResetStaffEnhancedCombo();
 
 public:
 	bool bCanStaminaRecovery = true;
@@ -143,25 +118,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
 	uint32 Intelligence;
-
-protected:
-	UPROPERTY()
-	uint32 GreatSwordCombo = 1;
-
-	UPROPERTY()
-	uint32 SpearCombo = 1;
-
-	UPROPERTY()
-	uint32 StaffCombo = 1;
-
-	UPROPERTY()
-	uint32 GreatSwordEnhancedCombo = 1;
-
-	UPROPERTY()
-	uint32 SpearEnhancedCombo = 1;
-
-	UPROPERTY()
-	uint32 StaffEnhancedCombo = 1;
 
 public:
 	UPROPERTY(BlueprintAssignable)

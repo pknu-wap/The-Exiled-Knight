@@ -20,9 +20,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	TObjectPtr<class AEKPlayerWeapon> GetCurrentWeapon();
+	TObjectPtr<class AEKPlayerWeapon> GetCurrentWeapon() { return CurrentWeapon; }
 
-	TObjectPtr<class UEKPlayerStatusComponent> GetPlayerStatusComponent();
+	TObjectPtr<class UEKPlayerStatusComponent> GetPlayerStatusComponent() { return PlayerStatusComponent; }
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
