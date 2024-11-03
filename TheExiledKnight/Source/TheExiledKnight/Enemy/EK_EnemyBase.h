@@ -14,8 +14,7 @@ class THEEXILEDKNIGHT_API AEK_EnemyBase : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AEK_EnemyBase(); 
-
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInvestigator, AActor* DmageCauser)override;
+	
 	
 protected:
 
