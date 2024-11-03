@@ -59,24 +59,24 @@ void AEKPlayer::BeginPlay()
 
 	// Test GreatSword Version
 
-	/*if (GreatSwordClass)
+	if (GreatSwordClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AGreatSword>(GreatSwordClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetMesh()->SetAnimInstanceClass(ABPGreatSword);
-	}*/
+	}
 	
 	// Test Spear Version
 
-	if (SpearClass)
+	/*if (SpearClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<ASpear>(SpearClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetCharacterMovement()->JumpZVelocity = 1000.f;
 		GetMesh()->SetAnimInstanceClass(ABPSpear);
-	}
+	}*/
 
 	// Test Staff Version Don't Select This
 
@@ -97,11 +97,6 @@ void AEKPlayer::Tick(float DeltaTime)
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("HP : %d / %d"), PlayerStatusComponent->GetHp(), PlayerStatusComponent->GetMaxHp()));
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("MP : %d / %d"), PlayerStatusComponent->GetMp(), PlayerStatusComponent->GetMaxMp()));
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("Stamina : %d / %d"), PlayerStatusComponent->GetStamina(), PlayerStatusComponent->GetMaxStamina()));
-}
-
-void AEKPlayer::AttackHit()
-{
-	CurrentWeapon->AttackHit(this, CurrentWeapon->GetWeaponCapsuleComponent());
 }
 
 float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

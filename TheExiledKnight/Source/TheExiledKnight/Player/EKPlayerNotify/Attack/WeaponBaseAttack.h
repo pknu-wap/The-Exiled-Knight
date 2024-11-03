@@ -22,4 +22,7 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<class AEKPlayerController> EKPlayerController;
+
+protected:
+	bool bIsHitOnce = false;
 };
