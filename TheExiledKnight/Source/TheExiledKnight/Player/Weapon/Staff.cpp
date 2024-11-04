@@ -9,11 +9,6 @@ AStaff::AStaff()
 	Staff = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Staff"));
 	RootComponent = Staff;
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> StaffMeshFinder(TEXT("/AssetShare/Animations/EssentialAnimation/MagicStaff/Demo/Mannequin/Weapon/SM_Staff"));
-	if (StaffMeshFinder.Succeeded())
-	{
-		StaffMesh = StaffMeshFinder.Object;
-	}
 	Staff->SetStaticMesh(StaffMesh);
 
 	WeaponCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
@@ -92,7 +87,7 @@ void AStaff::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 		EKPlayerController->SetAttackEndTimer(2.67f);
 	}
 
-	EKPlayerController->SetStaminaAndTimer(StaffAttackStamina);
+	EKPlayerController->ConsumtionStaminaAndTimer(StaffAttackStamina);
 }
 
 void AStaff::PlayEnhancedAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
@@ -107,7 +102,7 @@ void AStaff::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObj
 
 void AStaff::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
+	if (!EKPlayerController->bIsEquipWeapon)
 	{
 		return;
 	}
@@ -119,7 +114,7 @@ void AStaff::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObject
 
 void AStaff::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
+	if (!EKPlayerController->bIsEquipWeapon)
 	{
 		return;
 	}
@@ -129,7 +124,7 @@ void AStaff::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObje
 
 void AStaff::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
+	if (!EKPlayerController->bIsEquipWeapon)
 	{
 		return;
 	}
@@ -139,13 +134,21 @@ void AStaff::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObje
 	AttachWeaponToHandSocket(this, EKPlayer);
 }
 
-void AStaff::PlayHitAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController)
+void AStaff::PlayDefenseHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController)
-	{
-		return;
-	}
-	EKPlayer->PlayAnimMontage(StaffHitAnim);
+	EKPlayer->StopAnimMontage(StaffDefenseAnim);
+	EKPlayer->PlayAnimMontage(StaffDefenseAnim, 1.f, FName("Hit"));
+}
+
+void AStaff::PlayDefenseBrokenAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	EKPlayer->StopAnimMontage(StaffDefenseAnim);
+	EKPlayer->PlayAnimMontage(StaffDefenseAnim, 1.f, FName("Broken"));
+}
+
+void AStaff::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	EKPlayer->PlayAnimMontage(StaffHitAnim, 1.f, FName("Default"));
 }
 
 void AStaff::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)

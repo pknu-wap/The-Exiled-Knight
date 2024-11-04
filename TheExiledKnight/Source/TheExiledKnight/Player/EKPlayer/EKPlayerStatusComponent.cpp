@@ -95,18 +95,6 @@ void UEKPlayerStatusComponent::SetStamina(int32 SetData)
 
 #pragma region Damage
 
-void UEKPlayerStatusComponent::TakeDamage(float Damage)
-{
-	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Hit))
-	{
-		return;
-	}
-
-	SetHp(-Damage);
-	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Hit);
-	EKPlayer->GetCurrentWeapon()->PlayHitAnimMontage(EKPlayer, EKPlayerController);
-}
-
 void UEKPlayerStatusComponent::SetPlayerDefaultDamage()
 {
 
