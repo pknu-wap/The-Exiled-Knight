@@ -30,19 +30,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI|Perception")
 	UAIPerceptionComponent* AIPerception;
 
-	UFUNCTION()
-	void PerceptionUpdated(const TArray<AActor*>& UpdatedActors);
-
-	// Handles for different senses
-	void HandleSensedSight(AActor* Actor);
-	void HandleSensedHearing(FVector NoiseLocation);
-	void HandleSensedDamage(AActor* Actor);
-
-	
 	
 
-	// Custom sense-checking function
-	FAIStimulus CanSenseActor(AActor* Actor, EAIPerceptionSense AIPerceptionSense);
 
 private:
 	// AIPerception Sense Configurations
@@ -64,4 +53,6 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
 	float HearingRange = 3000.0f;
+
+	TObjectPtr<class EK_EnemyBase>EKEnemy;
 };

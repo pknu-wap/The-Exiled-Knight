@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameplayTagContainer.h"
 #include "EK_EnemyBase.generated.h"
 
 UCLASS()
@@ -19,15 +20,24 @@ public:
 	
 protected:
 
-	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "AnimMontage", meta = (AllowPrivateAccess = "true"));
+	UAnimMontage* AttackMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"));
+	UAnimMontage* hurtMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"));
+	UAnimMontage* DeadMontage;
+
 
 public:	
 	UPROPERTY(VisibleAnywhere, Category = Stat)
 	class UEK_EnemyStatusComponent* EnemyStat;
 	
+	
+	
 	virtual TObjectPtr <UEK_EnemyStatusComponent> GetStatusComponent();
 	
-private:
-	
+
 	
 };
