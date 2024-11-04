@@ -13,6 +13,7 @@ void UWidget_EquipSelect_ContentSlot::NativeConstruct()
 
 void UWidget_EquipSelect_ContentSlot::UpdateSlot(const FInventorySlot& inData)
 {
+	
 }
 
 FEventReply UWidget_EquipSelect_ContentSlot::RedirectMouseDownToWidget(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)

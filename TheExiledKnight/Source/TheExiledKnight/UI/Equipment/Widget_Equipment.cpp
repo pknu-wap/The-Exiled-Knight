@@ -10,7 +10,7 @@ void UWidget_Equipment::ShowEquipWindow()
 	WidgetSwitcher->SetActiveWidgetIndex(0);
 }
 
-void UWidget_Equipment::ShowEquipSelect(EItemCategory Category)
+void UWidget_Equipment::ShowEquipSelect(EEquipCategory Category)
 {
 	// Update Contents by Category
 	EquipSelect->UpdateContents(Category);
