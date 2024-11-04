@@ -28,6 +28,7 @@ public:
 
 	FGameplayTag UI_Widget_Game_Status;				// Status
 	FGameplayTag UI_Widget_Game_QuickSlots;			// QuickSlots
+	FGameplayTag UI_Widget_Game_BossBattle;			// Boss Battle
 
 
 private:
