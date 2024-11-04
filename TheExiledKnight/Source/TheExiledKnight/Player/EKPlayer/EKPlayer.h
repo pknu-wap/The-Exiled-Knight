@@ -20,9 +20,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	TObjectPtr<class AEKPlayerWeapon> GetCurrentWeapon() { return CurrentWeapon; }
+	class AEKPlayerWeapon* GetCurrentWeapon() { return CurrentWeapon; }
 
-	TObjectPtr<class UEKPlayerStatusComponent> GetPlayerStatusComponent() { return PlayerStatusComponent; }
+	class UEKPlayerStatusComponent* GetPlayerStatusComponent() { return PlayerStatusComponent; }
+
+	class UCapsuleComponent* GetLeftLegCapsuleComponent() { return LeftLegCapsuleComponent; }
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -36,6 +38,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UCameraComponent> Camera;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capsule")
+	TObjectPtr<class UCapsuleComponent> LeftLegCapsuleComponent;
 
 public:
 	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;

@@ -330,11 +330,12 @@ void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputVal
 	EKPlayer->GetCurrentWeapon()->PlayDefenseStartAnimMontage(EKPlayer, this);
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
+	PerfectDefenseTimer(PerfectDefenseTime);
 }
 
 void AEKPlayerController::WeaponDefenseTriggered(const FInputActionValue& InputValue)
 {
-	if (EKPlayer)
+	if (EKPlayer && !bIsPerfectDefense)
 	{
 		EKPlayer->GetCurrentWeapon()->PlayDefenseTriggerAnimMontage(EKPlayer, this);
 	}
@@ -486,6 +487,17 @@ void AEKPlayerController::ResetAttackCombo()
 void AEKPlayerController::SetAttackEndTimer(float Time)
 {
 	GetWorldTimerManager().SetTimer(AttackEndHandle, this, &ThisClass::ResetAttackCombo, Time, false);
+}
+
+void AEKPlayerController::SetPerfectDefense()
+{
+	bIsPerfectDefense = false;
+}
+
+void AEKPlayerController::PerfectDefenseTimer(float Time)
+{
+	bIsPerfectDefense = true;
+	GetWorldTimerManager().SetTimer(PerfectDefenseHandle, this, &ThisClass::SetPerfectDefense, Time, false);
 }
 
 #pragma endregion

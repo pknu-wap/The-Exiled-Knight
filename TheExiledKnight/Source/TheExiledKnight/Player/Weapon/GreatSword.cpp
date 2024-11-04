@@ -49,6 +49,8 @@ void AGreatSword::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TOb
 	}
 }
 
+#pragma region Attack
+
 void AGreatSword::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
 	if (!EKPlayerController->bIsEquipWeapon || !GreatSwordAttackAnim)
@@ -112,6 +114,10 @@ void AGreatSword::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer,
 
 }
 
+#pragma endregion
+
+#pragma region Defense and Hit
+
 void AGreatSword::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
 	if (!EKPlayerController->bIsEquipWeapon)
@@ -162,6 +168,8 @@ void AGreatSword::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<
 {
 	EKPlayer->PlayAnimMontage(GreatSwordHitAnim);
 }
+
+#pragma endregion
 
 void AGreatSword::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
 {
