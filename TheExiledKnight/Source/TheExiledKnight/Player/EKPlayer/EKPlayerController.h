@@ -21,6 +21,7 @@ class UInputAction;
 #define BackStepStamina 50
 #define JumpStamina 50
 
+#define PerfectDefenseStamina 150
 #define DefenseStamina 300
 
 #define GreatSwordAttackStamina 100
@@ -49,6 +50,7 @@ protected:
 	virtual void PlayerTick(float DeltaTime) override;
 
 private:
+	// About Input Function
 	void MoveTriggered(const FInputActionValue& InputValue);
 	void MoveRelease(const FInputActionValue& InputValue);
 
@@ -148,22 +150,32 @@ protected:
 public:
 	bool bIsEquipWeapon = false;
 
+	// About Perfect Defense
+	bool bIsPerfectDefense = false;
+	const float PerfectDefenseTime = 0.2f;
+
 protected:
 	FTimerHandle StaminaRecoveryHandle;
 	FTimerHandle AttackEndHandle;
+	FTimerHandle PerfectDefenseHandle;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Timer")
-	float StaminaRecoveryTime = 2.5f;
+	// How long does it take for the player to recover after using the Stemina
+	const float StaminaRecoveryTime = 2.5f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Timer")
-	float AttackNextTime = 0.5f;
+	// Time for player to move on to the next combo after an attack
+	const float AttackNextTime = 0.5f;
 
 public:
+	// About Stamina and Attack
 	void SetStaminaRecoveryTime();
 	void ConsumtionStaminaAndTimer(int32 Stamina);
 	void SetAttackComboNext();
 	void ResetAttackCombo();
 	void SetAttackEndTimer(float Time);
+
+	// About Perfect Defense
+	void SetPerfectDefense();
+	void PerfectDefenseTimer(float Time);
 
 protected:
 	// About Sprint And Dodge
