@@ -3,8 +3,6 @@
 
 #include "HitEnd.h"
 #include "../../EKPlayer/EKPlayer.h"
-#include "../../EKPlayer/EKPlayerController.h"
-#include "../../Weapon/GreatSword.h"
 #include "../../EKPlayerGameplayTags.h"
 
 void UHitEnd::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)

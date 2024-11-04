@@ -12,11 +12,6 @@ ASpear::ASpear()
 	Spear = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Spear"));
 	RootComponent = Spear;
 
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> SpearMeshFinder(TEXT("/AssetShare/Animations/Frank_Spear/Mesh/Frank_UE_Spear_Weapon_Skin"));
-	if (SpearMeshFinder.Succeeded())
-	{
-		SpearMesh = SpearMeshFinder.Object;
-	}
 	Spear->SetSkeletalMesh(SpearMesh);
 
 	WeaponCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
@@ -101,7 +96,7 @@ void ASpear::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 		EKPlayerController->SetAttackEndTimer(1.33f);
 	}
 
-	EKPlayerController->SetStaminaAndTimer(SpearAttackStamina);
+	EKPlayerController->ConsumtionStaminaAndTimer(SpearAttackStamina);
 }
 
 void ASpear::PlayEnhancedAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
@@ -116,7 +111,7 @@ void ASpear::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObj
 
 void ASpear::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
+	if (!EKPlayerController->bIsEquipWeapon)
 	{
 		return;
 	}
@@ -128,7 +123,7 @@ void ASpear::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObject
 
 void ASpear::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
+	if (!EKPlayerController->bIsEquipWeapon)
 	{
 		return;
 	}
@@ -138,7 +133,7 @@ void ASpear::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObje
 
 void ASpear::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
+	if (!EKPlayerController->bIsEquipWeapon)
 	{
 		return;
 	}
@@ -148,12 +143,20 @@ void ASpear::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObje
 	AttachWeaponToHandSocket(this, EKPlayer);
 }
 
+void ASpear::PlayDefenseHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	EKPlayer->StopAnimMontage(SpearDefenseAnim);
+	EKPlayer->PlayAnimMontage(SpearDefenseAnim, 1.f, FName("Hit"));
+}
+
+void ASpear::PlayDefenseBrokenAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	EKPlayer->StopAnimMontage(SpearDefenseAnim);
+	EKPlayer->PlayAnimMontage(SpearDefenseAnim, 1.f, FName("Broken"));
+}
+
 void ASpear::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController)
-	{
-		return;
-	}
 	EKPlayer->PlayAnimMontage(SpearHitAnim);
 }
 
