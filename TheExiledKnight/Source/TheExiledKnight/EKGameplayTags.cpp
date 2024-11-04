@@ -52,4 +52,9 @@ void FEKGameplayTags::InitializeNativeGameplayTags()
 		FName("UI.Widget.Game.QuickSlots"),
 		FString("QuickSlots")
 	);
+
+	GameplayTags.UI_Widget_Game_BossBattle = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("UI.Widget.Game.BossBattle"),
+		FString("BossBattle")
+	);
 }
