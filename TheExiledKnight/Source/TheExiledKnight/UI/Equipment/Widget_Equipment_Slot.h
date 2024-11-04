@@ -22,7 +22,7 @@ protected:
 
 public:
 	UPROPERTY(BlueprintReadWrite, Editanywhere)
-	EItemCategory Category = EItemCategory::None;
+	EEquipCategory Category = EEquipCategory::None;
 
 public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
