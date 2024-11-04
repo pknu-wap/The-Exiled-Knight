@@ -56,7 +56,7 @@ void AEK_EnemyBase::AttackHitCheck()
 				if (detectPlayer)
 				{
 					SetAttackHitCheck(true);
-					detectPlayer->GetPlayerStatusComponent()->TakeDamage(10);
+					//detectPlayer->GetPlayerStatusComponent()->TakeDamage(10);
 				}
 				
 			}
