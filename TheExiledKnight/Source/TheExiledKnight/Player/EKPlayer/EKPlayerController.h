@@ -136,6 +136,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IAEnhance;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IAGameMenu;
+
 	// Test Input
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Test")
 	TObjectPtr<UInputAction> IATest;
@@ -237,6 +240,9 @@ public:
 	void SetAttackNextAndTimer();
 	void SetAttackEndTime();
 	void SetAttackEndTimer(float Time);
+
+public:
+	void OnPressed_GameMenu(const FInputActionValue& InputValue);
 
 protected:
 	// About Sprint And Dodge
