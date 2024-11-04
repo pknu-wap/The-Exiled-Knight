@@ -12,6 +12,8 @@ void UWidget_EquipSelect_ListElement::NativeOnListItemObjectSet(UObject* ListIte
 	UEquipSelect_ListData* data = Cast<UEquipSelect_ListData>(ListItemObject);
 	if (!data) return;
 
+	// if(data->Category == EEquipC)
+
 	if (data->Items.IsValidIndex(0))
 		Slot_01->UpdateSlot(data->Items[0]);
 
