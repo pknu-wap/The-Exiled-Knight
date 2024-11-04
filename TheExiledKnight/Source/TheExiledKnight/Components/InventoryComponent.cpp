@@ -38,6 +38,11 @@ const TArray<FInventorySlot>& UInventoryComponent::GetContents(EItemCategory Cat
 	return Inventory;
 }
 
+const TArray<FInventorySlot>& UInventoryComponent::GetContents(EEquipCategory Category)
+{
+	return Inventory;
+}
+
 int UInventoryComponent::GetIndexToAdd(uint8 ID)
 {
 	for (int index = 0; index < Inventory_Size; index++)

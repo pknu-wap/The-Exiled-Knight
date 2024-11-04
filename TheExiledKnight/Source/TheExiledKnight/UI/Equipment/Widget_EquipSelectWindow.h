@@ -20,7 +20,7 @@ public:
 	virtual void NativeConstruct() override;
 
 public:
-	void UpdateContents(EItemCategory Category);
+	void UpdateContents(EEquipCategory Category);
 
 public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
