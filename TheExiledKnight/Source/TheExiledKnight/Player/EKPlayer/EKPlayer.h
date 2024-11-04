@@ -26,6 +26,9 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class AEKPlayerController> EKPlayerController;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UEKPlayerStatusComponent> PlayerStatusComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

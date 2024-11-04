@@ -37,6 +37,8 @@ public:
 	virtual void PlayDefenseStartAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController) PURE_VIRTUAL(AEKPlayerWeapon::PlayDefenseStartAnimMontage, ;);
 	virtual void PlayDefenseTriggerAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController) PURE_VIRTUAL(AEKPlayerWeapon::PlayDefenseTriggerAnimMontage, ;);
 	virtual void PlayDefenseReleaseAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController) PURE_VIRTUAL(AEKPlayerWeapon::PlayDefenseReleaseAnimMontage, ;);
+	virtual void PlayDefenseHitAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController) PURE_VIRTUAL(AEKPlayerWeapon::PlayDefenseHitAnimMontage, ;);
+	virtual void PlayDefenseBrokenAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController) PURE_VIRTUAL(AEKPlayerWeapon::PlayDefenseBrokenAnimMontage, ;);
 
 	virtual void PlayHitAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController) PURE_VIRTUAL(AEKPlayerWeapon::PlayHitAnimMontage, ;);
 

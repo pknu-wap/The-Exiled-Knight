@@ -10,11 +10,6 @@ AGreatSword::AGreatSword()
 	GreatSword = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GreatSword"));
 	RootComponent = GreatSword;
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> GreatSwordMeshFinder(TEXT("/AssetShare/Animations/GreatSword/GreatSword/Weapon/GreatSword_01"));
-	if (GreatSwordMeshFinder.Succeeded())
-	{
-		GreatSwordMesh = GreatSwordMeshFinder.Object;
-	}
 	GreatSword->SetStaticMesh(GreatSwordMesh);
 
 	WeaponCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
@@ -85,7 +80,7 @@ void AGreatSword::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TOb
 		EKPlayerController->SetAttackEndTimer(2.7f);
 	}
 
-	EKPlayerController->SetStaminaAndTimer(GreatSwordAttackStamina);
+	EKPlayerController->ConsumtionStaminaAndTimer(GreatSwordAttackStamina);
 }
 
 void AGreatSword::PlayEnhancedAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
@@ -109,7 +104,7 @@ void AGreatSword::PlayEnhancedAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPla
 		EKPlayer->PlayAnimMontage(GreatSwordEnhancedAttackAnim, 1.f, FName("Attack2"));
 	}*/
 
-	EKPlayerController->SetStaminaAndTimer(GreatSwordEnhancedAttackStamina);
+	EKPlayerController->ConsumtionStaminaAndTimer(GreatSwordEnhancedAttackStamina);
 }
 
 void AGreatSword::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
@@ -119,7 +114,7 @@ void AGreatSword::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer,
 
 void AGreatSword::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
+	if (!EKPlayerController->bIsEquipWeapon)
 	{
 		return;
 	}
@@ -131,7 +126,7 @@ void AGreatSword::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TO
 
 void AGreatSword::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
+	if (!EKPlayerController->bIsEquipWeapon)
 	{
 		return;
 	}
@@ -141,7 +136,7 @@ void AGreatSword::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, 
 
 void AGreatSword::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController || !EKPlayerController->bIsEquipWeapon)
+	if (!EKPlayerController->bIsEquipWeapon)
 	{
 		return;
 	}
@@ -151,12 +146,20 @@ void AGreatSword::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, 
 	AttachWeaponToHandSocket(this, EKPlayer);
 }
 
+void AGreatSword::PlayDefenseHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	EKPlayer->StopAnimMontage(GreatSwordDefenseAnim);
+	EKPlayer->PlayAnimMontage(GreatSwordDefenseAnim, 1.f, FName("Hit"));
+}
+
+void AGreatSword::PlayDefenseBrokenAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+{
+	EKPlayer->StopAnimMontage(GreatSwordDefenseAnim);
+	EKPlayer->PlayAnimMontage(GreatSwordDefenseAnim, 1.f, FName("Broken"));
+}
+
 void AGreatSword::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	if (!EKPlayer || !EKPlayerController)
-	{
-		return;
-	}
 	EKPlayer->PlayAnimMontage(GreatSwordHitAnim);
 }
 
