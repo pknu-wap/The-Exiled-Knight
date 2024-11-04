@@ -53,6 +53,8 @@ void ASpear::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 	}
 }
 
+#pragma region Attack
+
 void ASpear::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
 	if (!EKPlayerController->bIsEquipWeapon || !SpearAttackAnim)
@@ -109,6 +111,10 @@ void ASpear::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObj
 
 }
 
+#pragma endregion
+
+#pragma region Defense and Hit
+
 void ASpear::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
 	if (!EKPlayerController->bIsEquipWeapon)
@@ -159,6 +165,8 @@ void ASpear::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPl
 {
 	EKPlayer->PlayAnimMontage(SpearHitAnim);
 }
+
+#pragma endregion
 
 void ASpear::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
 {

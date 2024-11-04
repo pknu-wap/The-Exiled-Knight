@@ -32,6 +32,12 @@ void UWeaponBaseAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequen
 
 	UCapsuleComponent* WeaponCC = Cast<UCapsuleComponent>(EKPlayer->GetCurrentWeapon()->GetWeaponCapsuleComponent());
 
+	// Because Spear Attack4 is LeftLeg Attack
+	if (EKPlayer->GetCurrentWeapon()->AttackCombo == 4 && EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear))
+	{
+		WeaponCC = EKPlayer->GetLeftLegCapsuleComponent();
+	}
+
 	if (!WeaponCC)
 	{
 		return;
