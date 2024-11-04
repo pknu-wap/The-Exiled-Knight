@@ -9,7 +9,7 @@ void UWidget_EquipSelectWindow::NativeConstruct()
 	Super::NativeConstruct();
 }
 
-void UWidget_EquipSelectWindow::UpdateContents(EItemCategory Category)
+void UWidget_EquipSelectWindow::UpdateContents(EEquipCategory Category)
 {
 	ContentList->UpdateContents(Category);
 }

@@ -16,9 +16,11 @@
 #include "EKPlayerStatusComponent.h"
 #include "../EKPlayerGameplayTags.h"
 #include "Components/InventoryComponent.h"
+#include "Components/SlotComponent.h"
 #include "UI/UISubsystem.h"
 #include "Blueprint/UserWidget.h"
 #include "EKGameplayTags.h"
+
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -229,6 +231,8 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	}
 
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+
+	SlotComponent = CreateDefaultSubobject<USlotComponent>(TEXT("SlotComponent"));
 }
 
 void AEKPlayerController::BeginPlay()
