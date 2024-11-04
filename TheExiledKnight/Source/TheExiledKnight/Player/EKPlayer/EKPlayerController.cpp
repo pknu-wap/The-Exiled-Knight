@@ -16,6 +16,9 @@
 #include "EKPlayerStatusComponent.h"
 #include "../EKPlayerGameplayTags.h"
 #include "Components/InventoryComponent.h"
+#include "UI/UISubsystem.h"
+#include "Blueprint/UserWidget.h"
+#include "EKGameplayTags.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -279,6 +282,8 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Canceled, this, &ThisClass::EnhanceRelease);
 
 		EnhancedInputComponent->BindAction(IATest, ETriggerEvent::Started, this, &ThisClass::TestStarted);
+
+		EnhancedInputComponent->BindAction(IAGameMenu, ETriggerEvent::Started, this, &ThisClass::OnPressed_GameMenu);
 	}
 }
 
