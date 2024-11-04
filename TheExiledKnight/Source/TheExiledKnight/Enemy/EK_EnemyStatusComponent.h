@@ -17,36 +17,37 @@ class THEEXILEDKNIGHT_API UEK_EnemyStatusComponent : public UActorComponent
 public:
 
 	UEK_EnemyStatusComponent();
-	UFUNCTION(BlueprintCallable)
-	uint8 GetPosieLevel();
-	UFUNCTION(BlueprintCallable)
-	float GetMaxHealth();
-	UFUNCTION(BlueprintCallable)
-	float GetCurrentHealth();
-	UFUNCTION(BlueprintCallable)
-	float GetMaxPoise();
-	UFUNCTION(BlueprintCallable)
-	float  GetCurrentPoise();
-	UFUNCTION(BlueprintCallable)
-	bool  GetIsDead();
-	
-	UFUNCTION(BlueprintCallable)
-	void SetPoiseLevel(uint8 amount);
-
-	UFUNCTION(BlueprintCallable)
-	void SetMaxHealth(float amount);
-
-	UFUNCTION(BlueprintCallable)
-	void SetCurrentHealth(float amount);
 
 	UFUNCTION(BlueprintCallable)
 	void SetMaxPoise(float amount);
 
 	UFUNCTION(BlueprintCallable)
-	void SetCurrentPoise(float amount);
+	void SetMaxHealth(float amount);
 
 	UFUNCTION(BlueprintCallable)
 	void SetIsDead(bool isDead);
+
+	UFUNCTION(BlueprintCallable)
+	float GetMaxHealth();
+
+	UFUNCTION(BlueprintCallable)
+	float GetMaxPoise();
+
+	UFUNCTION(BlueprintCallable)
+	float GetCurrentHealth();
+
+	UFUNCTION(BlueprintCallable)
+	float GetCurrentPoise();
+	
+	UFUNCTION(BlueprintCallable)
+	bool  GetIsDead();
+
+
+	UFUNCTION(BlueprintCallable)
+	void  ChangeCurrentPoise(float amount);
+
+	UFUNCTION(BlueprintCallable)
+	void ChangeCurrentHealth(float amount);
 
 	UPROPERTY(BlueprintAssignable, Category = "Status")
 	FOnDamageTaken OnDamageTaken;
@@ -54,31 +55,22 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Status")
 	FOnHPIsZero OnHPIsZero;
 
-	UFUNCTION(BlueprintCallable,  Category="Status")
-
-	virtual void TakeDamage(float amount);
-
 	
 private:
-	UPROPERTY(VisibleAnywhere,Category=Stat,Meta  =(AllowPrivteAccess=true))
-	uint8 PoiseLevel;
+
 
 	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
-
 	float MaxHealth;
-	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
 
+	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
 	float CurrentHealth;
-
 	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
-
 	float MaxPosie;
+	
 	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
-
-	float CurrentPosie;
+	float CurrentPoise;
 
 	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
-
 	bool bIsDead;
 
 };
