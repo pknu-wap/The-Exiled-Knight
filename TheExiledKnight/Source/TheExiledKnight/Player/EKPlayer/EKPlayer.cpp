@@ -36,6 +36,10 @@ AEKPlayer::AEKPlayer()
 	Camera->SetupAttachment(SpringArm);
 	Camera->bUsePawnControlRotation = true;
 
+	LeftLegCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("LeftLeg"));
+	LeftLegCapsuleComponent->SetupAttachment(RootComponent);
+	LeftLegCapsuleComponent->SetRelativeLocation(FVector(20, -30, -70));
+
 	GetCharacterMovement()->GravityScale = 3.f;
 	GetCharacterMovement()->JumpZVelocity = 800.f;
 	GetCharacterMovement()->AirControl = 0.2f;
@@ -71,7 +75,7 @@ void AEKPlayer::BeginPlay()
 	
 	// Test Spear Version
 
-	/*if (SpearClass)
+	if (SpearClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<ASpear>(SpearClass, SpawnParams);
@@ -79,18 +83,18 @@ void AEKPlayer::BeginPlay()
 		GetCharacterMovement()->JumpZVelocity = 1000.f;
 		GetMesh()->SetAnimInstanceClass(ABPSpear);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear);
-	}*/
+	}
 
 	// Test Staff Version Don't Select This
 
-	if (StaffClass)
+	/*if (StaffClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AStaff>(StaffClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetMesh()->SetAnimInstanceClass(ABPStaff);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
-	}
+	}*/
 }
 
 void AEKPlayer::Tick(float DeltaTime)
@@ -112,20 +116,26 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 		return 0.f;
 	}
 
-	PlayerStatusComponent->SetHp(-Damage);
-	CurrentWeapon->PlayHitAnimMontage(this, EKPlayerController);
-
-	/*if (EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense) && PlayerStatusComponent->GetStamina() >= DefenseStamina)
+	if (EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense) && PlayerStatusComponent->GetStamina() >= DefenseStamina)
 	{
-		PlayerStatusComponent->SetHp(-Damage * 0.3);
-		EKPlayerController->ConsumtionStaminaAndTimer(DefenseStamina);
-		CurrentWeapon->PlayDefenseHitAnimMontage(this, EKPlayerController);
+		if (EKPlayerController->bIsPerfectDefense) // Perfect Defense
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Cyan, TEXT("Perfect!!"));
+			EKPlayerController->ConsumtionStaminaAndTimer(PerfectDefenseStamina);
+		}
+		else // Normal Defense
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Cyan, TEXT("Normal..."));
+			PlayerStatusComponent->SetHp(-Damage * 0.3);
+			EKPlayerController->ConsumtionStaminaAndTimer(DefenseStamina);
+			CurrentWeapon->PlayDefenseHitAnimMontage(this, EKPlayerController);
+		}
 	}
 	else
 	{
 		PlayerStatusComponent->SetHp(-Damage);
 		CurrentWeapon->PlayHitAnimMontage(this, EKPlayerController);
-	}*/
+	}
 
 	EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Hit);
 
