@@ -2,16 +2,16 @@
 
 
 #include "EKEnemyGamePlayTags.h"
-namespace EKPlayerGameplayTags
+namespace EKEnemyGameplayTags
 {
-#pragma region Status
+#pragma region State
 
-	UE_DEFINE_GAMEPLAY_TAG(EKEnemy_State_Idle, "EKEnemy.State.Idle");
-	UE_DEFINE_GAMEPLAY_TAG(EKEnemy_State_Walk, "EKEnemy.State.Walk");
-	UE_DEFINE_GAMEPLAY_TAG(EKEnemy_State_Sprint, "EKEnemy.State.Sprint");
+	UE_DEFINE_GAMEPLAY_TAG(EKEnemy_State_None, "EKEnemy.State.Idle"); //patrol or  idle
+	UE_DEFINE_GAMEPLAY_TAG(EKEnemy_State_Investigating, "EKEnemy.State.Investigating");
 	UE_DEFINE_GAMEPLAY_TAG(EKEnemy_State_Combat, "EKEnemy.State.Combat");
-	UE_DEFINE_GAMEPLAY_TAG(EKEnemy_State_Chase, "EKEnemy.State.Chase");
 	UE_DEFINE_GAMEPLAY_TAG(EKEnemy_State_Stun, "EKEnemy.State.Stun");
+	UE_DEFINE_GAMEPLAY_TAG(EKEnemy_State_Hurt, "EKEnemy.State.Hurt");
+	UE_DEFINE_GAMEPLAY_TAG(EKEnemy_State_Dead, "EKEnemy.State.Dead");
 #pragma endregion
 
 
