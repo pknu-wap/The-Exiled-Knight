@@ -1,56 +1,67 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AISenseConfig_Damage.h"
-#include"Perception/AIPerceptionComponent.h"
-#include"Perception/AIPerceptionTypes.h"
-#include "Enemy/EKEnemyGamePlayTags.h"
 #include "EKEnemyAIController.generated.h"
-/**
- * 
- */
-UENUM()
-enum EAIPerceptionSense //SENSE ENUM 
+
+UENUM(BlueprintType)
+enum class EAIPerceptionSense : uint8 // SENSE ENUM 
 {
-	NONE,
-	SIGHT,
-	HEARING,
-	DAMAGE
+	NONE UMETA(DisplayName = "None"),
+	SIGHT UMETA(DisplayName = "Sight"),
+	HEARING UMETA(DisplayName = "Hearing"),
+	DAMAGE UMETA(DisplayName = "Damage")
 };
 
 UCLASS()
 class THEEXILEDKNIGHT_API AEKEnemyAIController : public AAIController
 {
 	GENERATED_BODY()
+
 public:
 	AEKEnemyAIController();
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	class UAIPerceptionComponent* AIPerception;
+
+	// AIPerception Component
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI|Perception")
+	UAIPerceptionComponent* AIPerception;
 
 	UFUNCTION()
 	void PerceptionUpdated(const TArray<AActor*>& UpdatedActors);
-	FAIStimulus CanSenseActor(AActor* Actor, EAIPerceptionSense AIPercetptionSense);
-	void HandleSensedSight(AActor*Actor);
+
+	// Handles for different senses
+	void HandleSensedSight(AActor* Actor);
 	void HandleSensedHearing(FVector NoiseLocation);
-	bool GetPerceptionInfo(AActor* Actor, FActorPerceptionBlueprintInfo& OutInfo) const;
-		
+	void HandleSensedDamage(AActor* Actor);
+
+	
+	
+
+	// Custom sense-checking function
+	FAIStimulus CanSenseActor(AActor* Actor, EAIPerceptionSense AIPerceptionSense);
+
 private:
-#pragma region AIPerception
-	class UAISenseConfig_Sight* SightConfig;
-	class UAISenseConfig_Hearing* HearingConfig;
-	class UAISenseConfig_Damage* DamageSenseConfig;
-	UPROPERTY(BlueprintReadWrite, Category = Perception, meta = (AllowPrivateAccess = "true"));
-	float  SightRadius;
-	UPROPERTY(BlueprintReadWrite, Category = Perception, meta = (AllowPrivateAccess = "true"));
-	float LostSightRadius;
-	UPROPERTY(BlueprintReadWrite, Category = Perception, meta = (AllowPrivateAccess = "true"));
-	float HearingRange;
+	// AIPerception Sense Configurations
+	UPROPERTY(VisibleAnywhere, Category = "AI|Perception")
+	UAISenseConfig_Sight* SightConfig;
 
-#pragma endregion
+	UPROPERTY(VisibleAnywhere, Category = "AI|Perception")
+	UAISenseConfig_Hearing* HearingConfig;
 
+	UPROPERTY(VisibleAnywhere, Category = "AI|Perception")
+	UAISenseConfig_Damage* DamageSenseConfig;
+
+	// Perception ranges
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
+	float SightRadius = 500.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
+	float LostSightRadius = 1000.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
+	float HearingRange = 3000.0f;
 };
