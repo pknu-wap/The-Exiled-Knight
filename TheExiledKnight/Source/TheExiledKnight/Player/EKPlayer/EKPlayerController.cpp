@@ -16,6 +16,7 @@
 #include "UI/UISubsystem.h"
 #include "Blueprint/UserWidget.h"
 #include "EKGameplayTags.h"
+#include "../Weapon/DamageType/EKPlayerDamageType.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -174,7 +175,7 @@ void AEKPlayerController::JumpStarted(const FInputActionValue& InputValue)
 
 	EKPlayer->Jump();
 
-	SetStaminaAndTimer(JumpStamina);
+	ConsumtionStaminaAndTimer(JumpStamina);
 }
 
 void AEKPlayerController::JumpTriggered(const FInputActionValue& InputValue)
@@ -216,14 +217,19 @@ void AEKPlayerController::SprintAndDodgeTriggered(const FInputActionValue& Input
 
 	if (KeyPressDuration >= NeedDodgeThresholdTime)
 	{
-		if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_SitDown) ||
-			EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack))
+		if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack))
 		{
 			return;
 		}
+
+		if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_SitDown))
+		{
+			EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
+		}
+
 		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Sprint);
 		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = EKPlayerSprintSpeed;
-		SetStaminaAndTimer(SprintStamina);
+		ConsumtionStaminaAndTimer(SprintStamina);
 	}
 }
 
@@ -254,13 +260,13 @@ void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputVa
 		{
 			EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Dodge);
 			EKPlayer->PlayAnimMontage(BackStepAnim);
-			SetStaminaAndTimer(BackStepStamina);
+			ConsumtionStaminaAndTimer(BackStepStamina);
 		}
 		else
 		{
 			EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Dodge);
 			EKPlayer->PlayAnimMontage(DodgeAnim);
-			SetStaminaAndTimer(DodgeStamina);
+			ConsumtionStaminaAndTimer(DodgeStamina);
 		}
 	}
 
@@ -408,7 +414,8 @@ void AEKPlayerController::SitDownStarted(const FInputActionValue& InputValue)
 
 void AEKPlayerController::TestStarted(const FInputActionValue& InputValue)
 {
-	EKPlayer->GetPlayerStatusComponent()->TakeDamage(1);
+	TSubclassOf<UEKPlayerDamageType> PlayerDamageType = UEKPlayerDamageType::StaticClass();
+	UGameplayStatics::ApplyDamage(EKPlayer, 10, this, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
 }
 
 #pragma endregion
@@ -459,7 +466,7 @@ void AEKPlayerController::SetStaminaRecoveryTime()
 	EKPlayer->GetPlayerStatusComponent()->bCanStaminaRecovery = true;
 }
 
-void AEKPlayerController::SetStaminaAndTimer(int32 Stamina)
+void AEKPlayerController::ConsumtionStaminaAndTimer(int32 Stamina)
 {
 	EKPlayer->GetPlayerStatusComponent()->SetStamina(-Stamina);
 	EKPlayer->GetPlayerStatusComponent()->bCanStaminaRecovery = false;

@@ -2,6 +2,7 @@
 
 #include "EKPlayer.h"
 #include "EKPlayerStatusComponent.h"
+#include "EKPlayerController.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -59,14 +60,14 @@ void AEKPlayer::BeginPlay()
 
 	// Test GreatSword Version
 
-	if (GreatSwordClass)
+	/*if (GreatSwordClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AGreatSword>(GreatSwordClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetMesh()->SetAnimInstanceClass(ABPGreatSword);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword);
-	}
+	}*/
 	
 	// Test Spear Version
 
@@ -82,14 +83,14 @@ void AEKPlayer::BeginPlay()
 
 	// Test Staff Version Don't Select This
 
-	/*if (StaffClass)
+	if (StaffClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AStaff>(StaffClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetMesh()->SetAnimInstanceClass(ABPStaff);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
-	}*/
+	}
 }
 
 void AEKPlayer::Tick(float DeltaTime)
@@ -106,7 +107,28 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 {
 	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
-	GetPlayerStatusComponent()->TakeDamage(Damage);
+	if (EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Hit))
+	{
+		return 0.f;
+	}
+
+	PlayerStatusComponent->SetHp(-Damage);
+	CurrentWeapon->PlayHitAnimMontage(this, EKPlayerController);
+
+	/*if (EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense) && PlayerStatusComponent->GetStamina() >= DefenseStamina)
+	{
+		PlayerStatusComponent->SetHp(-Damage * 0.3);
+		EKPlayerController->ConsumtionStaminaAndTimer(DefenseStamina);
+		CurrentWeapon->PlayDefenseHitAnimMontage(this, EKPlayerController);
+	}
+	else
+	{
+		PlayerStatusComponent->SetHp(-Damage);
+		CurrentWeapon->PlayHitAnimMontage(this, EKPlayerController);
+	}*/
+
+	EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Hit);
+
 	return 0.f;
 }
 

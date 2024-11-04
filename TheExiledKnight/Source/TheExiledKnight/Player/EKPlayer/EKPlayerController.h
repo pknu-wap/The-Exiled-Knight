@@ -21,6 +21,8 @@ class UInputAction;
 #define BackStepStamina 50
 #define JumpStamina 50
 
+#define DefenseStamina 300
+
 #define GreatSwordAttackStamina 100
 #define GreatSwordEnhancedAttackStamina 200
 #define GreatSwordJumpAttackStamina 100
@@ -158,7 +160,7 @@ protected:
 
 public:
 	void SetStaminaRecoveryTime();
-	void SetStaminaAndTimer(int32 Stamina);
+	void ConsumtionStaminaAndTimer(int32 Stamina);
 	void SetAttackComboNext();
 	void ResetAttackCombo();
 	void SetAttackEndTimer(float Time);
