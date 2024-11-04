@@ -129,7 +129,7 @@ void AEKPlayerWeapon::AttackHit(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<UCaps
 			TObjectPtr<AEK_EnemyBase> HitEnemy = Cast<AEK_EnemyBase>(HitActor);
 			if (HitEnemy)
 			{
-				HitEnemy->GetStatusComponent()->TakeDamage(1);
+				//HitEnemy->GetStatusComponent()->TakeDamage(1);
 				EKPlayer->bIsHitOnce = true;
 				GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Attack!!!"));
 			}
