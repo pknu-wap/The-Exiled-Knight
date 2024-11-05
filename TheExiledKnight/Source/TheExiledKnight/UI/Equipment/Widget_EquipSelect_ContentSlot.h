@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Structs/InventorySlotStruct.h"
+#include "EKEnums.h"
 #include "Widget_EquipSelect_ContentSlot.generated.h"
 
 class UButton;
@@ -20,13 +21,17 @@ public:
 	virtual void NativeConstruct() override;
 
 public:
-	void UpdateSlot(const FInventorySlot& inData);
+	void UpdateSlot(EEquipCategory inCategory, const FInventorySlot& inData);
 
 protected:
 	UFUNCTION(BlueprintCallable)
 	FEventReply RedirectMouseDownToWidget(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 
 public:
+	EEquipCategory Category;
+
+	FInventorySlot SlotData;
+
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
 	UButton* Button_Slot;
 
