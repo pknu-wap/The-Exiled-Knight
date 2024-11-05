@@ -10,8 +10,11 @@ void UWidget_Equipment::ShowEquipWindow()
 	WidgetSwitcher->SetActiveWidgetIndex(0);
 }
 
-void UWidget_Equipment::ShowEquipSelect(EEquipCategory Category)
+void UWidget_Equipment::ShowEquipSelect(EEquipCategory Category, int slotIdx)
 {
+	// Save Slot Idx
+	SlotIdx_EquipSelect = slotIdx;
+
 	// Update Contents by Category
 	EquipSelect->UpdateContents(Category);
 	WidgetSwitcher->SetActiveWidgetIndex(1);
