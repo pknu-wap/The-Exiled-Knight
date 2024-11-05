@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Structs/ItemStruct.h"
+#include "EKEnums.h"
 #include "SlotComponent.generated.h"
 
 USTRUCT(BlueprintType)
@@ -25,7 +26,7 @@ struct FMagicStruct
 	UTexture2D* Icon;
 };
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FSlotUpdated, int)
+DECLARE_MULTICAST_DELEGATE_TwoParams(FSlotUpdated, EEquipCategory, int)
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THEEXILEDKNIGHT_API USlotComponent : public UActorComponent
@@ -45,11 +46,20 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	
+	void EquipWeapon(const FItemStruct& InItemData);
+	void EquipRune(const FItemStruct& InItemData);
+	void EquipUsableItem(const FItemStruct& InItemData);
+	void EquipMagic(const FMagicStruct& InMagicData);
 
-protected:
+private:
+	class UWidget_Equipment* GetEquipmentWidget();
+
+public:
 	// Weapons
 	TArray<FItemStruct> WeaponSlots;
+
+	// Rune
+	TArray<FItemStruct> RuneSlots;
 
 	// Usable Items
 	TArray<FItemStruct> UsableSlots;
@@ -59,6 +69,6 @@ protected:
 
 	// Special Skill
 	
-private:
+public:
 	FSlotUpdated Delegate_SlotUpdated;
 };
