@@ -33,6 +33,8 @@ FEventReply UWidget_EquipSelect_ContentSlot::RedirectMouseDownToWidget(const FGe
 	FEventReply Reply;
 	Reply.NativeReply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 
+	if (SlotData.Item.ID == 0) return Reply;
+
 	APlayerController* controller = GetOwningPlayer();
 	if (!controller) return Reply;
 	USlotComponent* slotComp = controller->GetComponentByClass<USlotComponent>();
@@ -50,8 +52,7 @@ FEventReply UWidget_EquipSelect_ContentSlot::RedirectMouseDownToWidget(const FGe
 		case EEquipCategory::Weapon:
 		{
 			// Equip Weapon
-
-
+			slotComp->EquipWeapon(SlotData.Item);
 			break;
 		}
 		case EEquipCategory::Rune:

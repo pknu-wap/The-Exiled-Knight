@@ -8,6 +8,21 @@
 #include "Components/Button.h"
 #include "UI/UISubsystem.h"
 #include "EKGameplayTags.h"
+#include "Kismet/GameplayStatics.h"
+#include "Components/SlotComponent.h"
+
+void UWidget_Equipment_Slot::NativeConstruct()
+{
+	Super::NativeConstruct();
+	 
+	APlayerController* playerController = UGameplayStatics::GetPlayerController(this, 0);
+	if (!playerController) return;
+	USlotComponent* slotComp = playerController->GetComponentByClass<USlotComponent>();
+	if (!slotComp) return;
+
+	slotComp->Delegate_SlotUpdated.RemoveAll(this);
+	slotComp->Delegate_SlotUpdated.AddUObject(this, UWidget_Equipment_Slot::SlotUpdated);
+}
 
 FEventReply UWidget_Equipment_Slot::RedirectMouseDownToWidget(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
@@ -26,8 +41,58 @@ FEventReply UWidget_Equipment_Slot::RedirectMouseDownToWidget(const FGeometry& I
 		UWidget_Equipment* EquipmentWidget = Cast<UWidget_Equipment>(widget);
 		if (!EquipmentWidget) return Reply;
 
-		EquipmentWidget->ShowEquipSelect(Category);
+		EquipmentWidget->ShowEquipSelect(Category, SlotIdx);
 	} 
 
 	return Reply;
+}
+
+void UWidget_Equipment_Slot::SlotUpdated(EEquipCategory inCategory, int inSlotIdx)
+{
+	if (Category != inCategory || inSlotIdx != SlotIdx) return;
+
+	APlayerController* playerController = GetOwningPlayer();
+	if (!playerController) return;
+	USlotComponent* slotComp = playerController->GetComponentByClass<USlotComponent>();
+	if (!slotComp) return;
+
+	switch (Category)
+	{
+		case EEquipCategory::None:
+		{
+			break;
+		}
+		case EEquipCategory::Weapon:
+		{
+			if (slotComp->WeaponSlots.IsValidIndex(inSlotIdx))
+			{
+				Image_Item->SetBrushFromTexture(slotComp->WeaponSlots[inSlotIdx].Icon);
+			}
+			break;
+		}
+		case EEquipCategory::Rune:
+		{
+			if (slotComp->RuneSlots.IsValidIndex(inSlotIdx))
+			{
+				Image_Item->SetBrushFromTexture(slotComp->RuneSlots[inSlotIdx].Icon);
+			}
+			break;
+		}
+		case EEquipCategory::FragmentOfGod:
+		{
+			break;
+		}
+		case EEquipCategory::UsableItem:
+		{
+			if (slotComp->UsableSlots.IsValidIndex(inSlotIdx))
+			{
+				Image_Item->SetBrushFromTexture(slotComp->UsableSlots[inSlotIdx].Icon);
+			}
+			break;
+		}
+		default:
+		{
+			break;
+		}
+	}
 }
