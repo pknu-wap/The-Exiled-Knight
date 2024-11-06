@@ -58,8 +58,7 @@ FEventReply UWidget_EquipSelect_ContentSlot::RedirectMouseDownToWidget(const FGe
 		case EEquipCategory::Rune:
 		{
 			// Equip Rune
-
-
+			slotComp->EquipRune(SlotData.Item);
 			break;
 		}
 		case EEquipCategory::FragmentOfGod:
@@ -70,8 +69,8 @@ FEventReply UWidget_EquipSelect_ContentSlot::RedirectMouseDownToWidget(const FGe
 		}
 		case EEquipCategory::UsableItem:
 		{
-
-
+			// Equip Usable Item
+			slotComp->EquipUsableItem(SlotData.Item);
 			break;
 		}
 		default:
