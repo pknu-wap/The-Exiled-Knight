@@ -10,6 +10,7 @@
 
 AEKEnemyAIController::AEKEnemyAIController()
 {
+ 
 #pragma region AIPerception
 	AIPerception = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerception"));
 	SetPerceptionComponent(*AIPerception);
@@ -46,6 +47,29 @@ AEKEnemyAIController::AEKEnemyAIController()
 #pragma endregion
 	 
 
+}
+void AEKEnemyAIController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+	
+	AEK_EnemyBase* EnemyPerception = Cast<AEK_EnemyBase>(InPawn);
+	if (EnemyPerception)
+	{
+		if (SightConfig)
+		{
+			SightConfig->SightRadius = EnemyPerception->GetSightRadius();
+			SightConfig->LoseSightRadius = EnemyPerception->GetLostSightRadius();
+			
+			AIPerception->ConfigureSense(*SightConfig);
+		}
+		if (HearingConfig)
+		{
+			HearingConfig->HearingRange = EnemyPerception->GetHearingRange();
+
+			AIPerception->ConfigureSense(*HearingConfig);
+		}
+	}
 }
 #pragma region Perception
 

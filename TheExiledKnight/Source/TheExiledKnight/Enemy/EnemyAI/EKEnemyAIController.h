@@ -30,7 +30,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI|Perception")
 	UAIPerceptionComponent* AIPerception;
 
-	
+	virtual void OnPossess(APawn* InPawn) override; 
 
 
 private:
@@ -44,15 +44,14 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "AI|Perception")
 	UAISenseConfig_Damage* DamageSenseConfig;
 
-	// Perception ranges
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class EK_EnemyBase>EKEnemy; 
+
+	UPROPERTY()
 	float SightRadius = 500.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY()
 	float LostSightRadius = 1000.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY()
 	float HearingRange = 3000.0f;
-
-	TObjectPtr<class EK_EnemyBase>EKEnemy;
 };
