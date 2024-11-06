@@ -14,6 +14,8 @@
 #include "../Weapon/Staff.h"
 #include "Animation/AnimInstance.h"
 #include "../EKPlayerGameplayTags.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "../../Enemy/EK_EnemyBase.h"
 
 AEKPlayer::AEKPlayer()
 {
@@ -63,22 +65,23 @@ void AEKPlayer::BeginPlay()
 	EKPlayerController = Cast<AEKPlayerController>(this->GetController());
 
 #pragma region Weapon Test
+
 	// Test Change Weapon
 
 	// Test GreatSword Version
 
-	/*if (GreatSwordClass)
+	if (GreatSwordClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AGreatSword>(GreatSwordClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetMesh()->SetAnimInstanceClass(ABPGreatSword);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword);
-	}*/
+	}
 
 	// Test Spear Version
 
-	if (SpearClass)
+	/*if (SpearClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<ASpear>(SpearClass, SpawnParams);
@@ -86,7 +89,7 @@ void AEKPlayer::BeginPlay()
 		GetCharacterMovement()->JumpZVelocity = 1000.f;
 		GetMesh()->SetAnimInstanceClass(ABPSpear);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear);
-	}
+	}*/
 
 	// Test Staff Version Don't Select This
 
@@ -98,6 +101,7 @@ void AEKPlayer::BeginPlay()
 		GetMesh()->SetAnimInstanceClass(ABPStaff);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
 	}*/
+
 #pragma endregion
 
 }
@@ -109,8 +113,10 @@ void AEKPlayer::Tick(float DeltaTime)
 	// Test
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("HP : %d / %d"), PlayerStatusComponent->GetHp(), PlayerStatusComponent->GetMaxHp()));
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("MP : %d / %d"), PlayerStatusComponent->GetMp(), PlayerStatusComponent->GetMaxMp()));
-	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("Stamina : %d / %d"), PlayerStatusComponent->GetStamina(), PlayerStatusComponent->GetMaxStamina()));
+	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("Stamina : %d / %d"), PlayerStatusComponent->GetStamina(), PlayerStatusComponent->GetMaxStamina()));
 }
+
+#pragma region Damage
 
 float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
@@ -120,6 +126,10 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 	{
 		return 0.f;
 	}
+
+	HitTimer();
+
+	EKPlayerController->BattleStateTimer();
 
 	if (EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense) && PlayerStatusComponent->GetStamina() >= DefenseStamina)
 	{
@@ -144,15 +154,38 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 	else
 	{
 		PlayerStatusComponent->SetHp(-Damage);
-		CurrentWeapon->PlayHitAnimMontage(this);
+		HitDirection(Cast<AEK_EnemyBase>(DamageCauser));
 	}
-
-	HitTimer();
-
-	EKPlayerController->BattleStateTimer();
 
 	return 0.f;
 }
+
+void AEKPlayer::HitDirection(TObjectPtr<AEK_EnemyBase> Enemy)
+{
+	if (!Enemy)
+	{
+		return;
+	}
+
+	FVector PlayerLocation = this->GetActorLocation();
+	FVector EnemyLocation = Enemy->GetActorLocation();
+
+	FVector Direction = (PlayerLocation - EnemyLocation).GetSafeNormal();
+
+	FVector PlayerForward = this->GetActorForwardVector();
+
+	float Angle = FMath::RadiansToDegrees(FMath::Acos(FVector::DotProduct(Direction, PlayerForward)));
+
+	FVector CrossProduct = FVector::CrossProduct(PlayerForward, Direction);
+
+	if (CrossProduct.Z < 0) {
+		Angle = -Angle;
+	}
+
+	HitAngle = Angle;
+}
+
+#pragma endregion
 
 #pragma region Attach to Socket
 
