@@ -10,6 +10,9 @@
 struct FInputActionValue;
 class UInputMappingContext;
 class UInputAction;
+class UAnimMontage;
+
+#pragma region Default Value
 
 // Edit Walk and Sprint Speed Here
 #define EKPlayerWalkSpeed 200.f
@@ -36,6 +39,8 @@ class UInputAction;
 #define StaffEnhancedAttackStamina 80
 #define StaffJumpAttackStamina 80
 
+#pragma endregion
+
 UCLASS()
 class AEKPlayerController : public APlayerController
 {
@@ -48,6 +53,8 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 	virtual void PlayerTick(float DeltaTime) override;
+
+#pragma region Input Function
 
 private:
 	// About Input Function
@@ -78,7 +85,7 @@ private:
 
 	void Interact(const FInputActionValue& InputValue);
 	void FindInteractableObjects();
-	
+
 	void EnhanceStarted(const FInputActionValue& InputValue);
 	void EnhanceRelease(const FInputActionValue& InputValue);
 
@@ -86,6 +93,10 @@ private:
 
 public:
 	void OnPressed_GameMenu(const FInputActionValue& InputValue);
+
+#pragma endregion
+
+#pragma region Input
 
 protected:
 	// Common Input And Input Mapping Context
@@ -129,6 +140,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Test")
 	UInputAction* IATest;
 
+#pragma endregion
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class AEKPlayer> EKPlayer;
@@ -136,28 +149,35 @@ protected:
 protected:
 	// Common Animation Montage
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
-	TObjectPtr<class UAnimMontage> UsePotionAnim;
+	TObjectPtr<UAnimMontage> UsePotionAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
-	TObjectPtr<class UAnimMontage> DodgeAnim;
+	TObjectPtr<UAnimMontage> DodgeAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
-	TObjectPtr<class UAnimMontage> BackStepAnim;
+	TObjectPtr<UAnimMontage> BackStepAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
-	TObjectPtr<class UAnimMontage> DieAnim;
+	TObjectPtr<UAnimMontage> DieAnim;
 
 public:
 	bool bIsEquipWeapon = false;
 
+#pragma region Timer
+
+public:
 	// About Perfect Defense
 	bool bIsPerfectDefense = false;
 	const float PerfectDefenseTime = 0.2f;
+
+	// About Battle State
+	const float BattleEndTime = 10.f;
 
 protected:
 	FTimerHandle StaminaRecoveryHandle;
 	FTimerHandle AttackEndHandle;
 	FTimerHandle PerfectDefenseHandle;
+	FTimerHandle BattleStateHandle;
 
 	// How long does it take for the player to recover after using the Stemina
 	const float StaminaRecoveryTime = 2.5f;
@@ -175,7 +195,13 @@ public:
 
 	// About Perfect Defense
 	void SetPerfectDefense();
-	void PerfectDefenseTimer(float Time);
+	void PerfectDefenseTimer();
+
+	// About Battle State
+	void SetBattleStateEnd();
+	void BattleStateTimer();
+
+#pragma endregion
 
 protected:
 	// About Sprint And Dodge
