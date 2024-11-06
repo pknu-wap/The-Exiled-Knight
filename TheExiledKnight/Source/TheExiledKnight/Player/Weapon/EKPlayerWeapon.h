@@ -9,6 +9,7 @@
 #include "../EKPlayer/EKPlayer.h"
 #include "../EKPlayer/EKPlayerController.h"
 #include "../EKPlayer/EKPlayerStatusComponent.h"
+#include "../EKPlayerGameplayTags.h"
 #include "EKPlayerWeapon.generated.h"
 
 UCLASS(Abstract)
@@ -40,7 +41,7 @@ public:
 	virtual void PlayDefenseHitAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController) PURE_VIRTUAL(AEKPlayerWeapon::PlayDefenseHitAnimMontage, ;);
 	virtual void PlayDefenseBrokenAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController) PURE_VIRTUAL(AEKPlayerWeapon::PlayDefenseBrokenAnimMontage, ;);
 
-	virtual void PlayHitAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController) PURE_VIRTUAL(AEKPlayerWeapon::PlayHitAnimMontage, ;);
+	virtual void PlayHitAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer) PURE_VIRTUAL(AEKPlayerWeapon::PlayHitAnimMontage, ;);
 
 	virtual void AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<class AEKPlayer> EKPlayer) PURE_VIRTUAL(AEKPlayerWeapon::AttachToDefenseSocket, ;);
 

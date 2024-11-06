@@ -60,6 +60,7 @@ void AGreatSword::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TOb
 
 	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < GreatSwordAttackStamina)
 	{
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 		return;
 	}
 
@@ -154,17 +155,23 @@ void AGreatSword::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, 
 
 void AGreatSword::PlayDefenseHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	EKPlayer->StopAnimMontage(GreatSwordDefenseAnim);
+	if (!EKPlayerController->bIsEquipWeapon || !GreatSwordDefenseAnim)
+	{
+		return;
+	}		
 	EKPlayer->PlayAnimMontage(GreatSwordDefenseAnim, 1.f, FName("Hit"));
 }
 
 void AGreatSword::PlayDefenseBrokenAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	EKPlayer->StopAnimMontage(GreatSwordDefenseAnim);
+	if (!EKPlayerController->bIsEquipWeapon || !GreatSwordDefenseAnim)
+	{
+		return;
+	}	
 	EKPlayer->PlayAnimMontage(GreatSwordDefenseAnim, 1.f, FName("Broken"));
 }
 
-void AGreatSword::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+void AGreatSword::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer)
 {
 	EKPlayer->PlayAnimMontage(GreatSwordHitAnim);
 }
