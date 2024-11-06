@@ -24,10 +24,17 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "HitAnimation")
 	FOnHitAnimationEnd OnHurtAnimationEnd;  
 
-	void PlayHurtReactionAnimation(const FVector& DamageDirection);
+	void PlayHurtReactionAnimation(const FVector& DamageDirection);   
+	
 	void OnHurtMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
 	void PlayDieReactionAnimation();
 	
+	float GetSightRadius();
+
+	float GetLostSightRadius();
+
+	float GetHearingRange();
 
 protected:
 
@@ -59,6 +66,14 @@ public:
 	
 	virtual TObjectPtr <UEK_EnemyStatusComponent> GetStatusComponent();
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
+	float SightRadius = 500.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
+	float LostSightRadius = 1000.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
+	float HearingRange = 2000.0f;
 
 	
 };
