@@ -44,4 +44,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
 	bool bIsSitted = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
+	float HitAngle = 0.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
+	bool bIsHitted = false;
 };

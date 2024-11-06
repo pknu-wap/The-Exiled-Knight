@@ -105,7 +105,7 @@ void AStaff::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObj
 
 #pragma endregion
 
-#pragma region Defense and Hit
+#pragma region Defense
 
 void AStaff::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
@@ -158,16 +158,6 @@ void AStaff::PlayDefenseBrokenAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjec
 	}
 
 	EKPlayer->PlayAnimMontage(StaffDefenseAnim, 1.f, FName("Broken"));
-}
-
-void AStaff::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer)
-{
-	if (!StaffHitAnim)
-	{
-		return;
-	}
-
-	EKPlayer->PlayAnimMontage(StaffHitAnim, 1.f, FName("Default"));
 }
 
 #pragma endregion

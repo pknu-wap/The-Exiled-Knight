@@ -117,7 +117,7 @@ void AGreatSword::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer,
 
 #pragma endregion
 
-#pragma region Defense and Hit
+#pragma region Defense
 
 void AGreatSword::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
@@ -169,11 +169,6 @@ void AGreatSword::PlayDefenseBrokenAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, T
 		return;
 	}	
 	EKPlayer->PlayAnimMontage(GreatSwordDefenseAnim, 1.f, FName("Broken"));
-}
-
-void AGreatSword::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer)
-{
-	EKPlayer->PlayAnimMontage(GreatSwordHitAnim);
 }
 
 #pragma endregion
