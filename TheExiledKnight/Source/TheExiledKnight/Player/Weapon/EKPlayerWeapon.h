@@ -9,6 +9,7 @@
 #include "../EKPlayer/EKPlayer.h"
 #include "../EKPlayer/EKPlayerController.h"
 #include "../EKPlayer/EKPlayerStatusComponent.h"
+#include "Item/EKItem_Base.h"
 #include "EKPlayerWeapon.generated.h"
 
 UCLASS()
