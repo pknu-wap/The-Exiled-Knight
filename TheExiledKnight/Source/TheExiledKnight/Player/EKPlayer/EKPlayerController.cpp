@@ -20,7 +20,8 @@
 #include "UI/UISubsystem.h"
 #include "Blueprint/UserWidget.h"
 #include "EKGameplayTags.h"
-
+#include "Item/EKItem_Base.h"
+#include "DrawDebugHelpers.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -91,6 +92,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	if (IAEnhanceFinder.Succeeded())
 	{
 		IAEnhance = IAEnhanceFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UInputAction> IAInteractFinder(TEXT("/Script/EnhancedInput.InputAction'/Game/EKPlayer/Input/IA_EK_Interact.IA_EK_Interact'"));
+	if (IAInteractFinder.Succeeded())
+	{
+		IAInteract = IAInteractFinder.Object;
 	}
 
 	// Test Input
@@ -281,6 +288,8 @@ void AEKPlayerController::SetupInputComponent()
 
 		EnhancedInputComponent->BindAction(IASitDown, ETriggerEvent::Started, this, &ThisClass::SitDownStarted);
 
+		EnhancedInputComponent->BindAction(IAInteract, ETriggerEvent::Started, this, &ThisClass::Interact);
+
 		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Started, this, &ThisClass::EnhanceStarted);
 		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Completed, this, &ThisClass::EnhanceRelease);
 		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Canceled, this, &ThisClass::EnhanceRelease);
@@ -295,6 +304,7 @@ void AEKPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
+	FindInteractableObjects();
 }
 
 void AEKPlayerController::MoveTriggered(const FInputActionValue& InputValue)
@@ -596,8 +606,53 @@ void AEKPlayerController::TestStarted(const FInputActionValue& InputValue)
 	EKPlayer->GetPlayerStatusComponent()->TakeDamage(1);
 }
 
+void AEKPlayerController::Interact(const FInputActionValue& InputValue)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Interact"));
+
+	if (bCanItemInteract)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Can Interact with Item"));
+	}
+}
+
 void AEKPlayerController::FindInteractableObjects()
 {
+	FVector Location;
+	FRotator Rotation;
+	TArray<FHitResult> HitResults;
+	AEKItem_Base* Item = nullptr;
+
+	EKPlayer->GetActorEyesViewPoint(Location, Rotation);
+
+	FVector Start = Location;
+	FVector End = Start + Rotation.Vector() * 500.0f;
+
+	// ignore player
+
+	FCollisionQueryParams traceParams;
+	GetWorld()->LineTraceMultiByChannel(HitResults, Start, End, ECC_Visibility, traceParams);
+
+	for (FHitResult& HitResult : HitResults)
+	{
+		Item = Cast<AEKItem_Base>(HitResult.GetActor());
+
+		if (Item != nullptr	)
+			break;
+	}
+
+	FColor Color = Item ? FColor::Green : FColor::Red;
+
+	DrawDebugLine(GetWorld(), Start, End, Color, false, 2.0f);
+
+	if (Item)
+	{
+		// Show Interact UI
+
+		bCanItemInteract = true;
+	}
+	else
+		bCanItemInteract = false;
 
 }
 
@@ -734,10 +789,10 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 {
 	UUISubsystem* UISystem = GetGameInstance()->GetSubsystem<UUISubsystem>();
 	if (!UISystem) return;
-	
+
 	UUserWidget* layer_GameMenu = UISystem->GetLayer(FEKGameplayTags::Get().UI_Layer_GameMenu);
 	UUserWidget* widget_GameMenu = UISystem->GetWidget(FEKGameplayTags::Get().UI_Widget_GameMenu_GameMenu);
-	
+
 	if (layer_GameMenu && layer_GameMenu->GetVisibility() == ESlateVisibility::Collapsed)
 	{
 		layer_GameMenu->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
@@ -748,7 +803,7 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 		SetInputMode(UIInputMode);
 		SetShowMouseCursor(true);
 	}
-	else if(widget_GameMenu && widget_GameMenu->GetVisibility() == ESlateVisibility::SelfHitTestInvisible)
+	else if (widget_GameMenu && widget_GameMenu->GetVisibility() == ESlateVisibility::SelfHitTestInvisible)
 	{
 		layer_GameMenu->SetVisibility(ESlateVisibility::Collapsed);
 		widget_GameMenu->SetVisibility(ESlateVisibility::Collapsed);
@@ -757,5 +812,5 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 		SetInputMode(GameInputMode);
 		SetShowMouseCursor(false);
 	}
-	
+
 }
