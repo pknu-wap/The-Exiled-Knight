@@ -61,6 +61,7 @@ void AStaff::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 
 	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < StaffAttackStamina)
 	{
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 		return;
 	}
 
@@ -159,7 +160,7 @@ void AStaff::PlayDefenseBrokenAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjec
 	EKPlayer->PlayAnimMontage(StaffDefenseAnim, 1.f, FName("Broken"));
 }
 
-void AStaff::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+void AStaff::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer)
 {
 	if (!StaffHitAnim)
 	{

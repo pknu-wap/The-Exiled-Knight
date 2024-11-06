@@ -64,6 +64,7 @@ void ASpear::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 
 	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < SpearAttackStamina)
 	{
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 		return;
 	}
 
@@ -151,17 +152,23 @@ void ASpear::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObje
 
 void ASpear::PlayDefenseHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	EKPlayer->StopAnimMontage(SpearDefenseAnim);
+	if (!EKPlayerController->bIsEquipWeapon || !SpearDefenseAnim)
+	{
+		return;
+	}	
 	EKPlayer->PlayAnimMontage(SpearDefenseAnim, 1.f, FName("Hit"));
 }
 
 void ASpear::PlayDefenseBrokenAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
-	EKPlayer->StopAnimMontage(SpearDefenseAnim);
+	if (!EKPlayerController->bIsEquipWeapon || !SpearDefenseAnim)
+	{
+		return;
+	}	
 	EKPlayer->PlayAnimMontage(SpearDefenseAnim, 1.f, FName("Broken"));
 }
 
-void ASpear::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+void ASpear::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer)
 {
 	EKPlayer->PlayAnimMontage(SpearHitAnim);
 }

@@ -1,6 +1,5 @@
 // Made by Somalia Pirate
 
-
 #include "EKPlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -175,7 +174,10 @@ void AEKPlayerController::JumpStarted(const FInputActionValue& InputValue)
 
 	EKPlayer->Jump();
 
-	ConsumtionStaminaAndTimer(JumpStamina);
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_BattleState))
+	{
+		ConsumtionStaminaAndTimer(JumpStamina);
+	}
 }
 
 void AEKPlayerController::JumpTriggered(const FInputActionValue& InputValue)
@@ -193,7 +195,7 @@ void AEKPlayerController::JumpTriggered(const FInputActionValue& InputValue)
 
 #pragma endregion
 
-#pragma region SprintAndDodge
+#pragma region Sprint and Dodge
 
 void AEKPlayerController::SprintAndDodgeStarted(const FInputActionValue& InputValue)
 {
@@ -229,7 +231,11 @@ void AEKPlayerController::SprintAndDodgeTriggered(const FInputActionValue& Input
 
 		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Sprint);
 		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = EKPlayerSprintSpeed;
-		ConsumtionStaminaAndTimer(SprintStamina);
+
+		if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_BattleState))
+		{
+			ConsumtionStaminaAndTimer(SprintStamina);
+		}
 	}
 }
 
@@ -260,13 +266,21 @@ void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputVa
 		{
 			EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Dodge);
 			EKPlayer->PlayAnimMontage(BackStepAnim);
-			ConsumtionStaminaAndTimer(BackStepStamina);
+
+			if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_BattleState))
+			{
+				ConsumtionStaminaAndTimer(BackStepStamina);
+			}
 		}
 		else
 		{
 			EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Dodge);
 			EKPlayer->PlayAnimMontage(DodgeAnim);
-			ConsumtionStaminaAndTimer(DodgeStamina);
+
+			if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_BattleState))
+			{
+				ConsumtionStaminaAndTimer(DodgeStamina);
+			}
 		}
 	}
 
@@ -293,6 +307,8 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
+
+	BattleStateTimer();
 
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Enhance))
 	{
@@ -330,7 +346,8 @@ void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputVal
 	EKPlayer->GetCurrentWeapon()->PlayDefenseStartAnimMontage(EKPlayer, this);
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
-	PerfectDefenseTimer(PerfectDefenseTime);
+	PerfectDefenseTimer();
+	BattleStateTimer();
 }
 
 void AEKPlayerController::WeaponDefenseTriggered(const FInputActionValue& InputValue)
@@ -494,10 +511,21 @@ void AEKPlayerController::SetPerfectDefense()
 	bIsPerfectDefense = false;
 }
 
-void AEKPlayerController::PerfectDefenseTimer(float Time)
+void AEKPlayerController::PerfectDefenseTimer()
 {
 	bIsPerfectDefense = true;
-	GetWorldTimerManager().SetTimer(PerfectDefenseHandle, this, &ThisClass::SetPerfectDefense, Time, false);
+	GetWorldTimerManager().SetTimer(PerfectDefenseHandle, this, &ThisClass::SetPerfectDefense, PerfectDefenseTime, false);
+}
+
+void AEKPlayerController::SetBattleStateEnd()
+{
+	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_BattleState);
+}
+
+void AEKPlayerController::BattleStateTimer()
+{
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_BattleState);
+	GetWorldTimerManager().SetTimer(BattleStateHandle, this, &ThisClass::SetBattleStateEnd, BattleEndTime, false);
 }
 
 #pragma endregion

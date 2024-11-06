@@ -104,15 +104,15 @@ void UEKPlayerStatusComponent::SetPlayerFinalDamage()
 {
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword))
 	{
-		FinalDamage = DefaultDamage + Strength * 10 + Ability * 3 + EKPlayer->GetCurrentWeapon()->WeaponAdditionalDamage;
+		FinalDamage = DefaultDamage + ((Strength * 10) * 1.5) + ((Ability * 10) * 0.8) + EKPlayer->GetCurrentWeapon()->WeaponAdditionalDamage;
 	}
 	else if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear))
 	{
-		FinalDamage = DefaultDamage * 0.8 + Ability * 8 + Strength * 2 + EKPlayer->GetCurrentWeapon()->WeaponAdditionalDamage;
+		FinalDamage = DefaultDamage + ((Ability * 10) * 1.5) + ((Strength * 10) * 0.8) + EKPlayer->GetCurrentWeapon()->WeaponAdditionalDamage;
 	}
 	else if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff))
 	{
-		FinalDamage = DefaultDamage * 0.2 + Intelligence * 20 + EKPlayer->GetCurrentWeapon()->WeaponAdditionalDamage;
+		FinalDamage = DefaultDamage + ((Intelligence * 10) * 1.5) + ((Mental * 10) * 0.8) + EKPlayer->GetCurrentWeapon()->WeaponAdditionalDamage;
 	}
 }
 
