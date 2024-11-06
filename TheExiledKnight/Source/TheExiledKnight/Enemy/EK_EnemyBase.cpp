@@ -83,6 +83,22 @@ void AEK_EnemyBase::PlayDieReactionAnimation()
 {
 	PlayAnimMontage(DeadMontage);  
 }
+
+float AEK_EnemyBase::GetSightRadius()
+{
+	return SightRadius;
+}
+
+float AEK_EnemyBase::GetLostSightRadius()
+{
+	return LostSightRadius;
+}
+
+float AEK_EnemyBase::GetHearingRange()
+{
+	return HearingRange;
+}
+
 #pragma endregion
 
 
