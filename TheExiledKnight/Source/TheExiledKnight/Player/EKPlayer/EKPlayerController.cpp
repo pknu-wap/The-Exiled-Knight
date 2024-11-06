@@ -19,6 +19,8 @@
 #include "UI/UISubsystem.h"
 #include "Blueprint/UserWidget.h"
 #include "EKGameplayTags.h"
+#include "Item/EKItem_Base.h"
+#include "DrawDebugHelpers.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -297,6 +299,7 @@ void AEKPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
+	FindInteractableObjects();
 }
 
 void AEKPlayerController::MoveTriggered(const FInputActionValue& InputValue)
@@ -601,10 +604,50 @@ void AEKPlayerController::TestStarted(const FInputActionValue& InputValue)
 void AEKPlayerController::Interact(const FInputActionValue& InputValue)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Interact"));
+
+	if (bCanItemInteract)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Can Interact with Item"));
+	}
 }
 
 void AEKPlayerController::FindInteractableObjects()
 {
+	FVector Location;
+	FRotator Rotation;
+	TArray<FHitResult> HitResults;
+	AEKItem_Base* Item = nullptr;
+
+	EKPlayer->GetActorEyesViewPoint(Location, Rotation);
+
+	FVector Start = Location;
+	FVector End = Start + Rotation.Vector() * 500.0f;
+
+	// ignore player
+
+	FCollisionQueryParams traceParams;
+	GetWorld()->LineTraceMultiByChannel(HitResults, Start, End, ECC_Visibility, traceParams);
+
+	for (FHitResult& HitResult : HitResults)
+	{
+		Item = Cast<AEKItem_Base>(HitResult.GetActor());
+
+		if (Item != nullptr	)
+			break;
+	}
+
+	FColor Color = Item ? FColor::Green : FColor::Red;
+
+	DrawDebugLine(GetWorld(), Start, End, Color, false, 2.0f);
+
+	if (Item)
+	{
+		// Show Interact UI
+
+		bCanItemInteract = true;
+	}
+	else
+		bCanItemInteract = false;
 
 }
 
