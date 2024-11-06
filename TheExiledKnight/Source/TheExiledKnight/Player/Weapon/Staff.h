@@ -34,8 +34,6 @@ public:
 	virtual void PlayDefenseHitAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController) override;
 	virtual void PlayDefenseBrokenAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController) override;
 
-	virtual void PlayHitAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer) override;
-
 	virtual void AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<class AEKPlayer> EKPlayer) override;
 
 	virtual void AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<class AEKPlayer> EKPlayer) override;
@@ -66,7 +64,4 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	TObjectPtr<class UAnimMontage> StaffUnEquipAnim;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	TObjectPtr<class UAnimMontage> StaffHitAnim;
 };

@@ -114,7 +114,7 @@ void ASpear::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObj
 
 #pragma endregion
 
-#pragma region Defense and Hit
+#pragma region Defense
 
 void ASpear::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
@@ -166,11 +166,6 @@ void ASpear::PlayDefenseBrokenAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjec
 		return;
 	}	
 	EKPlayer->PlayAnimMontage(SpearDefenseAnim, 1.f, FName("Broken"));
-}
-
-void ASpear::PlayHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer)
-{
-	EKPlayer->PlayAnimMontage(SpearHitAnim);
 }
 
 #pragma endregion

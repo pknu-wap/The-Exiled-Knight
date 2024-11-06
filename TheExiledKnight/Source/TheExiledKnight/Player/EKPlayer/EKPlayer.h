@@ -45,6 +45,9 @@ protected:
 public:
 	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+	void HitDirection(TObjectPtr<class AEK_EnemyBase> Enemy);
+	float HitAngle = 0.f;
+
 	void AttachWeaponToSpineSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
 	void AttachWeaponToHandSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
 
