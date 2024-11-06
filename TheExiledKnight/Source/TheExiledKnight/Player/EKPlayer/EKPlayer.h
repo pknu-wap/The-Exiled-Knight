@@ -73,6 +73,14 @@ protected:
 	TSubclassOf<class UAnimInstance> ABPStaff;
 
 public:
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FGameplayTagContainer EKPlayerStateContainer;
+
+protected:
+	FTimerHandle HitTagHandle;
+
+	const float NextHitTime = 0.5f;
+
+	void RemoveHitTag();
+	void HitTimer();
 };
