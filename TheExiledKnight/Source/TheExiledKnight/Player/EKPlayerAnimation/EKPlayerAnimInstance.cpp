@@ -43,6 +43,7 @@ void UEKPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	CurrentSpeed = Velocity.Size2D();
 	bShouldMove = (CurrentSpeed > 3.f && EKMovementComponent->GetCurrentAcceleration() != FVector(0, 0, 0));
 	bIsFalling = EKMovementComponent->IsFalling();
+	HitAngle = EKPlayer->HitAngle;
 
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_SitDown))
 	{
@@ -51,5 +52,14 @@ void UEKPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	else
 	{
 		bIsSitted = false;
+	}
+
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Hit))
+	{
+		bIsHitted = true;
+	}
+	else
+	{
+		bIsHitted = false;
 	}
 }
