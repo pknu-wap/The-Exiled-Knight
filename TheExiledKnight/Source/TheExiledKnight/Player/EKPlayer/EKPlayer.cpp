@@ -60,6 +60,9 @@ void AEKPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
+	EKPlayerController = Cast<AEKPlayerController>(this->GetController());
+
+#pragma region Weapon Test
 	// Test Change Weapon
 
 	// Test GreatSword Version
@@ -72,7 +75,7 @@ void AEKPlayer::BeginPlay()
 		GetMesh()->SetAnimInstanceClass(ABPGreatSword);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword);
 	}*/
-	
+
 	// Test Spear Version
 
 	if (SpearClass)
@@ -95,6 +98,8 @@ void AEKPlayer::BeginPlay()
 		GetMesh()->SetAnimInstanceClass(ABPStaff);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
 	}*/
+#pragma endregion
+
 }
 
 void AEKPlayer::Tick(float DeltaTime)
@@ -104,7 +109,7 @@ void AEKPlayer::Tick(float DeltaTime)
 	// Test
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("HP : %d / %d"), PlayerStatusComponent->GetHp(), PlayerStatusComponent->GetMaxHp()));
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("MP : %d / %d"), PlayerStatusComponent->GetMp(), PlayerStatusComponent->GetMaxMp()));
-	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("Stamina : %d / %d"), PlayerStatusComponent->GetStamina(), PlayerStatusComponent->GetMaxStamina()));
+	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("Stamina : %d / %d"), PlayerStatusComponent->GetStamina(), PlayerStatusComponent->GetMaxStamina()));
 }
 
 float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -118,6 +123,11 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 
 	if (EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense) && PlayerStatusComponent->GetStamina() >= DefenseStamina)
 	{
+		if (!EKPlayerController)
+		{
+			return 0.f;
+		}
+
 		if (EKPlayerController->bIsPerfectDefense) // Perfect Defense
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Cyan, TEXT("Perfect!!"));
@@ -134,13 +144,17 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 	else
 	{
 		PlayerStatusComponent->SetHp(-Damage);
-		CurrentWeapon->PlayHitAnimMontage(this, EKPlayerController);
+		CurrentWeapon->PlayHitAnimMontage(this);
 	}
 
-	EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Hit);
+	HitTimer();
+
+	EKPlayerController->BattleStateTimer();
 
 	return 0.f;
 }
+
+#pragma region Attach to Socket
 
 void AEKPlayer::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon)
 {
@@ -157,3 +171,20 @@ void AEKPlayer::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon)
 		Weapon->AttachWeaponToHandSocket(Weapon, this);
 	}
 }
+
+#pragma endregion
+
+#pragma region Timer
+
+void AEKPlayer::RemoveHitTag()
+{
+	EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Hit);
+}
+
+void AEKPlayer::HitTimer()
+{
+	EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Hit);
+	GetWorldTimerManager().SetTimer(HitTagHandle, this, &ThisClass::RemoveHitTag, NextHitTime, false);
+}
+
+#pragma endregion
