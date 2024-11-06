@@ -5,9 +5,23 @@
 #include "Components/ActorComponent.h"
 #include "EKPlayerStatusComponent.generated.h"
 
+#pragma region Max Value
+
+// Edit Player Basic Max Stat Here
 #define PlayerMaxHp 10000
 #define PlayerMaxMp 10000
 #define PlayerMaxStamina 10000
+
+// Edit Player Max Level Here
+#define PlayerMaxLevel 120
+#define PlayerMaxVitalityLevel 20
+#define PlayerMaxMentalLevel 20
+#define PlayerMaxEnduranceLevel 20
+#define PlayerMaxStrengthLevel 20
+#define PlayerMaxAbilityLevel 20
+#define PlayerMaxInteligenceLevel 20
+
+#pragma endregion
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHPUpdated, int32, MaxHP, int32, CurrentHP);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnStaminaUpdated, int32, MaxStamina, int32, CurrentStamina);
@@ -47,13 +61,13 @@ public:
 	float GetPlayerFinalDamage() { return FinalDamage; }
 	void SetPlayerFinalDamage();
 
-	void LevelUp();
-	void LevelUpVitality();
-	void LevelUpMental();
-	void LevelUpEndurance();
-	void LevelUpStrength();
-	void LevelUpAbility();
-	void LevelUpIntelligence();
+	void LevelUp(uint8 SetData);
+	void LevelUpVitality(uint8 SetData);
+	void LevelUpMental(uint8 SetData);
+	void LevelUpEndurance(uint8 SetData);
+	void LevelUpStrength(uint8 SetData);
+	void LevelUpAbility(uint8 SetData);
+	void LevelUpIntelligence(uint8 SetData);
 
 public:
 	bool bCanStaminaRecovery = true;
@@ -64,6 +78,8 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<class AEKPlayerController> EKPlayerController;
+
+#pragma region Basic Status
 
 protected:
 	// Basic status
@@ -91,11 +107,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
 	float FinalDamage;
 
+#pragma endregion
+
+#pragma region Upgrade Status
+
 protected:
 	// Upgrade status
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 MaxLevel;
-
 	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
 	uint32 Level;
 
@@ -116,6 +133,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
 	uint32 Intelligence;
+
+#pragma endregion
 
 public:
 	UPROPERTY(BlueprintAssignable)
