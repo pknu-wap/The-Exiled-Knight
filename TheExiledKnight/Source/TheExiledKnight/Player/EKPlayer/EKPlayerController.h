@@ -138,6 +138,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IAGameMenu;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IAInteract;
 
 	// Test Input
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Test")
@@ -221,6 +224,7 @@ protected:
 public:
 	bool bIsEquipWeapon = false;
 	bool bCanAttackNext = false;
+	bool bCanItemInteract = false;
 
 protected:
 	FTimerHandle StaminaRecoveryHandle;
