@@ -221,6 +221,7 @@ protected:
 public:
 	bool bIsEquipWeapon = false;
 	bool bCanAttackNext = false;
+	bool bCanItemInteract = false;
 
 protected:
 	FTimerHandle StaminaRecoveryHandle;
