@@ -16,11 +16,6 @@ struct THEEXILEDKNIGHT_API FInventorySlot
 	GENERATED_BODY()
 
 	FInventorySlot();
-	FInventorySlot(const FInventorySlot& Other)
-	{
-		Item = Other.Item;
-		Amount = Other.Amount;
-	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FItemStruct Item;
