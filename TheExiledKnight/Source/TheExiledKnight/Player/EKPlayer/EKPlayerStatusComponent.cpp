@@ -22,8 +22,7 @@ UEKPlayerStatusComponent::UEKPlayerStatusComponent()
 	FinalDamage = DefaultDamage;
 	
 	// Edit Basic Status Value Here
-	MaxLevel = 100;
-	Level = 1;
+	Level = 6;
 	Vitality = 1;
 	Mental = 1;
 	Endurance = 1;
@@ -50,6 +49,7 @@ void UEKPlayerStatusComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	// Stamina Recovery
 	if (bCanStaminaRecovery)
 	{
 		SetStamina(4);
@@ -114,6 +114,45 @@ void UEKPlayerStatusComponent::SetPlayerFinalDamage()
 	{
 		FinalDamage = DefaultDamage + ((Intelligence * 10) * 1.5) + ((Mental * 10) * 0.8) + EKPlayer->GetCurrentWeapon()->WeaponAdditionalDamage;
 	}
+}
+
+#pragma endregion
+
+#pragma region LevelUp
+
+void UEKPlayerStatusComponent::LevelUp(uint8 SetData)
+{
+	Level = FMath::Clamp(Level + SetData, 0, PlayerMaxLevel);
+}
+
+void UEKPlayerStatusComponent::LevelUpVitality(uint8 SetData)
+{
+	Vitality = FMath::Clamp(Vitality + SetData, 0, PlayerMaxVitalityLevel);
+}
+
+void UEKPlayerStatusComponent::LevelUpMental(uint8 SetData)
+{
+	Mental = FMath::Clamp(Mental + SetData, 0, PlayerMaxMentalLevel);
+}
+
+void UEKPlayerStatusComponent::LevelUpEndurance(uint8 SetData)
+{
+	Endurance = FMath::Clamp(Endurance + SetData, 0, PlayerMaxEnduranceLevel);
+}
+
+void UEKPlayerStatusComponent::LevelUpStrength(uint8 SetData)
+{
+	Strength = FMath::Clamp(Strength + SetData, 0, PlayerMaxStrengthLevel);
+}
+
+void UEKPlayerStatusComponent::LevelUpAbility(uint8 SetData)
+{
+	Ability = FMath::Clamp(Ability + SetData, 0, PlayerMaxAbilityLevel);
+}
+
+void UEKPlayerStatusComponent::LevelUpIntelligence(uint8 SetData)
+{
+	Intelligence = FMath::Clamp(Intelligence + SetData, 0, PlayerMaxInteligenceLevel);
 }
 
 #pragma endregion
