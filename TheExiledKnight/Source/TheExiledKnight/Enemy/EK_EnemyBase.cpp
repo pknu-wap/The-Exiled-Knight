@@ -49,13 +49,13 @@ void AEK_EnemyBase::PlayHurtReactionAnimation(const FVector& DamageDirection)
 		
 	if (FMath::Abs(RightDot) > FMath::Abs(ForwardDot))
 	{
-		if (RightDot > 0)HurtMontage = hurtRMontage;
-		else HurtMontage = hurtLMontage;
+		if (RightDot > 0)HurtMontage = hurtRAnimMontage;
+		else HurtMontage = hurtLAnimMontage;
 	}
 	else
 	{
-		if (ForwardDot > 0)HurtMontage = hurtFMontage;
-		else HurtMontage = hurtBMontage;
+		if (ForwardDot > 0)HurtMontage = hurtFAnimMontage;
+		else HurtMontage = hurtBAnimMontage;
 	}
 	if (HurtMontage) 
 	{
@@ -64,7 +64,7 @@ void AEK_EnemyBase::PlayHurtReactionAnimation(const FVector& DamageDirection)
 		{
 			// ANIMATION PLAY
 			FOnMontageEnded MontageEndedDelegate;
-			MontageEndedDelegate.BindUObject(this, &AEK_EnemyBase::OnHurtMontageEnded); 
+			MontageEndedDelegate.BindUObject(this, &AEK_EnemyBase::OnHurtAnimationEnded); 
 
 			// ANIMATIONPLAY AND END DELEGATE 설정
 			AnimInstance->Montage_Play(HurtMontage);
@@ -75,13 +75,29 @@ void AEK_EnemyBase::PlayHurtReactionAnimation(const FVector& DamageDirection)
 	}
 }
 
-void AEK_EnemyBase::OnHurtMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+void AEK_EnemyBase::OnHurtAnimationEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	OnHurtAnimationEnd.Broadcast(); 
 }
+
 void AEK_EnemyBase::PlayDieReactionAnimation()
 {
-	PlayAnimMontage(DeadMontage);  
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance(); 
+	if (AnimInstance && DeathAnimMontage)
+	{
+		// 애니메이션 종료 시점을 감지하기 위한 델리게이트 설정
+		FOnMontageEnded EndDelegate;
+		EndDelegate.BindUObject(this, &AEK_EnemyBase::OnDeathAnimationEnded);
+		AnimInstance->Montage_Play(DeathAnimMontage);
+		AnimInstance->Montage_SetEndDelegate(EndDelegate, DeathAnimMontage);
+	}
+}
+void AEK_EnemyBase::OnDeathAnimationEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	if (!bInterrupted)
+	{
+		Destroy();
+	}
 }
 
 float AEK_EnemyBase::GetSightRadius()
