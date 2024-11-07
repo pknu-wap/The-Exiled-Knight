@@ -5,6 +5,9 @@
 #include "UI/UISubsystem.h"
 #include "EKGameplayTags.h"
 #include "UI/Equipment/Widget_Equipment.h"
+#include "Subsystems/InventorySubsystem.h"
+#include "Kismet/GameplayStatics.h"
+#include "Player/EKPlayer/EKPlayer.h"
 
 // Sets default values for this component's properties
 USlotComponent::USlotComponent()
@@ -22,10 +25,14 @@ void USlotComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	WeaponSlots.Reset(2);
-	RuneSlots.Reset(4);
-	UsableSlots.Reset(4);
-	MagicSlots.Reset(6);
+	for(int i = 0; i < 2; i++)
+		WeaponSlots.Add(FItemStruct());
+	for (int i = 0; i < 4; i++)
+		RuneSlots.Add(FItemStruct());
+	for (int i = 0; i < 4; i++)
+		UsableSlots.Add(FItemStruct());
+	for (int i = 0; i < 6; i++)
+		MagicSlots.Add(FMagicStruct());
 }
 
 
@@ -42,10 +49,21 @@ void USlotComponent::EquipWeapon(const FItemStruct& InItemData)
 	UWidget_Equipment* equipWidget = GetEquipmentWidget();
 	if (!equipWidget) return;
 
+	UInventorySubsystem* inventorySystem =
+		GetWorld()->GetGameInstance()->GetSubsystem<UInventorySubsystem>();
+	if (!inventorySystem) return;
+
+	FWeaponStruct* weaponInfo = inventorySystem->GetWeaponInfo(InItemData.ID);
+	if (!weaponInfo) return;
+
+	AEKPlayer* player = Cast<AEKPlayer>(UGameplayStatics::GetPlayerCharacter(this, 0));
+	if (!player) return;
+
 	int slotIdx = equipWidget->GetEquipSelectSlotIdx();
 	if (WeaponSlots.IsValidIndex(slotIdx))
 	{
 		WeaponSlots[slotIdx] = InItemData;
+		player->EquipWeapon(*weaponInfo);
 		Delegate_SlotUpdated.Broadcast(EEquipCategory::Weapon, slotIdx);
 	}
 }

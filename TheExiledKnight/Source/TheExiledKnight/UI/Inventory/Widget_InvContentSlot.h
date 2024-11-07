@@ -20,7 +20,7 @@ public:
 	virtual void NativeConstruct() override;
 	
 public:
-	void UpdateSlot(const FInventorySlot& inData);
+	void UpdateSlot(int slotIdx, const FInventorySlot& inData);
 
 protected:
 	UFUNCTION(BlueprintCallable)
@@ -35,4 +35,7 @@ public:
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
 	UTextBlock* Text_Quantity;
+
+private:
+	int SlotIdx = 0;
 };
