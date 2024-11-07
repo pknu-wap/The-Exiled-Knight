@@ -116,13 +116,13 @@ void AEKPlayer::BeginPlay()
 
 	// Test Staff Version Don't Select This
 
-	if (StaffClass)
+	/*if (StaffClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AStaff>(StaffClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetMesh()->SetAnimInstanceClass(ABPStaff);
-	}
+	}*/
 }
 
 void AEKPlayer::Tick(float DeltaTime)
@@ -154,6 +154,23 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 {
 	GetPlayerStatusComponent()->TakeDamage(Damage);
 	return 0.f;
+}
+
+void AEKPlayer::EquipWeapon(const FWeaponStruct& InWeaponInfo)
+{
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->Destroy();
+		CurrentWeapon = nullptr;
+	}
+
+	if (InWeaponInfo.WeaponClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(InWeaponInfo.WeaponClass, SpawnParams);
+		AttachWeaponToSpineSocket(CurrentWeapon);
+		GetMesh()->SetAnimInstanceClass(InWeaponInfo.AnimInstance);
+	}
 }
 
 void AEKPlayer::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon)

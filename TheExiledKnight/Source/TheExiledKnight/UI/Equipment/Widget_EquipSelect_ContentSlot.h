@@ -24,6 +24,8 @@ public:
 	void UpdateSlot(EEquipCategory inCategory, const FInventorySlot& inData);
 
 protected:
+	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+
 	UFUNCTION(BlueprintCallable)
 	FEventReply RedirectMouseDownToWidget(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 

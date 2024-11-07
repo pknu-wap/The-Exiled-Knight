@@ -2,11 +2,14 @@
 
 
 #include "UI/Equipment/Widget_EquipSelect_ContentSlot.h"
+#include "UI/Equipment/Widget_EquipSelectWindow.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
 #include "Kismet/KismetTextLibrary.h"
 #include "Components/SlotComponent.h"
+#include "UI/UISubsystem.h"
+#include "EKGameplayTags.h"
 
 void UWidget_EquipSelect_ContentSlot::NativeConstruct()
 {
@@ -18,14 +21,29 @@ void UWidget_EquipSelect_ContentSlot::UpdateSlot(EEquipCategory inCategory, cons
 	Category = inCategory;
 	SlotData = inData;
 
-	Image_Item->SetBrushFromTexture(SlotData.Item.Icon);
 	if (inData.Amount > 0)
 	{
+		Image_Item->SetBrushFromTexture(SlotData.Item.Icon);
+
 		Text_Quantity->SetText(UKismetTextLibrary::Conv_IntToText(inData.Amount));
 		Text_Quantity->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	}
 	else
 		Text_Quantity->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+void UWidget_EquipSelect_ContentSlot::NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+	Super::NativeOnMouseEnter(InGeometry, InMouseEvent);
+
+	UUISubsystem* UISystem = GetWorld()->GetGameInstance()->GetSubsystem<UUISubsystem>();
+	if (!UISystem) return;
+	UUserWidget* widget = UISystem->GetWidget(FEKGameplayTags::Get().UI_Widget_GameMenu_EquipSelect);
+	if (!widget) return;
+	UWidget_EquipSelectWindow* EquipSelectWidget = Cast<UWidget_EquipSelectWindow>(widget);
+	if (!EquipSelectWidget) return;
+
+	EquipSelectWidget->UpdateDescription(SlotData);
 }
 
 FEventReply UWidget_EquipSelect_ContentSlot::RedirectMouseDownToWidget(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
