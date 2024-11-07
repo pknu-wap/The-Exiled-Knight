@@ -26,7 +26,9 @@ public:
 
 	void PlayHurtReactionAnimation(const FVector& DamageDirection);   
 	
-	void OnHurtMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+	void OnHurtAnimationEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	void OnDeathAnimationEnded(UAnimMontage* Montage, bool bInterrupted);
 
 	void PlayDieReactionAnimation();
 	
@@ -39,22 +41,22 @@ public:
 protected:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "AnimMontage", meta = (AllowPrivateAccess = "true"));
-	UAnimMontage* AttackMontage;
+	UAnimMontage* AttackAnimMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"));
-	UAnimMontage* hurtFMontage;
+	UAnimMontage* hurtFAnimMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"));
-	UAnimMontage* hurtLMontage;
+	UAnimMontage* hurtLAnimMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"));
-	UAnimMontage* hurtRMontage;
+	UAnimMontage* hurtRAnimMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"));
-	UAnimMontage* hurtBMontage;
+	UAnimMontage* hurtBAnimMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"));
-	UAnimMontage* DeadMontage;
+	UAnimMontage* DeathAnimMontage;
 
 
 public:	
