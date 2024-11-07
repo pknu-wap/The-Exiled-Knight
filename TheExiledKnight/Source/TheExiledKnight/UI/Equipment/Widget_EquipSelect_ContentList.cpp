@@ -10,9 +10,9 @@
 
 void UWidget_EquipSelect_ContentList::UpdateContents(EEquipCategory Category)
 {
-	ACharacter* player = UGameplayStatics::GetPlayerCharacter(this, 0);
-	if (!player) return;
-	UInventoryComponent* inventoryComp = player->GetComponentByClass<UInventoryComponent>();
+	APlayerController* playerController = GetOwningPlayer();
+	if (!playerController) return;
+	UInventoryComponent* inventoryComp = playerController->GetComponentByClass<UInventoryComponent>();
 	if (!inventoryComp) return;
 
 	ContentList->ClearListItems();
@@ -23,7 +23,7 @@ void UWidget_EquipSelect_ContentList::UpdateContents(EEquipCategory Category)
 		UEquipSelect_ListData* data = NewObject<UEquipSelect_ListData>(UEquipSelect_ListData::StaticClass());
 		data->Category = Category;
 
-		for (int j = i; j < j + 5; j++)
+		for (int j = i; j < i + 5; j++)
 		{
 			if (contents.IsValidIndex(j))
 			{
