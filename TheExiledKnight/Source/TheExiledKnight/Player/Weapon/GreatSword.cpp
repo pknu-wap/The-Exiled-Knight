@@ -117,62 +117,6 @@ void AGreatSword::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer,
 
 #pragma endregion
 
-#pragma region Defense
-
-void AGreatSword::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon)
-	{
-		return;
-	}
-
-	EKPlayer->PlayAnimMontage(GreatSwordDefenseAnim, 1.f, FName("Start"));
-
-	AttachToDefenseSocket(this, EKPlayer);
-}
-
-void AGreatSword::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon)
-	{
-		return;
-	}
-
-	EKPlayer->PlayAnimMontage(GreatSwordDefenseAnim, 1.f, FName("Loop"));
-}
-
-void AGreatSword::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon)
-	{
-		return;
-	}
-
-	EKPlayer->PlayAnimMontage(GreatSwordDefenseAnim, 1.f, FName("End"));
-
-	AttachWeaponToHandSocket(this, EKPlayer);
-}
-
-void AGreatSword::PlayDefenseHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon || !GreatSwordDefenseAnim)
-	{
-		return;
-	}		
-	EKPlayer->PlayAnimMontage(GreatSwordDefenseAnim, 1.f, FName("Hit"));
-}
-
-void AGreatSword::PlayDefenseBrokenAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon || !GreatSwordDefenseAnim)
-	{
-		return;
-	}	
-	EKPlayer->PlayAnimMontage(GreatSwordDefenseAnim, 1.f, FName("Broken"));
-}
-
-#pragma endregion
-
 void AGreatSword::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
 {
 	if (Weapon)
