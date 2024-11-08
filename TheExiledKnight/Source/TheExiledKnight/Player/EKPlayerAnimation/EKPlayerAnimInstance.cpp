@@ -5,6 +5,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../EKPlayer/EKPlayer.h"
 #include "../EKPlayer/EKPlayerController.h"
+#include "../EKPlayer/EKPlayerStatusComponent.h"
 #include "../EKPlayerGameplayTags.h"
 
 UEKPlayerAnimInstance::UEKPlayerAnimInstance(const FObjectInitializer& ObjectInitializer)
@@ -62,4 +63,15 @@ void UEKPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	{
 		bIsHitted = false;
 	}
+
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense))
+	{
+		bIsDefense = true;
+	}
+	else
+	{
+		bIsDefense = false;
+	}
+
+	Stamina = EKPlayer->GetPlayerStatusComponent()->GetStamina();
 }
