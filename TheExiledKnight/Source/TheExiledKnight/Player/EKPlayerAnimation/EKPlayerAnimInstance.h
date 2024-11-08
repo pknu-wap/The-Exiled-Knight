@@ -22,8 +22,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")
 	TObjectPtr<class AEKPlayer> EKPlayer;
 
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")
 	TObjectPtr<class AEKPlayerController> EKPlayerController;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")
@@ -50,4 +49,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
 	bool bIsHitted = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
+	bool bIsDefense = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
+	float Stamina = 0.f;
 };
