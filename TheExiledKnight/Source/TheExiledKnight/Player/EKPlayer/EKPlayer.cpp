@@ -129,6 +129,11 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 
 	HitTimer();
 
+	if (!EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_BattleState))
+	{
+		CurrentWeapon->PlayWeaponEquipAnimMontage(this, EKPlayerController);
+	}
+
 	EKPlayerController->BattleStateTimer();
 
 	if (EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense) && PlayerStatusComponent->GetStamina() >= DefenseStamina)
