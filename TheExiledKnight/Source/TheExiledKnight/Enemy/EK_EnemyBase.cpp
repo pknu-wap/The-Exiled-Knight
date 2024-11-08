@@ -115,6 +115,19 @@ float AEK_EnemyBase::GetHearingRange()
 	return HearingRange;
 }
 
+AActor* AEK_EnemyBase::GetAttackTarget()
+{
+	return AttackTarget;
+}
+
+void AEK_EnemyBase::SetAttackTarget(AActor* Actor)
+{
+	if (Actor)
+	{
+		AttackTarget = Actor;
+	}
+}
+
 #pragma endregion
 
 

@@ -36,6 +36,13 @@ AEKEnemyProjectileBase::AEKEnemyProjectileBase()
 #pragma endregion 
 }
 
+UBoxComponent *AEKEnemyProjectileBase::GetCollisionComponent()
+{
+	return CollisionBox;
+}
+
+
+
 // Called when the game starts or when spawned
 void AEKEnemyProjectileBase::BeginPlay()
 {
@@ -61,5 +68,13 @@ void AEKEnemyProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* Ot
 	
 
 	Destroy();
+}
+
+void AEKEnemyProjectileBase::SetHomingTarget(AActor* TargetActor)
+{
+	if (TargetActor&&bIsHoming)
+	{
+		ProjectileComponent->HomingTargetComponent = TargetActor->GetRootComponent(); 
+	}
 }
 
