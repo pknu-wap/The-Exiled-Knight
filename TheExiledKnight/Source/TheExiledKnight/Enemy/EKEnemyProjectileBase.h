@@ -15,12 +15,16 @@ public:
 	// Sets default values for this actor's properties
 	AEKEnemyProjectileBase();
 
+	void SetHomingTarget(AActor* TargetActor);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+
 public:	
 	 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh");
@@ -42,7 +46,7 @@ public:
 	USoundBase* HitSound; 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting", meta = (AllowPrivateAccess = "true"))
-	float InitialSpeed = 300;
+	float InitialSpeed = 1000;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting", meta = (AllowPrivateAccess = "true"))
 	float MaxSpeed = 1000;
@@ -54,5 +58,7 @@ private:
 	bool bIsRotation = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting", meta = (AllowPrivateAccess = "true"))
-	bool bIsHoming = false;
+	bool bIsHoming = true;
+public:
+	UBoxComponent* GetCollisionComponent();
 };

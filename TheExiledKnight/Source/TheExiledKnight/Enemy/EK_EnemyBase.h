@@ -38,6 +38,10 @@ public:
 
 	float GetHearingRange();
 
+	AActor *GetAttackTarget();
+	
+	UFUNCTION(BlueprintCallable) 
+	void SetAttackTarget(AActor* Actor);
 protected:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "AnimMontage", meta = (AllowPrivateAccess = "true"));
@@ -77,5 +81,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
 	float HearingRange = 2000.0f;
 
+	UPROPERTY()
+	AActor* AttackTarget;
 	
 };
