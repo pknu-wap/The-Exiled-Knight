@@ -20,7 +20,7 @@ AEKEnemyAIController::AEKEnemyAIController()
 	SightConfig->SightRadius = SightRadius;
 	SightConfig->LoseSightRadius = LostSightRadius;
 	SightConfig->PeripheralVisionAngleDegrees = 60.0f;
-	SightConfig->SetMaxAge(5.f);
+	SightConfig->SetMaxAge(15.f);
 	SightConfig->AutoSuccessRangeFromLastSeenLocation = -1.f;
 
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
@@ -33,7 +33,7 @@ AEKEnemyAIController::AEKEnemyAIController()
 #pragma region Hearing
 	HearingConfig = CreateDefaultSubobject<UAISenseConfig_Hearing>(TEXT("HearingConfig"));
 	HearingConfig->HearingRange = HearingRange;
-	HearingConfig->SetMaxAge(3.f);
+	HearingConfig->SetMaxAge(15.f);
 
 	HearingConfig->DetectionByAffiliation.bDetectEnemies = true;
 	HearingConfig->DetectionByAffiliation.bDetectNeutrals = true;
