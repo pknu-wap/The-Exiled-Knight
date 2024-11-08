@@ -138,17 +138,16 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 			return 0.f;
 		}
 
+		EKPlayerController->ConsumtionStaminaAndTimer(DefenseStamina);
+
 		if (EKPlayerController->bIsPerfectDefense) // Perfect Defense
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Cyan, TEXT("Perfect!!"));
-			EKPlayerController->ConsumtionStaminaAndTimer(PerfectDefenseStamina);
+			GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Magenta, TEXT("Perfect Defense"));
 		}
 		else // Normal Defense
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Cyan, TEXT("Normal..."));
+			GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Red, TEXT("Normal Defense"));
 			PlayerStatusComponent->SetHp(-Damage * 0.3);
-			EKPlayerController->ConsumtionStaminaAndTimer(DefenseStamina);
-			CurrentWeapon->PlayDefenseHitAnimMontage(this, EKPlayerController);
 		}
 	}
 	else

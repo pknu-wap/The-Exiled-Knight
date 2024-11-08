@@ -24,8 +24,7 @@ class UAnimMontage;
 #define BackStepStamina 50
 #define JumpStamina 50
 
-#define PerfectDefenseStamina 150
-#define DefenseStamina 300
+#define DefenseStamina 200
 
 #define GreatSwordAttackStamina 100
 #define GreatSwordEnhancedAttackStamina 200
@@ -78,7 +77,6 @@ private:
 	void WeaponAttackStarted(const FInputActionValue& InputValue);
 
 	void WeaponDefenseStarted(const FInputActionValue& InputValue);
-	void WeaponDefenseTriggered(const FInputActionValue& InputValue);
 	void WeaponDefenseRelease(const FInputActionValue& InputValue);
 
 	void SitDownStarted(const FInputActionValue& InputValue);

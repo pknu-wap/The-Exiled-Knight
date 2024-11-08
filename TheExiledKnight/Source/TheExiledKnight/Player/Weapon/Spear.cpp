@@ -114,62 +114,6 @@ void ASpear::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObj
 
 #pragma endregion
 
-#pragma region Defense
-
-void ASpear::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon)
-	{
-		return;
-	}
-
-	EKPlayer->PlayAnimMontage(SpearDefenseAnim, 1.f, FName("Start"));
-
-	AttachToDefenseSocket(this, EKPlayer);
-}
-
-void ASpear::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon)
-	{
-		return;
-	}
-
-	EKPlayer->PlayAnimMontage(SpearDefenseAnim, 1.f, FName("Loop"));
-}
-
-void ASpear::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon)
-	{
-		return;
-	}
-
-	EKPlayer->PlayAnimMontage(SpearDefenseAnim, 1.f, FName("End"));
-
-	AttachWeaponToHandSocket(this, EKPlayer);
-}
-
-void ASpear::PlayDefenseHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon || !SpearDefenseAnim)
-	{
-		return;
-	}	
-	EKPlayer->PlayAnimMontage(SpearDefenseAnim, 1.f, FName("Hit"));
-}
-
-void ASpear::PlayDefenseBrokenAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon || !SpearDefenseAnim)
-	{
-		return;
-	}	
-	EKPlayer->PlayAnimMontage(SpearDefenseAnim, 1.f, FName("Broken"));
-}
-
-#pragma endregion
-
 void ASpear::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
 {
 	if (Weapon)
