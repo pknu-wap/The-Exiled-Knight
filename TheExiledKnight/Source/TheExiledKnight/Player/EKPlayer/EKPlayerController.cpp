@@ -299,7 +299,7 @@ void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputVa
 
 void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValue)
 {
-	if (!EKPlayer || !bIsEquipWeapon)
+	if (!EKPlayer)
 	{
 		return;
 	}
@@ -311,21 +311,28 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 		return;
 	}
 
-	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
-	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
-
 	BattleStateTimer();
 
-	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Enhance))
+	if (!bIsEquipWeapon)
 	{
-		EKPlayer->GetCurrentWeapon()->PlayEnhancedAttackStartAnimMontage(EKPlayer, this);
+		EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
 	}
 	else
 	{
-		EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
-	}
+		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
 
-	EKPlayer->bUseControllerRotationYaw = true;
+		if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Enhance))
+		{
+			EKPlayer->GetCurrentWeapon()->PlayEnhancedAttackStartAnimMontage(EKPlayer, this);
+		}
+		else
+		{
+			EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
+		}
+
+		EKPlayer->bUseControllerRotationYaw = true;
+	}
 }
 
 void AEKPlayerController::EnhanceStarted(const FInputActionValue& InputValue)
@@ -349,10 +356,18 @@ void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputVal
 		return;
 	}
 
-	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
-	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
-	PerfectDefenseTimer();
 	BattleStateTimer();
+
+	if (!bIsEquipWeapon)
+	{
+		EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
+	}
+	else
+	{
+		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
+		PerfectDefenseTimer();
+	}
 }
 
 void AEKPlayerController::WeaponDefenseRelease(const FInputActionValue& InputValue)
@@ -516,6 +531,10 @@ void AEKPlayerController::PerfectDefenseTimer()
 void AEKPlayerController::SetBattleStateEnd()
 {
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_BattleState);
+	if (bIsEquipWeapon)
+	{
+		EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
+	}
 }
 
 void AEKPlayerController::BattleStateTimer()

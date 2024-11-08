@@ -110,11 +110,6 @@ void AGreatSword::PlayEnhancedAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPla
 	EKPlayerController->ConsumtionStaminaAndTimer(GreatSwordEnhancedAttackStamina);
 }
 
-void AGreatSword::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-
-}
-
 #pragma endregion
 
 void AGreatSword::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
