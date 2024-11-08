@@ -55,4 +55,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
 	float Stamina = 0.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
+	bool bIsDown = false;
 };
