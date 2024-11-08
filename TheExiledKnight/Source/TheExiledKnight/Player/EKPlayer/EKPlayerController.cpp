@@ -63,7 +63,6 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAWeaponAttack, ETriggerEvent::Started, this, &ThisClass::WeaponAttackStarted);
 
 		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Started, this, &ThisClass::WeaponDefenseStarted);
-		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Triggered, this, &ThisClass::WeaponDefenseTriggered);
 		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Completed, this, &ThisClass::WeaponDefenseRelease);
 		EnhancedInputComponent->BindAction(IAWeaponDefense, ETriggerEvent::Canceled, this, &ThisClass::WeaponDefenseRelease);
 
@@ -209,6 +208,13 @@ void AEKPlayerController::SprintAndDodgeTriggered(const FInputActionValue& Input
 		return;
 	}
 
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump))
+	{
+		return;
+	}
+
 	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < SprintStamina)
 	{
 		EKPlayer->GetCharacterMovement()->MaxWalkSpeed = EKPlayerWalkSpeed;
@@ -343,19 +349,10 @@ void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputVal
 		return;
 	}
 
-	EKPlayer->GetCurrentWeapon()->PlayDefenseStartAnimMontage(EKPlayer, this);
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
 	PerfectDefenseTimer();
 	BattleStateTimer();
-}
-
-void AEKPlayerController::WeaponDefenseTriggered(const FInputActionValue& InputValue)
-{
-	if (EKPlayer && !bIsPerfectDefense)
-	{
-		EKPlayer->GetCurrentWeapon()->PlayDefenseTriggerAnimMontage(EKPlayer, this);
-	}
 }
 
 void AEKPlayerController::WeaponDefenseRelease(const FInputActionValue& InputValue)
@@ -364,7 +361,6 @@ void AEKPlayerController::WeaponDefenseRelease(const FInputActionValue& InputVal
 	{
 		return;
 	}
-	EKPlayer->GetCurrentWeapon()->PlayDefenseReleaseAnimMontage(EKPlayer, this);
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
 }
 

@@ -105,63 +105,6 @@ void AStaff::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObj
 
 #pragma endregion
 
-#pragma region Defense
-
-void AStaff::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon || !StaffDefenseAnim)
-	{
-		return;
-	}
-
-	EKPlayer->PlayAnimMontage(StaffDefenseAnim, 1.f, FName("Start"));
-
-	AttachToDefenseSocket(this, EKPlayer);
-}
-
-void AStaff::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon || !StaffDefenseAnim)
-	{
-		return;
-	}
-	EKPlayer->PlayAnimMontage(StaffDefenseAnim, 1.f, FName("Loop"));
-}
-
-void AStaff::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon || !StaffDefenseAnim)
-	{
-		return;
-	}
-
-	EKPlayer->PlayAnimMontage(StaffDefenseAnim, 1.f, FName("End"));
-
-	AttachWeaponToHandSocket(this, EKPlayer);
-}
-
-void AStaff::PlayDefenseHitAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon || !StaffDefenseAnim)
-	{
-		return;
-	}
-
-	EKPlayer->PlayAnimMontage(StaffDefenseAnim, 1.f, FName("Hit"));
-}
-
-void AStaff::PlayDefenseBrokenAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon || !StaffDefenseAnim)
-	{
-		return;
-	}
-
-	EKPlayer->PlayAnimMontage(StaffDefenseAnim, 1.f, FName("Broken"));
-}
-
-#pragma endregion
-
 #pragma region Attach to Socket
 
 void AStaff::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
