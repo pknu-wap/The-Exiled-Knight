@@ -80,7 +80,7 @@ void UEKEnemyAttackHitCheckNotfiyState::NotifyTick(USkeletalMeshComponent* MeshC
 					AEKPlayer* DetectedPlayer = Cast<AEKPlayer>(HitActor);
 					if (DetectedPlayer)
 					{
-						UGameplayStatics::ApplyDamage(HitActor, 10, Hit.GetActor()->GetInstigatorController(), HitActor, NULL);
+						UGameplayStatics::ApplyDamage(HitActor, 10, Hit.GetActor()->GetInstigatorController(), HitActor, DamageTypeClass);
 						SetAttackHitCheck(true);
 
 					}
