@@ -15,6 +15,10 @@ class THEEXILEDKNIGHT_API UEKEnemyAttackHitCheckNotfiyState : public UAnimNotify
 	GENERATED_BODY()
 public:
 	UEKEnemyAttackHitCheckNotfiyState();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+	TSubclassOf<UDamageType> DamageTypeClass;
+
 #pragma region NotifyState
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration) override;
 	virtual void NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime) override;
