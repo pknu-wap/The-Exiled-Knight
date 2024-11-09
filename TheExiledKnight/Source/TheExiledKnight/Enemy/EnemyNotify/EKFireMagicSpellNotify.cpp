@@ -2,7 +2,7 @@
 
 
 #include "Enemy/EnemyNotify/EKFireMagicSpellNotify.h"
-#include "Enemy/EKEnemyProjectileBase.h"
+#include "Enemy/EnemyWeapon/EKEnemyProjectileBase.h"
 #include"Enemy/EK_EnemyBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"

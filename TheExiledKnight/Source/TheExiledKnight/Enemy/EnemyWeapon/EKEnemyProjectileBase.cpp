@@ -62,7 +62,7 @@ void AEKEnemyProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* Ot
 		}
 		if (HitPlayer)
 		{
-			UGameplayStatics::ApplyDamage(OtherActor, 10, Hit.GetActor()->GetInstigatorController(), this, NULL);
+			UGameplayStatics::ApplyDamage(OtherActor, 10, Hit.GetActor()->GetInstigatorController(), this,DamageTypeClass );
 		}
 	}
 	
