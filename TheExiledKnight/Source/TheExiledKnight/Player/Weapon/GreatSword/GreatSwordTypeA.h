@@ -22,6 +22,9 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+public:
+	virtual void PlaySkillStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController) override;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	TObjectPtr<UAnimMontage> GreatSwordSkillAnim;
