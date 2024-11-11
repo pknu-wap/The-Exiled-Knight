@@ -4,7 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "../EKPlayerEnum.h"
 #include "EKPlayerAnimInstance.generated.h"
+
+#define GreatSwordNumber 1
+#define SpearNumber 2
+#define StaffNumber 3
 
 UCLASS()
 class UEKPlayerAnimInstance : public UAnimInstance
@@ -29,33 +34,37 @@ protected:
 	TObjectPtr<class UCharacterMovementComponent> EKMovementComponent;
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Calc")
 	FVector Velocity = FVector(0, 0, 0);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Calc")
 	float CurrentSpeed = 0.f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
-	bool bShouldMove = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
-	bool bIsFalling = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
-	bool bIsSitted = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Calc")
 	float HitAngle = 0.f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
-	bool bIsHitted = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
-	bool bIsDefense = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Calc")
 	float Stamina = 0.f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CalcInfo")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Weapon")
+	int32 CurrentWeaponType;
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Bool")
+	bool bShouldMove = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Bool")
+	bool bIsFalling = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Bool")
+	bool bIsHitted = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Bool")
+	bool bIsDefense = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Bool")
 	bool bIsDown = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Bool")
+	bool bIsSitted = false;
 };

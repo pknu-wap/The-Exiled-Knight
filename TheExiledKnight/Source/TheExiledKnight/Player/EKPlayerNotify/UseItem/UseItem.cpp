@@ -4,7 +4,6 @@
 #include "UseItem.h"
 #include "../../EKPlayer/EKPlayer.h"
 #include "../../EKPlayer/EKPlayerController.h"
-#include "../../Weapon/GreatSword.h"
 #include "../../EKPlayerGameplayTags.h"
 
 void UUseItem::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
