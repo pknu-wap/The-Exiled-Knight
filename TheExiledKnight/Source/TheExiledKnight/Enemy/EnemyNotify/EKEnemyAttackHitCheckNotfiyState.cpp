@@ -3,6 +3,7 @@
 
 #include "EKEnemyAttackHitCheckNotfiyState.h"
 #include "Enemy/EK_EnemyBase.h"
+#include "Enemy/EK_EnemyStatusComponent.h"
 #include"Player/EKPlayer/EKPlayer.h"
 #include"Kismet/GameplayStatics.h"
 #include"Player/EKPlayer//EKPlayerStatusComponent.h"
@@ -16,8 +17,15 @@ UEKEnemyAttackHitCheckNotfiyState::UEKEnemyAttackHitCheckNotfiyState()
 void UEKEnemyAttackHitCheckNotfiyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
-	SetAttackHitCheck(false);
+	
+	HitActors.Empty(); 
 	Owner =MeshComp->GetOwner();
+	AEK_EnemyBase* OwnerEnemy = Cast<AEK_EnemyBase>(Owner); 
+	if (OwnerEnemy && OwnerEnemy->GetStatusComponent())  // OwnerEnemy와 StatusComponent 유효성 검사
+	{
+		AttackDamage = OwnerEnemy->GetStatusComponent()->GetAttackDamage();
+	}
+	
 	StartLocation = Owner->GetActorLocation();
 	TotalDistance = TotalDuration * MoveDistancePerSec; //Total distance
 	TotalTime = TotalDuration;
@@ -48,14 +56,15 @@ void UEKEnemyAttackHitCheckNotfiyState::NotifyTick(USkeletalMeshComponent* MeshC
 	{
 #pragma region AttackHitCheck
 
-		if (GetAttackHitCheck()) return;
+		
 		FVector   SocketLocation = MeshComp->GetSocketLocation(StartSocketName);
 		FVector   SocketForward = MeshComp->GetSocketRotation(StartSocketName).Vector();
 
 		FVector AttackRangeStart = SocketLocation;
 		FVector AttackRangeEnd = SocketLocation + SocketForward * AttackHalfHeight * 2;
 
-		DrawDebugCapsule(MeshComp->GetWorld(), (AttackRangeStart + AttackRangeEnd) * 0.5f, AttackHalfHeight, AttackRadius, FRotationMatrix::MakeFromZ(AttackRangeEnd - AttackRangeStart).ToQuat(), FColor::Red, false, 0.2f);
+		DrawDebugCapsule(MeshComp->GetWorld(), (AttackRangeStart + AttackRangeEnd) * 0.5f, AttackHalfHeight, AttackRadius,
+			FRotationMatrix::MakeFromZ(AttackRangeEnd - AttackRangeStart).ToQuat(), FColor::Red, false, 0.2f);
 		FCollisionQueryParams Params(NAME_None, false, Owner);
 		TArray<FHitResult> HitResults;
 		
@@ -71,18 +80,18 @@ void UEKEnemyAttackHitCheckNotfiyState::NotifyTick(USkeletalMeshComponent* MeshC
 
 		if (bHit)
 		{
-			
+			float Damage = AttackDamage * DamagePercentage;
+
 			for (const FHitResult& Hit : HitResults)
 			{
 				AActor* HitActor = Hit.GetActor();
-				if (HitActor)
+				if (HitActor&&!HitActors.Contains(HitActor))
 				{
 					AEKPlayer* DetectedPlayer = Cast<AEKPlayer>(HitActor);
 					if (DetectedPlayer)
 					{
-						UGameplayStatics::ApplyDamage(HitActor, 10, Hit.GetActor()->GetInstigatorController(), HitActor, DamageTypeClass);
-						SetAttackHitCheck(true);
-
+						UGameplayStatics::ApplyDamage(HitActor, Damage, Hit.GetActor()->GetInstigatorController(), HitActor, DamageTypeClass);   
+						HitActors.Add(HitActor);
 					}
 				}
 			}
@@ -111,12 +120,3 @@ void UEKEnemyAttackHitCheckNotfiyState::NotifyEnd(USkeletalMeshComponent* MeshCo
 }
 
 
-void UEKEnemyAttackHitCheckNotfiyState::SetAttackHitCheck(bool check)
-{
-	bAttackHitCheck = check;
-}
-
-bool UEKEnemyAttackHitCheckNotfiyState::GetAttackHitCheck()
-{
-	return bAttackHitCheck;
-}
