@@ -5,9 +5,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EKPlayer.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "../Weapon/GreatSword.h"
-#include "../Weapon/Spear.h"
-#include "../Weapon/Staff.h"
+#include "../Weapon/EKPlayerWeapon.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "EKPlayerStatusComponent.h"
 #include "../EKPlayerGameplayTags.h"
@@ -70,9 +68,9 @@ void AEKPlayerController::SetupInputComponent()
 
 		EnhancedInputComponent->BindAction(IAInteract, ETriggerEvent::Started, this, &ThisClass::Interact);
 
-		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Started, this, &ThisClass::EnhanceStarted);
-		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Completed, this, &ThisClass::EnhanceRelease);
-		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Canceled, this, &ThisClass::EnhanceRelease);
+		EnhancedInputComponent->BindAction(IASkill, ETriggerEvent::Started, this, &ThisClass::SkillStarted);
+		EnhancedInputComponent->BindAction(IASkill, ETriggerEvent::Completed, this, &ThisClass::SkillRelease);
+		EnhancedInputComponent->BindAction(IASkill, ETriggerEvent::Canceled, this, &ThisClass::SkillRelease);
 
 		EnhancedInputComponent->BindAction(IATest, ETriggerEvent::Started, this, &ThisClass::TestStarted);
 	}
@@ -322,25 +320,25 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
 
-		if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Enhance))
+		if (!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Enhance))
 		{
-			EKPlayer->GetCurrentWeapon()->PlayEnhancedAttackStartAnimMontage(EKPlayer, this);
+			EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
 		}
 		else
 		{
-			EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
+
 		}
 
 		EKPlayer->bUseControllerRotationYaw = true;
 	}
 }
 
-void AEKPlayerController::EnhanceStarted(const FInputActionValue& InputValue)
+void AEKPlayerController::SkillStarted(const FInputActionValue& InputValue)
 {
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Enhance);
 }
 
-void AEKPlayerController::EnhanceRelease(const FInputActionValue& InputValue)
+void AEKPlayerController::SkillRelease(const FInputActionValue& InputValue)
 {
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Enhance);
 }

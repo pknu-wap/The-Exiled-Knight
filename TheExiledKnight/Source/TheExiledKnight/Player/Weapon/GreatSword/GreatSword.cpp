@@ -19,6 +19,7 @@ AGreatSword::AGreatSword()
 
 	MaxAttackCombo = 3;
 
+	// Edit Weapon Default Damage Here
 	WeaponAdditionalDamage = 20;
 }
 
@@ -49,8 +50,6 @@ void AGreatSword::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TOb
 	}
 }
 
-#pragma region Attack
-
 void AGreatSword::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
 {
 	if (!EKPlayerController->bIsEquipWeapon || !GreatSwordAttackAnim)
@@ -66,51 +65,22 @@ void AGreatSword::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TOb
 
 	if (AttackCombo == 1)
 	{
-		EKPlayer->StopAnimMontage(GreatSwordAttackAnim);
 		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim, 1.0f, FName("Attack1"));
 		EKPlayerController->SetAttackEndTimer(2.27f);
 	}
 	else if (AttackCombo == 2)
 	{
-		EKPlayer->StopAnimMontage(GreatSwordAttackAnim);
 		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim, 1.0f, FName("Attack2"));
 		EKPlayerController->SetAttackEndTimer(2.37f);
 	}
 	else if (AttackCombo == 3)
 	{
-		EKPlayer->StopAnimMontage(GreatSwordAttackAnim);
 		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim, 1.0f, FName("Attack3"));
 		EKPlayerController->SetAttackEndTimer(2.7f);
 	}
 
 	EKPlayerController->ConsumtionStaminaAndTimer(GreatSwordAttackStamina);
 }
-
-void AGreatSword::PlayEnhancedAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-	if (!EKPlayerController->bIsEquipWeapon || !GreatSwordEnhancedAttackAnim)
-	{
-		return;
-	}
-
-	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < GreatSwordEnhancedAttackStamina)
-	{
-		return;
-	}
-
-	/*if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordEnhancedCombo() == 1)
-	{
-		EKPlayer->PlayAnimMontage(GreatSwordEnhancedAttackAnim, 1.f, FName("Attack1"));
-	}
-	else if (EKPlayer->GetPlayerStatusComponent()->GetGreatSwordEnhancedCombo() == 2)
-	{
-		EKPlayer->PlayAnimMontage(GreatSwordEnhancedAttackAnim, 1.f, FName("Attack2"));
-	}*/
-
-	EKPlayerController->ConsumtionStaminaAndTimer(GreatSwordEnhancedAttackStamina);
-}
-
-#pragma endregion
 
 void AGreatSword::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
 {
