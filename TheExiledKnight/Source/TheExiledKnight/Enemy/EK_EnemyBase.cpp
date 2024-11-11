@@ -66,11 +66,26 @@ void AEK_EnemyBase::PlayHurtReactionAnimation(const FVector& DamageDirection)
 			FOnMontageEnded MontageEndedDelegate;
 			MontageEndedDelegate.BindUObject(this, &AEK_EnemyBase::OnHurtAnimationEnded); 
 
-			// ANIMATIONPLAY AND END DELEGATE ¼³Á¤
+			// ANIMATIONPLAY AND END DELEGATE ì„¤ì •
 			AnimInstance->Montage_Play(HurtMontage);
 			AnimInstance->Montage_SetEndDelegate(MontageEndedDelegate, HurtMontage);
 
 		
+		}
+	}
+			
+			AActor* HitActor = Hit.GetActor(); 
+			if (HitActor) 
+			{
+				//UE_LOG(LogTemp, Warning, TEXT("Detected Actor Class: %s"), *HitActor->GetClass()->GetName()); 
+				AEKPlayer* detectPlayer = Cast<AEKPlayer>(HitActor); 
+				if (detectPlayer)
+				{
+					SetAttackHitCheck(true);
+				}
+				
+			}
+
 		}
 	}
 }
@@ -85,7 +100,7 @@ void AEK_EnemyBase::PlayDieReactionAnimation()
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance(); 
 	if (AnimInstance && DeathAnimMontage)
 	{
-		// ¾Ö´Ï¸ÞÀÌ¼Ç Á¾·á ½ÃÁ¡À» °¨ÁöÇÏ±â À§ÇÑ µ¨¸®°ÔÀÌÆ® ¼³Á¤
+		
 		FOnMontageEnded EndDelegate;
 		EndDelegate.BindUObject(this, &AEK_EnemyBase::OnDeathAnimationEnded);
 		AnimInstance->Montage_Play(DeathAnimMontage);
