@@ -84,8 +84,8 @@ private:
 	void Interact(const FInputActionValue& InputValue);
 	void FindInteractableObjects();
 
-	void EnhanceStarted(const FInputActionValue& InputValue);
-	void EnhanceRelease(const FInputActionValue& InputValue);
+	void SkillStarted(const FInputActionValue& InputValue);
+	void SkillRelease(const FInputActionValue& InputValue);
 
 	void TestStarted(const FInputActionValue& InputValue);
 
@@ -129,7 +129,7 @@ protected:
 	UInputAction* IASitDown;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
-	UInputAction* IAEnhance;
+	UInputAction* IASkill;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
 	UInputAction* IAInteract;

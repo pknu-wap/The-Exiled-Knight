@@ -69,12 +69,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
 	TSubclassOf<class UAnimInstance> ABPGreatSword;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
-	TSubclassOf<class UAnimInstance> ABPSpear;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
-	TSubclassOf<class UAnimInstance> ABPStaff;
-
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FGameplayTagContainer EKPlayerStateContainer;
