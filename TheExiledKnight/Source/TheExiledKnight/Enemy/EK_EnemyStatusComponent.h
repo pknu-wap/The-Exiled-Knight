@@ -18,37 +18,21 @@ public:
 
 	UEK_EnemyStatusComponent();
 
-	UFUNCTION(BlueprintCallable)
+
 	void SetMaxPoise(float amount);
-
-	UFUNCTION(BlueprintCallable)
 	void SetMaxHealth(float amount);
-
-	UFUNCTION(BlueprintCallable)
+	void SetAttackDamage(float amount);
 	void SetIsDead(bool isDead);
-
-	UFUNCTION(BlueprintCallable)
-	float GetMaxHealth();
-
-	UFUNCTION(BlueprintCallable)
-	float GetMaxPoise();
-
-	UFUNCTION(BlueprintCallable)
-	float GetCurrentHealth();
-
-	UFUNCTION(BlueprintCallable)
-	float GetCurrentPoise();
-	
-	UFUNCTION(BlueprintCallable)
-	bool  GetIsDead();
-
-
-	UFUNCTION(BlueprintCallable)
 	void  ChangeCurrentPoise(float amount);
-
-	UFUNCTION(BlueprintCallable)
-	void ChangeCurrentHealth(float amount);
-
+	void ChangeCurrentHealth(float amount); 
+	
+	float GetMaxHealth();
+    float GetMaxPoise();
+	float GetCurrentHealth();
+	float GetCurrentPoise();
+	float GetAttackDamage();
+    bool  GetIsDead();
+	
 	UPROPERTY(BlueprintAssignable, Category = "Status")
 	FOnDamageTaken OnDamageTaken;
 
@@ -59,18 +43,24 @@ public:
 private:
 
 
+
 	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
 	float MaxHealth;
 
 	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
 	float CurrentHealth;
 	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
-	float MaxPosie;
+	float MaxPoise;
 	
 	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
 	float CurrentPoise;
 
 	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
+	float AttackDamage;
+
+	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
 	bool bIsDead;
+
+
 
 };
