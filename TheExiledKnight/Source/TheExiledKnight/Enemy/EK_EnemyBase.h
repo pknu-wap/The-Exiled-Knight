@@ -81,6 +81,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
 	float HearingRange = 2000.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
+	TArray<AActor*> AttachedActors;
+
 	UPROPERTY()
 	AActor* AttackTarget;
 	

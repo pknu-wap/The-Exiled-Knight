@@ -15,10 +15,11 @@ AEK_EnemyBase::AEK_EnemyBase()
 float AEK_EnemyBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInvestigator, AActor* DamageCauser)
 {
 	const float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInvestigator, DamageCauser);
+	if (EnemyStat->GetCurrentHealth() <= 0)return;
 	if (Damage > 0)
 	{
 		EnemyStat->ChangeCurrentHealth(Damage);
-		EnemyStat->OnDamageTaken.Broadcast();
+		
 		FVector DamageDirection = (DamageCauser->GetActorLocation() - GetActorLocation()).GetSafeNormal(); 
 		PlayHurtReactionAnimation(DamageDirection);
 		if (EnemyStat->GetCurrentHealth() <= 0)
@@ -59,6 +60,7 @@ void AEK_EnemyBase::PlayHurtReactionAnimation(const FVector& DamageDirection)
 	}
 	if (HurtMontage) 
 	{
+		EnemyStat->OnDamageTaken.Broadcast(); 
 		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 		if (AnimInstance)
 		{
@@ -67,27 +69,13 @@ void AEK_EnemyBase::PlayHurtReactionAnimation(const FVector& DamageDirection)
 			MontageEndedDelegate.BindUObject(this, &AEK_EnemyBase::OnHurtAnimationEnded); 
 
 			// ANIMATIONPLAY AND END DELEGATE 설정
-			AnimInstance->Montage_Play(HurtMontage);
+			AnimInstance->Montage_Play(DeathAnimMontage, 1.0f, EMontagePlayReturnType::MontageLength, 0.0f, true); 
 			AnimInstance->Montage_SetEndDelegate(MontageEndedDelegate, HurtMontage);
 
 		
 		}
 	}
 			
-			AActor* HitActor = Hit.GetActor(); 
-			if (HitActor) 
-			{
-				//UE_LOG(LogTemp, Warning, TEXT("Detected Actor Class: %s"), *HitActor->GetClass()->GetName()); 
-				AEKPlayer* detectPlayer = Cast<AEKPlayer>(HitActor); 
-				if (detectPlayer)
-				{
-					SetAttackHitCheck(true);
-				}
-				
-			}
-
-		}
-	}
 }
 
 void AEK_EnemyBase::OnHurtAnimationEnded(UAnimMontage* Montage, bool bInterrupted)
@@ -111,6 +99,13 @@ void AEK_EnemyBase::OnDeathAnimationEnded(UAnimMontage* Montage, bool bInterrupt
 {
 	if (!bInterrupted)
 	{
+		for (AActor* Actor : AttachedActors)
+		{
+			if (Actor)
+			{
+				Actor->Destroy();
+			}
+		}
 		Destroy();
 	}
 }
