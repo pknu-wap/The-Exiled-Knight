@@ -35,7 +35,7 @@ void AGreatSword::Tick(float DeltaTime)
 
 }
 
-void AGreatSword::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+void AGreatSword::PlayWeaponEquipAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
 {
 	if (EKPlayer && EKPlayerController)
 	{
@@ -50,7 +50,7 @@ void AGreatSword::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TOb
 	}
 }
 
-void AGreatSword::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+void AGreatSword::PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
 {
 	if (!EKPlayerController->bIsEquipWeapon || !GreatSwordAttackAnim)
 	{
@@ -82,7 +82,7 @@ void AGreatSword::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TOb
 	EKPlayerController->ConsumtionStaminaAndTimer(GreatSwordAttackStamina);
 }
 
-void AGreatSword::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
+void AGreatSword::AttachToDefenseSocket(AEKPlayerWeapon* Weapon, AEKPlayer* EKPlayer)
 {
 	if (Weapon)
 	{
