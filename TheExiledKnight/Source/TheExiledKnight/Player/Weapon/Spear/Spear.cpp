@@ -1,9 +1,6 @@
 // Made by Somalia Pirate
 
-
 #include "Spear.h"
-#include "Engine/SkeletalMesh.h"
-#include "Components/SkeletalMeshComponent.h"
 
 ASpear::ASpear()
 {
@@ -100,16 +97,6 @@ void ASpear::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 	}
 
 	EKPlayerController->ConsumtionStaminaAndTimer(SpearAttackStamina);
-}
-
-void ASpear::PlayEnhancedAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-
-}
-
-void ASpear::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-
 }
 
 #pragma endregion
