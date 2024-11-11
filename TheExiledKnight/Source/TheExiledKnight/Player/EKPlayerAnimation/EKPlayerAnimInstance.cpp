@@ -7,6 +7,7 @@
 #include "../EKPlayer/EKPlayerController.h"
 #include "../EKPlayer/EKPlayerStatusComponent.h"
 #include "../EKPlayerGameplayTags.h"
+#include "../Weapon/EKPlayerWeapon.h"
 
 UEKPlayerAnimInstance::UEKPlayerAnimInstance(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -74,4 +75,17 @@ void UEKPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	}
 
 	Stamina = EKPlayer->GetPlayerStatusComponent()->GetStamina();
+
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword))
+	{
+		CurrentWeaponType = GreatSwordNumber;
+	}
+	else if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear))
+	{
+		CurrentWeaponType = SpearNumber;
+	}
+	else if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff))
+	{
+		CurrentWeaponType = StaffNumber;
+	}
 }

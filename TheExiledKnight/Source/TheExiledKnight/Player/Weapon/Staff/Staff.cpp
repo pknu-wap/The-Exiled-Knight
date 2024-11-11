@@ -93,16 +93,6 @@ void AStaff::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 	EKPlayerController->ConsumtionStaminaAndTimer(StaffAttackStamina);
 }
 
-void AStaff::PlayEnhancedAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-
-}
-
-void AStaff::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-
-}
-
 #pragma endregion
 
 #pragma region Attach to Socket

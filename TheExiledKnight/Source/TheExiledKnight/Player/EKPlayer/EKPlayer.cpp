@@ -9,9 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Engine/SkeletalMesh.h"
 #include "Engine/StaticMesh.h"
-#include "../Weapon/GreatSword.h"
-#include "../Weapon/Spear.h"
-#include "../Weapon/Staff.h"
+#include "../Weapon/EKPlayerWeapon.h"
 #include "Animation/AnimInstance.h"
 #include "../EKPlayerGameplayTags.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -75,7 +73,6 @@ void AEKPlayer::BeginPlay()
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AGreatSword>(GreatSwordClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
-		GetMesh()->SetAnimInstanceClass(ABPGreatSword);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword);
 	}
 
@@ -87,7 +84,6 @@ void AEKPlayer::BeginPlay()
 		CurrentWeapon = GetWorld()->SpawnActor<ASpear>(SpearClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		GetCharacterMovement()->JumpZVelocity = 1000.f;
-		GetMesh()->SetAnimInstanceClass(ABPSpear);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear);
 	}*/
 
@@ -98,7 +94,6 @@ void AEKPlayer::BeginPlay()
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AStaff>(StaffClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
-		GetMesh()->SetAnimInstanceClass(ABPStaff);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
 	}*/
 
