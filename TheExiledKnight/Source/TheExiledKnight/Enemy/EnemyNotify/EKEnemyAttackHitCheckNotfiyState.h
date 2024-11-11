@@ -27,8 +27,7 @@ public:
 #pragma endregion	
 #pragma region AttackHitCheck
 	void AttackHitCheck();
-	void SetAttackHitCheck(bool check);
-	bool GetAttackHitCheck();
+
 #pragma endregion
 
 protected:
@@ -40,10 +39,12 @@ private:
 	
 	float TotalDistance;
 	float TotalTime;
+	float AttackDamage;
 	
 	FVector StartLocation;
 	
 	AActor* Owner;
+	TArray<AActor*>HitActors;
 
 	FTimerHandle MoveTimerHandle;
 
@@ -52,6 +53,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Attack, Meta = (AllowPrivteAccess = true))
 	float AttackHalfHeight;
+
+	UPROPERTY(EditAnywhere, Category = Attack, Meta = (AllowPrivteAccess = true))
+	float  DamagePercentage = 1.0f;
 
 	UPROPERTY(EditAnywhere, Category = Attack, Meta = (AllowPrivteAccess = true))
 	bool bAttackHitCheck;
