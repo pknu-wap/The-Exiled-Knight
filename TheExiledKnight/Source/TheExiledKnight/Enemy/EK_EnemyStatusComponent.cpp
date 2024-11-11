@@ -7,91 +7,82 @@
 UEK_EnemyStatusComponent::UEK_EnemyStatusComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
-	SetPoiseLevel(1);
 	SetMaxHealth(100);
-	SetCurrentHealth(GetMaxHealth());
+	ChangeCurrentHealth(GetMaxHealth());
 	SetMaxPoise(10);
-	SetCurrentPoise(GetMaxPoise());
+	SetAttackDamage(10);
+	ChangeCurrentPoise(GetMaxPoise()); 
 	SetIsDead(false);
-	
 }
-
-
-void UEK_EnemyStatusComponent::TakeDamage(float amount)
-{
-	SetCurrentHealth(FMath::Clamp<float>(GetCurrentHealth() - amount, 0.0f, GetMaxHealth()));
-	
-	if (CurrentHealth <= 0.0f)
-	{
-		OnHPIsZero.Broadcast();
-	}
-	else
-	{
-		OnDamageTaken.Broadcast();
-	}
-
-}
-
-uint8 UEK_EnemyStatusComponent::GetPosieLevel()
-{
-	return PoiseLevel;
-}
-
-float UEK_EnemyStatusComponent::GetMaxHealth()
-{
-	return MaxHealth;
-}
-
-
-float UEK_EnemyStatusComponent::GetCurrentHealth()
-{
-	return CurrentHealth;
-}
-
-float UEK_EnemyStatusComponent::GetMaxPoise()
-{
-	return MaxPosie;
-}
-
-float UEK_EnemyStatusComponent::GetCurrentPoise()
-{
-	return CurrentPosie;
-}
-
-bool UEK_EnemyStatusComponent::GetIsDead()
-{
-	return bIsDead;
-}
-
-void UEK_EnemyStatusComponent::SetPoiseLevel(uint8 amount)
-{
-	PoiseLevel = amount;
-}
+#pragma region InitialSetting
 
 void UEK_EnemyStatusComponent::SetMaxHealth(float amount)
 {
 	MaxHealth = amount;
 }
 
-void UEK_EnemyStatusComponent::SetCurrentHealth(float amount)
+void UEK_EnemyStatusComponent::SetAttackDamage(float amount)
 {
-	CurrentHealth = amount;
+	AttackDamage = amount;
 }
 
 void UEK_EnemyStatusComponent::SetMaxPoise(float amount)
 {
-	MaxPosie = amount;
+	MaxPoise = amount;
 }
-
-void UEK_EnemyStatusComponent::SetCurrentPoise(float amount)
-{
-	CurrentPosie = amount;
-}
-
 void UEK_EnemyStatusComponent::SetIsDead(bool isDead)
 {
 	bIsDead = isDead;
 }
+#pragma endregion
+
+
+#pragma region GetStat
+
+float UEK_EnemyStatusComponent::GetMaxHealth()
+{
+	return MaxHealth;
+}
+float UEK_EnemyStatusComponent::GetMaxPoise()
+{
+	return MaxPoise;
+}
+float UEK_EnemyStatusComponent::GetCurrentHealth()
+{
+	return CurrentHealth;
+}
+
+float UEK_EnemyStatusComponent::GetCurrentPoise()
+{
+	return CurrentPoise;
+}
+
+float UEK_EnemyStatusComponent::GetAttackDamage()
+{
+	return AttackDamage;
+}
+
+bool UEK_EnemyStatusComponent::GetIsDead()
+{
+	return bIsDead;
+}
+#pragma endregion
+
+#pragma region ChangeStat
+void UEK_EnemyStatusComponent::ChangeCurrentPoise(float amount)
+{
+	CurrentPoise -= amount;
+}
+
+void UEK_EnemyStatusComponent::ChangeCurrentHealth(float amount)
+{
+	CurrentHealth -= amount;
+}
+
+#pragma endregion
+
+
+
 
 
 
