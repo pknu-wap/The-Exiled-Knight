@@ -81,8 +81,6 @@ FEventReply UWidget_EquipSelect_ContentSlot::RedirectMouseDownToWidget(const FGe
 		}
 		case EEquipCategory::FragmentOfGod:
 		{
-
-
 			break;
 		}
 		case EEquipCategory::UsableItem:
