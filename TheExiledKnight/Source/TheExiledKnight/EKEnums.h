@@ -31,5 +31,6 @@ enum class EEquipCategory : uint8
 	Weapon,
 	Rune,
 	FragmentOfGod,
-	UsableItem
+	UsableItem,
+	Magic
 };

@@ -27,6 +27,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateDescription(const FInventorySlot& SlotData);
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void UpdateStatusInfo();
+
 public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
 	UTextBlock* Text_Category;
