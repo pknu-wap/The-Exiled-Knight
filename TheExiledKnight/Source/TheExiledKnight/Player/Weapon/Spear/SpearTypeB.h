@@ -21,6 +21,9 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
+public:
+	virtual void PlaySkillStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController) override;
+
 protected:
 	// Spear Animation Montage
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")

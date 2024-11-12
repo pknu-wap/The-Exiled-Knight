@@ -25,6 +25,8 @@ void AEKPlayerWeapon::Tick(float DeltaTime)
 
 }
 
+#pragma region Attach to Socket
+
 void AEKPlayerWeapon::AttachWeaponToSpineSocket(AEKPlayerWeapon* Weapon, AEKPlayer* EKPlayer)
 {
 	if (Weapon)
@@ -49,9 +51,13 @@ void AEKPlayerWeapon::AttachWeaponToHandSocket(AEKPlayerWeapon* Weapon, AEKPlaye
 	}
 }
 
-void AEKPlayerWeapon::SetAttackComboNext(uint8 MaxCombo)
+#pragma endregion
+
+#pragma region Combo
+
+void AEKPlayerWeapon::SetAttackComboNext()
 {
-	if (AttackCombo < MaxCombo)
+	if (AttackCombo < MaxAttackCombo)
 	{
 		AttackCombo++;
 	}
@@ -65,3 +71,5 @@ void AEKPlayerWeapon::ResetAttackCombo()
 {
 	AttackCombo = 1;
 }
+
+#pragma endregion

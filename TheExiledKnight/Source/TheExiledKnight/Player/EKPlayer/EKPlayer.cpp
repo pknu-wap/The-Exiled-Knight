@@ -68,31 +68,54 @@ void AEKPlayer::BeginPlay()
 
 	// Test GreatSword Version
 
-	if (GreatSwordClass)
+	/*if (GreatSwordTypeAClass)
 	{
 		FActorSpawnParameters SpawnParams;
-		CurrentWeapon = GetWorld()->SpawnActor<AGreatSword>(GreatSwordClass, SpawnParams);
+		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(GreatSwordTypeAClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword);
-	}
+	}*/
+
+	/*if (GreatSwordTypeBClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(GreatSwordTypeBClass, SpawnParams);
+		AttachWeaponToSpineSocket(CurrentWeapon);
+		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword);
+	}*/
 
 	// Test Spear Version
 
-	/*if (SpearClass)
+	/*if (SpearTypeAClass)
 	{
 		FActorSpawnParameters SpawnParams;
-		CurrentWeapon = GetWorld()->SpawnActor<ASpear>(SpearClass, SpawnParams);
+		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(SpearTypeAClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
-		GetCharacterMovement()->JumpZVelocity = 1000.f;
+		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear);
+	}*/
+
+	/*if (SpearTypeBClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(SpearTypeBClass, SpawnParams);
+		AttachWeaponToSpineSocket(CurrentWeapon);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear);
 	}*/
 
 	// Test Staff Version Don't Select This
 
-	/*if (StaffClass)
+	if (StaffTypeAClass)
 	{
 		FActorSpawnParameters SpawnParams;
-		CurrentWeapon = GetWorld()->SpawnActor<AStaff>(StaffClass, SpawnParams);
+		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(StaffTypeAClass, SpawnParams);
+		AttachWeaponToSpineSocket(CurrentWeapon);
+		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
+	}
+
+	/*if (StaffTypeBClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(StaffTypeBClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
 	}*/
@@ -108,7 +131,7 @@ void AEKPlayer::Tick(float DeltaTime)
 	// Test
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("HP : %d / %d"), PlayerStatusComponent->GetHp(), PlayerStatusComponent->GetMaxHp()));
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("MP : %d / %d"), PlayerStatusComponent->GetMp(), PlayerStatusComponent->GetMaxMp()));
-	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("Stamina : %d / %d"), PlayerStatusComponent->GetStamina(), PlayerStatusComponent->GetMaxStamina()));
+	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("Stamina : %d / %d"), PlayerStatusComponent->GetStamina(), PlayerStatusComponent->GetMaxStamina()));
 }
 
 #pragma region Damage

@@ -52,6 +52,6 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	float WeaponAdditionalDamage;
 
-	void SetAttackComboNext(uint8 MaxCombo);
+	void SetAttackComboNext();
 	void ResetAttackCombo();
 };
