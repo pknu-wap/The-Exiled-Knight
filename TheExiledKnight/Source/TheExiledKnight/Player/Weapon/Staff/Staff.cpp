@@ -54,43 +54,64 @@ void AStaff::PlayWeaponEquipAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController
 
 void AStaff::PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
 {
-	if (!EKPlayerController->bIsEquipWeapon || !StaffAttackAnim)
+	if (!EKPlayerController->bIsEquipWeapon || !StaffAttackAnim || !StaffAttackMagicAnim)
 	{
 		return;
 	}
 
-	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < StaffAttackStamina)
+	if (EKPlayer->GetPlayerStatusComponent()->GetMp() < StaffAttackMp)
 	{
+		if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < StaffAttackStamina)
+		{
+			EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+			return;
+		}
+
+		if (AttackCombo == 1)
+		{
+			EKPlayer->StopAnimMontage(StaffAttackAnim);
+			EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack1"));
+			EKPlayerController->SetAttackEndTimer(2.33f);
+		}
+		else if (AttackCombo == 2)
+		{
+			EKPlayer->StopAnimMontage(StaffAttackAnim);
+			EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack2"));
+			EKPlayerController->SetAttackEndTimer(2.67f);
+		}
+		else if (AttackCombo == 3)
+		{
+			EKPlayer->StopAnimMontage(StaffAttackAnim);
+			EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack3"));
+			EKPlayerController->SetAttackEndTimer(3.33f);
+		}
+		else if (AttackCombo == 4)
+		{
+			EKPlayer->StopAnimMontage(StaffAttackAnim);
+			EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack4"));
+			EKPlayerController->SetAttackEndTimer(2.67f);
+		}
+
+		EKPlayerController->ConsumtionStaminaAndTimer(StaffAttackStamina);
+	}
+	else
+	{
+		if (bIsFirstAttackMagic)
+		{
+			EKPlayer->StopAnimMontage(StaffAttackMagicAnim);
+			EKPlayer->PlayAnimMontage(StaffAttackMagicAnim, 1.0f, FName("Attack1"));
+			bIsFirstAttackMagic = false;
+		}
+		else
+		{
+			EKPlayer->StopAnimMontage(StaffAttackMagicAnim);
+			EKPlayer->PlayAnimMontage(StaffAttackMagicAnim, 1.0f, FName("Attack2"));
+			bIsFirstAttackMagic = true;
+		}
+
+		EKPlayer->GetPlayerStatusComponent()->SetMp(-StaffAttackMp);
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
-		return;
 	}
-
-	if (AttackCombo == 1)
-	{
-		EKPlayer->StopAnimMontage(StaffAttackAnim);
-		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack1"));
-		EKPlayerController->SetAttackEndTimer(2.33f);
-	}
-	else if (AttackCombo == 2)
-	{
-		EKPlayer->StopAnimMontage(StaffAttackAnim);
-		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack2"));
-		EKPlayerController->SetAttackEndTimer(2.67f);
-	}
-	else if (AttackCombo == 3)
-	{
-		EKPlayer->StopAnimMontage(StaffAttackAnim);
-		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack3"));
-		EKPlayerController->SetAttackEndTimer(3.33f);
-	}
-	else if (AttackCombo == 4)
-	{
-		EKPlayer->StopAnimMontage(StaffAttackAnim);
-		EKPlayer->PlayAnimMontage(StaffAttackAnim, 1.0f, FName("Attack4"));
-		EKPlayerController->SetAttackEndTimer(2.67f);
-	}
-
-	EKPlayerController->ConsumtionStaminaAndTimer(StaffAttackStamina);
 }
 
 #pragma endregion

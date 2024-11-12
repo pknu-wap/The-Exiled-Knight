@@ -18,7 +18,7 @@ class UAnimMontage;
 #define EKPlayerWalkSpeed 200.f
 #define EKPlayerSprintSpeed 600.f
 
-// Edit Stamina Consumption Here
+// Edit Stamina & Mp Consumption Here
 #define SprintStamina 1
 #define DodgeStamina 100
 #define BackStepStamina 50
@@ -29,14 +29,21 @@ class UAnimMontage;
 #define GreatSwordAttackStamina 100
 #define GreatSwordEnhancedAttackStamina 200
 #define GreatSwordJumpAttackStamina 100
+#define GreatSwordSkill 80
+#define GreatSwordSkillMp 200
 
 #define SpearAttackStamina 50
 #define SpearEnhancedAttackStamina 50
 #define SpearJumpAttackStamina 50
+#define SpearSkill 80
+#define SpearSkillMp 200
 
 #define StaffAttackStamina 80
+#define StaffAttackMp 80
 #define StaffEnhancedAttackStamina 80
 #define StaffJumpAttackStamina 80
+#define StaffSkill 80
+#define StaffSkillMp 200
 
 #pragma endregion
 
@@ -85,7 +92,6 @@ private:
 	void FindInteractableObjects();
 
 	void SkillStarted(const FInputActionValue& InputValue);
-	void SkillRelease(const FInputActionValue& InputValue);
 
 	void TestStarted(const FInputActionValue& InputValue);
 
@@ -187,6 +193,7 @@ public:
 	// About Stamina and Attack
 	void SetStaminaRecoveryTime();
 	void ConsumtionStaminaAndTimer(int32 Stamina);
+
 	void SetAttackComboNext();
 	void ResetAttackCombo();
 	void SetAttackEndTimer(float Time);
