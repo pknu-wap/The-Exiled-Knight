@@ -3,7 +3,6 @@
 #include "GreatSwordTypeB.h"
 
 AGreatSwordTypeB::AGreatSwordTypeB()
-	:Super()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -21,4 +20,24 @@ void AGreatSwordTypeB::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AGreatSwordTypeB::PlaySkillStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
+{
+	if (!EKPlayerController->bIsEquipWeapon || !GreatSwordSkillAnim)
+	{
+		return;
+	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < GreatSwordSkill ||
+		EKPlayer->GetPlayerStatusComponent()->GetMp() < GreatSwordSkillMp)
+	{
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+		return;
+	}
+
+	EKPlayer->StopAnimMontage(GreatSwordSkillAnim);
+	EKPlayer->PlayAnimMontage(GreatSwordSkillAnim, 1.0f, FName("Start"));
+	EKPlayer->GetPlayerStatusComponent()->SetMp(-GreatSwordSkillMp);
+	EKPlayerController->ConsumtionStaminaAndTimer(GreatSwordSkill);
 }

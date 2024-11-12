@@ -9,7 +9,8 @@ void UBackStep::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase*
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 
-	if (EKPlayer = Cast<AEKPlayer>(MeshComp->GetOwner()))
+	EKPlayer = Cast<AEKPlayer>(MeshComp->GetOwner());
+	if (EKPlayer)
 	{
 		EKPlayerController = Cast<AEKPlayerController>(EKPlayer->GetController());
 	}
