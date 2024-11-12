@@ -69,9 +69,7 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAInteract, ETriggerEvent::Started, this, &ThisClass::Interact);
 
 		EnhancedInputComponent->BindAction(IASkill, ETriggerEvent::Started, this, &ThisClass::SkillStarted);
-		EnhancedInputComponent->BindAction(IASkill, ETriggerEvent::Completed, this, &ThisClass::SkillRelease);
-		EnhancedInputComponent->BindAction(IASkill, ETriggerEvent::Canceled, this, &ThisClass::SkillRelease);
-
+		
 		EnhancedInputComponent->BindAction(IATest, ETriggerEvent::Started, this, &ThisClass::TestStarted);
 	}
 }
@@ -320,14 +318,7 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
 
-		if (!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Enhance))
-		{
-			EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
-		}
-		else
-		{
-
-		}
+		EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
 
 		EKPlayer->bUseControllerRotationYaw = true;
 	}
@@ -335,12 +326,33 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 
 void AEKPlayerController::SkillStarted(const FInputActionValue& InputValue)
 {
-	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Enhance);
-}
+	if (!EKPlayer)
+	{
+		return;
+	}
 
-void AEKPlayerController::SkillRelease(const FInputActionValue& InputValue)
-{
-	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Enhance);
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Dodge))
+	{
+		return;
+	}
+
+	BattleStateTimer();
+
+	if (!bIsEquipWeapon)
+	{
+		EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
+	}
+	else
+	{
+		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
+
+		EKPlayer->GetCurrentWeapon()->PlaySkillStartAnimMontage(EKPlayer, this);
+
+		EKPlayer->bUseControllerRotationYaw = true;
+	}
 }
 
 #pragma endregion
@@ -502,7 +514,7 @@ void AEKPlayerController::ConsumtionStaminaAndTimer(int32 Stamina)
 
 void AEKPlayerController::SetAttackComboNext()
 {
-	EKPlayer->GetCurrentWeapon()->SetAttackComboNext(EKPlayer->GetCurrentWeapon()->MaxAttackCombo);
+	EKPlayer->GetCurrentWeapon()->SetAttackComboNext();
 }
 
 void AEKPlayerController::ResetAttackCombo()

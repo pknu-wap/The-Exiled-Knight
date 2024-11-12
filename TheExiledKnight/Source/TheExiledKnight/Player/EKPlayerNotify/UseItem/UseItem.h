@@ -15,9 +15,7 @@ public:
 	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
 
 protected:
-	UPROPERTY()
-	TObjectPtr<class AEKPlayer> EKPlayer;
+	class AEKPlayer* EKPlayer;
 
-	UPROPERTY()
-	TObjectPtr<class AEKPlayerController> EKPlayerController;
+	class AEKPlayerController* EKPlayerController;
 };

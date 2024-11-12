@@ -12,10 +12,10 @@ UEKPlayerStatusComponent::UEKPlayerStatusComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// Edit Basic Status Value Here
-	MaxHp = 100;
-	Hp = 50;
-	MaxMp = 100;
-	Mp = 50;
+	MaxHp = 1000;
+	Hp = 1000;
+	MaxMp = 1000;
+	Mp = 1000;
 	MaxStamina = 1000;
 	Stamina = 1000;
 	DefaultDamage = 100.f;
