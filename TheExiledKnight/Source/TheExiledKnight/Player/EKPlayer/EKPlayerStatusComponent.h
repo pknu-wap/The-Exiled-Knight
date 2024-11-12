@@ -94,74 +94,74 @@ protected:
 
 protected:
 	// Basic status
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 MaxHp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 MaxHp;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 Hp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 Hp;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 MaxMp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 MaxMp;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 Mp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 Mp;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 MaxStamina;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 MaxStamina;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 Stamina;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 Stamina;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 DefaultDamage;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 DefaultDamage;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 FinalDamage;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 FinalDamage;
 
 protected:
 	// Upgrade status
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 MaxLevel;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 MaxLevel;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 Level;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 Level;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 Vitality;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 Vitality;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 Mental;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 Mental;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 Endurance;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 Endurance;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 Strength;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 Strength;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 Ability;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 Ability;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 Intelligence;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 Intelligence;
 
 protected:
 	UPROPERTY()
-	uint32 GreatSwordCombo = 1;
+	int32 GreatSwordCombo = 1;
 
 	UPROPERTY()
-	uint32 SpearCombo = 1;
+	int32 SpearCombo = 1;
 
 	UPROPERTY()
-	uint32 StaffCombo = 1;
+	int32 StaffCombo = 1;
 
 	UPROPERTY()
-	uint32 GreatSwordEnhancedCombo = 1;
+	int32 GreatSwordEnhancedCombo = 1;
 
 	UPROPERTY()
-	uint32 SpearEnhancedCombo = 1;
+	int32 SpearEnhancedCombo = 1;
 
 	UPROPERTY()
-	uint32 StaffEnhancedCombo = 1;
+	int32 StaffEnhancedCombo = 1;
 
 public:
 	UPROPERTY(BlueprintAssignable)
