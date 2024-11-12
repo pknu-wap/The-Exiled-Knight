@@ -23,11 +23,7 @@ void UWidget_QuickSlot::NativeConstruct()
 
 void UWidget_QuickSlot::SlotUpdated(EEquipCategory inCategory, int inSlotIdx)
 {
-	if (SlotCategory != inCategory || ActiveSlotIdx != inSlotIdx)
-	{
-		Image_Item->SetOpacity(0);
-		return;
-	}
+	if (SlotCategory != inCategory || ActiveSlotIdx != inSlotIdx) return;
 
 	APlayerController* playerController = GetOwningPlayer();
 	if (!playerController) return;
@@ -45,7 +41,6 @@ void UWidget_QuickSlot::SlotUpdated(EEquipCategory inCategory, int inSlotIdx)
 		if (slotComp->WeaponSlots.IsValidIndex(inSlotIdx))
 		{
 			Image_Item->SetBrushFromTexture(slotComp->WeaponSlots[inSlotIdx].Icon);
-			Image_Item->SetOpacity(1);
 		}
 		break;
 	}
@@ -54,7 +49,6 @@ void UWidget_QuickSlot::SlotUpdated(EEquipCategory inCategory, int inSlotIdx)
 		if (slotComp->RuneSlots.IsValidIndex(inSlotIdx))
 		{
 			Image_Item->SetBrushFromTexture(slotComp->RuneSlots[inSlotIdx].Icon);
-			Image_Item->SetOpacity(1);
 		}
 		break;
 	}
@@ -67,7 +61,6 @@ void UWidget_QuickSlot::SlotUpdated(EEquipCategory inCategory, int inSlotIdx)
 		if (slotComp->UsableSlots.IsValidIndex(inSlotIdx))
 		{
 			Image_Item->SetBrushFromTexture(slotComp->UsableSlots[inSlotIdx].Icon);
-			Image_Item->SetOpacity(1);
 		}
 		break;
 	}
