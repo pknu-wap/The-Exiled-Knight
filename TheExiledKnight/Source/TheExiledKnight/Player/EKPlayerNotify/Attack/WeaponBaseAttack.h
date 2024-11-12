@@ -17,11 +17,9 @@ protected:
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
 
 protected:
-	UPROPERTY()
-	TObjectPtr<class AEKPlayer> EKPlayer;
+	class AEKPlayer* EKPlayer;
 
-	UPROPERTY()
-	TObjectPtr<class AEKPlayerController> EKPlayerController;
+	class AEKPlayerController* EKPlayerController;
 
 protected:
 	bool bIsHitOnce = false;

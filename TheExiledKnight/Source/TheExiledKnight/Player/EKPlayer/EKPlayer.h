@@ -53,13 +53,22 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class AGreatSword> GreatSwordClass;
+	TSubclassOf<class AGreatSwordTypeA> GreatSwordTypeAClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class ASpear> SpearClass;
+	TSubclassOf<class AGreatSwordTypeB> GreatSwordTypeBClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class AStaff> StaffClass;
+	TSubclassOf<class ASpearTypeA> SpearTypeAClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TSubclassOf<class ASpearTypeB> SpearTypeBClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TSubclassOf<class AStaffTypeA> StaffTypeAClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TSubclassOf<class AStaffTypeB> StaffTypeBClass;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
@@ -67,7 +76,7 @@ protected:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
-	TSubclassOf<class UAnimInstance> ABPGreatSword;
+	TSubclassOf<class UAnimInstance> ABPEKPlayer;
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

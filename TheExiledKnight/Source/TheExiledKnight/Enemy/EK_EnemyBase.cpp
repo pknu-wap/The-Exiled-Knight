@@ -73,21 +73,21 @@ void AEK_EnemyBase::PlayHurtReactionAnimation(const FVector& DamageDirection)
 		
 		}
 	}
-			
-			AActor* HitActor = Hit.GetActor(); 
-			if (HitActor) 
-			{
-				//UE_LOG(LogTemp, Warning, TEXT("Detected Actor Class: %s"), *HitActor->GetClass()->GetName()); 
-				AEKPlayer* detectPlayer = Cast<AEKPlayer>(HitActor); 
-				if (detectPlayer)
-				{
-					SetAttackHitCheck(true);
-				}
-				
-			}
+	//		
+	//		AActor* HitActor = Hit.GetActor(); 
+	//		if (HitActor) 
+	//		{
+	//			//UE_LOG(LogTemp, Warning, TEXT("Detected Actor Class: %s"), *HitActor->GetClass()->GetName()); 
+	//			AEKPlayer* detectPlayer = Cast<AEKPlayer>(HitActor); 
+	//			if (detectPlayer)
+	//			{
+	//				SetAttackHitCheck(true);
+	//			}
+	//			
+	//		}
 
-		}
-	}
+	//	}
+	//}
 }
 
 void AEK_EnemyBase::OnHurtAnimationEnded(UAnimMontage* Montage, bool bInterrupted)
