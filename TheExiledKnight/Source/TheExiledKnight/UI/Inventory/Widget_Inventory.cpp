@@ -27,6 +27,11 @@ void UWidget_Inventory::NativeConstruct()
 	Button_BeforeCategory->OnClicked.AddDynamic(this, &UWidget_Inventory::ShowBeforeCategory);
 	Button_NextCategory->OnClicked.Clear();
 	Button_NextCategory->OnClicked.AddDynamic(this, &UWidget_Inventory::ShowNextCategory);
+
+	FTimerHandle timerHandle;
+	GetWorld()->GetTimerManager().SetTimer(timerHandle, [&]() {
+		UpdateContents(EItemCategory::Weapon);
+		}, 0.25, false);
 }
 
 void UWidget_Inventory::UpdateContents(EItemCategory Category)
