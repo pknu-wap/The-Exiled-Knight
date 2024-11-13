@@ -87,6 +87,5 @@ void UWeaponBaseAttack::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenc
 
 	EKPlayerController->SetAttackComboNext();
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
-	EKPlayer->bUseControllerRotationYaw = false;
 	bIsHitOnce = false;
 }

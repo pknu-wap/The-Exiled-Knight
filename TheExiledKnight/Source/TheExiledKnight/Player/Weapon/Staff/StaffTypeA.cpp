@@ -7,6 +7,8 @@ AStaffTypeA::AStaffTypeA()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	Staff->SetStaticMesh(StaffMesh);
+
 	WeaponAdditionalDamage = 5;
 }
 
