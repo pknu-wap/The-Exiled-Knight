@@ -348,8 +348,6 @@ void AEKPlayerController::SkillStarted(const FInputActionValue& InputValue)
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
 
 		EKPlayer->GetCurrentWeapon()->PlaySkillStartAnimMontage(EKPlayer, this);
-
-		EKPlayer->bUseControllerRotationYaw = true;
 	}
 }
 
@@ -549,6 +547,17 @@ void AEKPlayerController::BattleStateTimer()
 {
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_BattleState);
 	GetWorldTimerManager().SetTimer(BattleStateHandle, this, &ThisClass::SetBattleStateEnd, BattleEndTime, false);
+}
+
+void AEKPlayerController::RemoveAttackTag()
+{
+	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+}
+
+void AEKPlayerController::RemoveAttackTagTimer(float Time)
+{
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+	GetWorldTimerManager().SetTimer(StaffBaseSkillEndHandle, this, &ThisClass::RemoveAttackTag, Time, false);
 }
 
 #pragma endregion
