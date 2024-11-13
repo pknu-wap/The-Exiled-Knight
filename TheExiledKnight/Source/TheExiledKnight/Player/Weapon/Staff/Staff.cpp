@@ -12,11 +12,11 @@ AStaff::AStaff()
 	Staff->SetStaticMesh(StaffMesh);
 
 	WeaponCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
-	WeaponCapsuleComponent->SetupAttachment(RootComponent);
 	WeaponCapsuleComponent->SetRelativeLocationAndRotation(FVector(0, -20, 0), FRotator(-90, 0, 90));
 	WeaponCapsuleComponent->SetRelativeScale3D(FVector(1.f, 1.f, 2.f));
 	WeaponCapsuleComponent->SetCapsuleRadius(11.f);
 	WeaponCapsuleComponent->SetCapsuleHalfHeight(44.f);
+	WeaponCapsuleComponent->SetupAttachment(RootComponent);
 
 	MaxAttackCombo = 4;
 

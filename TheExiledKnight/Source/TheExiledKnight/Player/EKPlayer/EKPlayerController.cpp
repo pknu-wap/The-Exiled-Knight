@@ -319,8 +319,6 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
 
 		EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
-
-		EKPlayer->bUseControllerRotationYaw = true;
 	}
 }
 
