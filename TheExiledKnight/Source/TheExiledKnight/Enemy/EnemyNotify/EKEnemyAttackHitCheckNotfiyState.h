@@ -25,10 +25,7 @@ public:
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation);
 	
 #pragma endregion	
-#pragma region AttackHitCheck
-	void AttackHitCheck();
 
-#pragma endregion
 
 protected:
 
@@ -44,6 +41,7 @@ private:
 	FVector StartLocation;
 	
 	AActor* Owner;
+
 	TArray<AActor*>HitActors;
 
 	FTimerHandle MoveTimerHandle;
@@ -58,7 +56,7 @@ private:
 	float  DamagePercentage = 1.0f;
 
 	UPROPERTY(EditAnywhere, Category = Attack, Meta = (AllowPrivteAccess = true))
-	bool bAttackHitCheck;
+	bool bAttackHitCheck; //debug line  or not
 
 	UPROPERTY(EditAnywhere, Category = Attack, Meta = (AllowPrivteAccess = true))
 	FName StartSocketName;
