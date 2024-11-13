@@ -180,6 +180,7 @@ public:
 protected:
 	FTimerHandle StaminaRecoveryHandle;
 	FTimerHandle AttackEndHandle;
+	FTimerHandle StaffBaseSkillEndHandle;
 	FTimerHandle PerfectDefenseHandle;
 	FTimerHandle BattleStateHandle;
 
@@ -205,6 +206,10 @@ public:
 	// About Battle State
 	void SetBattleStateEnd();
 	void BattleStateTimer();
+
+	// About Staff Base Skill
+	void RemoveAttackTag();
+	void RemoveAttackTagTimer(float Time);
 
 #pragma endregion
 
