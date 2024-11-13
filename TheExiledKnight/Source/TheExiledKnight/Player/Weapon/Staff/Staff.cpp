@@ -101,16 +101,17 @@ void AStaff::PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController
 			EKPlayer->StopAnimMontage(StaffAttackMagicAnim);
 			EKPlayer->PlayAnimMontage(StaffAttackMagicAnim, 1.0f, FName("Attack1"));
 			bIsFirstAttackMagic = false;
+			EKPlayerController->RemoveAttackTagTimer(1.f);
 		}
 		else
 		{
 			EKPlayer->StopAnimMontage(StaffAttackMagicAnim);
 			EKPlayer->PlayAnimMontage(StaffAttackMagicAnim, 1.0f, FName("Attack2"));
 			bIsFirstAttackMagic = true;
+			EKPlayerController->RemoveAttackTagTimer(0.69f);
 		}
 
 		EKPlayer->GetPlayerStatusComponent()->SetMp(-StaffAttackMp);
-		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 	}
 }
 
