@@ -104,21 +104,21 @@ void AEKPlayer::BeginPlay()
 
 	// Test Staff Version Don't Select This
 
-	if (StaffTypeAClass)
+	/*if (StaffTypeAClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(StaffTypeAClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
-	}
+	}*/
 
-	/*if (StaffTypeBClass)
+	if (StaffTypeBClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(StaffTypeBClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
-	}*/
+	}
 
 #pragma endregion
 

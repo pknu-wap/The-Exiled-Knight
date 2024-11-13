@@ -30,6 +30,9 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+public:
+	UCapsuleComponent* GetCollisionComponent() { return CapsuleComponent; }
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	UStaticMesh* StaticMesh;
