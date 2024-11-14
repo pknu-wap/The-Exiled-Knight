@@ -36,6 +36,9 @@ public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
 	UTextBlock* Text_Quantity;
 
+public:
+	int GetActiveSlotIdx() { return ActiveSlotIdx; }
+
 private:
 	int ActiveSlotIdx = 0;
 };
