@@ -15,7 +15,7 @@ void UWidget_EquipSelect_ContentList::UpdateContents(EItemCategory Category)
 	UInventoryComponent* inventoryComp = player->GetComponentByClass<UInventoryComponent>();
 	if (!inventoryComp) return;
 	
-	const TArray<FInventorySlot>& contents = inventoryComp->GetContents(Category);
+	const TArray<FInventorySlot>& contents = inventoryComp->GetConstContents(Category);
 	for (int i = 0; i < contents.Num(); i += 5)
 	{
 		UEquipSelect_ListData* data = NewObject<UEquipSelect_ListData>(UEquipSelect_ListData::StaticClass());
@@ -26,6 +26,8 @@ void UWidget_EquipSelect_ContentList::UpdateContents(EItemCategory Category)
 			{
 				data->Items.Add(contents[j]);
 			}
+			else
+				UE_LOG(LogTemp, Warning, TEXT("Widget_InvContentList"))
 		}
 
 		ContentList->AddItem(data);

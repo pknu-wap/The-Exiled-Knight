@@ -25,8 +25,7 @@ struct FItemStruct : public FTableRowBase
         MaxStackSize = Other.MaxStackSize;
         ItemValue = Other.ItemValue;
         bUseable = Other.bUseable;
-        //StaticMesh = Other.StaticMesh;
-        //SkeletonMesh = Other.SkeletonMesh;
+        bDestroyable = Other.bDestroyable;
     };
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -53,11 +52,8 @@ struct FItemStruct : public FTableRowBase
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     bool bUseable = false;
 
-    //UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    //UStaticMesh* StaticMesh;
-
-    //UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    //USkeletalMesh* SkeletonMesh;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    bool bDestroyable = true;
 };
 
 USTRUCT(BlueprintType)
