@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "EKEnums.h"
 #include "Widget_QuickSlots.generated.h"
 
 class UWidget_QuickSlot;
@@ -14,6 +15,10 @@ class THEEXILEDKNIGHT_API UWidget_QuickSlots : public UUserWidget
 	GENERATED_BODY()
 	
 public:
+	int GetActiveSlotIdx(EEquipCategory InCategory);
+
+
+protected:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
 	UWidget_QuickSlot* QuickSlot_Weapon;
 
