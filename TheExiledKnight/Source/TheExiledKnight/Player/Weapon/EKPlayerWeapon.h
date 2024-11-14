@@ -52,6 +52,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	float WeaponAdditionalDamage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float DamageValue;
+
 	void SetAttackComboNext();
 	void ResetAttackCombo();
 };

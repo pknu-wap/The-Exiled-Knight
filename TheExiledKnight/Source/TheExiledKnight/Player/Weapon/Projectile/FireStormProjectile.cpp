@@ -12,15 +12,17 @@ AFireStormProjectile::AFireStormProjectile()
 	StormMeshComponent->SetRelativeLocation(FVector(0, 0, -70));
 
 	CapsuleComponent->SetCapsuleHalfHeight(400.f);
-	CapsuleComponent->SetCapsuleRadius(100.f);
+	CapsuleComponent->SetCapsuleRadius(150.f);
 	CapsuleComponent->SetRelativeLocation(FVector(0, 0, 0));
 
-	ProjectileMovementComponent->InitialSpeed = 100.f;
-	ProjectileMovementComponent->MaxSpeed = 100.f;
+	ProjectileMovementComponent->InitialSpeed = 130.f;
+	ProjectileMovementComponent->MaxSpeed = 130.f;
 
 	BaseParticle->SetRelativeLocation(FVector(0, 0, -80));
 
 	SetLifeSpan(12.f);
+
+	DamageValue = 0.1;
 }
 
 void AFireStormProjectile::BeginPlay()
@@ -32,11 +34,6 @@ void AFireStormProjectile::BeginPlay()
 void AFireStormProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (bIsHitOnce)
-	{
-		return;
-	}
 
 	FVector CapsuleLocation = CapsuleComponent->GetComponentLocation();
 	FRotator CapsuleRotation = CapsuleComponent->GetComponentRotation();
@@ -68,11 +65,11 @@ void AFireStormProjectile::Tick(float DeltaTime)
 			TSubclassOf<UEKPlayerDamageType> PlayerDamageType = UEKPlayerDamageType::StaticClass();
 			if (HitEnemy)
 			{
-				UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage(), EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
-				bIsHitOnce = true;
+				UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
 				if (HitParticle)
 				{
-					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, GetActorLocation(), GetActorRotation());
+					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, HitEnemy->GetActorLocation(), HitEnemy->GetActorRotation());
+					HitEnemy->Jump();
 				}
 				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Purple, TEXT("Fire Storm"));
 			}
