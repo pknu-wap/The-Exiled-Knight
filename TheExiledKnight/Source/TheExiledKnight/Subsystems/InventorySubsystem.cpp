@@ -38,7 +38,7 @@ FItemStruct* UInventorySubsystem::GetItemRow(FName RowName)
 	return ItemDB->FindRow<FItemStruct>(RowName, TEXT("GetItemRow"));
 }
 
-FItemStruct* UInventorySubsystem::GetItemInfo(uint8 ID)
+const FItemStruct* UInventorySubsystem::GetItemInfo(uint8 ID)
 {
 	FItemStruct* ItemInfo = ItemDictionary.Find(ID);
 

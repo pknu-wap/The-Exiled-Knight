@@ -22,7 +22,7 @@ public:
 
 	TObjectPtr<UDataTable> GetItemDB() { return ItemDB; };
 	FItemStruct* GetItemRow(FName RowName);
-	FItemStruct* GetItemInfo(uint8 ID);
+	const FItemStruct* GetItemInfo(uint8 ID);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
