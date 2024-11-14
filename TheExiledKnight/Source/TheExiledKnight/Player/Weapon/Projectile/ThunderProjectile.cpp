@@ -1,23 +1,28 @@
 // Made by Somalia Pirate
 
-#include "FireBallProjectile.h"
+#include "ThunderProjectile.h"
 
-AFireBallProjectile::AFireBallProjectile()
+AThunderProjectile::AThunderProjectile()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	ProjectileMovementComponent->ProjectileGravityScale = 0.05f;
+	StaticMeshComponent->SetRelativeScale3D(FVector(0.4f, 0.4f, 0.4f));
 
-	DamageValue = 0.5;
+	ProjectileMovementComponent->InitialSpeed = 600.f;
+	ProjectileMovementComponent->MaxSpeed = 600.f;
+
+	SetLifeSpan(0.8f);
+
+	DamageValue = 0.3;
 }
 
-void AFireBallProjectile::BeginPlay()
+void AThunderProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-void AFireBallProjectile::Tick(float DeltaTime)
+void AThunderProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
@@ -56,7 +61,7 @@ void AFireBallProjectile::Tick(float DeltaTime)
 				{
 					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, GetActorLocation(), GetActorRotation());
 				}
-				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Purple, TEXT("Fire Ball"));
+				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Thunder Ball"));
 				Destroy();
 				return;
 			}
