@@ -7,6 +7,8 @@ AFireBallProjectile::AFireBallProjectile()
 	PrimaryActorTick.bCanEverTick = true;
 
 	ProjectileMovementComponent->ProjectileGravityScale = 0.05f;
+
+	DamageValue = 0.5;
 }
 
 void AFireBallProjectile::BeginPlay()
@@ -54,7 +56,7 @@ void AFireBallProjectile::Tick(float DeltaTime)
 			TSubclassOf<UEKPlayerDamageType> PlayerDamageType = UEKPlayerDamageType::StaticClass();
 			if (HitEnemy)
 			{
-				UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage(), EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
+				UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
 				bIsHitOnce = true;
 				if (HitParticle)
 				{

@@ -10,6 +10,8 @@ AStaffTypeB::AStaffTypeB()
 	Staff->SetStaticMesh(StaffMesh);
 
 	WeaponAdditionalDamage = 5;
+
+	DamageValue = 0.3;
 }
 
 void AStaffTypeB::BeginPlay()

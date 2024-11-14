@@ -68,7 +68,7 @@ void UWeaponBaseAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequen
 			if (HitEnemy)
 			{
 				EKPlayer->GetPlayerStatusComponent()->SetPlayerFinalDamage();
-				UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage(), EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
+				UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * EKPlayer->GetCurrentWeapon()->DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
 				bIsHitOnce = true;
 				GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Attack!!!"));
 			}
