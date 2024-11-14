@@ -56,8 +56,6 @@ protected:
 	USoundBase* HitSound;
 
 protected:
-	bool bIsHitOnce = false;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	float DamageValue;
 

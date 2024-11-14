@@ -1,6 +1,5 @@
 // Made by Somalia Pirate
 
-
 #include "MagicBaseAttack.h"
 
 void UMagicBaseAttack::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
@@ -12,6 +11,7 @@ void UMagicBaseAttack::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBas
 		AActor* OwnerActor = MeshComp->GetOwner();
 
 		EKPlayer = Cast<AEKPlayer>(OwnerActor);
+
 		if (!EKPlayer)
 		{
 			return;
