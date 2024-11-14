@@ -20,6 +20,7 @@
 #include "Blueprint/UserWidget.h"
 #include "EKGameplayTags.h"
 #include "Item/EKItem_Base.h"
+#include "Subsystems/InventorySubsystem.h"
 #include "DrawDebugHelpers.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
@@ -97,6 +98,12 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	if (IAInteractFinder.Succeeded())
 	{
 		IAInteract = IAInteractFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UInputAction> IAIAGameMenuFinder(TEXT("/Script/EnhancedInput.InputAction'/Game/EKPlayer/Input/IA_EK_GameMenu.IA_EK_GameMenu'"));
+	if (IAIAGameMenuFinder.Succeeded())
+	{
+		IAGameMenu = IAIAGameMenuFinder.Object;
 	}
 
 	// Test Input
@@ -286,6 +293,8 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IASitDown, ETriggerEvent::Started, this, &ThisClass::SitDownStarted);
 
 		EnhancedInputComponent->BindAction(IAInteract, ETriggerEvent::Started, this, &ThisClass::Interact);
+
+		EnhancedInputComponent->BindAction(IAGameMenu, ETriggerEvent::Started, this, &ThisClass::OnPressed_GameMenu);
 
 		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Started, this, &ThisClass::EnhanceStarted);
 		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Completed, this, &ThisClass::EnhanceRelease);
@@ -605,9 +614,11 @@ void AEKPlayerController::Interact(const FInputActionValue& InputValue)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Interact"));
 
-	if (bCanItemInteract)
+	if (Item)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Can Interact with Item"));
+
+		InventoryComponent->AddItem(Item->GetItemInfo(), Item->GetItemQuantity());
 	}
 }
 
@@ -616,7 +627,6 @@ void AEKPlayerController::FindInteractableObjects()
 	FVector Location;
 	FRotator Rotation;
 	TArray<FHitResult> HitResults;
-	AEKItem_Base* Item = nullptr;
 
 	EKPlayer->GetActorEyesViewPoint(Location, Rotation);
 
@@ -632,7 +642,7 @@ void AEKPlayerController::FindInteractableObjects()
 	{
 		Item = Cast<AEKItem_Base>(HitResult.GetActor());
 
-		if (Item != nullptr	)
+		if (Item != nullptr)
 			break;
 	}
 
@@ -644,10 +654,7 @@ void AEKPlayerController::FindInteractableObjects()
 	{
 		// Show Interact UI
 
-		bCanItemInteract = true;
 	}
-	else
-		bCanItemInteract = false;
 
 }
 
