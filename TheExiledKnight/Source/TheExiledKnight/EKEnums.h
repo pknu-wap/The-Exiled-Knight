@@ -10,7 +10,9 @@ enum class EWeaponType : uint8
 	None,
 	GreatSword,
 	Spear,
-	Staff
+	Staff,
+
+	MAX UMETA(Hidden)
 };
 
 UENUM(BlueprintType)
@@ -22,4 +24,6 @@ enum class EItemCategory : uint8
 	Hunting,	// monster drop item
 	Upgrades,	// weapon & potion upgrade
 	Rune,	// Special skill
+
+	MAX UMETA(Hidden)
 };

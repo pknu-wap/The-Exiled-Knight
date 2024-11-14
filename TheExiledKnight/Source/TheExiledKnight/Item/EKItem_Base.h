@@ -25,11 +25,20 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	const uint8 GetItemID() { return ID; }
+	const FItemStruct GetItemInfo() { return ItemInfo; }
+	const uint8 GetItemQuantity() { return Quantity; }
+
+	UFUNCTION(BlueprintCallable)
+	virtual void UseItem();
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	uint8 ID = 0;
+	uint8 ID = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	FItemStruct ItemInfo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	uint8 Quantity = 1;
 };

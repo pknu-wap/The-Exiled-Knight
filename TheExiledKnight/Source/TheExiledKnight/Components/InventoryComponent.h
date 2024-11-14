@@ -27,32 +27,54 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	const TArray<FInventorySlot>& GetContents(EItemCategory Category);
+	const TArray<FInventorySlot>& GetConstContents(EItemCategory Category);
 
-	int GetIndexToAdd(uint8 ID);
-	int GetDupSlotIndex(uint8 ID, int MaxStack);
-	int GetEmptySlotIndex();
-
-	UFUNCTION(BlueprintCallable)
-	TArray<FInventorySlot>& GetInventory() { return Inventory; }
+	int GetIndexToAdd(uint8 ID, EItemCategory Category);
+	int GetDupSlotIndex(uint8 ID, EItemCategory Category);
+	int GetEmptySlotIndex(EItemCategory Category);
 
 	UFUNCTION(BlueprintCallable)
-	bool AddItem(FItemStruct ItemToAdd);
+	TArray<FInventorySlot>& GetContents(EItemCategory Category);
+
+	UFUNCTION(BlueprintCallable)
+	bool AddItem(FItemStruct ItemToAdd, int Quantity = 1);
+
+	UFUNCTION(BlueprintCallable)
+	bool UseItem(FItemStruct ItemToUse, int Quantity = 1);
+
+	UFUNCTION(BlueprintCallable)
+	bool DeleteItem(FItemStruct ItemToDelete, int Quantity = 0);
+
+	UFUNCTION(BlueprintCallable)
+	bool DeleteSlots(TArray<FInventorySlot>& Slots);
+
+	UFUNCTION(BlueprintCallable)
+	bool AddNewSlot(TArray<FInventorySlot>& Slots);
 
 
 private:
 	void InitializeInventory();
 
 
-
-
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<UDataTable> ItemDB;
+	TArray<FInventorySlot> None;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	TArray<FInventorySlot> Inventory;
+	TArray<FInventorySlot> Weapon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	int Inventory_Size = 5;
+	TArray<FInventorySlot> Shard;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TArray<FInventorySlot> Hunting;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TArray<FInventorySlot> Upgrades;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TArray<FInventorySlot> Rune;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	int ExpansionSize = 5;
 };
