@@ -69,8 +69,6 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAInteract, ETriggerEvent::Started, this, &ThisClass::Interact);
 
 		EnhancedInputComponent->BindAction(IASkill, ETriggerEvent::Started, this, &ThisClass::SkillStarted);
-		
-		EnhancedInputComponent->BindAction(IATest, ETriggerEvent::Started, this, &ThisClass::TestStarted);
 	}
 }
 
@@ -279,6 +277,8 @@ void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputVa
 			EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Dodge);
 			EKPlayer->PlayAnimMontage(DodgeAnim);
 
+			InvincibilityTimer(0.65f);
+
 			if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_BattleState))
 			{
 				ConsumtionStaminaAndTimer(DodgeStamina);
@@ -372,7 +372,7 @@ void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputVal
 	{
 		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
-		PerfectDefenseTimer();
+		InvincibilityTimer(0.2f);
 	}
 }
 
@@ -447,12 +447,6 @@ void AEKPlayerController::SitDownStarted(const FInputActionValue& InputValue)
 	}
 }
 
-void AEKPlayerController::TestStarted(const FInputActionValue& InputValue)
-{
-	TSubclassOf<UEKPlayerDamageType> PlayerDamageType = UEKPlayerDamageType::StaticClass();
-	UGameplayStatics::ApplyDamage(EKPlayer, 10, this, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
-}
-
 #pragma endregion
 
 void AEKPlayerController::Interact(const FInputActionValue& InputValue)
@@ -523,17 +517,6 @@ void AEKPlayerController::SetAttackEndTimer(float Time)
 	GetWorldTimerManager().SetTimer(AttackEndHandle, this, &ThisClass::ResetAttackCombo, Time, false);
 }
 
-void AEKPlayerController::SetPerfectDefense()
-{
-	bIsPerfectDefense = false;
-}
-
-void AEKPlayerController::PerfectDefenseTimer()
-{
-	bIsPerfectDefense = true;
-	GetWorldTimerManager().SetTimer(PerfectDefenseHandle, this, &ThisClass::SetPerfectDefense, PerfectDefenseTime, false);
-}
-
 void AEKPlayerController::SetBattleStateEnd()
 {
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_BattleState);
@@ -558,6 +541,17 @@ void AEKPlayerController::RemoveAttackTagTimer(float Time)
 {
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 	GetWorldTimerManager().SetTimer(StaffBaseSkillEndHandle, this, &ThisClass::RemoveAttackTag, Time, false);
+}
+
+void AEKPlayerController::SetInvincibility()
+{
+	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Invincibility);
+}
+
+void AEKPlayerController::InvincibilityTimer(float Time)
+{
+	GetWorldTimerManager().SetTimer(InvincibilityHandle, this, &ThisClass::SetInvincibility, Time, false);
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Invincibility);
 }
 
 #pragma endregion
