@@ -1,80 +1,112 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "EKEnemyProjectileBase.h"
-#include"GameFramework/ProjectileMovementComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/BoxComponent.h"
+#include "Components/SceneComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include"Player/EKPlayer/EKPlayer.h"
-#include"Sound/SoundBase.h"
+#include "Player/EKPlayer/EKPlayer.h"
+#include "Sound/SoundBase.h"
+
 // Sets default values
 AEKEnemyProjectileBase::AEKEnemyProjectileBase()
 {
 #pragma region InitialSetting
 
-	
+    
+    CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
+    CollisionBox->SetCollisionProfileName(TEXT("BlockAllDynamic"));
+    RootComponent = CollisionBox;
 
-	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
-	CollisionBox->SetCollisionProfileName(TEXT("BlockAllDynamic"));
-	RootComponent = CollisionBox;
+    
+    CollisionBox->OnComponentHit.AddDynamic(this, &AEKEnemyProjectileBase::OnHit);
 
-	CollisionBox->OnComponentHit.AddDynamic(this, &AEKEnemyProjectileBase::OnHit);
+   
+    ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Projectile_Mesh"));
+    ProjectileMesh->SetupAttachment(RootComponent);
 
-	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Projectile_Mesh"));
-	ProjectileMesh->SetupAttachment(CollisionBox);
+    
+    ProjectileComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile_Component"));
+    ProjectileComponent->bRotationFollowsVelocity = true; 
+    ProjectileComponent->bShouldBounce = false;            
 
-	ProjectileComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile_Component"));
-	ProjectileComponent->InitialSpeed = InitialSpeed;
-	ProjectileComponent->MaxSpeed = MaxSpeed;
-	ProjectileComponent->ProjectileGravityScale = GravityScale; 
-	ProjectileMesh->SetupAttachment(CollisionBox); 
-	ProjectileComponent->bRotationFollowsVelocity = bIsRotation;
-	
-	TrailParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("TrailParticle"));
-	TrailParticle->SetupAttachment(RootComponent);  
-	TrailParticle->bAutoActivate = true; 
-#pragma endregion 
+    
+    ProjectileMesh->SetupAttachment(CollisionBox);
+
+    
+    TrailParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("TrailParticle"));
+    TrailParticle->SetupAttachment(ProjectileMesh);
+    TrailParticle->bAutoActivate = true;
+
+#pragma endregion
 }
 
-UBoxComponent *AEKEnemyProjectileBase::GetCollisionComponent()
+UBoxComponent* AEKEnemyProjectileBase::GetCollisionComponent()
 {
-	return CollisionBox;
+    return CollisionBox;
 }
 
 
-
-// Called when the game starts or when spawned
 void AEKEnemyProjectileBase::BeginPlay()
 {
-	Super::BeginPlay();
-	
+    Super::BeginPlay();
+
+    if (ProjectileComponent)
+    {
+        ProjectileComponent->InitialSpeed = InitialSpeed;
+        ProjectileComponent->MaxSpeed = MaxSpeed;
+        ProjectileComponent->bRotationFollowsVelocity = bIsRotation;
+    }
+
+  
+    SetLifeSpan(10.0f); 
 }
 
+// 충돌 처리 함수 - 개선된 버전
 void AEKEnemyProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (HitEffect)
-	{
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, Hit.Location, FRotator::ZeroRotator, true);  
-		AEKPlayer* HitPlayer = Cast<AEKPlayer>(OtherActor);
-		if (HitSound)
-		{
-			UGameplayStatics::PlaySoundAtLocation(this, HitSound, Hit.Location); 
-		}
-		if (HitPlayer)
-		{
-			UGameplayStatics::ApplyDamage(OtherActor, 10, Hit.GetActor()->GetInstigatorController(), this,DamageTypeClass );
-		}
-	}
-	
+    if (!OtherActor || OtherActor == this)
+    {
+        return;
+    }
 
-	Destroy();
+ 
+    HandleImpactEffects(Hit.Location);
+
+    
+    AEKPlayer* HitPlayer = Cast<AEKPlayer>(OtherActor);
+    if (HitPlayer)
+    {
+        UGameplayStatics::ApplyDamage(HitPlayer, 30.0f, Hit.GetActor()->GetInstigatorController(), Owner, DamageTypeClass);  
+    }
+
+    Destroy();
 }
+
+
+void AEKEnemyProjectileBase::HandleImpactEffects(const FVector& ImpactLocation)
+{
+    
+    if (HitEffect)
+    {
+        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, ImpactLocation, FRotator::ZeroRotator, true);
+    }
+
+   
+    if (HitSound)
+    {
+        UGameplayStatics::PlaySoundAtLocation(this, HitSound, ImpactLocation);
+    }
+}
+
+
 
 void AEKEnemyProjectileBase::SetHomingTarget(AActor* TargetActor)
 {
-	if (TargetActor&&bIsHoming)
-	{
-		ProjectileComponent->HomingTargetComponent = TargetActor->GetRootComponent(); 
-	}
+    if (TargetActor && bIsHoming)
+    {
+        if (ProjectileComponent)
+        {
+            ProjectileComponent->HomingTargetComponent = TargetActor->GetRootComponent();
+        }
+    }
 }
-
