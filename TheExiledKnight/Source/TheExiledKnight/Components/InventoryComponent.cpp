@@ -21,7 +21,6 @@ void UInventoryComponent::BeginPlay()
 	Super::BeginPlay();
 
 	InitializeInventory();
-	
 }
 
 
@@ -35,21 +34,22 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 const TArray<FInventorySlot>& UInventoryComponent::GetConstContents(EItemCategory Category)
 {
-	switch (Category)
-	{
-	case EItemCategory::Weapon:
-		return Weapon;
-	case EItemCategory::Shard:
-		return Shard;
-	case EItemCategory::Hunting:
-		return Hunting;
-	case EItemCategory::Upgrades:
-		return Upgrades;
-	case EItemCategory::Rune:
-		return Rune;
-	default:
-		return None;
-	}
+	//switch (Category)
+	//{
+	//case EItemCategory::Weapon:
+	//	return Weapon;
+	//case EItemCategory::Shard:
+	//	return Shard;
+	//case EItemCategory::Hunting:
+	//	return Hunting;
+	//case EItemCategory::Upgrades:
+	//	return Upgrades;
+	//case EItemCategory::Rune:
+	//	return Rune;
+	//default:
+	//	return None;
+	//}
+	return None;
 }
 
 int UInventoryComponent::GetIndexToAdd(uint8 ID, EItemCategory Category)
@@ -96,11 +96,11 @@ int UInventoryComponent::GetEmptySlotIndex(EItemCategory Category)
 void UInventoryComponent::InitializeInventory()
 {
 	AddNewSlot(GetContents(EItemCategory::None));
-	AddNewSlot(GetContents(EItemCategory::Weapon));
-	AddNewSlot(GetContents(EItemCategory::Shard));
-	AddNewSlot(GetContents(EItemCategory::Hunting));
-	AddNewSlot(GetContents(EItemCategory::Upgrades));
-	AddNewSlot(GetContents(EItemCategory::Rune));
+	//AddNewSlot(GetContents(EItemCategory::Weapon));
+	//AddNewSlot(GetContents(EItemCategory::Shard));
+	//AddNewSlot(GetContents(EItemCategory::Hunting));
+	//AddNewSlot(GetContents(EItemCategory::Upgrades));
+	//AddNewSlot(GetContents(EItemCategory::Rune));
 
 	//for (TPair<EItemCategory, TArray<FInventorySlot>>& Pair : Inventory)
 	//{
@@ -115,21 +115,23 @@ void UInventoryComponent::InitializeInventory()
 
 TArray<FInventorySlot>& UInventoryComponent::GetContents(EItemCategory Category)
 {
-	switch (Category)
-	{
-	case EItemCategory::Weapon:
-		return Weapon;
-	case EItemCategory::Shard:
-		return Shard;
-	case EItemCategory::Hunting:
-		return Hunting;
-	case EItemCategory::Upgrades:
-		return Upgrades;
-	case EItemCategory::Rune:
-		return Rune;
-	default:
-		return None;
-	}
+	//switch (Category)
+	//{
+	//case EItemCategory::Weapon:
+	//	return Weapon;
+	//case EItemCategory::Shard:
+	//	return Shard;
+	//case EItemCategory::Hunting:
+	//	return Hunting;
+	//case EItemCategory::Upgrades:
+	//	return Upgrades;
+	//case EItemCategory::Rune:
+	//	return Rune;
+	//default:
+	//	return None;
+	//}
+
+	return None;
 }
 
 bool UInventoryComponent::AddItem(FItemStruct ItemToAdd, int Quantity)
@@ -261,6 +263,7 @@ bool UInventoryComponent::DeleteSlots(TArray<FInventorySlot>& Slots)
 
 bool UInventoryComponent::AddNewSlot(TArray<FInventorySlot>& Slots)
 {
+	UE_LOG(LogTemp, Warning, TEXT("AddNewSlot"))
 	Slots.AddDefaulted(ExpansionSize);
 
 	return true;
