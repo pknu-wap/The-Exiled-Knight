@@ -7,6 +7,8 @@ ASpearTypeB::ASpearTypeB()
 	PrimaryActorTick.bCanEverTick = true;
 
 	WeaponAdditionalDamage = 10;
+
+	DamageValue = 0.6;
 }
 
 void ASpearTypeB::BeginPlay()

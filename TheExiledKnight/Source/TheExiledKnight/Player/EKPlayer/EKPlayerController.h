@@ -27,23 +27,17 @@ class UAnimMontage;
 #define DefenseStamina 200
 
 #define GreatSwordAttackStamina 100
-#define GreatSwordEnhancedAttackStamina 200
-#define GreatSwordJumpAttackStamina 100
 #define GreatSwordSkill 80
 #define GreatSwordSkillMp 200
 
 #define SpearAttackStamina 50
-#define SpearEnhancedAttackStamina 50
-#define SpearJumpAttackStamina 50
 #define SpearSkill 80
 #define SpearSkillMp 200
 
 #define StaffAttackStamina 80
-#define StaffAttackMp 80
-#define StaffEnhancedAttackStamina 80
-#define StaffJumpAttackStamina 80
+#define StaffAttackMp 50
 #define StaffSkill 80
-#define StaffSkillMp 200
+#define StaffSkillMp 300
 
 #pragma endregion
 
@@ -93,8 +87,6 @@ private:
 
 	void SkillStarted(const FInputActionValue& InputValue);
 
-	void TestStarted(const FInputActionValue& InputValue);
-
 public:
 	void OnPressed_GameMenu(const FInputActionValue& InputValue);
 
@@ -140,10 +132,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
 	UInputAction* IAInteract;
 
-	// Test Input
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Test")
-	UInputAction* IATest;
-
 #pragma endregion
 
 protected:
@@ -170,10 +158,6 @@ public:
 #pragma region Timer
 
 public:
-	// About Perfect Defense
-	bool bIsPerfectDefense = false;
-	const float PerfectDefenseTime = 0.2f;
-
 	// About Battle State
 	const float BattleEndTime = 10.f;
 
@@ -181,8 +165,8 @@ protected:
 	FTimerHandle StaminaRecoveryHandle;
 	FTimerHandle AttackEndHandle;
 	FTimerHandle StaffBaseSkillEndHandle;
-	FTimerHandle PerfectDefenseHandle;
 	FTimerHandle BattleStateHandle;
+	FTimerHandle InvincibilityHandle; // muzuk
 
 	// How long does it take for the player to recover after using the Stemina
 	const float StaminaRecoveryTime = 2.5f;
@@ -199,10 +183,6 @@ public:
 	void ResetAttackCombo();
 	void SetAttackEndTimer(float Time);
 
-	// About Perfect Defense
-	void SetPerfectDefense();
-	void PerfectDefenseTimer();
-
 	// About Battle State
 	void SetBattleStateEnd();
 	void BattleStateTimer();
@@ -210,6 +190,9 @@ public:
 	// About Staff Base Skill
 	void RemoveAttackTag();
 	void RemoveAttackTagTimer(float Time);
+
+	void SetInvincibility();
+	void InvincibilityTimer(float Time);
 
 #pragma endregion
 

@@ -163,7 +163,7 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 
 		EKPlayerController->ConsumtionStaminaAndTimer(DefenseStamina);
 
-		if (EKPlayerController->bIsPerfectDefense) // Perfect Defense
+		if (EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Invincibility)) // Perfect Defense
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Magenta, TEXT("Perfect Defense"));
 		}
@@ -176,32 +176,42 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 	else
 	{
 		PlayerStatusComponent->SetHp(-Damage);
-		HitDirection(Cast<AEK_EnemyBase>(DamageCauser));
+		HitDirection(DamageCauser);
 	}
+
+	EKPlayerController->InvincibilityTimer(0.5f);
 
 	return 0.f;
 }
 
-void AEKPlayer::HitDirection(TObjectPtr<AEK_EnemyBase> Enemy)
+void AEKPlayer::HitDirection(AActor* Enemy)
 {
-	if (!Enemy)
-	{
-		return;
-	}
-
 	FVector PlayerLocation = this->GetActorLocation();
 	FVector EnemyLocation = Enemy->GetActorLocation();
 
-	FVector Direction = (PlayerLocation - EnemyLocation).GetSafeNormal();
-
+	FVector Direction = (EnemyLocation - PlayerLocation).GetSafeNormal();
 	FVector PlayerForward = this->GetActorForwardVector();
 
-	float Angle = FMath::RadiansToDegrees(FMath::Acos(FVector::DotProduct(Direction, PlayerForward)));
+	float DotProduct = FVector::DotProduct(Direction, PlayerForward);
+	float Angle = FMath::RadiansToDegrees(FMath::Acos(DotProduct));
 
 	FVector CrossProduct = FVector::CrossProduct(PlayerForward, Direction);
 
 	if (CrossProduct.Z < 0) {
 		Angle = -Angle;
+	}
+
+	if (Angle > -45 && Angle <= 45) {
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Hit Front"));
+	}
+	else if (Angle > 45 && Angle <= 135) {
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Hit Right"));
+	}
+	else if (Angle < -45 && Angle >= -135) {
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Hit Left"));
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Hit Back"));
 	}
 
 	HitAngle = Angle;

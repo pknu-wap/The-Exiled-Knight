@@ -58,6 +58,9 @@ protected:
 protected:
 	bool bIsHitOnce = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	float DamageValue;
+
 protected:
 	AEKPlayer* EKPlayer;
 	AEKPlayerController* EKPlayerController;

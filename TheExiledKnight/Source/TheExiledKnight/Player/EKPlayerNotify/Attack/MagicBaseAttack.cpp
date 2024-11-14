@@ -19,8 +19,8 @@ void UMagicBaseAttack::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBas
 
 		FVector SpawnLocation = EKPlayer->GetActorLocation() + EKPlayer->GetActorForwardVector() * 100.f;
 
-		AEKPlayerProjectile* SpawnFireBall = EKPlayer->GetWorld()->SpawnActor<AEKPlayerProjectile>(FireBall, SpawnLocation, EKPlayer->GetActorRotation());
+		AEKPlayerProjectile* SpawnMagic = EKPlayer->GetWorld()->SpawnActor<AEKPlayerProjectile>(FireBall, SpawnLocation, EKPlayer->GetActorRotation());
 
-		SpawnFireBall->GetCollisionComponent()->IgnoreActorWhenMoving(EKPlayer, true);
+		SpawnMagic->GetCollisionComponent()->IgnoreActorWhenMoving(EKPlayer, true);
 	}
 }
