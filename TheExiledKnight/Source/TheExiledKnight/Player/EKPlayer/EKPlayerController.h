@@ -139,6 +139,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IAInteract;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IAGameMenu;
+
 	// Test Input
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Test")
 	TObjectPtr<UInputAction> IATest;
@@ -146,6 +149,9 @@ protected:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class AEKPlayer> EKPlayer;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class AEKItem_Base* Item = nullptr;
 
 protected:
 	// Common Animation Montage
@@ -221,7 +227,6 @@ protected:
 public:
 	bool bIsEquipWeapon = false;
 	bool bCanAttackNext = false;
-	bool bCanItemInteract = false;
 
 protected:
 	FTimerHandle StaminaRecoveryHandle;
