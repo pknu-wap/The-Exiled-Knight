@@ -23,8 +23,8 @@ public:
 	void SetHealth(float amount);
 	void SetAttackDamage(float amount);
 	void SetIsDead(bool isDead);
-	void  ChangeCurrentPoise(float amount);
-	void ChangeCurrentHealth(float amount); 
+	void  DamageCurrentPoise(float amount);
+	void DamageCurrentHealth(float amount); 
 	
 	float GetMaxHealth();
     float GetMaxPoise();
