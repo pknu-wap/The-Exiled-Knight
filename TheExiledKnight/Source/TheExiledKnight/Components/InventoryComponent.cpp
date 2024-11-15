@@ -34,22 +34,21 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 const TArray<FInventorySlot>& UInventoryComponent::GetConstContents(EItemCategory Category)
 {
-	//switch (Category)
-	//{
-	//case EItemCategory::Weapon:
-	//	return Weapon;
-	//case EItemCategory::Shard:
-	//	return Shard;
-	//case EItemCategory::Hunting:
-	//	return Hunting;
-	//case EItemCategory::Upgrades:
-	//	return Upgrades;
-	//case EItemCategory::Rune:
-	//	return Rune;
-	//default:
-	//	return None;
-	//}
-	return None;
+	switch (Category)
+	{
+	case EItemCategory::Weapon:
+		return Weapon;
+	case EItemCategory::Fragment:
+		return Fragment;
+	case EItemCategory::Hunting:
+		return Hunting;
+	case EItemCategory::Upgrades:
+		return Upgrades;
+	case EItemCategory::Rune:
+		return Rune;
+	default:
+		return None;
+	}
 }
 
 int UInventoryComponent::GetIndexToAdd(uint8 ID, EItemCategory Category)
@@ -96,42 +95,32 @@ int UInventoryComponent::GetEmptySlotIndex(EItemCategory Category)
 void UInventoryComponent::InitializeInventory()
 {
 	AddNewSlot(GetContents(EItemCategory::None));
-	//AddNewSlot(GetContents(EItemCategory::Weapon));
-	//AddNewSlot(GetContents(EItemCategory::Shard));
-	//AddNewSlot(GetContents(EItemCategory::Hunting));
-	//AddNewSlot(GetContents(EItemCategory::Upgrades));
-	//AddNewSlot(GetContents(EItemCategory::Rune));
-
-	//for (TPair<EItemCategory, TArray<FInventorySlot>>& Pair : Inventory)
-	//{
-	//	EItemCategory Category = Pair.Key;
-	//	TArray<FInventorySlot>& Slots = Pair.Value;
-
-	//	Slots.AddDefaulted(ExpansionSize);
-	//}
+	AddNewSlot(GetContents(EItemCategory::Weapon));
+	AddNewSlot(GetContents(EItemCategory::Fragment));
+	AddNewSlot(GetContents(EItemCategory::Hunting));
+	AddNewSlot(GetContents(EItemCategory::Upgrades));
+	AddNewSlot(GetContents(EItemCategory::Rune));
 
 	UE_LOG(LogTemp, Warning, TEXT("InitializeInventory"))
 }
 
 TArray<FInventorySlot>& UInventoryComponent::GetContents(EItemCategory Category)
 {
-	//switch (Category)
-	//{
-	//case EItemCategory::Weapon:
-	//	return Weapon;
-	//case EItemCategory::Shard:
-	//	return Shard;
-	//case EItemCategory::Hunting:
-	//	return Hunting;
-	//case EItemCategory::Upgrades:
-	//	return Upgrades;
-	//case EItemCategory::Rune:
-	//	return Rune;
-	//default:
-	//	return None;
-	//}
-
-	return None;
+	switch (Category)
+	{
+	case EItemCategory::Weapon:
+		return Weapon;
+	case EItemCategory::Fragment:
+		return Fragment;
+	case EItemCategory::Hunting:
+		return Hunting;
+	case EItemCategory::Upgrades:
+		return Upgrades;
+	case EItemCategory::Rune:
+		return Rune;
+	default:
+		return None;
+	}
 }
 
 bool UInventoryComponent::AddItem(FItemStruct ItemToAdd, int Quantity)
@@ -201,9 +190,25 @@ bool UInventoryComponent::UseItem(FItemStruct ItemToUse, int Quantity)
 
 	int index = GetDupSlotIndex(ItemToUse.ID, ItemToUse.ItemCategory);
 
+	if (index == -1)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("You don't have that item."));
+		return false;
+	}
+
 	if (Slots[index].Quantity < Quantity)
 		return false;
 	
+	AEKItem_Base* ItemInstance = GetWorld()->GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetOrCreateItemInstance(ItemToUse.Name);
+	if (ItemInstance == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UseItem : ItemInstance is nullptr"));
+		return false;
+	}
+
+	ItemInstance->UseItem();
+
+	Slots[index].Item;
 	Slots[index].Quantity -= Quantity;
 
 	if (Slots[index].Quantity == 0)
