@@ -27,3 +27,14 @@ enum class EItemCategory : uint8
 
 	MAX UMETA(Hidden)
 };
+
+UENUM(BlueprintType)
+enum class EEquipCategory : uint8
+{
+	None,
+	Weapon,
+	Rune,
+	FragmentOfGod,
+	UsableItem,
+	Magic
+};

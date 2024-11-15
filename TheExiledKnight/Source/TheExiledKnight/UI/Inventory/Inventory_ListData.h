@@ -17,5 +17,6 @@ class THEEXILEDKNIGHT_API UInventory_ListData : public UObject
 	GENERATED_BODY()
 
 public:
+	int StartIdx = 0;
 	TArray<FInventorySlot> Items;
 };
