@@ -237,6 +237,8 @@ bool UInventoryComponent::DeleteItem(FItemStruct ItemToDelete, int Quantity)
 			Slots[index] = tmp2;
 			tmp2 = tmp1;
 		}
+		
+		UE_LOG(LogTemp, Warning, TEXT("add new empty slot"));
 	}
 
 	return true;
