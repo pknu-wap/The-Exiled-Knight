@@ -1,8 +1,8 @@
 // Made by Somalia Pirate
 
-#include "ThunderProjectile.h"
+#include "ThunderBallProjectile.h"
 
-AThunderProjectile::AThunderProjectile()
+AThunderBallProjectile::AThunderBallProjectile()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -16,13 +16,13 @@ AThunderProjectile::AThunderProjectile()
 	DamageValue = 0.3;
 }
 
-void AThunderProjectile::BeginPlay()
+void AThunderBallProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-void AThunderProjectile::Tick(float DeltaTime)
+void AThunderBallProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
@@ -59,7 +59,7 @@ void AThunderProjectile::Tick(float DeltaTime)
 				UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
 				if (HitParticle)
 				{
-					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, GetActorLocation(), GetActorRotation());
+					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, HitEnemy->GetActorLocation(), HitEnemy->GetActorRotation());
 				}
 				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Thunder Ball"));
 				Destroy();

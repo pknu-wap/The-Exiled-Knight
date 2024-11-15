@@ -3,7 +3,6 @@
 #include "StaffTypeA.h"
 
 AStaffTypeA::AStaffTypeA()
-	:Super()
 {
 	PrimaryActorTick.bCanEverTick = true;
 

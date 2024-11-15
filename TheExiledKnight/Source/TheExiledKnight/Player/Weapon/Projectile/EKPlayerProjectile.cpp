@@ -45,3 +45,8 @@ void AEKPlayerProjectile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
+
+void AEKPlayerProjectile::SetBaseParticle(UParticleSystem* ChangeParticle)
+{
+	BaseParticle->Template = ChangeParticle;
+}
