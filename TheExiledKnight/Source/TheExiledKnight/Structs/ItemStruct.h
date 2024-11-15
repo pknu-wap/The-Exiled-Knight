@@ -6,9 +6,6 @@
 #include "EKEnums.h"
 #include "ItemStruct.generated.h"
 
-/**
- * 
- */
 USTRUCT(BlueprintType)
 struct FItemStruct : public FTableRowBase
 {
@@ -71,6 +68,7 @@ struct FWeaponStruct : public FTableRowBase
         ID = Other.ID;
         Name = Other.Name;
         SocketName = Other.SocketName;
+        WeaponClass = Other.WeaponClass;
         AnimInstance = Other.AnimInstance;
         SkillAnim = Other.SkillAnim;
         STRRate = Other.STRRate;
@@ -91,6 +89,11 @@ struct FWeaponStruct : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     UAnimInstance* AnimInstance = nullptr;
+
+    TSubclassOf<class AEKPlayerWeapon> WeaponClass;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSubclassOf<UAnimInstance> AnimInstance;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     UAnimMontage* SkillAnim = nullptr;
