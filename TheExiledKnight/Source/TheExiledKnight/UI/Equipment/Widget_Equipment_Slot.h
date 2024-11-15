@@ -17,12 +17,21 @@ class THEEXILEDKNIGHT_API UWidget_Equipment_Slot : public UUserWidget
 	GENERATED_BODY()
 	
 protected:
+	virtual void NativeConstruct() override;
+
 	UFUNCTION(BlueprintCallable)
 	FEventReply RedirectMouseDownToWidget(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 
 public:
+	UFUNCTION()
+	void SlotUpdated(EEquipCategory inCategory, int inSlotIdx);
+
+public:
 	UPROPERTY(BlueprintReadWrite, Editanywhere)
-	EItemCategory Category = EItemCategory::None;
+	EEquipCategory Category = EEquipCategory::None;
+
+	UPROPERTY(BlueprintReadWrite, Editanywhere)
+	int SlotIdx = 0;
 
 public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
