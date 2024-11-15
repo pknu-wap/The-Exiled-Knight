@@ -38,6 +38,11 @@ const TArray<FInventorySlot>& UInventoryComponent::GetContents(EItemCategory Cat
 	return Inventory;
 }
 
+const TArray<FInventorySlot>& UInventoryComponent::GetContents(EEquipCategory Category)
+{
+	return Inventory;
+}
+
 int UInventoryComponent::GetIndexToAdd(uint8 ID)
 {
 	for (int index = 0; index < Inventory_Size; index++)
@@ -126,7 +131,7 @@ bool UInventoryComponent::AddItem(FItemStruct ItemToAdd)
 			Inventory[index] = tmp2;
 			tmp2 = tmp1;
 		}
-		
+
 		UE_LOG(LogTemp, Warning, TEXT("add new empty slot"));
 	}
 
