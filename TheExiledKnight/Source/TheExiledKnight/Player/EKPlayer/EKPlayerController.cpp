@@ -69,6 +69,8 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAInteract, ETriggerEvent::Started, this, &ThisClass::Interact);
 
 		EnhancedInputComponent->BindAction(IASkill, ETriggerEvent::Started, this, &ThisClass::SkillStarted);
+
+		EnhancedInputComponent->BindAction(IALockOn, ETriggerEvent::Started, this, &ThisClass::LockOnStarted);
 	}
 }
 
@@ -122,20 +124,34 @@ void AEKPlayerController::MoveRelease(const FInputActionValue& InputValue)
 
 void AEKPlayerController::LookTriggered(const FInputActionValue& InputValue)
 {
-	FVector2D LookAxisVector = InputValue.Get<FVector2D>();
+	LookAxisVector = InputValue.Get<FVector2D>();
 
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Look);
 
-	if (EKPlayer)
+	if (!EKPlayer)
 	{
-		EKPlayer->AddControllerYawInput(LookAxisVector.X);
-		EKPlayer->AddControllerPitchInput(LookAxisVector.Y);
+		return;
 	}
+
+	EKPlayer->AddControllerYawInput(LookAxisVector.X);
+	EKPlayer->AddControllerPitchInput(LookAxisVector.Y);
 }
 
 void AEKPlayerController::LookRelease(const FInputActionValue& InputValue)
 {
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Look);
+}
+
+void AEKPlayerController::LockOnStarted(const FInputActionValue& InputValue)
+{
+	if (EKPlayer->GetLockOnTarget())
+	{
+		EKPlayer->SetLockOnTarget(nullptr);
+	}
+	else
+	{
+		EKPlayer->SetLockOnTarget(EKPlayer->FindNearTarget());
+	}
 }
 
 #pragma endregion
@@ -307,6 +323,12 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 		return;
 	}
 
+	// if Player sets lock on, Camera view changes
+	if (EKPlayer->GetLockOnTarget())
+	{
+		EKPlayer->SetActorRotation(EKPlayer->GetLockOnTargetRotation());
+	}
+
 	BattleStateTimer();
 
 	if (!bIsEquipWeapon)
@@ -336,6 +358,12 @@ void AEKPlayerController::SkillStarted(const FInputActionValue& InputValue)
 		return;
 	}
 
+	// if Player sets lock on, Camera view changes
+	if (EKPlayer->GetLockOnTarget())
+	{
+		EKPlayer->SetActorRotation(EKPlayer->GetLockOnTargetRotation());
+	}
+
 	BattleStateTimer();
 
 	if (!bIsEquipWeapon)
@@ -360,6 +388,12 @@ void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputVal
 	if (!EKPlayer)
 	{
 		return;
+	}
+
+	// if Player sets lock on, Camera view changes
+	if (EKPlayer->GetLockOnTarget())
+	{
+		EKPlayer->SetActorRotation(EKPlayer->GetLockOnTargetRotation());
 	}
 
 	BattleStateTimer();

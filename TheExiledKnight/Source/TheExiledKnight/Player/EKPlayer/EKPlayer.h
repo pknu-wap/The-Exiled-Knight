@@ -19,6 +19,8 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
+#pragma region Player Base Component
+
 public:
 	class AEKPlayerWeapon* GetCurrentWeapon() { return CurrentWeapon; }
 
@@ -42,6 +44,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capsule")
 	TObjectPtr<class UCapsuleComponent> LeftLegCapsuleComponent;
 
+#pragma endregion
+
 public:
 	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
@@ -50,6 +54,8 @@ public:
 
 	void AttachWeaponToSpineSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
 	void AttachWeaponToHandSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
+
+#pragma region Weapon Class
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
@@ -70,6 +76,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class AStaffTypeB> StaffTypeBClass;
 
+#pragma endregion
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TObjectPtr<class AEKPlayerWeapon> CurrentWeapon;
@@ -89,4 +97,30 @@ protected:
 
 	void RemoveHitTag();
 	void HitTimer();
+
+#pragma region Lock On
+
+public:
+	AActor* GetLockOnTarget() { return LockOnTarget; }
+	void SetLockOnTarget(AActor* Target);
+	AActor* FindNearTarget();
+	FRotator GetLockOnTargetRotation() { return LockOnTargetRotation; }
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "LockOn")
+	class UBoxComponent* TargetFindLockOnBox;
+
+	TArray<AActor*> LockOnTargets;
+
+	AActor* LockOnTarget;
+
+	FRotator LockOnTargetRotation;
+
+	UFUNCTION()
+	void OnTargetEnterRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnTargetExitRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+#pragma endregion
+
 };
