@@ -16,6 +16,7 @@
 #include "EKPlayerStatusComponent.h"
 #include "../EKPlayerGameplayTags.h"
 #include "Components/InventoryComponent.h"
+#include "Components/SlotComponent.h"
 #include "UI/UISubsystem.h"
 #include "Blueprint/UserWidget.h"
 #include "EKGameplayTags.h"
@@ -244,6 +245,8 @@ AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitial
 	}
 
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+
+	SlotComponent = CreateDefaultSubobject<USlotComponent>(TEXT("SlotComponent"));
 }
 
 void AEKPlayerController::BeginPlay()
@@ -301,6 +304,8 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAEnhance, ETriggerEvent::Canceled, this, &ThisClass::EnhanceRelease);
 
 		EnhancedInputComponent->BindAction(IATest, ETriggerEvent::Started, this, &ThisClass::TestStarted);
+
+		EnhancedInputComponent->BindAction(IAGameMenu, ETriggerEvent::Started, this, &ThisClass::OnPressed_GameMenu);
 	}
 }
 
@@ -409,10 +414,11 @@ void AEKPlayerController::JumpTriggered(const FInputActionValue& InputValue)
 
 void AEKPlayerController::WeaponChangeStarted(const FInputActionValue& InputValue)
 {
-	if (!EKPlayer)
+	if (!EKPlayer || !EKPlayer->GetCurrentWeapon())
 	{
 		return;
 	}
+
 
 	EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
 }
@@ -530,6 +536,8 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 
+	if (!EKPlayer->GetCurrentWeapon()) return;
+
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Enhance))
 	{
 		EKPlayer->GetCurrentWeapon()->PlayEnhancedAttackStartAnimMontage(EKPlayer, this);
@@ -544,7 +552,7 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 
 void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputValue)
 {
-	if (!EKPlayer)
+	if (!EKPlayer || !EKPlayer->GetCurrentWeapon())
 	{
 		return;
 	}
@@ -555,7 +563,7 @@ void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputVal
 
 void AEKPlayerController::WeaponDefenseTriggered(const FInputActionValue& InputValue)
 {
-	if (EKPlayer)
+	if (EKPlayer && EKPlayer->GetCurrentWeapon())
 	{
 		EKPlayer->GetCurrentWeapon()->PlayDefenseTriggerAnimMontage(EKPlayer, this);
 	}
@@ -563,7 +571,7 @@ void AEKPlayerController::WeaponDefenseTriggered(const FInputActionValue& InputV
 
 void AEKPlayerController::WeaponDefenseRelease(const FInputActionValue& InputValue)
 {
-	if (!EKPlayer)
+	if (!EKPlayer || !EKPlayer->GetCurrentWeapon())
 	{
 		return;
 	}

@@ -41,6 +41,25 @@ void UInventorySubsystem::Initialize(FSubsystemCollectionBase& Collection)
 		UE_LOG(LogTemp, Warning, TEXT("ItemClassDB is null"));
 		return;
 	}
+
+	WeaponDB = LoadObject<UDataTable>(this, TEXT("/Script/Engine.DataTable'/Game/TheExiledKnight/Inventory/DataTables/DT_Weapon.DT_Weapon'"));
+
+	if (WeaponDB == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("WeaponDB is null"));
+		return;
+	}
+	
+	TArray<FName> WeaponNames = WeaponDB->GetRowNames();
+
+	for (auto RowName : WeaponNames)
+	{
+		FWeaponStruct* WeaponInfo = WeaponDB->FindRow<FWeaponStruct>(RowName, TEXT("GetItemRow"));
+		if (WeaponInfo != nullptr)
+		{
+			WeaponDictionary.Add(WeaponInfo->ID, *WeaponInfo);
+		}
+	}
 }
 
 const FItemStruct* UInventorySubsystem::GetItemInfo(uint8 ID)
@@ -100,4 +119,18 @@ const TSubclassOf<AEKItem_Base> UInventorySubsystem::GetItemClass(FName ItemName
 	}
 
 	return ItemObject->ItemObject;
+
+}
+
+FWeaponStruct* UInventorySubsystem::GetWeaponInfo(uint8 ID)
+{
+	FWeaponStruct* weaponInfo = WeaponDictionary.Find(ID);
+
+	if (weaponInfo == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GetWeaponInfo : weaponInfo == nullptr"));
+		return nullptr;
+	}
+
+	return weaponInfo;
 }

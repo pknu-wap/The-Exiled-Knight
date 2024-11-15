@@ -10,17 +10,23 @@
 
 void UWidget_InvContentList::UpdateContents(EItemCategory Category)
 {
-	ACharacter* player = UGameplayStatics::GetPlayerCharacter(this, 0);
-	if (!player) return;
-	UInventoryComponent* inventoryComp = player->GetComponentByClass<UInventoryComponent>();
+	APlayerController* playerController = GetOwningPlayer();
+	if (!playerController) return;
+	UInventoryComponent* inventoryComp = playerController->GetComponentByClass<UInventoryComponent>();
 	if (!inventoryComp) return;
 
+
 	const TArray<FInventorySlot>& contents = inventoryComp->GetConstContents(Category);
+
+	ContentList->ClearListItems();
+
+	const TArray<FInventorySlot>& contents = inventoryComp->GetContents(Category);
 	for (int i = 0; i < contents.Num(); i += 5)
 	{
 		UInventory_ListData* data = NewObject<UInventory_ListData>(UInventory_ListData::StaticClass());
+		data->StartIdx = i;
 
-		for (int j = i; j < j + 5; j++)
+		for (int j = i; j < i + 5; j++)
 		{
 			if (contents.IsValidIndex(j))
 			{
