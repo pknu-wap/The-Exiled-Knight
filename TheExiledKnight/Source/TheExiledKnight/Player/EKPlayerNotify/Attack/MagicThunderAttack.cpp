@@ -33,7 +33,6 @@ void UMagicThunderAttack::Notify(USkeletalMeshComponent* MeshComp, UAnimSequence
 			FRotator SpawnRotation = EKPlayer->GetActorRotation();
 			SpawnRotation.Yaw += Angles[i];
 			AEKPlayerProjectile* SpawnMagic = EKPlayer->GetWorld()->SpawnActor<AEKPlayerProjectile>(ThunderBall, SpawnLocations[i], SpawnRotation);
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Spawn Thunder"));
 			SpawnMagic->GetCollisionComponent()->IgnoreActorWhenMoving(EKPlayer, true);
 		}
 	}
