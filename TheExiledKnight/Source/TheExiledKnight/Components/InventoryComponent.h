@@ -8,7 +8,6 @@
 #include "EKEnums.h"
 #include "InventoryComponent.generated.h"
 
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THEEXILEDKNIGHT_API UInventoryComponent : public UActorComponent
 {
@@ -28,6 +27,7 @@ public:
 
 public:
 	const TArray<FInventorySlot>& GetContents(EItemCategory Category);
+	const TArray<FInventorySlot>& GetContents(EEquipCategory Category);
 
 	int GetIndexToAdd(uint8 ID);
 	int GetDupSlotIndex(uint8 ID, int MaxStack);
@@ -42,9 +42,6 @@ public:
 
 private:
 	void InitializeInventory();
-
-
-
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))

@@ -7,9 +7,6 @@
 #include "Structs/ItemStruct.h"
 #include "InventorySubsystem.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class THEEXILEDKNIGHT_API UInventorySubsystem : public UGameInstanceSubsystem
 {
@@ -23,6 +20,8 @@ public:
 	TObjectPtr<UDataTable> GetItemDB() { return ItemDB; };
 	FItemStruct* GetItemRow(FName RowName);
 	FItemStruct* GetItemInfo(uint8 ID);
+	
+	FWeaponStruct* GetWeaponInfo(uint8 ID);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
@@ -30,4 +29,11 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TMap<uint8, FItemStruct> ItemDictionary;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<UDataTable> WeaponDB;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TMap<uint8, FWeaponStruct> WeaponDictionary;
 };
