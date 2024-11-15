@@ -15,11 +15,15 @@ AEK_EnemyBase::AEK_EnemyBase()
 float AEK_EnemyBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInvestigator, AActor* DamageCauser)
 {
 	const float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInvestigator, DamageCauser);
+	if (DamageCauser)
+	{
+		SetAttackTarget(DamageCauser);
+	}
 	if (EnemyStat->GetCurrentHealth() > 0) 
 	{
 		if (Damage > 0)
 		{
-			EnemyStat->ChangeCurrentHealth(Damage);
+			EnemyStat->DamageCurrentHealth(Damage);
 
 			FVector DamageDirection = (DamageCauser->GetActorLocation() - GetActorLocation()).GetSafeNormal();
 			PlayHurtReactionAnimation(DamageDirection);
