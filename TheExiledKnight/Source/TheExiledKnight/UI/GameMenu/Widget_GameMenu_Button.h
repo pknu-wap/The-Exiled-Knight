@@ -11,7 +11,7 @@ enum class EGameMenuCategory : uint8
 {
 	Inventory		UMETA(DisplayName = "Inventory"),
 	Equipment		UMETA(DisplayName = "Equipment"),
-	Option			UMETA(DisplayName = "Option"),
+	Setting			UMETA(DisplayName = "Setting"),
 	Quit			UMETA(DisplayName = "Quit"),
 };
 

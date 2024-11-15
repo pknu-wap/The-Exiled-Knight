@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameplayTagContainer.h"
+#include "Structs/ItemStruct.h"
 #include "EKPlayer.generated.h"
 
 UCLASS()
@@ -41,6 +42,7 @@ public:
 
 	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+	void EquipWeapon(const FWeaponStruct& InWeaponInfo);
 	void AttachWeaponToSpineSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
 	void AttachWeaponToHandSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
 

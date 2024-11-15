@@ -5,14 +5,22 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
+#include "Components/InventoryComponent.h"
+#include "Kismet/KismetTextLibrary.h"
 
 void UWidget_InvContentSlot::NativeConstruct()
 {
 	Super::NativeConstruct();
 }
 
-void UWidget_InvContentSlot::UpdateSlot(const FInventorySlot& inData)
+void UWidget_InvContentSlot::UpdateSlot(int slotIdx, const FInventorySlot& inData)
 {
+	SlotIdx = slotIdx;
+	if (inData.Amount > 0)
+	{
+		Image_Item->SetBrushFromTexture(inData.Item.Icon);
+		Text_Quantity->SetText(UKismetTextLibrary::Conv_IntToText(inData.Amount));
+	}
 }
 
 FEventReply UWidget_InvContentSlot::RedirectMouseDownToWidget(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
