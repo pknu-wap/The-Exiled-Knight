@@ -33,6 +33,8 @@ public:
 public:
 	UCapsuleComponent* GetCollisionComponent() { return CapsuleComponent; }
 
+	void SetBaseParticle(UParticleSystem* ChangeParticle);
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	UStaticMesh* StaticMesh;

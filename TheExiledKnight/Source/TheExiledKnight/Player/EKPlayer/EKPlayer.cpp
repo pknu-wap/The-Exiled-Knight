@@ -179,7 +179,7 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 		HitDirection(DamageCauser);
 	}
 
-	EKPlayerController->InvincibilityTimer(0.5f);
+	EKPlayerController->InvincibilityTimer(1.f);
 
 	return 0.f;
 }
