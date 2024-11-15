@@ -87,6 +87,8 @@ private:
 
 	void SkillStarted(const FInputActionValue& InputValue);
 
+	void LockOnStarted(const FInputActionValue& InputValue);
+
 public:
 	void OnPressed_GameMenu(const FInputActionValue& InputValue);
 
@@ -132,6 +134,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
 	UInputAction* IAInteract;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
+	UInputAction* IALockOn;
+
 #pragma endregion
 
 protected:
@@ -154,6 +159,8 @@ protected:
 
 public:
 	bool bIsEquipWeapon = false;
+
+	FVector2D GetLookAxisVector() { return LookAxisVector; }
 
 #pragma region Timer
 
@@ -201,6 +208,8 @@ protected:
 	float SpaceKeyPressStart = 0.f;
 	float NeedDodgeThresholdTime = 0.2f;
 	float KeyPressDuration = 0.f;
+
+	FVector2D LookAxisVector;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInventoryComponent> InventoryComponent;
