@@ -12,18 +12,20 @@ void UWidget_EquipSelect_ListElement::NativeOnListItemObjectSet(UObject* ListIte
 	UEquipSelect_ListData* data = Cast<UEquipSelect_ListData>(ListItemObject);
 	if (!data) return;
 
+	// if(data->Category == EEquipC)
+
 	if (data->Items.IsValidIndex(0))
-		Slot_01->UpdateSlot(data->Items[0]);
+		Slot_01->UpdateSlot(data->Category, data->Items[0]);
 
 	if (data->Items.IsValidIndex(1))
-		Slot_02->UpdateSlot(data->Items[1]);
+		Slot_02->UpdateSlot(data->Category, data->Items[1]);
 
 	if (data->Items.IsValidIndex(2))
-		Slot_03->UpdateSlot(data->Items[2]);
+		Slot_03->UpdateSlot(data->Category, data->Items[2]);
 
 	if (data->Items.IsValidIndex(3))
-		Slot_04->UpdateSlot(data->Items[3]);
+		Slot_04->UpdateSlot(data->Category, data->Items[3]);
 
 	if (data->Items.IsValidIndex(4))
-		Slot_05->UpdateSlot(data->Items[4]);
+		Slot_05->UpdateSlot(data->Category, data->Items[4]);
 }

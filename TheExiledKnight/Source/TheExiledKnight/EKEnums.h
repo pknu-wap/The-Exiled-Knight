@@ -23,3 +23,14 @@ enum class EItemCategory : uint8
 	Upgrades,	// weapon & potion upgrade
 	Rune,	// Special skill
 };
+
+UENUM(BlueprintType)
+enum class EEquipCategory : uint8
+{
+	None,
+	Weapon,
+	Rune,
+	FragmentOfGod,
+	UsableItem,
+	Magic
+};
