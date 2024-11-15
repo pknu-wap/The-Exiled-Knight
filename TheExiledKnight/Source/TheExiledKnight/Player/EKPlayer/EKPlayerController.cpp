@@ -508,6 +508,9 @@ void AEKPlayerController::UsePotionStarted(const FInputActionValue& InputValue)
 	EKPlayer->GetPlayerStatusComponent()->SetHp(10);
 	EKPlayer->GetPlayerStatusComponent()->SetMp(10);
 	EKPlayer->PlayAnimMontage(UsePotionAnim);
+
+	if (InventoryComponent != nullptr)
+		InventoryComponent->UseItem(*GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfo(3));
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_UseItem);
 }
 
