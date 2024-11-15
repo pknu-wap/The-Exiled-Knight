@@ -38,6 +38,7 @@ public:
 
 	float GetHearingRange();
 
+	UFUNCTION(BlueprintCallable)
 	AActor *GetAttackTarget();
 	
 	UFUNCTION(BlueprintCallable) 
