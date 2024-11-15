@@ -69,12 +69,12 @@ bool UEK_EnemyStatusComponent::GetIsDead()
 #pragma endregion
 
 #pragma region ChangeStat
-void UEK_EnemyStatusComponent::ChangeCurrentPoise(float amount)
+void UEK_EnemyStatusComponent::DamageCurrentPoise(float amount)
 {
 	CurrentPoise -= amount;
 }
 
-void UEK_EnemyStatusComponent::ChangeCurrentHealth(float amount)
+void UEK_EnemyStatusComponent::DamageCurrentHealth(float amount)
 {
 	CurrentHealth -= amount;
 }
