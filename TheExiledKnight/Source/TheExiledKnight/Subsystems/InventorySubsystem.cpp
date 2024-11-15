@@ -12,9 +12,9 @@ void UInventorySubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
-	ItemDB = LoadObject<UDataTable>(this, TEXT("/Script/Engine.DataTable'/Game/TheExiledKnight/Inventory/DataTables/DT_Item.DT_Item'"));
+	ItemInfoDB = LoadObject<UDataTable>(this, TEXT("/Script/Engine.DataTable'/Game/TheExiledKnight/Inventory/DataTables/DT_Item.DT_Item'"));
 
-	if (ItemDB == nullptr)
+	if (ItemInfoDB == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ItemDB is null"));
 		return;
@@ -22,20 +22,25 @@ void UInventorySubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 	uint8 ID = 0;
 
-	for (auto RowName : ItemDB->GetRowNames())
+	for (FName RowName : ItemInfoDB->GetRowNames())
 	{
 		ID++;
-		FItemStruct* ItemInfo = ItemDB->FindRow<FItemStruct>(RowName, TEXT("GetItemRow"));
+		FItemStruct* ItemInfo = ItemInfoDB->FindRow<FItemStruct>(RowName, TEXT("GetItemRow"));
 		if (ItemInfo != nullptr)
 		{
 			ItemDictionary.Add(ID, *ItemInfo);
 		}
 	}
-}
 
-FItemStruct* UInventorySubsystem::GetItemRow(FName RowName)
-{
-	return ItemDB->FindRow<FItemStruct>(RowName, TEXT("GetItemRow"));
+	// Item Object Dictionary Initialize
+
+	ItemClassDB = LoadObject<UDataTable>(this, TEXT("/Script/Engine.DataTable'/Game/TheExiledKnight/Inventory/DataTables/DT_ItemClass.DT_ItemClass'"));
+
+	if (ItemClassDB == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ItemClassDB is null"));
+		return;
+	}
 }
 
 const FItemStruct* UInventorySubsystem::GetItemInfo(uint8 ID)
@@ -49,4 +54,50 @@ const FItemStruct* UInventorySubsystem::GetItemInfo(uint8 ID)
 	}
 
 	return ItemInfo;
+}
+
+AEKItem_Base* UInventorySubsystem::GetOrCreateItemInstance(FName ItemName)
+{
+	AEKItem_Base* ItemInstance;
+
+	if (!ItemInstanceCache.Contains(ItemName))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GetOrCreateItemInstance : ItemInstanceCache doesn't exist"));
+
+		// add cache
+		ItemInstance = NewObject<AEKItem_Base>(this, GetItemClass(ItemName));
+
+		if (ItemInstance == nullptr)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("GetOrCreateItemInstance : ItemInstance is nullptr"));
+			return nullptr;
+		}
+
+
+		ItemInstanceCache.Add(ItemName, ItemInstance);
+
+		return ItemInstance;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GetOrCreateItemInstance : ItemInstanceCache exists"));
+		ItemInstance = *ItemInstanceCache.Find(ItemName);
+		return ItemInstance;
+	}
+}
+
+const TSubclassOf<AEKItem_Base> UInventorySubsystem::GetItemClass(FName ItemName)
+{
+	if (ItemClassDB == nullptr)
+		return nullptr;
+
+	FItemObject* ItemObject = ItemClassDB->FindRow<FItemObject>(ItemName, TEXT("GetItemRow"));
+
+	if (ItemObject == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GetItemInfo : ItemInfo == nullptr"));
+		return nullptr;
+	}
+
+	return ItemObject->ItemObject;
 }

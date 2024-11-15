@@ -12,6 +12,17 @@ FItemStruct::FItemStruct()
     Icon = nullptr;
     MaxStackSize = 1;
     ItemValue = 0;
+    ItemLevel = 1;
     bUseable = false;
     bDestroyable = false;
+}
+
+FWeaponStruct::FWeaponStruct()
+{
+
+}
+
+FItemObject::FItemObject()
+{
+
 }

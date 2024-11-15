@@ -24,6 +24,7 @@ struct FItemStruct : public FTableRowBase
         Icon = Other.Icon;
         MaxStackSize = Other.MaxStackSize;
         ItemValue = Other.ItemValue;
+        ItemLevel = Other.ItemLevel;
         bUseable = Other.bUseable;
         bDestroyable = Other.bDestroyable;
     };
@@ -50,6 +51,9 @@ struct FItemStruct : public FTableRowBase
     int ItemValue;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int ItemLevel;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     bool bUseable = false;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -61,13 +65,17 @@ struct FWeaponStruct : public FTableRowBase
 {
     GENERATED_BODY()
 
-    FWeaponStruct() {};
+    FWeaponStruct();
     FWeaponStruct(const FWeaponStruct& Other)
     {
         ID = Other.ID;
         Name = Other.Name;
         SocketName = Other.SocketName;
         AnimInstance = Other.AnimInstance;
+        SkillAnim = Other.SkillAnim;
+        STRRate = Other.STRRate;
+        DEXRate = Other.DEXRate;
+        INTRate = Other.INTRate;
         StaticMesh = Other.StaticMesh;
         SkeletonMesh = Other.SkeletonMesh;
     };
@@ -76,17 +84,52 @@ struct FWeaponStruct : public FTableRowBase
     uint8 ID = 0;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FName Name;
+    FName Name = "Weapon";
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FName SocketName;
+    FName SocketName = "Socket";
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    UAnimInstance* AnimInstance;
+    UAnimInstance* AnimInstance = nullptr;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    UStaticMesh* StaticMesh;
+    UAnimMontage* SkillAnim = nullptr;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    USkeletalMesh* SkeletonMesh;
+    float STRRate = 1.0;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float DEXRate = 1.0;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float INTRate = 1.0;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UStaticMesh* StaticMesh = nullptr;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    USkeletalMesh* SkeletonMesh = nullptr;
+};
+
+USTRUCT(BlueprintType)
+struct FItemObject : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    FItemObject();
+    FItemObject(const FItemObject& Other)
+    {
+        ID = Other.ID;
+        Name = Other.Name;
+        ItemObject = Other.ItemObject;
+    };
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    uint8 ID = 0;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FName Name = "Name";
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSubclassOf<class AEKItem_Base> ItemObject = nullptr;
 };
