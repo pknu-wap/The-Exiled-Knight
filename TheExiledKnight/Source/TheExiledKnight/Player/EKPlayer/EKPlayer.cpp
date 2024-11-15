@@ -14,6 +14,7 @@
 #include "../EKPlayerGameplayTags.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "../../Enemy/EK_EnemyBase.h"
+#include "Components/BoxComponent.h"
 
 AEKPlayer::AEKPlayer()
 {
@@ -54,6 +55,11 @@ AEKPlayer::AEKPlayer()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
+
+	TargetFindLockOnBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TargetFindLockOnBox"));
+	TargetFindLockOnBox->SetupAttachment(RootComponent);
+	TargetFindLockOnBox->SetRelativeLocation(FVector(0, 0, 0));
+	TargetFindLockOnBox->SetRelativeScale3D(FVector(24.f, 24.f, 20.f));
 }
 
 void AEKPlayer::BeginPlay()
@@ -61,6 +67,9 @@ void AEKPlayer::BeginPlay()
 	Super::BeginPlay();
 
 	EKPlayerController = Cast<AEKPlayerController>(this->GetController());
+
+	TargetFindLockOnBox->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnTargetEnterRange);
+	TargetFindLockOnBox->OnComponentEndOverlap.AddDynamic(this, &ThisClass::OnTargetExitRange);
 
 #pragma region Weapon Test
 
@@ -132,6 +141,16 @@ void AEKPlayer::Tick(float DeltaTime)
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("HP : %d / %d"), PlayerStatusComponent->GetHp(), PlayerStatusComponent->GetMaxHp()));
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("MP : %d / %d"), PlayerStatusComponent->GetMp(), PlayerStatusComponent->GetMaxMp()));
 	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("Stamina : %d / %d"), PlayerStatusComponent->GetStamina(), PlayerStatusComponent->GetMaxStamina()));
+
+	if (LockOnTarget)
+	{
+		FVector Direction = LockOnTarget->GetActorLocation() - GetActorLocation();
+		FRotator TargetRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
+		// TargetRotation.Pitch += EKPlayerController->GetLookAxisVector().Y;
+		TargetRotation.Pitch -= 30.f;
+		LockOnTargetRotation = TargetRotation;
+		EKPlayerController->SetControlRotation(LockOnTargetRotation);
+	}
 }
 
 #pragma region Damage
@@ -250,6 +269,58 @@ void AEKPlayer::HitTimer()
 {
 	EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Hit);
 	GetWorldTimerManager().SetTimer(HitTagHandle, this, &ThisClass::RemoveHitTag, NextHitTime, false);
+}
+
+#pragma endregion
+
+#pragma region Lock On
+
+void AEKPlayer::SetLockOnTarget(AActor* Target)
+{
+	LockOnTarget = Target;
+}
+
+void AEKPlayer::OnTargetEnterRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor && OtherActor->IsA(AEK_EnemyBase::StaticClass()))
+	{
+		LockOnTargets.Add(OtherActor);
+	}
+}
+
+void AEKPlayer::OnTargetExitRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (OtherActor && LockOnTargets.Contains(OtherActor))
+	{
+		LockOnTargets.Remove(OtherActor);
+	}
+}
+
+AActor* AEKPlayer::FindNearTarget()
+{
+	if (LockOnTargets.Num() == 0)
+	{
+		return nullptr;
+	}
+
+	float NearDistance = 10000.f;
+	AActor* NearTarget = nullptr;
+
+	for (AActor* Target : LockOnTargets)
+	{
+		if (IsValid(Target))
+		{
+			float Distance = FVector::Dist(this->GetActorLocation(), Target->GetActorLocation());
+
+			if (Distance < NearDistance)
+			{
+				NearDistance = Distance;
+				NearTarget = Target;
+			}
+		}
+	}
+
+	return NearTarget;
 }
 
 #pragma endregion
