@@ -15,7 +15,7 @@ class THEEXILEDKNIGHT_API UWidget_EquipSelect_ContentList : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	void UpdateContents(EItemCategory Category);
+	void UpdateContents(EEquipCategory Category);
 
 public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
