@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "EKEnums.h"
+#include "Structs/InventorySlotStruct.h"
 #include "Widget_Inventory.generated.h"
 
 class UButton;
@@ -29,6 +30,9 @@ public:
 
 	UFUNCTION()
 	void ShowNextCategory();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateDescription(const FInventorySlot& SlotData);
 
 public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)

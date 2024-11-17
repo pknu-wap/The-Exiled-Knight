@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameplayTagContainer.h"
+#include "Structs/ItemStruct.h"
 #include "EKPlayer.generated.h"
 
 UCLASS()
@@ -52,6 +53,7 @@ public:
 	void HitDirection(AActor* Enemy);
 	float HitAngle = 0.f;
 
+	void EquipWeapon(const FWeaponStruct& InWeaponInfo);
 	void AttachWeaponToSpineSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
 	void AttachWeaponToHandSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
 
