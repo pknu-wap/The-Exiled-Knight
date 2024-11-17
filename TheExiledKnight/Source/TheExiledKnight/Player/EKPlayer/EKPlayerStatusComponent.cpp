@@ -11,7 +11,6 @@ UEKPlayerStatusComponent::UEKPlayerStatusComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
-
 	// Edit Basic Status Value Here
 	MaxHp = 100;
 	Hp = 50;
@@ -19,12 +18,11 @@ UEKPlayerStatusComponent::UEKPlayerStatusComponent()
 	Mp = 50;
 	MaxStamina = 1000;
 	Stamina = 1000;
-	DefaultDamage = 0;
-	FinalDamage = 0;
-
+	DefaultDamage = 100.f;
+	FinalDamage = DefaultDamage;
+	
 	// Edit Basic Status Value Here
-	MaxLevel = 100;
-	Level = 1;
+	Level = 6;
 	Vitality = 1;
 	Mental = 1;
 	Endurance = 1;
@@ -51,53 +49,14 @@ void UEKPlayerStatusComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	// Stamina Recovery
 	if (bCanStaminaRecovery)
 	{
 		SetStamina(4);
 	}
 }
 
-void UEKPlayerStatusComponent::TakeDamage(float Damage)
-{
-	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Hit))
-	{
-		return;
-	}
-
-	SetHp(-Damage);
-	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Hit);
-	EKPlayer->GetCurrentWeapon()->PlayHitAnimMontage(EKPlayer, EKPlayerController);
-}
-
-uint32 UEKPlayerStatusComponent::GetMaxHp()
-{
-	return MaxHp;
-}
-
-uint32 UEKPlayerStatusComponent::GetHp()
-{
-	return Hp;
-}
-
-uint32 UEKPlayerStatusComponent::GetMaxMp()
-{
-	return MaxMp;
-}
-
-uint32 UEKPlayerStatusComponent::GetMp()
-{
-	return Mp;
-}
-
-uint32 UEKPlayerStatusComponent::GetMaxStamina()
-{
-	return MaxStamina;
-}
-
-uint32 UEKPlayerStatusComponent::GetStamina()
-{
-	return Stamina;
-}
+#pragma region Set Basic Status
 
 void UEKPlayerStatusComponent::SetMaxHp(int32 SetData)
 {
@@ -132,146 +91,68 @@ void UEKPlayerStatusComponent::SetStamina(int32 SetData)
 	Delegate_StaminaUpdated.Broadcast(MaxStamina, Stamina);
 }
 
-uint32 UEKPlayerStatusComponent::GetPlayerDefaultDamage()
+#pragma endregion
+
+#pragma region Damage
+
+void UEKPlayerStatusComponent::SetPlayerDefaultDamage()
 {
-	return DefaultDamage;
+
 }
 
-uint32 UEKPlayerStatusComponent::GetPlayerFinalDamage()
+void UEKPlayerStatusComponent::SetPlayerFinalDamage()
 {
-	return FinalDamage;
-}
-
-// About Weapon Attack Combo
-
-uint32 UEKPlayerStatusComponent::GetGreatSwordCombo()
-{
-	return GreatSwordCombo;
-}
-
-void UEKPlayerStatusComponent::SetGreatSwordCombo()
-{
-	if (GreatSwordCombo < 3)
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword))
 	{
-		GreatSwordCombo++;
+		FinalDamage = DefaultDamage + ((Strength * 10) * 1.5) + ((Ability * 10) * 0.8) + EKPlayer->GetCurrentWeapon()->WeaponAdditionalDamage;
 	}
-	else
+	else if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear))
 	{
-		ResetGreatSwordCombo();
+		FinalDamage = DefaultDamage + ((Ability * 10) * 1.5) + ((Strength * 10) * 0.8) + EKPlayer->GetCurrentWeapon()->WeaponAdditionalDamage;
+	}
+	else if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff))
+	{
+		FinalDamage = DefaultDamage + ((Intelligence * 10) * 1.5) + ((Mental * 10) * 0.8) + EKPlayer->GetCurrentWeapon()->WeaponAdditionalDamage;
 	}
 }
 
-void UEKPlayerStatusComponent::ResetGreatSwordCombo()
+#pragma endregion
+
+#pragma region LevelUp
+
+void UEKPlayerStatusComponent::LevelUp(uint8 SetData)
 {
-	GreatSwordCombo = 1;
+	Level = FMath::Clamp(Level + SetData, 0, PlayerMaxLevel);
 }
 
-uint32 UEKPlayerStatusComponent::GetSpearCombo()
+void UEKPlayerStatusComponent::LevelUpVitality(uint8 SetData)
 {
-	return SpearCombo;
+	Vitality = FMath::Clamp(Vitality + SetData, 0, PlayerMaxVitalityLevel);
 }
 
-void UEKPlayerStatusComponent::SetSpearCombo()
+void UEKPlayerStatusComponent::LevelUpMental(uint8 SetData)
 {
-	if (SpearCombo < 5)
-	{
-		SpearCombo++;
-	}
-	else
-	{
-		ResetSpearCombo();
-	}
+	Mental = FMath::Clamp(Mental + SetData, 0, PlayerMaxMentalLevel);
 }
 
-void UEKPlayerStatusComponent::ResetSpearCombo()
+void UEKPlayerStatusComponent::LevelUpEndurance(uint8 SetData)
 {
-	SpearCombo = 1;
+	Endurance = FMath::Clamp(Endurance + SetData, 0, PlayerMaxEnduranceLevel);
 }
 
-uint32 UEKPlayerStatusComponent::GetStaffCombo()
+void UEKPlayerStatusComponent::LevelUpStrength(uint8 SetData)
 {
-	return StaffCombo;
+	Strength = FMath::Clamp(Strength + SetData, 0, PlayerMaxStrengthLevel);
 }
 
-void UEKPlayerStatusComponent::SetStaffCombo()
+void UEKPlayerStatusComponent::LevelUpAbility(uint8 SetData)
 {
-	if (StaffCombo < 5)
-	{
-		StaffCombo++;
-	}
-	else
-	{
-		ResetStaffCombo();
-	}
+	Ability = FMath::Clamp(Ability + SetData, 0, PlayerMaxAbilityLevel);
 }
 
-void UEKPlayerStatusComponent::ResetStaffCombo()
+void UEKPlayerStatusComponent::LevelUpIntelligence(uint8 SetData)
 {
-	StaffCombo = 1;
+	Intelligence = FMath::Clamp(Intelligence + SetData, 0, PlayerMaxInteligenceLevel);
 }
 
-uint32 UEKPlayerStatusComponent::GetGreatSwordEnhancedCombo()
-{
-	return GreatSwordEnhancedCombo;
-}
-
-void UEKPlayerStatusComponent::SetGreatSwordEnhancedCombo()
-{
-	if (GreatSwordEnhancedCombo < 2)
-	{
-		GreatSwordEnhancedCombo++;
-	}
-	else
-	{
-		ResetGreatSwordEnhancedCombo();
-	}
-}
-
-void UEKPlayerStatusComponent::ResetGreatSwordEnhancedCombo()
-{
-	GreatSwordEnhancedCombo = 1;
-}
-
-uint32 UEKPlayerStatusComponent::GetSpearEnhancedCombo()
-{
-	return SpearEnhancedCombo;
-}
-
-void UEKPlayerStatusComponent::SetSpearEnhancedCombo()
-{
-	if (SpearEnhancedCombo < 5)
-	{
-		SpearEnhancedCombo++;
-	}
-	else
-	{
-		ResetSpearEnhancedCombo();
-	}
-}
-
-void UEKPlayerStatusComponent::ResetSpearEnhancedCombo()
-{
-	SpearEnhancedCombo = 1;
-}
-
-uint32 UEKPlayerStatusComponent::GetStaffEnhancedCombo()
-{
-	return StaffEnhancedCombo;
-}
-
-void UEKPlayerStatusComponent::SetStaffEnhancedCombo()
-{
-	if (StaffEnhancedCombo < 5)
-	{
-		StaffEnhancedCombo++;
-	}
-	else
-	{
-		ResetStaffEnhancedCombo();
-	}
-}
-
-void UEKPlayerStatusComponent::ResetStaffEnhancedCombo()
-{
-	StaffEnhancedCombo = 1;
-}
+#pragma endregion
