@@ -21,7 +21,7 @@ public:
 	virtual void NativeConstruct() override;
 
 public:
-	void UpdateSlot(EEquipCategory inCategory, const FInventorySlot& inData);
+	void UpdateSlot(EItemCategory inCategory, const FInventorySlot& inData);
 
 protected:
 	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
@@ -30,7 +30,7 @@ protected:
 	FEventReply RedirectMouseDownToWidget(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 
 public:
-	EEquipCategory Category;
+	EItemCategory Category;
 
 	FInventorySlot SlotData;
 
