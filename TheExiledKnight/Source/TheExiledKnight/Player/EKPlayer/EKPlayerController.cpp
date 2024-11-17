@@ -297,6 +297,11 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IATest, ETriggerEvent::Started, this, &ThisClass::TestStarted);
 
 		EnhancedInputComponent->BindAction(IAGameMenu, ETriggerEvent::Started, this, &ThisClass::OnPressed_GameMenu);
+		EnhancedInputComponent->BindAction(IA_Up, ETriggerEvent::Started, this, &ThisClass::OnPressed_Up);
+		EnhancedInputComponent->BindAction(IA_Down, ETriggerEvent::Started, this, &ThisClass::OnPressed_Down);
+		EnhancedInputComponent->BindAction(IA_Left, ETriggerEvent::Started, this, &ThisClass::OnPressed_Left);
+		EnhancedInputComponent->BindAction(IA_Right, ETriggerEvent::Started, this, &ThisClass::OnPressed_Right);
+
 	}
 }
 
@@ -816,4 +821,28 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 		SetShowMouseCursor(false);
 	}
 
+}
+
+void AEKPlayerController::OnPressed_Up(const FInputActionValue& InputValue)
+{
+	if (SlotComponent)
+		SlotComponent->UpdateActiveSlot(EInputType::Up);
+}
+
+void AEKPlayerController::OnPressed_Down(const FInputActionValue& InputValue)
+{
+	if (SlotComponent)
+		SlotComponent->UpdateActiveSlot(EInputType::Down);
+}
+
+void AEKPlayerController::OnPressed_Left(const FInputActionValue& InputValue)
+{
+	if (SlotComponent)
+		SlotComponent->UpdateActiveSlot(EInputType::Left);
+}
+
+void AEKPlayerController::OnPressed_Right(const FInputActionValue& InputValue)
+{
+	if (SlotComponent)
+		SlotComponent->UpdateActiveSlot(EInputType::Right);
 }
