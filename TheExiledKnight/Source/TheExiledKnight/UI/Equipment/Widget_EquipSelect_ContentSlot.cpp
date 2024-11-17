@@ -85,7 +85,7 @@ FEventReply UWidget_EquipSelect_ContentSlot::RedirectMouseDownToWidget(const FGe
 		}
 		case EItemCategory::UseableItem:
 		{
-			// Equip Usable Item
+			// Equip Useable Item
 			slotComp->EquipUseableItem(SlotData.Item);
 			break;
 		}

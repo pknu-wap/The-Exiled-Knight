@@ -16,7 +16,7 @@ void UWidget_InvContentList::UpdateContents(EItemCategory Category)
 	if (!inventoryComp) return;
 
 
-	const TArray<FInventorySlot>& contents = inventoryComp->GetConstInventory(Category);
+	const TArray<FInventorySlot>& contents = inventoryComp->GetConstContents(Category);
 
 	ContentList->ClearListItems();
 
