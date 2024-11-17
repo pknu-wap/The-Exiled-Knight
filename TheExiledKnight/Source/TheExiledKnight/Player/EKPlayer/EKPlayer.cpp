@@ -99,6 +99,7 @@ void AEKPlayer::BeginPlay()
 
 #pragma endregion
 
+		
 }
 
 void AEKPlayer::Tick(float DeltaTime)
@@ -187,6 +188,23 @@ void AEKPlayer::HitDirection(TObjectPtr<AEK_EnemyBase> Enemy)
 #pragma endregion
 
 #pragma region Attach to Socket
+
+void AEKPlayer::EquipWeapon(const FWeaponStruct& InWeaponInfo)
+{
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->Destroy();
+		CurrentWeapon = nullptr;
+	}
+
+	if (InWeaponInfo.WeaponClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(InWeaponInfo.WeaponClass, SpawnParams);
+		AttachWeaponToSpineSocket(CurrentWeapon);
+		GetMesh()->SetAnimInstanceClass(InWeaponInfo.AnimInstance);
+	}
+}
 
 void AEKPlayer::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon)
 {
