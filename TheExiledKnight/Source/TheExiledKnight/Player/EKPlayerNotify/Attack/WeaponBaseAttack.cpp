@@ -4,10 +4,7 @@
 #include "../../EKPlayer/EKPlayer.h"
 #include "../../EKPlayer/EKPlayerController.h"
 #include "../../EKPlayerGameplayTags.h"
-#include "../../Weapon/GreatSword/GreatSword.h"
-#include "../../Weapon/Spear/Spear.h"
-#include "../../Weapon/Staff/Staff.h"
-#include "../../../Enemy/EK_EnemyStatusComponent.h"
+#include "../../Weapon/EKPlayerWeapon.h"
 #include "../../../Enemy/EK_EnemyBase.h"
 #include "../../Weapon/DamageType/EKPlayerDamageType.h"
 
@@ -15,7 +12,8 @@ void UWeaponBaseAttack::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSeque
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 
-	if (EKPlayer = Cast<AEKPlayer>(MeshComp->GetOwner()))
+	EKPlayer = Cast<AEKPlayer>(MeshComp->GetOwner());
+	if (EKPlayer)
 	{
 		EKPlayerController = Cast<AEKPlayerController>(EKPlayer->GetController());
 	}
@@ -32,12 +30,6 @@ void UWeaponBaseAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequen
 
 	UCapsuleComponent* WeaponCC = Cast<UCapsuleComponent>(EKPlayer->GetCurrentWeapon()->GetWeaponCapsuleComponent());
 
-	// Because Spear Attack4 is LeftLeg Attack
-	if (EKPlayer->GetCurrentWeapon()->AttackCombo == 4 && EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear))
-	{
-		WeaponCC = EKPlayer->GetLeftLegCapsuleComponent();
-	}
-
 	if (!WeaponCC)
 	{
 		return;
@@ -50,7 +42,7 @@ void UWeaponBaseAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequen
 
 	TArray<FHitResult> HitResults;
 
-	DrawDebugCapsule(GetWorld(), CapsuleLocation, CapsuleHalfHeight, CapsuleRadius, CapsuleRotation.Quaternion(), FColor::Red, false, 0.3f);
+	// DrawDebugCapsule(GetWorld(), CapsuleLocation, CapsuleHalfHeight, CapsuleRadius, CapsuleRotation.Quaternion(), FColor::Red, false, 0.3f);
 
 	bool bIsHit = MeshComp->GetWorld()->SweepMultiByChannel(
 		HitResults,
@@ -76,7 +68,7 @@ void UWeaponBaseAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequen
 			if (HitEnemy)
 			{
 				EKPlayer->GetPlayerStatusComponent()->SetPlayerFinalDamage();
-				UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage(), EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
+				UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * EKPlayer->GetCurrentWeapon()->DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
 				bIsHitOnce = true;
 				GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Attack!!!"));
 			}
@@ -88,15 +80,12 @@ void UWeaponBaseAttack::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenc
 {
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 
-	if (EKPlayerController)
+	if (!EKPlayerController || !EKPlayer)
 	{
-		EKPlayerController->SetAttackComboNext();
+		return;
 	}
 
-	if (EKPlayer)
-	{
-		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
-		EKPlayer->bUseControllerRotationYaw = false;
-		bIsHitOnce = false;
-	}
+	EKPlayerController->SetAttackComboNext();
+	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+	bIsHitOnce = false;
 }
