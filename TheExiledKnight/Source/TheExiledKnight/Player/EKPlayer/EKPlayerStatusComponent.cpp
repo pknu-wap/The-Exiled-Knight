@@ -18,7 +18,7 @@ UEKPlayerStatusComponent::UEKPlayerStatusComponent()
 	Mp = 50;
 	MaxStamina = 1000;
 	Stamina = 1000;
-	DefaultDamage = 100.f;
+	DefaultDamage = 1.0f;
 	FinalDamage = DefaultDamage;
 	
 	// Edit Basic Status Value Here
