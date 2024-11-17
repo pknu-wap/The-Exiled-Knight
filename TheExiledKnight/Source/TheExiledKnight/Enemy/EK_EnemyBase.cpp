@@ -3,76 +3,149 @@
 
 #include "EK_EnemyBase.h"
 #include "EK_EnemyStatusComponent.h"
-#include"Player/EKPlayer/EKPlayer.h"
-#include"Player/EKPlayer//EKPlayerStatusComponent.h"
+#include"Animation/AnimInstance.h"
+
+
 // Sets default values
 AEK_EnemyBase::AEK_EnemyBase()
 {
 	EnemyStat = CreateDefaultSubobject<UEK_EnemyStatusComponent>(TEXT("EnemyStat"));
 }
 
+float AEK_EnemyBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInvestigator, AActor* DamageCauser)
+{
+	const float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInvestigator, DamageCauser);
+	if (DamageCauser)
+	{
+		SetAttackTarget(DamageCauser);
+	}
+	if (EnemyStat->GetCurrentHealth() > 0) 
+	{
+		if (Damage > 0)
+		{
+			EnemyStat->DamageCurrentHealth(Damage);
+
+			FVector DamageDirection = (DamageCauser->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+			PlayHurtReactionAnimation(DamageDirection);
+			if (EnemyStat->GetCurrentHealth() <= 0)
+			{
+				PlayDieReactionAnimation();
+				EnemyStat->OnHPIsZero.Broadcast();
+			}
+
+		}
+	}
+	return Damage;
+}
 TObjectPtr<UEK_EnemyStatusComponent> AEK_EnemyBase::GetStatusComponent()
 {
 	return EnemyStat;
 }
 
-void AEK_EnemyBase::AttackHitCheck()
+#pragma region  PlayMontage
+
+void AEK_EnemyBase::PlayHurtReactionAnimation(const FVector& DamageDirection)
 {
-	if (GetAttackHitCheck())return;
-	USkeletalMeshComponent* SkeletalMeshComp = FindComponentByClass<USkeletalMeshComponent>();
-	if (!SkeletalMeshComp)
+	FVector Forward = GetActorForwardVector(); //forwar vector
+	FVector Right = GetActorRightVector(); //right vector
+	
+	UAnimMontage* HurtMontage = nullptr;
+
+	float  ForwardDot = FVector::DotProduct(Forward, DamageDirection);
+	float RightDot = FVector::DotProduct(Right, DamageDirection);
+		
+	if (FMath::Abs(RightDot) > FMath::Abs(ForwardDot))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("SkeletalMeshComponent not found on %s"), *GetName());
-		return;
+		if (RightDot > 0)HurtMontage = hurtRAnimMontage;
+		else HurtMontage = hurtLAnimMontage;
 	}
-	FVector  SocketLocation = SkeletalMeshComp->GetSocketLocation("Attack_Socket");
-	FVector   SocketForward = SkeletalMeshComp->GetSocketRotation("Attack_Socket").Vector();
-	
-	FVector AttackRangeStart = SocketLocation;
-	FVector AttackRangeEnd = SocketLocation + SocketForward * AttackHalfHeight * 2;
-	DrawDebugCapsule(GetWorld(), (AttackRangeStart + AttackRangeEnd) * 0.5f, AttackHalfHeight, AttackRadius, FRotationMatrix::MakeFromZ(AttackRangeEnd - AttackRangeStart).ToQuat(), FColor::Red, false, 0.2f);
-	FCollisionQueryParams Params(NAME_None, false, this);
-	TArray<FHitResult> HitResults;
-	FCollisionQueryParams CollisionParams(NAME_None, false, this);
-	
-	bool bHit = GetWorld()->SweepMultiByChannel( 
-		HitResults,
-		AttackRangeStart,
-		AttackRangeEnd,
-		FQuat::Identity,
-		ECC_Pawn,
-		FCollisionShape::MakeCapsule(AttackRadius, AttackHalfHeight)
-	);
-	if (bHit)
+	else
 	{
-		for (auto& Hit : HitResults)
+		if (ForwardDot > 0)HurtMontage = hurtFAnimMontage;
+		else HurtMontage = hurtBAnimMontage;
+	}
+	if (HurtMontage) 
+	{
+		EnemyStat->OnDamageTaken.Broadcast(); 
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		if (AnimInstance)
 		{
-			
-			AActor* HitActor = Hit.GetActor(); 
-			if (HitActor) 
-			{
-				//UE_LOG(LogTemp, Warning, TEXT("Detected Actor Class: %s"), *HitActor->GetClass()->GetName()); 
-				AEKPlayer* detectPlayer = Cast<AEKPlayer>(HitActor); 
-				if (detectPlayer)
-				{
-					SetAttackHitCheck(true);
-					detectPlayer->GetPlayerStatusComponent()->TakeDamage(10);
-				}
-				
-			}
+			// ANIMATION PLAY
+			FOnMontageEnded MontageEndedDelegate;
+			MontageEndedDelegate.BindUObject(this, &AEK_EnemyBase::OnHurtAnimationEnded); 
+
+			// ANIMATIONPLAY AND END DELEGATE 설정
+			AnimInstance->Montage_Play(DeathAnimMontage, 1.0f, EMontagePlayReturnType::MontageLength, 0.0f, true); 
+			AnimInstance->Montage_SetEndDelegate(MontageEndedDelegate, HurtMontage);
+
+		
 		}
 	}
+			
 }
 
-void AEK_EnemyBase::SetAttackHitCheck(bool check)
+void AEK_EnemyBase::OnHurtAnimationEnded(UAnimMontage* Montage, bool bInterrupted)
 {
-	bAttackHitCheck = check; 
+	OnHurtAnimationEnd.Broadcast(); 
 }
 
-bool AEK_EnemyBase::GetAttackHitCheck()
+void AEK_EnemyBase::PlayDieReactionAnimation()
 {
-	return bAttackHitCheck;
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance(); 
+	if (AnimInstance && DeathAnimMontage)
+	{
+		
+		FOnMontageEnded EndDelegate;
+		EndDelegate.BindUObject(this, &AEK_EnemyBase::OnDeathAnimationEnded);
+		AnimInstance->Montage_Play(DeathAnimMontage);
+		AnimInstance->Montage_SetEndDelegate(EndDelegate, DeathAnimMontage);
+	}
 }
+void AEK_EnemyBase::OnDeathAnimationEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	if (!bInterrupted)
+	{
+		for (AActor* Actor : AttachedActors)
+		{
+			if (Actor)
+			{
+				Actor->Destroy();
+			}
+		}
+		Destroy();
+	}
+}
+
+float AEK_EnemyBase::GetSightRadius()
+{
+	return SightRadius;
+}
+
+float AEK_EnemyBase::GetLostSightRadius()
+{
+	return LostSightRadius;
+}
+
+float AEK_EnemyBase::GetHearingRange()
+{
+	return HearingRange;
+}
+
+AActor* AEK_EnemyBase::GetAttackTarget()
+{
+	return AttackTarget;
+}
+
+void AEK_EnemyBase::SetAttackTarget(AActor* Actor)
+{
+	if (Actor)
+	{
+		AttackTarget = Actor;
+	}
+}
+
+#pragma endregion
+
 
 
 
