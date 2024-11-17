@@ -126,7 +126,7 @@ bool UInventoryComponent::AddItem(FItemStruct ItemToAdd)
 			Inventory[index] = tmp2;
 			tmp2 = tmp1;
 		}
-		
+
 		UE_LOG(LogTemp, Warning, TEXT("add new empty slot"));
 	}
 

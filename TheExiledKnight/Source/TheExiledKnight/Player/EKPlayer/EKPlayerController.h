@@ -133,6 +133,11 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
 	UInputAction* IAInteract;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IAGameMenu;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IAInteract;
 
 	// Test Input
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Test")
@@ -170,6 +175,8 @@ public:
 
 	// About Battle State
 	const float BattleEndTime = 10.f;
+	bool bCanAttackNext = false;
+	bool bCanItemInteract = false;
 
 protected:
 	FTimerHandle StaminaRecoveryHandle;
@@ -209,4 +216,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInventoryComponent> InventoryComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class USlotComponent> SlotComponent;
 };
