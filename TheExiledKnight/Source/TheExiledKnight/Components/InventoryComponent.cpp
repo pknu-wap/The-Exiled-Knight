@@ -32,7 +32,7 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
-const TArray<FInventorySlot>& UInventoryComponent::GetConstContents(EItemCategory Category)
+const TArray<FInventorySlot>& UInventoryComponent::GetConstInventory(EItemCategory Category)
 {
 	switch (Category)
 	{
@@ -53,7 +53,7 @@ const TArray<FInventorySlot>& UInventoryComponent::GetConstContents(EItemCategor
 
 int UInventoryComponent::GetIndexToAdd(uint8 ID, EItemCategory Category)
 {
-	const TArray<FInventorySlot>& Slots = GetConstContents(Category);
+	const TArray<FInventorySlot>& Slots = GetConstInventory(Category);
 
 	for (int index = 0; index < Slots.Num(); index++)
 	{
@@ -68,7 +68,7 @@ int UInventoryComponent::GetIndexToAdd(uint8 ID, EItemCategory Category)
 
 int UInventoryComponent::GetDupSlotIndex(uint8 ID, EItemCategory Category)
 {
-	const TArray<FInventorySlot>& Slots = GetConstContents(Category);
+	const TArray<FInventorySlot>& Slots = GetConstInventory(Category);
 
 	for (int index = 0; index < Slots.Num(); index++)
 	{
@@ -81,7 +81,7 @@ int UInventoryComponent::GetDupSlotIndex(uint8 ID, EItemCategory Category)
 
 int UInventoryComponent::GetEmptySlotIndex(EItemCategory Category)
 {
-	const TArray<FInventorySlot>& Slots = GetConstContents(Category);
+	const TArray<FInventorySlot>& Slots = GetConstInventory(Category);
 
 	for (int index = 0; index < Slots.Num(); index++)
 	{
@@ -94,17 +94,17 @@ int UInventoryComponent::GetEmptySlotIndex(EItemCategory Category)
 
 void UInventoryComponent::InitializeInventory()
 {
-	AddNewSlot(GetContents(EItemCategory::None));
-	AddNewSlot(GetContents(EItemCategory::Weapon));
-	AddNewSlot(GetContents(EItemCategory::Fragment));
-	AddNewSlot(GetContents(EItemCategory::Hunting));
-	AddNewSlot(GetContents(EItemCategory::Upgrades));
-	AddNewSlot(GetContents(EItemCategory::Rune));
+	AddNewSlot(GetInventory(EItemCategory::None));
+	AddNewSlot(GetInventory(EItemCategory::Weapon));
+	AddNewSlot(GetInventory(EItemCategory::Fragment));
+	AddNewSlot(GetInventory(EItemCategory::Hunting));
+	AddNewSlot(GetInventory(EItemCategory::Upgrades));
+	AddNewSlot(GetInventory(EItemCategory::Rune));
 
 	UE_LOG(LogTemp, Warning, TEXT("InitializeInventory"))
 }
 
-TArray<FInventorySlot>& UInventoryComponent::GetContents(EItemCategory Category)
+TArray<FInventorySlot>& UInventoryComponent::GetInventory(EItemCategory Category)
 {
 	switch (Category)
 	{
@@ -125,7 +125,7 @@ TArray<FInventorySlot>& UInventoryComponent::GetContents(EItemCategory Category)
 
 bool UInventoryComponent::AddItem(FItemStruct ItemToAdd, int Quantity)
 {
-	TArray<FInventorySlot>& Slots = GetContents(ItemToAdd.ItemCategory);
+	TArray<FInventorySlot>& Slots = GetInventory(ItemToAdd.ItemCategory);
 
 	int indexToAdd = GetDupSlotIndex(ItemToAdd.ID, ItemToAdd.ItemCategory);
 
@@ -186,7 +186,7 @@ bool UInventoryComponent::UseItem(FItemStruct ItemToUse, int Quantity)
 	if (!ItemToUse.bUseable)
 		return false;
 
-	TArray<FInventorySlot>& Slots = GetContents(ItemToUse.ItemCategory);
+	TArray<FInventorySlot>& Slots = GetInventory(ItemToUse.ItemCategory);
 
 	int index = GetDupSlotIndex(ItemToUse.ID, ItemToUse.ItemCategory);
 
@@ -219,7 +219,7 @@ bool UInventoryComponent::UseItem(FItemStruct ItemToUse, int Quantity)
 
 bool UInventoryComponent::DeleteItem(FItemStruct ItemToDelete, int Quantity)
 {
-	TArray<FInventorySlot>& Slots = GetContents(ItemToDelete.ItemCategory);
+	TArray<FInventorySlot>& Slots = GetInventory(ItemToDelete.ItemCategory);
 
 	int index = GetDupSlotIndex(ItemToDelete.ID, ItemToDelete.ItemCategory);
 

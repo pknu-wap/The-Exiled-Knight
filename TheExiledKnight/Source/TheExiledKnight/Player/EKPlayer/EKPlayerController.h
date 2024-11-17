@@ -142,9 +142,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IAInteract;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
-	TObjectPtr<UInputAction> IAGameMenu;
-
 	// Test Input
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Test")
 	TObjectPtr<UInputAction> IATest;

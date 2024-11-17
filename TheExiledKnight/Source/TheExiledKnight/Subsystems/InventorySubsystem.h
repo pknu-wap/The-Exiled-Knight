@@ -25,10 +25,6 @@ public:
 	AEKItem_Base* GetOrCreateItemInstance(FName ItemName);
 	const TSubclassOf<AEKItem_Base> GetItemClass(FName ItemName);
 
-	TObjectPtr<UDataTable> GetItemDB() { return ItemDB; };
-	FItemStruct* GetItemRow(FName RowName);
-	FItemStruct* GetItemInfo(uint8 ID);
-	
 	FWeaponStruct* GetWeaponInfo(uint8 ID);
 
 protected:

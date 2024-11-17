@@ -16,10 +16,10 @@ void UWidget_InvContentSlot::NativeConstruct()
 void UWidget_InvContentSlot::UpdateSlot(int slotIdx, const FInventorySlot& inData)
 {
 	SlotIdx = slotIdx;
-	if (inData.Amount > 0)
+	if (inData.Quantity > 0)
 	{
 		Image_Item->SetBrushFromTexture(inData.Item.Icon);
-		Text_Quantity->SetText(UKismetTextLibrary::Conv_IntToText(inData.Amount));
+		Text_Quantity->SetText(UKismetTextLibrary::Conv_IntToText(inData.Quantity));
 	}
 }
 
