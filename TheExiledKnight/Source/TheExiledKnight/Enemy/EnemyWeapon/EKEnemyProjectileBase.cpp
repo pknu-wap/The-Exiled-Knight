@@ -46,6 +46,11 @@ UBoxComponent* AEKEnemyProjectileBase::GetCollisionComponent()
 }
 
 
+void AEKEnemyProjectileBase::SetDamage(float amount)
+{
+    TotalDamage = amount;
+}
+
 void AEKEnemyProjectileBase::BeginPlay()
 {
     Super::BeginPlay();
@@ -76,7 +81,7 @@ void AEKEnemyProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* Ot
     AEKPlayer* HitPlayer = Cast<AEKPlayer>(OtherActor);
     if (HitPlayer)
     {
-        UGameplayStatics::ApplyDamage(HitPlayer, 30.0f, Hit.GetActor()->GetInstigatorController(), Owner, DamageTypeClass);
+        UGameplayStatics::ApplyDamage(HitPlayer, TotalDamage, Hit.GetActor()->GetInstigatorController(), Owner, DamageTypeClass);
     }
 
     Destroy();

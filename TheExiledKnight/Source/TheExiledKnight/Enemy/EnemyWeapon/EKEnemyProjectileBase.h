@@ -20,6 +20,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
 	TSubclassOf<UDamageType> DamageTypeClass;
 
+	void SetDamage(float amount);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -29,7 +31,7 @@ protected:
 
 	void HandleImpactEffects(const FVector& ImpactLocation);
 
-	
+
 
 
 public:	
@@ -66,6 +68,8 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting", meta = (AllowPrivateAccess = "true"))
 	bool bIsHoming = true;
+
+	float TotalDamage = 30.0f;
 public:
 	UBoxComponent* GetCollisionComponent();
 };
