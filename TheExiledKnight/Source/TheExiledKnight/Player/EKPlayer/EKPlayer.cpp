@@ -145,9 +145,12 @@ void AEKPlayer::Tick(float DeltaTime)
 	if (LockOnTarget)
 	{
 		FVector Direction = LockOnTarget->GetActorLocation() - GetActorLocation();
-		FRotator TargetRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
-		// TargetRotation.Pitch += EKPlayerController->GetLookAxisVector().Y;
-		TargetRotation.Pitch -= 30.f;
+		Direction = Direction.GetSafeNormal();
+
+		FRotator TargetRotation = Direction.Rotation();
+
+		TargetRotation.Pitch = EKPlayerController->GetControlRotation().Pitch;
+
 		LockOnTargetRotation = TargetRotation;
 		EKPlayerController->SetControlRotation(LockOnTargetRotation);
 	}
