@@ -21,7 +21,7 @@ public:
 	virtual void NativeConstruct() override;
 
 public:
-	void UpdateContents(EEquipCategory Category);
+	void UpdateContents(EItemCategory Category);
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
