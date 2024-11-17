@@ -87,9 +87,6 @@ struct FWeaponStruct : public FTableRowBase
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     FName SocketName = "Socket";
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    UAnimInstance* AnimInstance = nullptr;
-
     TSubclassOf<class AEKPlayerWeapon> WeaponClass;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)

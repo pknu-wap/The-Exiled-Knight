@@ -52,7 +52,7 @@ void UInventorySubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	
 	TArray<FName> WeaponNames = WeaponDB->GetRowNames();
 
-	for (auto RowName : WeaponNames)
+	for (FName RowName : WeaponNames)
 	{
 		FWeaponStruct* WeaponInfo = WeaponDB->FindRow<FWeaponStruct>(RowName, TEXT("GetItemRow"));
 		if (WeaponInfo != nullptr)
