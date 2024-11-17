@@ -21,11 +21,16 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	TObjectPtr<class AEKPlayerWeapon> GetCurrentWeapon();
+	class AEKPlayerWeapon* GetCurrentWeapon() { return CurrentWeapon; }
 
-	TObjectPtr<class UEKPlayerStatusComponent> GetPlayerStatusComponent();
+	class UEKPlayerStatusComponent* GetPlayerStatusComponent() { return PlayerStatusComponent; }
+
+	class UCapsuleComponent* GetLeftLegCapsuleComponent() { return LeftLegCapsuleComponent; }
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class AEKPlayerController> EKPlayerController;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UEKPlayerStatusComponent> PlayerStatusComponent;
 
@@ -35,12 +40,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UCameraComponent> Camera;
 
-public:
-	void AttackHit();
-	bool bIsHit = false;
-	bool bIsHitOnce = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capsule")
+	TObjectPtr<class UCapsuleComponent> LeftLegCapsuleComponent;
 
+public:
 	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	void HitDirection(TObjectPtr<class AEK_EnemyBase> Enemy);
+	float HitAngle = 0.f;
 
 	void EquipWeapon(const FWeaponStruct& InWeaponInfo);
 	void AttachWeaponToSpineSocket(TObjectPtr<class AEKPlayerWeapon> Weapon);
@@ -64,13 +71,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
 	TSubclassOf<class UAnimInstance> ABPGreatSword;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
-	TSubclassOf<class UAnimInstance> ABPSpear;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
-	TSubclassOf<class UAnimInstance> ABPStaff;
-
 public:
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FGameplayTagContainer EKPlayerStateContainer;
+
+protected:
+	FTimerHandle HitTagHandle;
+
+	const float NextHitTime = 0.5f;
+
+	void RemoveHitTag();
+	void HitTimer();
 };
