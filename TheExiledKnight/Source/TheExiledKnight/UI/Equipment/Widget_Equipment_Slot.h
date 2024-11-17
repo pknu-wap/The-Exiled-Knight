@@ -24,11 +24,11 @@ protected:
 
 public:
 	UFUNCTION()
-	void SlotUpdated(EEquipCategory inCategory, int inSlotIdx);
+	void SlotUpdated(EItemCategory inCategory, int inSlotIdx);
 
 public:
 	UPROPERTY(BlueprintReadWrite, Editanywhere)
-	EEquipCategory Category = EEquipCategory::None;
+	EItemCategory Category = EItemCategory::None;
 
 	UPROPERTY(BlueprintReadWrite, Editanywhere)
 	int SlotIdx = 0;

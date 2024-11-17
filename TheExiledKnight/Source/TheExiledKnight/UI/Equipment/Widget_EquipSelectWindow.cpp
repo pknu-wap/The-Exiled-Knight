@@ -10,30 +10,30 @@ void UWidget_EquipSelectWindow::NativeConstruct()
 	Super::NativeConstruct();
 }
 
-void UWidget_EquipSelectWindow::UpdateContents(EEquipCategory Category)
+void UWidget_EquipSelectWindow::UpdateContents(EItemCategory Category)
 {
 	switch (Category)
 	{
-	case EEquipCategory::None:
+	case EItemCategory::None:
 	{
 		break;
 	}
-	case EEquipCategory::Weapon:
+	case EItemCategory::Weapon:
 	{
 		Text_Category->SetText(FText::FromString(FString("Weapon")));
 		break;
 	}
-	case EEquipCategory::Rune:
+	case EItemCategory::Rune:
 	{
 		Text_Category->SetText(FText::FromString(FString("Rune")));
 		break;
 	}
-	case EEquipCategory::FragmentOfGod:
+	case EItemCategory::FragmentOfGod:
 	{
 		Text_Category->SetText(FText::FromString(FString("Fragment")));
 		break;
 	}
-	case EEquipCategory::UsableItem:
+	case EItemCategory::UseableItem:
 	{
 		Text_Category->SetText(FText::FromString(FString("Usable Item")));
 		break;
