@@ -84,9 +84,9 @@ void UWidget_Equipment_Slot::SlotUpdated(EItemCategory inCategory, int inSlotIdx
 		}
 		case EItemCategory::UseableItem:
 		{
-			if (slotComp->UsableSlots.IsValidIndex(inSlotIdx))
+			if (slotComp->UseableSlots.IsValidIndex(inSlotIdx))
 			{
-				Image_Item->SetBrushFromTexture(slotComp->UsableSlots[inSlotIdx].Icon);
+				Image_Item->SetBrushFromTexture(slotComp->UseableSlots[inSlotIdx].Icon);
 			}
 			break;
 		}

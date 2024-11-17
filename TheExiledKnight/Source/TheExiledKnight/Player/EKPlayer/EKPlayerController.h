@@ -142,6 +142,18 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	TObjectPtr<UInputAction> IAInteract;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IA_Up;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IA_Down;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IA_Left;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	TObjectPtr<UInputAction> IA_Right;
+
 	// Test Input
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Test")
 	TObjectPtr<UInputAction> IATest;
@@ -247,6 +259,10 @@ public:
 
 public:
 	void OnPressed_GameMenu(const FInputActionValue& InputValue);
+	void OnPressed_Up(const FInputActionValue& InputValue);
+	void OnPressed_Down(const FInputActionValue& InputValue);
+	void OnPressed_Left(const FInputActionValue& InputValue);
+	void OnPressed_Right(const FInputActionValue& InputValue);
 
 protected:
 	// About Sprint And Dodge

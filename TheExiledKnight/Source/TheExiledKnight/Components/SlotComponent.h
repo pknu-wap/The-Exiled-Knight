@@ -27,6 +27,7 @@ struct FMagicStruct
 };
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FSlotUpdated, EItemCategory, int)
+DECLARE_MULTICAST_DELEGATE_TwoParams(FQuickSlotUpdated, EItemCategory, int)
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THEEXILEDKNIGHT_API USlotComponent : public UActorComponent
@@ -51,24 +52,37 @@ public:
 	void EquipUseableItem(const FItemStruct& InItemData);
 	void EquipMagic(const FMagicStruct& InMagicData);
 
+public:
+	void UpdateActiveSlot(EInputType InInputType);
+
 private:
 	class UWidget_Equipment* GetEquipmentWidget();
 
 public:
 	// Weapons
 	TArray<FItemStruct> WeaponSlots;
+	int ActiveWeaponSlot = 0;
+	int MaxWeaponSlot = 2;
 
 	// Rune
 	TArray<FItemStruct> RuneSlots;
+	int MaxRuneSlot = 4;
 
 	// Usable Items
-	TArray<FItemStruct> UsableSlots;
+	TArray<FItemStruct> UseableSlots;
+	int ActiveUseableSlot = 0;
+	int MaxUseableSlot = 4;
 
 	// Magics
 	TArray<FMagicStruct> MagicSlots;
+	int ActiveMagicSlot = 0;
+	int MaxMagicSlot = 6;
 
 	// Special Skill
+	int ActiveFragmentSlot = 0;
+	int MaxFragmentSlot = 6;
 	
 public:
 	FSlotUpdated Delegate_SlotUpdated;
+	FQuickSlotUpdated Delegate_QuickSlotUpdated;
 };
