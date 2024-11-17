@@ -6,9 +6,6 @@
 #include "EKEnums.h"
 #include "ItemStruct.generated.h"
 
-/**
- * 
- */
 USTRUCT(BlueprintType)
 struct FItemStruct : public FTableRowBase
 {
@@ -25,8 +22,8 @@ struct FItemStruct : public FTableRowBase
         MaxStackSize = Other.MaxStackSize;
         ItemValue = Other.ItemValue;
         bUseable = Other.bUseable;
-        StaticMesh = Other.StaticMesh;
-        SkeletonMesh = Other.SkeletonMesh;
+        //StaticMesh = Other.StaticMesh;
+        //SkeletonMesh = Other.SkeletonMesh;
     };
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -52,6 +49,45 @@ struct FItemStruct : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     bool bUseable = false;
+
+    //UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    //UStaticMesh* StaticMesh;
+
+    //UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    //USkeletalMesh* SkeletonMesh;
+};
+
+USTRUCT(BlueprintType)
+struct FWeaponStruct : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    FWeaponStruct() {};
+    FWeaponStruct(const FWeaponStruct& Other)
+    {
+        ID = Other.ID;
+        Name = Other.Name;
+        SocketName = Other.SocketName;
+        WeaponClass = Other.WeaponClass;
+        AnimInstance = Other.AnimInstance;
+        StaticMesh = Other.StaticMesh;
+        SkeletonMesh = Other.SkeletonMesh;
+    };
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    uint8 ID = 0;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FName Name;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FName SocketName;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSubclassOf<class AEKPlayerWeapon> WeaponClass;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSubclassOf<UAnimInstance> AnimInstance;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     UStaticMesh* StaticMesh;
