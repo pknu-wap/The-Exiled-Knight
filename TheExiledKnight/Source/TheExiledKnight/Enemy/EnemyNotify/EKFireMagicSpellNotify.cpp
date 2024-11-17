@@ -3,6 +3,7 @@
 
 #include "Enemy/EnemyNotify/EKFireMagicSpellNotify.h"
 #include "Enemy/EnemyWeapon/EKEnemyProjectileBase.h"
+#include"Enemy/EK_EnemyStatusComponent.h"
 #include"Enemy/EK_EnemyBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
@@ -24,16 +25,19 @@ void UEKFireMagicSpellNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequ
 	
 	if (SpawnedSpell)
 	{
-		// 발사체가 발사 주체와 충돌을 무시하도록 설정
+		
 		AActor* OwnerActor = MeshComp->GetOwner();
 		if (OwnerActor)
 		{
 			SpawnedSpell->GetCollisionComponent()->IgnoreActorWhenMoving(OwnerActor, true);
 		}
 		AEK_EnemyBase* FireMagicEnemy = Cast<AEK_EnemyBase>(MeshComp->GetOwner());
-
+		
 		if (FireMagicEnemy) 
 		{
+			float TotalDamage = FireMagicEnemy->GetStatusComponent()->GetAttackDamage();
+			TotalDamage *= DamagePercent;
+			SpawnedSpell->SetDamage(TotalDamage);
 			SpawnedSpell->SetHomingTarget(FireMagicEnemy->GetAttackTarget());
 		}
 	}
