@@ -23,10 +23,14 @@ public:
 	void UpdateSlot(int slotIdx, const FInventorySlot& inData);
 
 protected:
+	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+
 	UFUNCTION(BlueprintCallable)
 	FEventReply RedirectMouseDownToWidget(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 
 public:
+	FInventorySlot SlotData;
+
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
 	UButton* Button_Slot;
 
