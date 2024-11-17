@@ -31,18 +31,5 @@ public:
 	virtual const uint8 GetItemQuantity() { return Quantity; }
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	float STRRate = 1.0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	float DEXRate = 1.0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	float INTRate = 1.0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	int Level = 1;
-
-	// Skill (AnimMontage), WeaponType, 스탯에 따른 보정 수치(근력, 기량, 지력), 강화 레벨
 	
 };

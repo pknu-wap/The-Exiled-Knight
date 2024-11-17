@@ -17,7 +17,7 @@ void UWidget_EquipSelect_ContentList::UpdateContents(EItemCategory Category)
 
 	ContentList->ClearListItems();
 	
-	const TArray<FInventorySlot>& contents = inventoryComp->GetConstInventory(Category);
+	const TArray<FInventorySlot>& contents = inventoryComp->GetConstContents(Category);
 
 	for (int i = 0; i < contents.Num(); i += 5)
 	{

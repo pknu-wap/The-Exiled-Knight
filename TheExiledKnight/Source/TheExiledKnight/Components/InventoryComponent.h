@@ -26,12 +26,10 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	const TArray<FInventorySlot>& GetConstInventory(EItemCategory Category);
-	const TArray<FInventorySlot>& GetEquipContents(EEquipCategory Category);
-
+	const TArray<FInventorySlot>& GetConstContents(EItemCategory Category);
 
 	UFUNCTION(BlueprintCallable)
-	TArray<FInventorySlot>& GetInventory(EItemCategory Category);
+	TArray<FInventorySlot>& GetContents(EItemCategory Category);
 
 	int GetIndexToAdd(uint8 ID, EItemCategory Category);
 	int GetDupSlotIndex(uint8 ID, EItemCategory Category);
@@ -42,6 +40,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool UseItem(FItemStruct ItemToUse, int Quantity = 1);
+
+	UFUNCTION(BlueprintCallable)
+	bool UpgradeItem(FItemStruct ItemToUpgrade);
 
 	UFUNCTION(BlueprintCallable)
 	bool DeleteItem(FItemStruct ItemToDelete, int Quantity = 0);
@@ -64,16 +65,22 @@ private:
 	TArray<FInventorySlot> Weapon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	TArray<FInventorySlot> Fragment;
+	TArray<FInventorySlot> Rune;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	TArray<FInventorySlot> Hunting;
+	TArray<FInventorySlot> FragmentOfGod;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TArray<FInventorySlot> UseableItem;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TArray<FInventorySlot> Magic;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> Upgrades;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	TArray<FInventorySlot> Rune;
+	TArray<FInventorySlot> Hunting;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	int ExpansionSize = 5;

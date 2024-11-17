@@ -26,3 +26,7 @@ FItemObject::FItemObject()
 {
 
 }
+
+FLevel::FLevel()
+{
+}
