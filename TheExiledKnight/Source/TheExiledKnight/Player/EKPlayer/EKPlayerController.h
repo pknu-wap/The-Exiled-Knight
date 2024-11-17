@@ -164,8 +164,6 @@ public:
 	bool bIsEquipWeapon = false;
 	bool bCanItemInteract = false;
 
-	FVector2D GetLookAxisVector() { return LookAxisVector; }
-
 #pragma region Timer
 
 public:
