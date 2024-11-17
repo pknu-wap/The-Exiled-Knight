@@ -35,7 +35,7 @@ void AGreatSword::Tick(float DeltaTime)
 
 }
 
-void AGreatSword::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+void AGreatSword::PlayWeaponEquipAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
 {
 	if (EKPlayer && EKPlayerController)
 	{
@@ -50,7 +50,7 @@ void AGreatSword::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TOb
 	}
 }
 
-void AGreatSword::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+void AGreatSword::PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
 {
 	if (!EKPlayerController->bIsEquipWeapon || !GreatSwordAttackAnim)
 	{
@@ -65,16 +65,19 @@ void AGreatSword::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TOb
 
 	if (AttackCombo == 1)
 	{
+		EKPlayer->StopAnimMontage(GreatSwordAttackAnim);
 		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim, 1.0f, FName("Attack1"));
 		EKPlayerController->SetAttackEndTimer(2.27f);
 	}
 	else if (AttackCombo == 2)
 	{
+		EKPlayer->StopAnimMontage(GreatSwordAttackAnim);
 		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim, 1.0f, FName("Attack2"));
 		EKPlayerController->SetAttackEndTimer(2.37f);
 	}
 	else if (AttackCombo == 3)
 	{
+		EKPlayer->StopAnimMontage(GreatSwordAttackAnim);
 		EKPlayer->PlayAnimMontage(GreatSwordAttackAnim, 1.0f, FName("Attack3"));
 		EKPlayerController->SetAttackEndTimer(2.7f);
 	}
@@ -82,7 +85,7 @@ void AGreatSword::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TOb
 	EKPlayerController->ConsumtionStaminaAndTimer(GreatSwordAttackStamina);
 }
 
-void AGreatSword::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
+void AGreatSword::AttachToDefenseSocket(AEKPlayerWeapon* Weapon, AEKPlayer* EKPlayer)
 {
 	if (Weapon)
 	{
