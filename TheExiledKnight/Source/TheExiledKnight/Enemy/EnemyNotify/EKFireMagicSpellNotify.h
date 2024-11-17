@@ -19,7 +19,10 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MagicSpell", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class AEKEnemyProjectileBase> MagicSpell;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MagicSpell", meta = (AllowPrivateAccess = "true"))
 	FName SocketName; 
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MagicSpell", meta = (AllowPrivateAccess = "true"))
+	float  DamagePercent=1.0f;
 };
