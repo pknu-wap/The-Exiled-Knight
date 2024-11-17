@@ -26,7 +26,7 @@ struct FMagicStruct
 	UTexture2D* Icon;
 };
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FSlotUpdated, EEquipCategory, int)
+DECLARE_MULTICAST_DELEGATE_TwoParams(FSlotUpdated, EItemCategory, int)
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THEEXILEDKNIGHT_API USlotComponent : public UActorComponent
@@ -48,7 +48,7 @@ public:
 public:
 	void EquipWeapon(const FItemStruct& InItemData);
 	void EquipRune(const FItemStruct& InItemData);
-	void EquipUsableItem(const FItemStruct& InItemData);
+	void EquipUseableItem(const FItemStruct& InItemData);
 	void EquipMagic(const FMagicStruct& InMagicData);
 
 private:
