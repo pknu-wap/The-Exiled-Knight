@@ -67,15 +67,13 @@ struct FWeaponStruct : public FTableRowBase
     {
         ID = Other.ID;
         Name = Other.Name;
-        SocketName = Other.SocketName;
+        EquipSocketName = Other.EquipSocketName;
+        DefenseSocketName = Other.DefenseSocketName;
         WeaponClass = Other.WeaponClass;
-        AnimInstance = Other.AnimInstance;
-        SkillAnim = Other.SkillAnim;
+        AttackPow = Other.AttackPow;
         STRRate = Other.STRRate;
         DEXRate = Other.DEXRate;
         INTRate = Other.INTRate;
-        StaticMesh = Other.StaticMesh;
-        SkeletonMesh = Other.SkeletonMesh;
     };
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -85,15 +83,15 @@ struct FWeaponStruct : public FTableRowBase
     FName Name = "Weapon";
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FName SocketName = "Socket";
+    FName EquipSocketName = "Socket";
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FName DefenseSocketName = "Socket";
 
     TSubclassOf<class AEKPlayerWeapon> WeaponClass;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TSubclassOf<UAnimInstance> AnimInstance;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    UAnimMontage* SkillAnim = nullptr;
+    float AttackPow = 1.0;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float STRRate = 1.0;
@@ -103,12 +101,6 @@ struct FWeaponStruct : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float INTRate = 1.0;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    UStaticMesh* StaticMesh = nullptr;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    USkeletalMesh* SkeletonMesh = nullptr;
 };
 
 USTRUCT(BlueprintType)
@@ -132,4 +124,31 @@ struct FItemObject : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSubclassOf<class AEKItem_Base> ItemObject = nullptr;
+};
+
+USTRUCT(BlueprintType)
+struct FLevel : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    FLevel();
+    FLevel(const FLevel& Other)
+    {
+        PotionRate = Other.PotionRate;
+        SwordRate = Other.SwordRate;
+        StaffRate = Other.StaffRate;
+        SpearRate = Other.SpearRate;
+    };
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float PotionRate = 0.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float SwordRate = 0.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float StaffRate = 0.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float SpearRate = 0.0f;
 };
