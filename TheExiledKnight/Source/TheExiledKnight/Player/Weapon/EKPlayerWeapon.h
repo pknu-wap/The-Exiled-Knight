@@ -10,6 +10,7 @@
 #include "../EKPlayer/EKPlayerController.h"
 #include "../EKPlayer/EKPlayerStatusComponent.h"
 #include "../EKPlayerGameplayTags.h"
+#include "Item/EKItem_Base.h"
 #include "EKPlayerWeapon.generated.h"
 
 UCLASS(Abstract)
