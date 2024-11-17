@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "EKEnums.h"
+#include "Structs/InventorySlotStruct.h"
 #include "Widget_EquipSelectWindow.generated.h"
 
 class UTextBlock;
@@ -21,6 +22,13 @@ public:
 
 public:
 	void UpdateContents(EItemCategory Category);
+
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateDescription(const FInventorySlot& SlotData);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void UpdateStatusInfo();
 
 public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)

@@ -83,23 +83,23 @@ protected:
 
 protected:
 	// Basic status
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 MaxHp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 MaxHp;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 Hp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 Hp;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 MaxMp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 MaxMp;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 Mp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 Mp;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 MaxStamina;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 MaxStamina;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
-	uint32 Stamina;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 Stamina;
 
 	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
 	float DefaultDamage;
@@ -113,26 +113,26 @@ protected:
 
 protected:
 	// Upgrade status
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 Level;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+	int32 Level;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 Vitality;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+	int32 Vitality;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 Mental;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+	int32 Mental;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 Endurance;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+	int32 Endurance;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 Strength;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+	int32 Strength;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 Ability;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+	int32 Ability;
 
-	UPROPERTY(VisibleAnywhere, Category = "Statment|Upgrade")
-	uint32 Intelligence;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+	int32 Intelligence;
 
 #pragma endregion
 

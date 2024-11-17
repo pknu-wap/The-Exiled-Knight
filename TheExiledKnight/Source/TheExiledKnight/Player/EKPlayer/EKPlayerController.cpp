@@ -10,15 +10,20 @@
 #include "EKPlayerStatusComponent.h"
 #include "../EKPlayerGameplayTags.h"
 #include "Components/InventoryComponent.h"
+#include "Components/SlotComponent.h"
 #include "UI/UISubsystem.h"
 #include "Blueprint/UserWidget.h"
 #include "EKGameplayTags.h"
 #include "../Weapon/DamageType/EKPlayerDamageType.h"
+#include "Item/EKItem_Base.h"
+#include "DrawDebugHelpers.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+
+	SlotComponent = CreateDefaultSubobject<USlotComponent>(TEXT("SlotComponent"));
 }
 
 void AEKPlayerController::BeginPlay()
@@ -71,12 +76,16 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IASkill, ETriggerEvent::Started, this, &ThisClass::SkillStarted);
 
 		EnhancedInputComponent->BindAction(IALockOn, ETriggerEvent::Started, this, &ThisClass::LockOnStarted);
+
+		EnhancedInputComponent->BindAction(IAGameMenu, ETriggerEvent::Started, this, &ThisClass::OnPressed_GameMenu);
 	}
 }
 
 void AEKPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
+
+	FindInteractableObjects();
 }
 
 #pragma region Move
@@ -205,6 +214,16 @@ void AEKPlayerController::JumpTriggered(const FInputActionValue& InputValue)
 #pragma endregion
 
 #pragma region Sprint and Dodge
+void AEKPlayerController::WeaponChangeStarted(const FInputActionValue& InputValue)
+{
+	if (!EKPlayer || !EKPlayer->GetCurrentWeapon())
+	{
+		return;
+	}
+
+
+	EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
+}
 
 void AEKPlayerController::SprintAndDodgeStarted(const FInputActionValue& InputValue)
 {
@@ -454,6 +473,65 @@ void AEKPlayerController::UsePotionStarted(const FInputActionValue& InputValue)
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_UseItem);
 }
 
+void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValue)
+{
+	if (!EKPlayer || !bIsEquipWeapon)
+	{
+		return;
+	}
+
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Dodge))
+	{
+		return;
+	}
+
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+
+	if (!EKPlayer->GetCurrentWeapon()) return;
+
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Enhance))
+	{
+		EKPlayer->GetCurrentWeapon()->PlayEnhancedAttackStartAnimMontage(EKPlayer, this);
+	}
+	else
+	{
+		EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
+	}
+
+	EKPlayer->bUseControllerRotationYaw = true;
+}
+
+void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputValue)
+{
+	if (!EKPlayer || !EKPlayer->GetCurrentWeapon())
+	{
+		return;
+	}
+
+	EKPlayer->GetCurrentWeapon()->PlayDefenseStartAnimMontage(EKPlayer, this);
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
+}
+
+void AEKPlayerController::WeaponDefenseTriggered(const FInputActionValue& InputValue)
+{
+	if (EKPlayer && EKPlayer->GetCurrentWeapon())
+	{
+		EKPlayer->GetCurrentWeapon()->PlayDefenseTriggerAnimMontage(EKPlayer, this);
+	}
+}
+
+void AEKPlayerController::WeaponDefenseRelease(const FInputActionValue& InputValue)
+{
+	if (!EKPlayer || !EKPlayer->GetCurrentWeapon())
+	{
+		return;
+	}
+	EKPlayer->GetCurrentWeapon()->PlayDefenseReleaseAnimMontage(EKPlayer, this);
+	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
+}
+
 void AEKPlayerController::SitDownStarted(const FInputActionValue& InputValue)
 {
 	if (!EKPlayer)
@@ -486,10 +564,50 @@ void AEKPlayerController::SitDownStarted(const FInputActionValue& InputValue)
 void AEKPlayerController::Interact(const FInputActionValue& InputValue)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Interact"));
+
+	if (bCanItemInteract)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Can Interact with Item"));
+	}
 }
 
 void AEKPlayerController::FindInteractableObjects()
 {
+	FVector Location;
+	FRotator Rotation;
+	TArray<FHitResult> HitResults;
+	AEKItem_Base* Item = nullptr;
+
+	EKPlayer->GetActorEyesViewPoint(Location, Rotation);
+
+	FVector Start = Location;
+	FVector End = Start + Rotation.Vector() * 500.0f;
+
+	// ignore player
+
+	FCollisionQueryParams traceParams;
+	GetWorld()->LineTraceMultiByChannel(HitResults, Start, End, ECC_Visibility, traceParams);
+
+	for (FHitResult& HitResult : HitResults)
+	{
+		Item = Cast<AEKItem_Base>(HitResult.GetActor());
+
+		if (Item != nullptr	)
+			break;
+	}
+
+	FColor Color = Item ? FColor::Green : FColor::Red;
+
+	DrawDebugLine(GetWorld(), Start, End, Color, false, 2.0f);
+
+	if (Item)
+	{
+		// Show Interact UI
+
+		bCanItemInteract = true;
+	}
+	else
+		bCanItemInteract = false;
 
 }
 
