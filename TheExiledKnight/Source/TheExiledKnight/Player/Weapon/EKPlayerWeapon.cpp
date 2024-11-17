@@ -5,7 +5,8 @@
 #include "../EKPlayer/EKPlayer.h"
 #include "../EKPlayer/EKPlayerController.h"
 #include "Subsystems/InventorySubsystem.h"
-
+#include "Enemy/EK_EnemyStatusComponent.h"
+#include"Enemy/EK_EnemyBase.h"
 AEKPlayerWeapon::AEKPlayerWeapon()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -24,52 +25,9 @@ void AEKPlayerWeapon::Tick(float DeltaTime)
 
 }
 
-void AEKPlayerWeapon::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
+#pragma region Attach to Socket
 
-}
-
-void AEKPlayerWeapon::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-
-}
-
-void AEKPlayerWeapon::PlayEnhancedAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-
-}
-
-void AEKPlayerWeapon::PlayJumpAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-
-}
-
-void AEKPlayerWeapon::PlayDefenseStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-
-}
-
-void AEKPlayerWeapon::PlayDefenseTriggerAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-
-}
-
-void AEKPlayerWeapon::PlayDefenseReleaseAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
-{
-
-}
-
-void AEKPlayerWeapon::PlayHitAnimMontage(TObjectPtr<class AEKPlayer> EKPlayer, TObjectPtr<class AEKPlayerController> EKPlayerController)
-{
-
-}
-
-void AEKPlayerWeapon::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<class AEKPlayer> EKPlayer)
-{
-
-}
-
-void AEKPlayerWeapon::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
+void AEKPlayerWeapon::AttachWeaponToSpineSocket(AEKPlayerWeapon* Weapon, AEKPlayer* EKPlayer)
 {
 	if (Weapon)
 	{
@@ -81,7 +39,7 @@ void AEKPlayerWeapon::AttachWeaponToSpineSocket(TObjectPtr<AEKPlayerWeapon> Weap
 	}
 }
 
-void AEKPlayerWeapon::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
+void AEKPlayerWeapon::AttachWeaponToHandSocket(AEKPlayerWeapon* Weapon, AEKPlayer* EKPlayer)
 {
 	if (Weapon)
 	{
@@ -93,50 +51,25 @@ void AEKPlayerWeapon::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapo
 	}
 }
 
-void AEKPlayerWeapon::AttackHit(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<UCapsuleComponent> WeaponCC)
+#pragma endregion
+
+#pragma region Combo
+
+void AEKPlayerWeapon::SetAttackComboNext()
 {
-	FVector CapsuleLocation = WeaponCC->GetComponentLocation();
-	FRotator CapsuleRotation = WeaponCC->GetComponentRotation();
-	float CapsuleHalfHeight = WeaponCC->GetScaledCapsuleHalfHeight();
-	float CapsuleRadius = WeaponCC->GetScaledCapsuleRadius();
-
-	FCollisionQueryParams Params(NAME_None, false, this);
-	TArray<FHitResult> HitResults;
-
-	//DrawDebugCapsule(GetWorld(), CapsuleLocation, CapsuleHalfHeight, CapsuleRadius, CapsuleRotation.Quaternion(), FColor::Red, false, 0.3f);
-
-	EKPlayer->bIsHit = GetWorld()->SweepMultiByChannel(
-		HitResults,
-		CapsuleLocation,
-		CapsuleLocation,
-		CapsuleRotation.Quaternion(),
-		ECC_Pawn,
-		FCollisionShape::MakeCapsule(CapsuleRadius, CapsuleHalfHeight),
-		Params
-	);
-
-	if (!EKPlayer->bIsHit)
+	if (AttackCombo < MaxAttackCombo)
 	{
-		return;
+		AttackCombo++;
 	}
-
-	for (auto& Hit : HitResults)
+	else
 	{
-		AActor* HitActor = Hit.GetActor();
-		if (HitActor)
-		{
-			TObjectPtr<AEK_EnemyBase> HitEnemy = Cast<AEK_EnemyBase>(HitActor);
-			if (HitEnemy)
-			{
-				// Here Insert About Damage function
-				EKPlayer->bIsHitOnce = true;
-				GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Attack!!!"));
-			}
-		}
+		ResetAttackCombo();
 	}
 }
 
-TObjectPtr<UCapsuleComponent> AEKPlayerWeapon::GetWeaponCapsuleComponent()
+void AEKPlayerWeapon::ResetAttackCombo()
 {
-	return nullptr;
+	AttackCombo = 1;
 }
+
+#pragma endregion
