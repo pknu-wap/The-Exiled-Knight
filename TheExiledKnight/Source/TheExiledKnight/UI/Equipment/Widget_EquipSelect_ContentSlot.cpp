@@ -16,7 +16,7 @@ void UWidget_EquipSelect_ContentSlot::NativeConstruct()
 	Super::NativeConstruct();
 }
 
-void UWidget_EquipSelect_ContentSlot::UpdateSlot(EEquipCategory inCategory, const FInventorySlot& inData)
+void UWidget_EquipSelect_ContentSlot::UpdateSlot(EItemCategory inCategory, const FInventorySlot& inData)
 {
 	Category = inCategory;
 	SlotData = inData;
@@ -63,30 +63,30 @@ FEventReply UWidget_EquipSelect_ContentSlot::RedirectMouseDownToWidget(const FGe
 		// Equip Item
 		switch (Category)
 		{
-		case EEquipCategory::None:
+		case EItemCategory::None:
 		{
 			break;
 		}
-		case EEquipCategory::Weapon:
+		case EItemCategory::Weapon:
 		{
 			// Equip Weapon
 			slotComp->EquipWeapon(SlotData.Item);
 			break;
 		}
-		case EEquipCategory::Rune:
+		case EItemCategory::Rune:
 		{
 			// Equip Rune
 			slotComp->EquipRune(SlotData.Item);
 			break;
 		}
-		case EEquipCategory::FragmentOfGod:
+		case EItemCategory::FragmentOfGod:
 		{
 			break;
 		}
-		case EEquipCategory::UsableItem:
+		case EItemCategory::UseableItem:
 		{
 			// Equip Usable Item
-			slotComp->EquipUsableItem(SlotData.Item);
+			slotComp->EquipUseableItem(SlotData.Item);
 			break;
 		}
 		default:

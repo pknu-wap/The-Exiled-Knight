@@ -15,7 +15,7 @@ class THEEXILEDKNIGHT_API UWidget_QuickSlots : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	int GetActiveSlotIdx(EEquipCategory InCategory);
+	int GetActiveSlotIdx(EItemCategory InCategory);
 
 
 protected:
@@ -29,5 +29,5 @@ protected:
 	UWidget_QuickSlot* QuickSlot_Magic;
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
-	UWidget_QuickSlot* QuickSlot_UsableItem;
+	UWidget_QuickSlot* QuickSlot_UseableItem;
 };
