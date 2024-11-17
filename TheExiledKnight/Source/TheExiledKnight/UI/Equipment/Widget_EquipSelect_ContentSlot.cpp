@@ -21,11 +21,11 @@ void UWidget_EquipSelect_ContentSlot::UpdateSlot(EEquipCategory inCategory, cons
 	Category = inCategory;
 	SlotData = inData;
 
-	if (inData.Amount > 0)
+	if (inData.Quantity > 0)
 	{
 		Image_Item->SetBrushFromTexture(SlotData.Item.Icon);
 
-		Text_Quantity->SetText(UKismetTextLibrary::Conv_IntToText(inData.Amount));
+		Text_Quantity->SetText(UKismetTextLibrary::Conv_IntToText(inData.Quantity));
 		Text_Quantity->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	}
 	else
