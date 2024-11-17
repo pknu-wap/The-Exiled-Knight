@@ -32,20 +32,24 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
-const TArray<FInventorySlot>& UInventoryComponent::GetConstInventory(EItemCategory Category)
+const TArray<FInventorySlot>& UInventoryComponent::GetConstContents(EItemCategory Category)
 {
 	switch (Category)
 	{
 	case EItemCategory::Weapon:
 		return Weapon;
-	case EItemCategory::Fragment:
-		return Fragment;
-	case EItemCategory::Hunting:
-		return Hunting;
-	case EItemCategory::Upgrades:
-		return Upgrades;
 	case EItemCategory::Rune:
 		return Rune;
+	case EItemCategory::FragmentOfGod:
+		return FragmentOfGod;
+	case EItemCategory::UseableItem:
+		return UseableItem;
+	case EItemCategory::Magic:
+		return Magic;
+	case EItemCategory::Upgrades:
+		return Upgrades;
+	case EItemCategory::Hunting:
+		return Hunting;
 	default:
 		return None;
 	}
@@ -53,7 +57,7 @@ const TArray<FInventorySlot>& UInventoryComponent::GetConstInventory(EItemCatego
 
 int UInventoryComponent::GetIndexToAdd(uint8 ID, EItemCategory Category)
 {
-	const TArray<FInventorySlot>& Slots = GetConstInventory(Category);
+	const TArray<FInventorySlot>& Slots = GetConstContents(Category);
 
 	for (int index = 0; index < Slots.Num(); index++)
 	{
@@ -68,7 +72,7 @@ int UInventoryComponent::GetIndexToAdd(uint8 ID, EItemCategory Category)
 
 int UInventoryComponent::GetDupSlotIndex(uint8 ID, EItemCategory Category)
 {
-	const TArray<FInventorySlot>& Slots = GetConstInventory(Category);
+	const TArray<FInventorySlot>& Slots = GetConstContents(Category);
 
 	for (int index = 0; index < Slots.Num(); index++)
 	{
@@ -81,7 +85,7 @@ int UInventoryComponent::GetDupSlotIndex(uint8 ID, EItemCategory Category)
 
 int UInventoryComponent::GetEmptySlotIndex(EItemCategory Category)
 {
-	const TArray<FInventorySlot>& Slots = GetConstInventory(Category);
+	const TArray<FInventorySlot>& Slots = GetConstContents(Category);
 
 	for (int index = 0; index < Slots.Num(); index++)
 	{
@@ -94,30 +98,36 @@ int UInventoryComponent::GetEmptySlotIndex(EItemCategory Category)
 
 void UInventoryComponent::InitializeInventory()
 {
-	AddNewSlot(GetInventory(EItemCategory::None));
-	AddNewSlot(GetInventory(EItemCategory::Weapon));
-	AddNewSlot(GetInventory(EItemCategory::Fragment));
-	AddNewSlot(GetInventory(EItemCategory::Hunting));
-	AddNewSlot(GetInventory(EItemCategory::Upgrades));
-	AddNewSlot(GetInventory(EItemCategory::Rune));
+	AddNewSlot(GetContents(EItemCategory::None));
+	AddNewSlot(GetContents(EItemCategory::Weapon));
+	AddNewSlot(GetContents(EItemCategory::Rune));
+	AddNewSlot(GetContents(EItemCategory::FragmentOfGod));
+	AddNewSlot(GetContents(EItemCategory::UseableItem));
+	AddNewSlot(GetContents(EItemCategory::Magic));
+	AddNewSlot(GetContents(EItemCategory::Upgrades));
+	AddNewSlot(GetContents(EItemCategory::Hunting));
 
 	UE_LOG(LogTemp, Warning, TEXT("InitializeInventory"))
 }
 
-TArray<FInventorySlot>& UInventoryComponent::GetInventory(EItemCategory Category)
+TArray<FInventorySlot>& UInventoryComponent::GetContents(EItemCategory Category)
 {
 	switch (Category)
 	{
 	case EItemCategory::Weapon:
 		return Weapon;
-	case EItemCategory::Fragment:
-		return Fragment;
-	case EItemCategory::Hunting:
-		return Hunting;
-	case EItemCategory::Upgrades:
-		return Upgrades;
 	case EItemCategory::Rune:
 		return Rune;
+	case EItemCategory::FragmentOfGod:
+		return FragmentOfGod;
+	case EItemCategory::UseableItem:
+		return UseableItem;
+	case EItemCategory::Magic:
+		return Magic;
+	case EItemCategory::Upgrades:
+		return Upgrades;
+	case EItemCategory::Hunting:
+		return Hunting;
 	default:
 		return None;
 	}
@@ -125,7 +135,7 @@ TArray<FInventorySlot>& UInventoryComponent::GetInventory(EItemCategory Category
 
 bool UInventoryComponent::AddItem(FItemStruct ItemToAdd, int Quantity)
 {
-	TArray<FInventorySlot>& Slots = GetInventory(ItemToAdd.ItemCategory);
+	TArray<FInventorySlot>& Slots = GetContents(ItemToAdd.ItemCategory);
 
 	int indexToAdd = GetDupSlotIndex(ItemToAdd.ID, ItemToAdd.ItemCategory);
 
@@ -186,7 +196,7 @@ bool UInventoryComponent::UseItem(FItemStruct ItemToUse, int Quantity)
 	if (!ItemToUse.bUseable)
 		return false;
 
-	TArray<FInventorySlot>& Slots = GetInventory(ItemToUse.ItemCategory);
+	TArray<FInventorySlot>& Slots = GetContents(ItemToUse.ItemCategory);
 
 	int index = GetDupSlotIndex(ItemToUse.ID, ItemToUse.ItemCategory);
 
@@ -208,20 +218,60 @@ bool UInventoryComponent::UseItem(FItemStruct ItemToUse, int Quantity)
 
 	ItemInstance->UseItem();
 
-	Slots[index].Item;
-	Slots[index].Quantity -= Quantity;
+	DeleteItem(ItemToUse, Quantity);
 
-	if (Slots[index].Quantity == 0)
-		DeleteItem(ItemToUse);
+	//Slots[index].Item;
+	//Slots[index].Quantity -= Quantity;
+
+	//if (Slots[index].Quantity == 0)
+	//	DeleteItem(ItemToUse);
+
+	return true;
+}
+
+bool UInventoryComponent::UpgradeItem(FItemStruct ItemToUpgrade)
+{
+	if (ItemToUpgrade.ItemLevel > 9)
+		return false;
+
+	TArray<FInventorySlot>& Slots = GetContents(ItemToUpgrade.ItemCategory);
+
+	int index = GetDupSlotIndex(ItemToUpgrade.ID, ItemToUpgrade.ItemCategory);
+
+	if (index == -1)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("You don't have that item."));
+		return false;
+	}
+
+	// Find Upgrades 
+	FName UpgradeName = "Upgrade" + ItemToUpgrade.ItemLevel;
+
+	FItemStruct Upgrade = *GetWorld()->GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfoDB()->FindRow<FItemStruct>(UpgradeName, TEXT("GetItemRow"));
+
+	int upgradeIndex = GetDupSlotIndex(Upgrade.ID, Upgrade.ItemCategory);
+
+	if (upgradeIndex == -1)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("You don't have upgrade."));
+		return false;
+	}
+
+	Slots[index].Item.ItemLevel++;
+
+	DeleteItem(Upgrade, 1);
 
 	return true;
 }
 
 bool UInventoryComponent::DeleteItem(FItemStruct ItemToDelete, int Quantity)
 {
-	TArray<FInventorySlot>& Slots = GetInventory(ItemToDelete.ItemCategory);
+	TArray<FInventorySlot>& Slots = GetContents(ItemToDelete.ItemCategory);
 
 	int index = GetDupSlotIndex(ItemToDelete.ID, ItemToDelete.ItemCategory);
+
+	if (index == -1)
+		return false;
 
 	Slots[index].Quantity -= Quantity;
 
