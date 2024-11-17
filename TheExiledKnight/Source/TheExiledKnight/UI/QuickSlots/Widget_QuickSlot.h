@@ -21,11 +21,11 @@ protected:
 
 public:
 	UFUNCTION()
-	void SlotUpdated(EEquipCategory inCategory, int inSlotIdx);
+	void SlotUpdated(EItemCategory inCategory, int inSlotIdx);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EEquipCategory SlotCategory;
+	EItemCategory SlotCategory;
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
 	UButton* Button_Slot;
