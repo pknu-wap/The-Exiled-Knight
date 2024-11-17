@@ -18,7 +18,7 @@ class THEEXILEDKNIGHT_API UEquipSelect_ListData : public UObject
 	GENERATED_BODY()
 	
 public:
-	EEquipCategory Category;
+	EItemCategory Category;
 
 	TArray<FInventorySlot> Items;
 };

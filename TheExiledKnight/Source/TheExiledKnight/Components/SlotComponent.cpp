@@ -64,7 +64,7 @@ void USlotComponent::EquipWeapon(const FItemStruct& InItemData)
 	{
 		WeaponSlots[slotIdx] = InItemData;
 		player->EquipWeapon(*weaponInfo);
-		Delegate_SlotUpdated.Broadcast(EEquipCategory::Weapon, slotIdx);
+		Delegate_SlotUpdated.Broadcast(EItemCategory::Weapon, slotIdx);
 	}
 }
 
@@ -77,11 +77,11 @@ void USlotComponent::EquipRune(const FItemStruct& InItemData)
 	if (RuneSlots.IsValidIndex(slotIdx))
 	{
 		RuneSlots[slotIdx] = InItemData;
-		Delegate_SlotUpdated.Broadcast(EEquipCategory::Rune, slotIdx);
+		Delegate_SlotUpdated.Broadcast(EItemCategory::Rune, slotIdx);
 	}
 }
 
-void USlotComponent::EquipUsableItem(const FItemStruct& InItemData)
+void USlotComponent::EquipUseableItem(const FItemStruct& InItemData)
 {
 	UWidget_Equipment* equipWidget = GetEquipmentWidget();
 	if (!equipWidget) return;
@@ -90,7 +90,7 @@ void USlotComponent::EquipUsableItem(const FItemStruct& InItemData)
 	if (UsableSlots.IsValidIndex(slotIdx))
 	{
 		UsableSlots[slotIdx] = InItemData;
-		Delegate_SlotUpdated.Broadcast(EEquipCategory::UsableItem, slotIdx);
+		Delegate_SlotUpdated.Broadcast(EItemCategory::UseableItem, slotIdx);
 	}
 }
 

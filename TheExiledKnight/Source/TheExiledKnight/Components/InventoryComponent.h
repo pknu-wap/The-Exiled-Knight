@@ -29,6 +29,7 @@ public:
 	const TArray<FInventorySlot>& GetConstInventory(EItemCategory Category);
 	const TArray<FInventorySlot>& GetEquipContents(EEquipCategory Category);
 
+
 	UFUNCTION(BlueprintCallable)
 	TArray<FInventorySlot>& GetInventory(EItemCategory Category);
 
