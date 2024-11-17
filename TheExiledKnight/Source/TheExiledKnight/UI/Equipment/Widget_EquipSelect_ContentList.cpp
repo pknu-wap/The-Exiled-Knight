@@ -8,7 +8,7 @@
 #include "GameFramework/Character.h"
 #include "Components/InventoryComponent.h"
 
-void UWidget_EquipSelect_ContentList::UpdateContents(EEquipCategory Category)
+void UWidget_EquipSelect_ContentList::UpdateContents(EItemCategory Category)
 {
 	APlayerController* playerController = GetOwningPlayer();
 	if (!playerController) return;
