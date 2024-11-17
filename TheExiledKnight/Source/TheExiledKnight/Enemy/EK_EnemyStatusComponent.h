@@ -19,12 +19,12 @@ public:
 	UEK_EnemyStatusComponent();
 
 
-	void SetMaxPoise(float amount);
-	void SetMaxHealth(float amount);
+	void SetPoise(float amount);
+	void SetHealth(float amount);
 	void SetAttackDamage(float amount);
 	void SetIsDead(bool isDead);
-	void  ChangeCurrentPoise(float amount);
-	void ChangeCurrentHealth(float amount); 
+	void  DamageCurrentPoise(float amount);
+	void DamageCurrentHealth(float amount); 
 	
 	float GetMaxHealth();
     float GetMaxPoise();
