@@ -134,6 +134,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
 	UInputAction* IAInteract;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	UInputAction* IAGameMenu;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
 	UInputAction* IALockOn;
 
@@ -159,6 +162,7 @@ protected:
 
 public:
 	bool bIsEquipWeapon = false;
+	bool bCanItemInteract = false;
 
 	FVector2D GetLookAxisVector() { return LookAxisVector; }
 
@@ -167,6 +171,7 @@ public:
 public:
 	// About Battle State
 	const float BattleEndTime = 10.f;
+	bool bCanAttackNext = false;
 
 protected:
 	FTimerHandle StaminaRecoveryHandle;
@@ -213,4 +218,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInventoryComponent> InventoryComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class USlotComponent> SlotComponent;
 };

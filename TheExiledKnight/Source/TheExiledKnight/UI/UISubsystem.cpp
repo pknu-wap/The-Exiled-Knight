@@ -2,6 +2,7 @@
 
 
 #include "UI/UISubsystem.h"
+#include "UI/BaseUserWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -85,6 +86,7 @@ void UUISubsystem::SetWidgetVisibility(FGameplayTag WidgetTag, ESlateVisibility 
 			(*widget)->SetFocus();
 		}
 	}
+
 }
 
 UUserWidget* UUISubsystem::GetLayer(FGameplayTag LayerTag)
