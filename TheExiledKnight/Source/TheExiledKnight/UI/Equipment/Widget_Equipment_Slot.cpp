@@ -47,7 +47,7 @@ FEventReply UWidget_Equipment_Slot::RedirectMouseDownToWidget(const FGeometry& I
 	return Reply;
 }
 
-void UWidget_Equipment_Slot::SlotUpdated(EEquipCategory inCategory, int inSlotIdx)
+void UWidget_Equipment_Slot::SlotUpdated(EItemCategory inCategory, int inSlotIdx)
 {
 	if (Category != inCategory || inSlotIdx != SlotIdx) return;
 
@@ -58,11 +58,11 @@ void UWidget_Equipment_Slot::SlotUpdated(EEquipCategory inCategory, int inSlotId
 
 	switch (Category)
 	{
-		case EEquipCategory::None:
+		case EItemCategory::None:
 		{
 			break;
 		}
-		case EEquipCategory::Weapon:
+		case EItemCategory::Weapon:
 		{
 			if (slotComp->WeaponSlots.IsValidIndex(inSlotIdx))
 			{
@@ -70,7 +70,7 @@ void UWidget_Equipment_Slot::SlotUpdated(EEquipCategory inCategory, int inSlotId
 			}
 			break;
 		}
-		case EEquipCategory::Rune:
+		case EItemCategory::Rune:
 		{
 			if (slotComp->RuneSlots.IsValidIndex(inSlotIdx))
 			{
@@ -78,11 +78,11 @@ void UWidget_Equipment_Slot::SlotUpdated(EEquipCategory inCategory, int inSlotId
 			}
 			break;
 		}
-		case EEquipCategory::FragmentOfGod:
+		case EItemCategory::FragmentOfGod:
 		{
 			break;
 		}
-		case EEquipCategory::UsableItem:
+		case EItemCategory::UseableItem:
 		{
 			if (slotComp->UsableSlots.IsValidIndex(inSlotIdx))
 			{
