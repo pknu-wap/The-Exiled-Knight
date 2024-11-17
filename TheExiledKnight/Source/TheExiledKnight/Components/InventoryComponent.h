@@ -27,7 +27,6 @@ public:
 
 public:
 	const TArray<FInventorySlot>& GetContents(EItemCategory Category);
-	const TArray<FInventorySlot>& GetContents(EEquipCategory Category);
 
 	int GetIndexToAdd(uint8 ID);
 	int GetDupSlotIndex(uint8 ID, int MaxStack);

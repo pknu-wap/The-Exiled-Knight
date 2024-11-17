@@ -17,7 +17,7 @@ class THEEXILEDKNIGHT_API UWidget_Equipment : public UUserWidget
 
 public:
 	void ShowEquipWindow();
-	void ShowEquipSelect(EEquipCategory Category, int slotIdx);
+	void ShowEquipSelect(EItemCategory Category, int slotIdx);
 
 public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
