@@ -4,34 +4,34 @@
 #include "UI/QuickSlots/Widget_QuickSlots.h"
 #include "UI/QuickSlots/Widget_QuickSlot.h"
 
-int UWidget_QuickSlots::GetActiveSlotIdx(EEquipCategory InCategory)
+int UWidget_QuickSlots::GetActiveSlotIdx(EItemCategory InCategory)
 {
 	switch (InCategory)
 	{
-	case EEquipCategory::None:
+	case EItemCategory::None:
 	{
 		break;
 	}
-	case EEquipCategory::Weapon:
+	case EItemCategory::Weapon:
 	{
 		return QuickSlot_Weapon->GetActiveSlotIdx();
 		break;
 	}
-	case EEquipCategory::Rune:
+	case EItemCategory::Rune:
 	{
 		break;
 	}
-	case EEquipCategory::FragmentOfGod:
+	case EItemCategory::FragmentOfGod:
 	{
 		return QuickSlot_Fragment->GetActiveSlotIdx();
 		break;
 	}
-	case EEquipCategory::UsableItem:
+	case EItemCategory::UseableItem:
 	{
-		return QuickSlot_UsableItem->GetActiveSlotIdx();
+		return QuickSlot_UseableItem->GetActiveSlotIdx();
 		break;
 	}
-	case EEquipCategory::Magic:
+	case EItemCategory::Magic:
 	{
 		return QuickSlot_Magic->GetActiveSlotIdx();
 		break;

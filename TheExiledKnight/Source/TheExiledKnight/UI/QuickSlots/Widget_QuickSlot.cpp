@@ -21,7 +21,7 @@ void UWidget_QuickSlot::NativeConstruct()
 	slotComp->Delegate_SlotUpdated.AddUObject(this, &UWidget_QuickSlot::SlotUpdated);
 }
 
-void UWidget_QuickSlot::SlotUpdated(EEquipCategory inCategory, int inSlotIdx)
+void UWidget_QuickSlot::SlotUpdated(EItemCategory inCategory, int inSlotIdx)
 {
 	if (SlotCategory != inCategory || ActiveSlotIdx != inSlotIdx)
 	{
@@ -36,11 +36,11 @@ void UWidget_QuickSlot::SlotUpdated(EEquipCategory inCategory, int inSlotIdx)
 
 	switch (SlotCategory)
 	{
-	case EEquipCategory::None:
+	case EItemCategory::None:
 	{
 		break;
 	}
-	case EEquipCategory::Weapon:
+	case EItemCategory::Weapon:
 	{
 		if (slotComp->WeaponSlots.IsValidIndex(inSlotIdx))
 		{
@@ -49,7 +49,7 @@ void UWidget_QuickSlot::SlotUpdated(EEquipCategory inCategory, int inSlotIdx)
 		}
 		break;
 	}
-	case EEquipCategory::Rune:
+	case EItemCategory::Rune:
 	{
 		if (slotComp->RuneSlots.IsValidIndex(inSlotIdx))
 		{
@@ -58,11 +58,11 @@ void UWidget_QuickSlot::SlotUpdated(EEquipCategory inCategory, int inSlotIdx)
 		}
 		break;
 	}
-	case EEquipCategory::FragmentOfGod:
+	case EItemCategory::FragmentOfGod:
 	{
 		break;
 	}
-	case EEquipCategory::UsableItem:
+	case EItemCategory::UseableItem:
 	{
 		if (slotComp->UsableSlots.IsValidIndex(inSlotIdx))
 		{
@@ -71,7 +71,7 @@ void UWidget_QuickSlot::SlotUpdated(EEquipCategory inCategory, int inSlotIdx)
 		}
 		break;
 	}
-	case EEquipCategory::Magic:
+	case EItemCategory::Magic:
 	{
 		break;
 	}
