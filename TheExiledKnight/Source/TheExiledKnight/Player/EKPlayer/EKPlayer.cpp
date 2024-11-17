@@ -2,17 +2,19 @@
 
 #include "EKPlayer.h"
 #include "EKPlayerStatusComponent.h"
+#include "EKPlayerController.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Engine/SkeletalMesh.h"
 #include "Engine/StaticMesh.h"
-#include "../Weapon/GreatSword.h"
-#include "../Weapon/Spear.h"
-#include "../Weapon/Staff.h"
+#include "../Weapon/EKPlayerWeapon.h"
 #include "Animation/AnimInstance.h"
 #include "../EKPlayerGameplayTags.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "../../Enemy/EK_EnemyBase.h"
+#include "Components/BoxComponent.h"
 
 AEKPlayer::AEKPlayer()
 {
@@ -35,6 +37,10 @@ AEKPlayer::AEKPlayer()
 	Camera->SetupAttachment(SpringArm);
 	Camera->bUsePawnControlRotation = true;
 
+	LeftLegCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("LeftLeg"));
+	LeftLegCapsuleComponent->SetupAttachment(RootComponent);
+	LeftLegCapsuleComponent->SetRelativeLocation(FVector(20, -30, -70));
+
 	GetCharacterMovement()->GravityScale = 3.f;
 	GetCharacterMovement()->JumpZVelocity = 800.f;
 	GetCharacterMovement()->AirControl = 0.2f;
@@ -50,79 +56,81 @@ AEKPlayer::AEKPlayer()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 
-	ConstructorHelpers::FClassFinder<UAnimInstance> ABPGreatSwordFinder(TEXT("/Game/EKPlayer/Blueprint/AnimationBlueprint/ABP_GreatSword.ABP_GreatSword_C"));
-	if (ABPGreatSwordFinder.Succeeded())
-	{
-		ABPGreatSword = ABPGreatSwordFinder.Class;
-	}
-
-	ConstructorHelpers::FClassFinder<UAnimInstance> ABPSpearFinder(TEXT("/Game/EKPlayer/Blueprint/AnimationBlueprint/ABP_Spear.ABP_Spear_C"));
-	if (ABPSpearFinder.Succeeded())
-	{
-		ABPSpear = ABPSpearFinder.Class;
-	}
-
-	ConstructorHelpers::FClassFinder<UAnimInstance> ABPStaffFinder(TEXT("/Game/EKPlayer/Blueprint/AnimationBlueprint/ABP_Staff.ABP_Staff_C"));
-	if (ABPStaffFinder.Succeeded())
-	{
-		ABPStaff = ABPStaffFinder.Class;
-	}
-
-	ConstructorHelpers::FClassFinder<AGreatSword> GreatSwordClassFinder(TEXT("/Game/EKPlayer/Blueprint/Weapon/BP_GreatSword.BP_GreatSword_C"));
-	if (GreatSwordClassFinder.Succeeded())
-	{
-		GreatSwordClass = GreatSwordClassFinder.Class;
-	}
-
-	ConstructorHelpers::FClassFinder<ASpear> SpearClassFinder(TEXT("/Game/EKPlayer/Blueprint/Weapon/BP_Spear.BP_Spear_C"));
-	if (SpearClassFinder.Succeeded())
-	{
-		SpearClass = SpearClassFinder.Class;
-	}
-
-	ConstructorHelpers::FClassFinder<AStaff> StaffClassFinder(TEXT("/Game/EKPlayer/Blueprint/Weapon/BP_Staff.BP_Staff_C"));
-	if (StaffClassFinder.Succeeded())
-	{
-		StaffClass = StaffClassFinder.Class;
-	}
+	TargetFindLockOnBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TargetFindLockOnBox"));
+	TargetFindLockOnBox->SetupAttachment(RootComponent);
+	TargetFindLockOnBox->SetRelativeLocation(FVector(0, 0, 0));
+	TargetFindLockOnBox->SetRelativeScale3D(FVector(24.f, 24.f, 20.f));
 }
 
 void AEKPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
+	EKPlayerController = Cast<AEKPlayerController>(this->GetController());
+
+	TargetFindLockOnBox->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnTargetEnterRange);
+	TargetFindLockOnBox->OnComponentEndOverlap.AddDynamic(this, &ThisClass::OnTargetExitRange);
+
+#pragma region Weapon Test
+
 	// Test Change Weapon
 
 	// Test GreatSword Version
 
-	/*if (GreatSwordClass)
+	/*if (GreatSwordTypeAClass)
 	{
 		FActorSpawnParameters SpawnParams;
-		CurrentWeapon = GetWorld()->SpawnActor<AGreatSword>(GreatSwordClass, SpawnParams);
+		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(GreatSwordTypeAClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
-		GetMesh()->SetAnimInstanceClass(ABPGreatSword);
+		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword);
 	}*/
-	
+
+	/*if (GreatSwordTypeBClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(GreatSwordTypeBClass, SpawnParams);
+		AttachWeaponToSpineSocket(CurrentWeapon);
+		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword);
+	}*/
+
 	// Test Spear Version
 
-	/*if (SpearClass)
+	/*if (SpearTypeAClass)
 	{
 		FActorSpawnParameters SpawnParams;
-		CurrentWeapon = GetWorld()->SpawnActor<ASpear>(SpearClass, SpawnParams);
+		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(SpearTypeAClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
-		GetCharacterMovement()->JumpZVelocity = 1000.f;
-		GetMesh()->SetAnimInstanceClass(ABPSpear);
+		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear);
+	}*/
+
+	/*if (SpearTypeBClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(SpearTypeBClass, SpawnParams);
+		AttachWeaponToSpineSocket(CurrentWeapon);
+		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear);
 	}*/
 
 	// Test Staff Version Don't Select This
 
-	/*if (StaffClass)
+	/*if (StaffTypeAClass)
 	{
 		FActorSpawnParameters SpawnParams;
-		CurrentWeapon = GetWorld()->SpawnActor<AStaff>(StaffClass, SpawnParams);
+		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(StaffTypeAClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
-		GetMesh()->SetAnimInstanceClass(ABPStaff);
+		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
 	}*/
+
+	if (StaffTypeBClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(StaffTypeBClass, SpawnParams);
+		AttachWeaponToSpineSocket(CurrentWeapon);
+		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
+	}
+
+#pragma endregion
+
 }
 
 void AEKPlayer::Tick(float DeltaTime)
@@ -132,29 +140,108 @@ void AEKPlayer::Tick(float DeltaTime)
 	// Test
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("HP : %d / %d"), PlayerStatusComponent->GetHp(), PlayerStatusComponent->GetMaxHp()));
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("MP : %d / %d"), PlayerStatusComponent->GetMp(), PlayerStatusComponent->GetMaxMp()));
-	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("Stamina : %d / %d"), PlayerStatusComponent->GetStamina(), PlayerStatusComponent->GetMaxStamina()));
+	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("Stamina : %d / %d"), PlayerStatusComponent->GetStamina(), PlayerStatusComponent->GetMaxStamina()));
+
+	if (LockOnTarget)
+	{
+		FVector Direction = LockOnTarget->GetActorLocation() - GetActorLocation();
+		Direction = Direction.GetSafeNormal();
+
+		FRotator TargetRotation = Direction.Rotation();
+
+		TargetRotation.Pitch = EKPlayerController->GetControlRotation().Pitch;
+
+		LockOnTargetRotation = TargetRotation;
+		EKPlayerController->SetControlRotation(LockOnTargetRotation);
+	}
 }
 
-TObjectPtr<AEKPlayerWeapon> AEKPlayer::GetCurrentWeapon()
-{
-	return CurrentWeapon;
-}
-
-TObjectPtr<UEKPlayerStatusComponent> AEKPlayer::GetPlayerStatusComponent()
-{
-	return PlayerStatusComponent;
-}
-
-void AEKPlayer::AttackHit()
-{
-	CurrentWeapon->AttackHit(this, CurrentWeapon->GetWeaponCapsuleComponent());
-}
+#pragma region Damage
 
 float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	GetPlayerStatusComponent()->TakeDamage(Damage);
+	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+	if (EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Hit))
+	{
+		return 0.f;
+	}
+
+	HitTimer();
+
+	if (!EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_BattleState))
+	{
+		CurrentWeapon->PlayWeaponEquipAnimMontage(this, EKPlayerController);
+	}
+
+	EKPlayerController->BattleStateTimer();
+
+	if (EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense) && PlayerStatusComponent->GetStamina() >= DefenseStamina)
+	{
+		if (!EKPlayerController)
+		{
+			return 0.f;
+		}
+
+		EKPlayerController->ConsumtionStaminaAndTimer(DefenseStamina);
+
+		if (EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Invincibility)) // Perfect Defense
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Magenta, TEXT("Perfect Defense"));
+		}
+		else // Normal Defense
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Red, TEXT("Normal Defense"));
+			PlayerStatusComponent->SetHp(-Damage * 0.3);
+		}
+	}
+	else
+	{
+		PlayerStatusComponent->SetHp(-Damage);
+		HitDirection(DamageCauser);
+	}
+
+	EKPlayerController->InvincibilityTimer(1.f);
+
 	return 0.f;
 }
+
+void AEKPlayer::HitDirection(AActor* Enemy)
+{
+	FVector PlayerLocation = this->GetActorLocation();
+	FVector EnemyLocation = Enemy->GetActorLocation();
+
+	FVector Direction = (EnemyLocation - PlayerLocation).GetSafeNormal();
+	FVector PlayerForward = this->GetActorForwardVector();
+
+	float DotProduct = FVector::DotProduct(Direction, PlayerForward);
+	float Angle = FMath::RadiansToDegrees(FMath::Acos(DotProduct));
+
+	FVector CrossProduct = FVector::CrossProduct(PlayerForward, Direction);
+
+	if (CrossProduct.Z < 0) {
+		Angle = -Angle;
+	}
+
+	if (Angle > -45 && Angle <= 45) {
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Hit Front"));
+	}
+	else if (Angle > 45 && Angle <= 135) {
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Hit Right"));
+	}
+	else if (Angle < -45 && Angle >= -135) {
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Hit Left"));
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Hit Back"));
+	}
+
+	HitAngle = Angle;
+}
+
+#pragma endregion
+
+#pragma region Attach to Socket
 
 void AEKPlayer::EquipWeapon(const FWeaponStruct& InWeaponInfo)
 {
@@ -188,3 +275,72 @@ void AEKPlayer::AttachWeaponToHandSocket(TObjectPtr<AEKPlayerWeapon> Weapon)
 		Weapon->AttachWeaponToHandSocket(Weapon, this);
 	}
 }
+
+#pragma endregion
+
+#pragma region Timer
+
+void AEKPlayer::RemoveHitTag()
+{
+	EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Hit);
+}
+
+void AEKPlayer::HitTimer()
+{
+	EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Hit);
+	GetWorldTimerManager().SetTimer(HitTagHandle, this, &ThisClass::RemoveHitTag, NextHitTime, false);
+}
+
+#pragma endregion
+
+#pragma region Lock On
+
+void AEKPlayer::SetLockOnTarget(AActor* Target)
+{
+	LockOnTarget = Target;
+}
+
+void AEKPlayer::OnTargetEnterRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor && OtherActor->IsA(AEK_EnemyBase::StaticClass()))
+	{
+		LockOnTargets.Add(OtherActor);
+	}
+}
+
+void AEKPlayer::OnTargetExitRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (OtherActor && LockOnTargets.Contains(OtherActor))
+	{
+		LockOnTargets.Remove(OtherActor);
+	}
+}
+
+AActor* AEKPlayer::FindNearTarget()
+{
+	if (LockOnTargets.Num() == 0)
+	{
+		return nullptr;
+	}
+
+	float NearDistance = 10000.f;
+	AActor* NearTarget = nullptr;
+
+	for (AActor* Target : LockOnTargets)
+	{
+		if (IsValid(Target))
+		{
+			float Distance = FVector::Dist(this->GetActorLocation(), Target->GetActorLocation());
+
+			if (Distance < NearDistance)
+			{
+				NearDistance = Distance;
+				NearTarget = Target;
+			}
+		}
+	}
+
+	return NearTarget;
+}
+
+#pragma endregion
