@@ -5,6 +5,24 @@
 #include "CoreMinimal.h"
 
 UENUM(BlueprintType)
+enum class EInputType : uint8
+{
+	Up,
+	Down,
+	Left,
+	Right
+};
+
+UENUM(BlueprintType)
+enum class EWidgetClassType : uint8
+{
+	Inventory,
+	Equipment,
+	EquipUpgrade,
+	Status
+};
+
+UENUM(BlueprintType)
 enum class EWeaponType : uint8
 {
 	None,

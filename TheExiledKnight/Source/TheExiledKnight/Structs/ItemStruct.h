@@ -39,7 +39,7 @@ struct FItemStruct : public FTableRowBase
     EItemCategory ItemCategory;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    UTexture2D* Icon;
+    UTexture2D* Icon = nullptr;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     uint8 MaxStackSize;
