@@ -34,8 +34,10 @@ void UWidget_GameMenu_Button::MenuButtonClicked()
 		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Equipment, ESlateVisibility::SelfHitTestInvisible);
 		break;
 	}
-	case EGameMenuCategory::Option:
+	case EGameMenuCategory::Setting:
 	{
+		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_GameMenu, ESlateVisibility::Collapsed);
+		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Setting, ESlateVisibility::SelfHitTestInvisible);
 		break;
 	}
 	case EGameMenuCategory::Quit:
