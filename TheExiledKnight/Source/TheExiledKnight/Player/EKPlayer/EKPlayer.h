@@ -92,13 +92,22 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FGameplayTagContainer EKPlayerStateContainer;
 
+#pragma region Timer
+
 protected:
 	FTimerHandle HitTagHandle;
+	FTimerHandle StrongHitTagHandle;
 
 	const float NextHitTime = 0.5f;
+	const float NextStrongHitTime = 2.f;
 
 	void RemoveHitTag();
 	void HitTimer();
+
+	void RemoveStrongHitTag();
+	void StrongHitTimer();
+
+#pragma endregion
 
 #pragma region Lock On
 

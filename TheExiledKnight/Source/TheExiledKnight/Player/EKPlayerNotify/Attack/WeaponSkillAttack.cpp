@@ -62,7 +62,7 @@ void UWeaponSkillAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSeque
 		if (HitEnemy)
 		{
 			IgnoreEnemy.Emplace(HitEnemy);
-			TSubclassOf<UEKPlayerEnhancedDamageType> PlayerDamageType = UEKPlayerEnhancedDamageType::StaticClass();
+			TSubclassOf<UEKPlayerStrongDamageType> PlayerDamageType = UEKPlayerStrongDamageType::StaticClass();
 			UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
 			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Silver, TEXT("Skill"));
 		}
