@@ -15,9 +15,13 @@ void UWidget_InvContentList::UpdateContents(EItemCategory Category)
 	UInventoryComponent* inventoryComp = playerController->GetComponentByClass<UInventoryComponent>();
 	if (!inventoryComp) return;
 
+
+	const TArray<FInventorySlot>& contents = inventoryComp->GetConstContents(Category);
+
 	ContentList->ClearListItems();
 
-	const TArray<FInventorySlot>& contents = inventoryComp->GetContents(Category);
+	//const TArray<FInventorySlot>& contents = inventoryComp->GetInventory(Category);
+
 	for (int i = 0; i < contents.Num(); i += 5)
 	{
 		UInventory_ListData* data = NewObject<UInventory_ListData>(UInventory_ListData::StaticClass());
@@ -29,6 +33,8 @@ void UWidget_InvContentList::UpdateContents(EItemCategory Category)
 			{
 				data->Items.Add(contents[j]);
 			}
+			else
+				UE_LOG(LogTemp, Warning, TEXT("Widget_InvContentList"))
 		}
 
 		ContentList->AddItem(data);
