@@ -33,6 +33,11 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
+const TArray<FInventorySlot> UInventoryComponent::GetContents(EUpgradeItemType Category)
+{
+	return Inventory;
+}
+
 const TArray<FInventorySlot>& UInventoryComponent::GetContents(EItemCategory Category)
 {
 	return Inventory;
