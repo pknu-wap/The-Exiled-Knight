@@ -8,6 +8,8 @@
 #include "EKEnums.h"
 #include "InventoryComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FAdd_Item_Delegate);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THEEXILEDKNIGHT_API UInventoryComponent : public UActorComponent
 {
@@ -48,10 +50,12 @@ public:
 	bool DeleteItem(FItemStruct ItemToDelete, int Quantity = 0);
 
 	UFUNCTION(BlueprintCallable)
-	bool DeleteSlots(TArray<FInventorySlot>& Slots);
+	bool UpdateSlots(TArray<FInventorySlot>& Slots);
 
 	UFUNCTION(BlueprintCallable)
 	bool AddNewSlot(TArray<FInventorySlot>& Slots);
+
+	FAdd_Item_Delegate AddItemDelegate;
 
 
 private:
@@ -84,4 +88,10 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	int ExpansionSize = 5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	int64 Astral = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	int TotalPotionQuantity = 4;
 };
