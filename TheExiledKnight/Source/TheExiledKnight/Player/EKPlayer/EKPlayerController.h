@@ -89,8 +89,13 @@ private:
 
 	void LockOnStarted(const FInputActionValue& InputValue);
 
+
 public:
 	void OnPressed_GameMenu(const FInputActionValue& InputValue);
+	void OnPressed_Up(const FInputActionValue& InputValue);
+	void OnPressed_Down(const FInputActionValue& InputValue);
+	void OnPressed_Left(const FInputActionValue& InputValue);
+	void OnPressed_Right(const FInputActionValue& InputValue);
 
 #pragma endregion
 
@@ -207,13 +212,6 @@ public:
 	void SetAttackComboNext();
 	void ResetAttackCombo();
 	void SetAttackEndTimer(float Time);
-
-public:
-	void OnPressed_GameMenu(const FInputActionValue& InputValue);
-	void OnPressed_Up(const FInputActionValue& InputValue);
-	void OnPressed_Down(const FInputActionValue& InputValue);
-	void OnPressed_Left(const FInputActionValue& InputValue);
-	void OnPressed_Right(const FInputActionValue& InputValue);
 
 public:
 	// About Battle State
