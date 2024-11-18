@@ -152,6 +152,7 @@ bool UInventoryComponent::AddItem(FItemStruct ItemToAdd, int Quantity)
 			UE_LOG(LogTemp, Warning, TEXT("Quantity++"));
 		}
 
+		AddItemDelegate.Broadcast();
 		return true;
 	}
 
@@ -187,6 +188,8 @@ bool UInventoryComponent::AddItem(FItemStruct ItemToAdd, int Quantity)
 	}
 	
 	UE_LOG(LogTemp, Warning, TEXT("Add new Item to Inventory Slot"));
+
+	AddItemDelegate.Broadcast();
 
 	return true;
 }
@@ -231,7 +234,7 @@ bool UInventoryComponent::UseItem(FItemStruct ItemToUse, int Quantity)
 
 bool UInventoryComponent::UpgradeItem(FItemStruct ItemToUpgrade)
 {
-	if (ItemToUpgrade.ItemLevel > 9)
+	if (ItemToUpgrade.ItemLevel > 10)
 		return false;
 
 	TArray<FInventorySlot>& Slots = GetContents(ItemToUpgrade.ItemCategory);
@@ -288,13 +291,13 @@ bool UInventoryComponent::DeleteItem(FItemStruct ItemToDelete, int Quantity)
 			tmp2 = tmp1;
 		}
 		
-		UE_LOG(LogTemp, Warning, TEXT("add new empty slot"));
+		UE_LOG(LogTemp, Warning, TEXT("destroy item and add new empty slot"));
 	}
 
 	return true;
 }
 
-bool UInventoryComponent::DeleteSlots(TArray<FInventorySlot>& Slots)
+bool UInventoryComponent::UpdateSlots(TArray<FInventorySlot>& Slots)
 {
 	if (Slots.Num() <= ExpansionSize)
 		return false;
