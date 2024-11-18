@@ -8,7 +8,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "EK_EnemyBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHitAnimationEnd);   
+ 
 
 UCLASS()
 class THEEXILEDKNIGHT_API AEK_EnemyBase : public ACharacter
@@ -21,16 +21,22 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInvestigator, AActor* DamageCauser)override;
 	
-	UPROPERTY(BlueprintAssignable, Category = "HitAnimation")
-	FOnHitAnimationEnd OnHurtAnimationEnd;  
-
 	void PlayHurtReactionAnimation(const FVector& DamageDirection);   
 	
 	void OnHurtAnimationEnded(UAnimMontage* Montage, bool bInterrupted);
 
+	void PlayDieReactionAnimation(); 
+
 	void OnDeathAnimationEnded(UAnimMontage* Montage, bool bInterrupted);
 
-	void PlayDieReactionAnimation();
+	void PlayStunReactionAnimation();
+
+	void OnStunAnimationEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	void HandleStrongAttack(float Damage);
+
+	void HandleNormalAttack(float Damage);
+
 	
 	float GetSightRadius();
 
@@ -63,15 +69,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"));
 	UAnimMontage* DeathAnimMontage;
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"));
+	UAnimMontage* StunMontage;
 public:	
 	UPROPERTY(VisibleAnywhere, Category = Stat)
 	class UEK_EnemyStatusComponent* EnemyStat;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BehaviorTree");
 	UBehaviorTree* BehaviorTree;
-	
-	virtual TObjectPtr <UEK_EnemyStatusComponent> GetStatusComponent();
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
 	float SightRadius = 500.0f;
@@ -88,5 +93,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
 	AActor* AttackTarget;
 	
-	bool bIsDead = false;
+	virtual TObjectPtr <UEK_EnemyStatusComponent> GetStatusComponent(); 
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	bool bIsStunned = false;
+
+	UAnimMontage* BeforeHurtMontage = nullptr;
+	
 };

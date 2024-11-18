@@ -18,11 +18,11 @@ class THEEXILEDKNIGHT_API UEKDamageType : public UDamageType
 UCLASS()
 class THEEXILEDKNIGHT_API UEKNormalDamageType : public UEKDamageType
 {
-	GENERATED_BODY() 
+	GENERATED_BODY()
 };
 
 UCLASS()
 class THEEXILEDKNIGHT_API UEKStrongDamageType : public UEKDamageType
 {
-	GENERATED_BODY() 
+	GENERATED_BODY()
 };

@@ -7,9 +7,9 @@
 UEK_EnemyStatusComponent::UEK_EnemyStatusComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
-	SetHealth(100);
-	SetPoise(10);
-	SetAttackDamage(10);
+	SetHealth(1000);
+	SetPoise(100);
+	SetAttackDamage(1);
 	SetIsDead(false);
 }
 #pragma region InitialSetting
@@ -80,6 +80,14 @@ void UEK_EnemyStatusComponent::DamageCurrentHealth(float amount)
 }
 
 #pragma endregion
+#pragma region ResetPoise
+void UEK_EnemyStatusComponent::ResetCurrentPoise()
+{
+	CurrentPoise = MaxPoise;
+}
+#pragma endregion
+
+
 
 
 
