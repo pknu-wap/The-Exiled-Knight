@@ -27,6 +27,10 @@ FItemObject::FItemObject()
 
 }
 
-FLevel::FLevel()
+FLevelRate::FLevelRate()
+{
+}
+
+FRune::FRune()
 {
 }
