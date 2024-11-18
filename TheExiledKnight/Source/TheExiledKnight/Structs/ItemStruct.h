@@ -62,7 +62,7 @@ struct FWeaponStruct : public FTableRowBase
 {
     GENERATED_BODY()
 
-    FWeaponStruct() {};
+    FWeaponStruct();
     FWeaponStruct(const FWeaponStruct& Other)
     {
         ID = Other.ID;
@@ -94,6 +94,68 @@ struct FWeaponStruct : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float INTRate = 1.0;
+};
+
+USTRUCT(BlueprintType)
+struct FLevelRate : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    FLevelRate();
+    FLevelRate(const FLevelRate& Other)
+    {
+        PotionRate = Other.PotionRate;
+        SwordRate = Other.SwordRate;
+        StaffRate = Other.StaffRate;
+        SpearRate = Other.SpearRate;
+    };
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float PotionRate = 0.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float SwordRate = 0.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float StaffRate = 0.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float SpearRate = 0.0f;
+};
+
+USTRUCT(BlueprintType)
+struct FRune : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    FRune();
+    FRune(const FRune& Other)
+    {
+        Vitality = Other.Vitality;
+        Mental = Other.Mental;
+        Endurance = Other.Endurance;
+        Strength = Other.Strength;
+        Ability = Other.Ability;
+        Intelligence = Other.Intelligence;
+    };
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    int32 Vitality;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    int32 Mental;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    int32 Endurance;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    int32 Strength;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    int32 Ability;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    int32 Intelligence;
 };
 
 USTRUCT(BlueprintType)
