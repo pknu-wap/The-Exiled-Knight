@@ -16,6 +16,12 @@ void AEKItem_Base::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	ItemInfo = *(GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfo(ID));
+}
+
+void AEKItem_Base::UseItem()
+{
+
 }
 
 // Called every frame

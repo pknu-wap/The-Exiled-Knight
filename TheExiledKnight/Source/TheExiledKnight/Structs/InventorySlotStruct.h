@@ -21,5 +21,5 @@ struct THEEXILEDKNIGHT_API FInventorySlot
 	FItemStruct Item;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	uint8 Amount = 0;
+	uint8 Quantity = 0;
 };
