@@ -77,13 +77,13 @@ void AEKPlayer::BeginPlay()
 
 	// Test GreatSword Version
 
-	/*if (GreatSwordTypeAClass)
+	if (GreatSwordTypeAClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(GreatSwordTypeAClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword);
-	}*/
+	}
 
 	/*if (GreatSwordTypeBClass)
 	{
@@ -121,13 +121,13 @@ void AEKPlayer::BeginPlay()
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
 	}*/
 
-	if (StaffTypeBClass)
+	/*if (StaffTypeBClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(StaffTypeBClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
-	}
+	}*/
 
 #pragma endregion
 

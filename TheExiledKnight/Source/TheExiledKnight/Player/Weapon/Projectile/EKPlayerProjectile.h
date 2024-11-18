@@ -58,8 +58,9 @@ protected:
 	USoundBase* HitSound;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
-	float DamageValue;
+	// Edit Editer Notify Damege Coefficient Value
+	UPROPERTY(EditAnywhere, Category = "Damage")
+	float DamageValue = 1.0;
 
 protected:
 	AEKPlayer* EKPlayer;
