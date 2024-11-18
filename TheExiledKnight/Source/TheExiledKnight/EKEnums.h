@@ -43,3 +43,23 @@ enum class EItemCategory : uint8
 	Upgrades,		// weapon & potion upgrade Items
 	Hunting			// monster drop item
 };
+
+UENUM(BlueprintType)
+enum class EStatusType : uint8
+{
+	Vitality,
+	Mental,
+	Endurance,
+	Strength,
+	Ability,
+	Intelligence
+};
+
+UENUM(BlueprintType)
+enum class EUpgradeItemType : uint8
+{
+	Sword,
+	Spear,
+	Staff,
+	Potion
+};
