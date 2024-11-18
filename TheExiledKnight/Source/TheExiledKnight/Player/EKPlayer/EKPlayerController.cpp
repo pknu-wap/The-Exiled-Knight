@@ -37,6 +37,10 @@ void AEKPlayerController::BeginPlay()
 	{
 		Subsystem->AddMappingContext(IMCDefault, 0);
 	}
+
+	InventoryComponent->AddItemDelegate.AddUObject(this, &AEKPlayerController::DestroyItem);
+
+	TryInteractLoop();
 }
 
 void AEKPlayerController::SetupInputComponent()
@@ -86,7 +90,7 @@ void AEKPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
-	FindInteractableObjects();
+	//FindInteractableObjects();
 }
 
 #pragma region Move
@@ -579,6 +583,12 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 
 #pragma region Timer
 
+void AEKPlayerController::DestroyItem()
+{
+	if (Item)
+		Item->Destroy();
+}
+
 void AEKPlayerController::SetStaminaRecoveryTime()
 {
 	EKPlayer->GetPlayerStatusComponent()->bCanStaminaRecovery = true;
@@ -641,6 +651,11 @@ void AEKPlayerController::InvincibilityTimer(float Time)
 {
 	GetWorldTimerManager().SetTimer(InvincibilityHandle, this, &ThisClass::SetInvincibility, Time, false);
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Invincibility);
+}
+
+void AEKPlayerController::TryInteractLoop()
+{
+	GetWorldTimerManager().SetTimer(InteractCheckHandle, this, &ThisClass::FindInteractableObjects, InteractCheckTime, true);
 }
 
 #pragma endregion
