@@ -7,7 +7,7 @@
 ATheExiledKnightGameMode::ATheExiledKnightGameMode()
 {
 	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/TheExiledKnight/Player/Blueprint/BP_EKPlayer"));
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Script/Engine.Blueprint'/Game/EKPlayer/Blueprint/BP_Player.BP_Player_C'"));
 	if (PlayerPawnBPClass.Class != NULL)
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
