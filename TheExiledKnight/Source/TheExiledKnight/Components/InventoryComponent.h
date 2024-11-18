@@ -8,6 +8,8 @@
 #include "EKEnums.h"
 #include "InventoryComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FAdd_Item_Delegate);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THEEXILEDKNIGHT_API UInventoryComponent : public UActorComponent
 {
@@ -26,17 +28,34 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	const TArray<FInventorySlot>& GetContents(EItemCategory Category);
-
-	int GetIndexToAdd(uint8 ID);
-	int GetDupSlotIndex(uint8 ID, int MaxStack);
-	int GetEmptySlotIndex();
+	const TArray<FInventorySlot>& GetConstContents(EItemCategory Category);
 
 	UFUNCTION(BlueprintCallable)
-	TArray<FInventorySlot>& GetInventory() { return Inventory; }
+	TArray<FInventorySlot>& GetContents(EItemCategory Category);
+
+	int GetIndexToAdd(uint8 ID, EItemCategory Category);
+	int GetDupSlotIndex(uint8 ID, EItemCategory Category);
+	int GetEmptySlotIndex(EItemCategory Category);
 
 	UFUNCTION(BlueprintCallable)
-	bool AddItem(FItemStruct ItemToAdd);
+	bool AddItem(FItemStruct ItemToAdd, int Quantity = 1);
+
+	UFUNCTION(BlueprintCallable)
+	bool UseItem(FItemStruct ItemToUse, int Quantity = 1);
+
+	UFUNCTION(BlueprintCallable)
+	bool UpgradeItem(FItemStruct ItemToUpgrade);
+
+	UFUNCTION(BlueprintCallable)
+	bool DeleteItem(FItemStruct ItemToDelete, int Quantity = 0);
+
+	UFUNCTION(BlueprintCallable)
+	bool UpdateSlots(TArray<FInventorySlot>& Slots);
+
+	UFUNCTION(BlueprintCallable)
+	bool AddNewSlot(TArray<FInventorySlot>& Slots);
+
+	FAdd_Item_Delegate AddItemDelegate;
 
 
 private:
@@ -44,11 +63,35 @@ private:
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<UDataTable> ItemDB;
+	TArray<FInventorySlot> None;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	TArray<FInventorySlot> Inventory;
+	TArray<FInventorySlot> Weapon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	int Inventory_Size = 5;
+	TArray<FInventorySlot> Rune;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TArray<FInventorySlot> FragmentOfGod;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TArray<FInventorySlot> UseableItem;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TArray<FInventorySlot> Magic;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TArray<FInventorySlot> Upgrades;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TArray<FInventorySlot> Hunting;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	int ExpansionSize = 5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	int64 Astral = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	int TotalPotionQuantity = 4;
 };
