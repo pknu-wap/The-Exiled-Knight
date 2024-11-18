@@ -256,7 +256,7 @@ void AEKPlayer::EquipWeapon(const FWeaponStruct& InWeaponInfo)
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(InWeaponInfo.WeaponClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
-		GetMesh()->SetAnimInstanceClass(InWeaponInfo.AnimInstance);
+		//GetMesh()->SetAnimInstanceClass(InWeaponInfo.AnimInstance);
 	}
 }
 
