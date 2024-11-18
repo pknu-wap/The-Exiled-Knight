@@ -15,6 +15,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "../../Enemy/EK_EnemyBase.h"
 #include "Components/BoxComponent.h"
+#include "Player/Weapon/DamageType/EKPlayerDamageType.h"
+#include "Engine/DamageEvents.h"
 
 AEKPlayer::AEKPlayer()
 {
@@ -162,13 +164,25 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 {
 	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
-	if (EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Hit))
+	if (!EKPlayerController || 
+		EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Hit) ||
+		EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_StrongHit))
 	{
 		return 0.f;
 	}
 
-	HitTimer();
+	UEKPlayerDamageType* DamageType = Cast<UEKPlayerDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject());
 
+	if (DamageType->IsA(UEKPlayerNormalDamageType::StaticClass()))
+	{
+		HitTimer();
+	}
+	else if (DamageType->IsA(UEKPlayerStrongDamageType::StaticClass()))
+	{
+		StrongHitTimer();
+	}
+
+	// if player don't equip weapon, equip weapon automatically
 	if (!EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_BattleState))
 	{
 		CurrentWeapon->PlayWeaponEquipAnimMontage(this, EKPlayerController);
@@ -176,13 +190,9 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 
 	EKPlayerController->BattleStateTimer();
 
+	// About Defense Logic
 	if (EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense) && PlayerStatusComponent->GetStamina() >= DefenseStamina)
 	{
-		if (!EKPlayerController)
-		{
-			return 0.f;
-		}
-
 		EKPlayerController->ConsumtionStaminaAndTimer(DefenseStamina);
 
 		if (EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Invincibility)) // Perfect Defense
@@ -191,14 +201,21 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 		}
 		else // Normal Defense
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Red, TEXT("Normal Defense"));
+			GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Yellow, TEXT("Normal Defense"));
 			PlayerStatusComponent->SetHp(-Damage * 0.3);
 		}
 	}
-	else
+	else // About Normal Logic
 	{
-		PlayerStatusComponent->SetHp(-Damage);
-		HitDirection(DamageCauser);
+		if (EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Invincibility))
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Magenta, TEXT("Invincibility"));
+		}
+		else
+		{
+			PlayerStatusComponent->SetHp(-Damage);
+			HitDirection(DamageCauser);
+		}
 	}
 
 	EKPlayerController->InvincibilityTimer(1.f);
@@ -289,6 +306,17 @@ void AEKPlayer::HitTimer()
 {
 	EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Hit);
 	GetWorldTimerManager().SetTimer(HitTagHandle, this, &ThisClass::RemoveHitTag, NextHitTime, false);
+}
+
+void AEKPlayer::RemoveStrongHitTag()
+{
+	EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_StrongHit);
+}
+
+void AEKPlayer::StrongHitTimer()
+{
+	EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_StrongHit);
+	GetWorldTimerManager().SetTimer(StrongHitTagHandle, this, &ThisClass::RemoveStrongHitTag, NextStrongHitTime, false);
 }
 
 #pragma endregion

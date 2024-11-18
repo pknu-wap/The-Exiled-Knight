@@ -8,7 +8,7 @@
 #include "Player/EKPlayer/EKPlayerController.h"
 #include "Player/EKPlayerGameplayTags.h"
 #include "Player/Weapon/EKPlayerWeapon.h"
-#include "Player/Weapon/DamageType/EKPlayerEnhancedDamageType.h"
+#include "Player/Weapon/DamageType/EKPlayerDamageType.h"
 #include "Enemy/EK_EnemyBase.h"
 #include "WeaponSkillAttack.generated.h"
 
