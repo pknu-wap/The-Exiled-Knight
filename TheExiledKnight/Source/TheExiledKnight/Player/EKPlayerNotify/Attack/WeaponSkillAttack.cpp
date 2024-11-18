@@ -1,8 +1,8 @@
 // Made by Somalia Pirate
 
-#include "WeaponBaseAttack.h"
+#include "WeaponSkillAttack.h"
 
-void UWeaponBaseAttack::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
+void UWeaponSkillAttack::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 
@@ -13,7 +13,7 @@ void UWeaponBaseAttack::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSeque
 	}
 }
 
-void UWeaponBaseAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
+void UWeaponSkillAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime, EventReference);
 
@@ -62,23 +62,22 @@ void UWeaponBaseAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequen
 		if (HitEnemy)
 		{
 			IgnoreEnemy.Emplace(HitEnemy);
-			TSubclassOf<UEKPlayerDamageType> PlayerDamageType = UEKPlayerDamageType::StaticClass();
+			TSubclassOf<UEKPlayerEnhancedDamageType> PlayerDamageType = UEKPlayerEnhancedDamageType::StaticClass();
 			UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Attack"));
+			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Silver, TEXT("Skill"));
 		}
 	}
 }
 
-void UWeaponBaseAttack::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
+void UWeaponSkillAttack::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 
-	if (!EKPlayerController || !EKPlayer)
+	if (!EKPlayer)
 	{
 		return;
 	}
 
-	EKPlayerController->SetAttackComboNext();
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 
 	IgnoreEnemy.Empty();
