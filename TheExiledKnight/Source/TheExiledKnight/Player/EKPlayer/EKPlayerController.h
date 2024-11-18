@@ -83,6 +83,8 @@ private:
 	void SitDownStarted(const FInputActionValue& InputValue);
 
 	void Interact(const FInputActionValue& InputValue);
+
+	UFUNCTION()
 	void FindInteractableObjects();
 
 	void SkillStarted(const FInputActionValue& InputValue);
@@ -146,6 +148,11 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class AEKPlayer> EKPlayer;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class AEKItem_Base* Item = nullptr;
+
+	void DestroyItem();
+
 protected:
 	// Common Animation Montage
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
@@ -171,12 +178,15 @@ public:
 	const float BattleEndTime = 10.f;
 	bool bCanAttackNext = false;
 
+	const float InteractCheckTime = 0.5f;
+
 protected:
 	FTimerHandle StaminaRecoveryHandle;
 	FTimerHandle AttackEndHandle;
 	FTimerHandle StaffBaseSkillEndHandle;
 	FTimerHandle BattleStateHandle;
 	FTimerHandle InvincibilityHandle; // muzuk
+	FTimerHandle InteractCheckHandle;
 
 	// How long does it take for the player to recover after using the Stemina
 	const float StaminaRecoveryTime = 2.5f;
@@ -203,6 +213,9 @@ public:
 
 	void SetInvincibility();
 	void InvincibilityTimer(float Time);
+
+	// About Interact 
+	void TryInteractLoop();
 
 #pragma endregion
 
