@@ -28,7 +28,9 @@ enum class EWeaponType : uint8
 	None,
 	GreatSword,
 	Spear,
-	Staff
+	Staff,
+
+	MAX UMETA(Hidden)
 };
 
 UENUM(BlueprintType)
@@ -38,7 +40,7 @@ enum class EItemCategory : uint8
 	Weapon,
 	Rune,			// defense or specific effect
 	FragmentOfGod,	// Special skill
-	UseableItem,		// Useable Item
+	UseableItem,	// Useable Item
 	Magic,
 	Upgrades,		// weapon & potion upgrade Items
 	Hunting			// monster drop item

@@ -265,6 +265,7 @@ void AEKPlayer::EquipWeapon(const FWeaponStruct& InWeaponInfo)
 			EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword);
 		else if (InWeaponInfo.WeaponClass.Get()->IsChildOf(ASpear::StaticClass()))
 			EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear);
+			
 		// GetMesh()->SetAnimInstanceClass(InWeaponInfo.AnimInstance);
 	}
 }
