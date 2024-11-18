@@ -61,22 +61,22 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class AGreatSwordTypeA> GreatSwordTypeAClass;
+	TSubclassOf<class AEKPlayerWeapon> GreatSwordTypeAClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class AGreatSwordTypeB> GreatSwordTypeBClass;
+	TSubclassOf<class AEKPlayerWeapon> GreatSwordTypeBClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class ASpearTypeA> SpearTypeAClass;
+	TSubclassOf<class AEKPlayerWeapon> SpearTypeAClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class ASpearTypeB> SpearTypeBClass;
+	TSubclassOf<class AEKPlayerWeapon> SpearTypeBClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class AStaffTypeA> StaffTypeAClass;
+	TSubclassOf<class AEKPlayerWeapon> StaffTypeAClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class AStaffTypeB> StaffTypeBClass;
+	TSubclassOf<class AEKPlayerWeapon> StaffTypeBClass;
 
 #pragma endregion
 

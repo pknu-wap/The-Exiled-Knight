@@ -26,6 +26,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
+	const TArray<FInventorySlot> GetContents(EUpgradeItemType Category);
 	const TArray<FInventorySlot>& GetContents(EItemCategory Category);
 
 	int GetIndexToAdd(uint8 ID);
