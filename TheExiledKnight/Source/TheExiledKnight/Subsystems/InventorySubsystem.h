@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Structs/ItemStruct.h"
+#include "Item/EKItem_Base.h"
 #include "InventorySubsystem.generated.h"
 
 UCLASS()
@@ -17,19 +18,28 @@ public:
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
-	TObjectPtr<UDataTable> GetItemDB() { return ItemDB; };
-	FItemStruct* GetItemRow(FName RowName);
-	FItemStruct* GetItemInfo(uint8 ID);
-	
+	TObjectPtr<UDataTable> GetItemInfoDB() { return ItemInfoDB; };
+	TObjectPtr<UDataTable> GetItemClassDB() { return ItemClassDB; };
+	const FItemStruct* GetItemInfo(uint8 ID);
+
+	AEKItem_Base* GetOrCreateItemInstance(FName ItemName);
+	const TSubclassOf<AEKItem_Base> GetItemClass(FName ItemName);
+
 	FWeaponStruct* GetWeaponInfo(uint8 ID);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	TObjectPtr<UDataTable> ItemDB;
+	TObjectPtr<UDataTable> ItemInfoDB;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<UDataTable> ItemClassDB;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TMap<uint8, FItemStruct> ItemDictionary;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TMap<FName, AEKItem_Base*> ItemInstanceCache;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<UDataTable> WeaponDB;
