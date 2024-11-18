@@ -67,8 +67,6 @@ struct FWeaponStruct : public FTableRowBase
     {
         ID = Other.ID;
         Name = Other.Name;
-        EquipSocketName = Other.EquipSocketName;
-        DefenseSocketName = Other.DefenseSocketName;
         WeaponClass = Other.WeaponClass;
         AttackPow = Other.AttackPow;
         STRRate = Other.STRRate;
@@ -81,12 +79,6 @@ struct FWeaponStruct : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     FName Name = "Weapon";
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FName EquipSocketName = "Socket";
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FName DefenseSocketName = "Socket";
 
     TSubclassOf<class AEKPlayerWeapon> WeaponClass;
 
@@ -127,12 +119,12 @@ struct FItemObject : public FTableRowBase
 };
 
 USTRUCT(BlueprintType)
-struct FLevel : public FTableRowBase
+struct FLevelRate : public FTableRowBase
 {
     GENERATED_BODY()
 
-    FLevel();
-    FLevel(const FLevel& Other)
+    FLevelRate();
+    FLevelRate(const FLevelRate& Other)
     {
         PotionRate = Other.PotionRate;
         SwordRate = Other.SwordRate;
@@ -151,4 +143,39 @@ struct FLevel : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float SpearRate = 0.0f;
+};
+
+USTRUCT(BlueprintType)
+struct FRune : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    FRune();
+    FRune(const FRune& Other)
+    {
+        Vitality = Other.Vitality;
+        Mental = Other.Mental;
+        Endurance = Other.Endurance;
+        Strength = Other.Strength;
+        Ability = Other.Ability;
+        Intelligence = Other.Intelligence;
+    };
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    int32 Vitality;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    int32 Mental;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    int32 Endurance;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    int32 Strength;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    int32 Ability;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    int32 Intelligence;
 };
