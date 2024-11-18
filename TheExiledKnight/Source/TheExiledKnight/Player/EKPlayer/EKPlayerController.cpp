@@ -16,6 +16,7 @@
 #include "EKGameplayTags.h"
 #include "../Weapon/DamageType/EKPlayerDamageType.h"
 #include "Item/EKItem_Base.h"
+#include "Subsystems/InventorySubsystem.h"
 #include "DrawDebugHelpers.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
@@ -36,6 +37,10 @@ void AEKPlayerController::BeginPlay()
 	{
 		Subsystem->AddMappingContext(IMCDefault, 0);
 	}
+
+	InventoryComponent->AddItemDelegate.AddUObject(this, &AEKPlayerController::DestroyItem);
+
+	TryInteractLoop();
 }
 
 void AEKPlayerController::SetupInputComponent()
@@ -90,7 +95,7 @@ void AEKPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
-	FindInteractableObjects();
+	//FindInteractableObjects();
 }
 
 #pragma region Move
@@ -465,6 +470,9 @@ void AEKPlayerController::UsePotionStarted(const FInputActionValue& InputValue)
 	EKPlayer->GetPlayerStatusComponent()->SetHp(10);
 	EKPlayer->GetPlayerStatusComponent()->SetMp(10);
 	EKPlayer->PlayAnimMontage(UsePotionAnim);
+
+	if (InventoryComponent != nullptr)
+		InventoryComponent->UseItem(*GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfo(3));
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_UseItem);
 }
 
@@ -503,9 +511,11 @@ void AEKPlayerController::Interact(const FInputActionValue& InputValue)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Interact"));
 
-	if (bCanItemInteract)
+	if (Item)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Can Interact with Item"));
+
+		InventoryComponent->AddItem(Item->GetItemInfo(), Item->GetItemQuantity());
 	}
 }
 
@@ -514,7 +524,6 @@ void AEKPlayerController::FindInteractableObjects()
 	FVector Location;
 	FRotator Rotation;
 	TArray<FHitResult> HitResults;
-	AEKItem_Base* Item = nullptr;
 
 	EKPlayer->GetActorEyesViewPoint(Location, Rotation);
 
@@ -542,10 +551,7 @@ void AEKPlayerController::FindInteractableObjects()
 	{
 		// Show Interact UI
 
-		bCanItemInteract = true;
 	}
-	else
-		bCanItemInteract = false;
 
 }
 
@@ -604,6 +610,12 @@ void AEKPlayerController::OnPressed_Right(const FInputActionValue& InputValue)
 #pragma endregion
 
 #pragma region Timer
+
+void AEKPlayerController::DestroyItem()
+{
+	if (Item)
+		Item->Destroy();
+}
 
 void AEKPlayerController::SetStaminaRecoveryTime()
 {
@@ -667,6 +679,12 @@ void AEKPlayerController::InvincibilityTimer(float Time)
 {
 	GetWorldTimerManager().SetTimer(InvincibilityHandle, this, &ThisClass::SetInvincibility, Time, false);
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Invincibility);
+}
+
+#pragma endregion
+void AEKPlayerController::TryInteractLoop()
+{
+	GetWorldTimerManager().SetTimer(InteractCheckHandle, this, &ThisClass::FindInteractableObjects, InteractCheckTime, true);
 }
 
 #pragma endregion
