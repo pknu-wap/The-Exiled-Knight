@@ -8,12 +8,12 @@
 #include "Player/EKPlayer/EKPlayerController.h"
 #include "Player/EKPlayerGameplayTags.h"
 #include "Player/Weapon/EKPlayerWeapon.h"
-#include "Player/Weapon/DamageType/EKPlayerDamageType.h"
+#include "Player/Weapon/DamageType/EKPlayerEnhancedDamageType.h"
 #include "Enemy/EK_EnemyBase.h"
-#include "WeaponBaseAttack.generated.h"
+#include "WeaponSkillAttack.generated.h"
 
 UCLASS()
-class THEEXILEDKNIGHT_API UWeaponBaseAttack : public UAnimNotifyState
+class THEEXILEDKNIGHT_API UWeaponSkillAttack : public UAnimNotifyState
 {
 	GENERATED_BODY()
 	

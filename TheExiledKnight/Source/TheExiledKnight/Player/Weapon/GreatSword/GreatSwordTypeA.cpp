@@ -8,8 +8,6 @@ AGreatSwordTypeA::AGreatSwordTypeA()
 
 	// Edit Weapon Default Damage Here
 	WeaponAdditionalDamage = 20;
-
-	DamageValue = 1.f;
 }
 
 void AGreatSwordTypeA::BeginPlay()

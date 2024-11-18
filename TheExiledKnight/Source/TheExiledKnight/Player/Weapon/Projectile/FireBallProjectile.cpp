@@ -14,7 +14,7 @@ AFireBallProjectile::AFireBallProjectile()
 void AFireBallProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 void AFireBallProjectile::Tick(float DeltaTime)
@@ -44,22 +44,18 @@ void AFireBallProjectile::Tick(float DeltaTime)
 
 	for (auto& Hit : HitResults)
 	{
-		AActor* HitActor = Hit.GetActor();
-		if (HitActor)
+		AEK_EnemyBase* HitEnemy = Cast<AEK_EnemyBase>(Hit.GetActor());
+		if (HitEnemy)
 		{
-			AEK_EnemyBase* HitEnemy = Cast<AEK_EnemyBase>(HitActor);
 			TSubclassOf<UEKPlayerDamageType> PlayerDamageType = UEKPlayerDamageType::StaticClass();
-			if (HitEnemy)
+			UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
+			if (HitParticle)
 			{
-				UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
-				if (HitParticle)
-				{
-					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, HitEnemy->GetActorLocation(), HitEnemy->GetActorRotation());
-				}
-				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Purple, TEXT("Fire Ball"));
-				Destroy();
-				return;
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, HitEnemy->GetActorLocation(), HitEnemy->GetActorRotation());
 			}
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Fire Ball"));
+			Destroy();
+			return;
 		}
 	}
 }
