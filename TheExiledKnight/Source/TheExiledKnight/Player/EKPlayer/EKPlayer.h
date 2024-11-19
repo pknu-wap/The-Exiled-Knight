@@ -49,6 +49,7 @@ protected:
 
 public:
 	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	bool CheckPlayerDie();
 
 	void HitDirection(AActor* Enemy);
 	float HitAngle = 0.f;

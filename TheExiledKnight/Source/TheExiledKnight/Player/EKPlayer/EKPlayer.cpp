@@ -219,9 +219,21 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 		}
 	}
 
+	CheckPlayerDie();
+
 	EKPlayerController->InvincibilityTimer(1.f);
 
 	return 0.f;
+}
+
+bool AEKPlayer::CheckPlayerDie()
+{
+	if (PlayerStatusComponent->GetHp() <= 0)
+	{
+		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Die);
+		return true;
+	}
+	return false;
 }
 
 void AEKPlayer::HitDirection(AActor* Enemy)
