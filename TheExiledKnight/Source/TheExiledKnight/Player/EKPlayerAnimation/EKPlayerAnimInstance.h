@@ -60,10 +60,10 @@ protected:
 	bool bIsHitted = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Bool")
-	bool bIsDefense = false;
+	bool bIsHitDowned = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Bool")
-	bool bIsDown = false;
+	bool bIsDefense = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Bool")
 	bool bIsSitted = false;

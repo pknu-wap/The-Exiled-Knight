@@ -65,6 +65,15 @@ void UEKPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		bIsHitted = false;
 	}
 
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_StrongHit))
+	{
+		bIsHitDowned = true;
+	}
+	else
+	{
+		bIsHitDowned = false;
+	}
+
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense))
 	{
 		bIsDefense = true;

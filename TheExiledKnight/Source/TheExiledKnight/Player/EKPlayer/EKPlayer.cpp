@@ -17,6 +17,7 @@
 #include "Components/BoxComponent.h"
 #include "Player/Weapon/DamageType/EKPlayerDamageType.h"
 #include "Engine/DamageEvents.h"
+#include "Enemy/DamageSystem/EKDamageType.h"
 
 AEKPlayer::AEKPlayer()
 {
@@ -171,13 +172,13 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 		return 0.f;
 	}
 
-	UEKPlayerDamageType* DamageType = Cast<UEKPlayerDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject());
+	UEKDamageType* DamageType = Cast<UEKDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject());
 
-	if (DamageType->IsA(UEKPlayerNormalDamageType::StaticClass()))
+	if (DamageType->IsA(UEKNormalDamageType::StaticClass()))
 	{
 		HitTimer();
 	}
-	else if (DamageType->IsA(UEKPlayerStrongDamageType::StaticClass()))
+	else if (DamageType->IsA(UEKStrongDamageType::StaticClass()))
 	{
 		StrongHitTimer();
 	}

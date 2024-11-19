@@ -420,6 +420,7 @@ void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputVal
 	{
 		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
+		EKPlayer->GetCurrentWeapon()->AttachToDefenseSocket(EKPlayer->GetCurrentWeapon(), EKPlayer);
 		InvincibilityTimer(0.2f);
 	}
 }
@@ -431,6 +432,7 @@ void AEKPlayerController::WeaponDefenseRelease(const FInputActionValue& InputVal
 		return;
 	}
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
+	EKPlayer->GetCurrentWeapon()->AttachWeaponToHandSocket(EKPlayer->GetCurrentWeapon(), EKPlayer);
 }
 
 #pragma endregion
