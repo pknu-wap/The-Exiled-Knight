@@ -97,6 +97,11 @@ void AEKPlayerController::PlayerTick(float DeltaTime)
 
 void AEKPlayerController::MoveTriggered(const FInputActionValue& InputValue)
 {
+	if (EKPlayer->CheckPlayerDie())
+	{
+		return;
+	}
+
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense))
 	{
@@ -179,6 +184,11 @@ void AEKPlayerController::JumpStarted(const FInputActionValue& InputValue)
 		return;
 	}
 
+	if (EKPlayer->CheckPlayerDie())
+	{
+		return;
+	}
+
 	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < JumpStamina)
 	{
 		return;
@@ -232,6 +242,11 @@ void AEKPlayerController::SprintAndDodgeTriggered(const FInputActionValue& Input
 		return;
 	}
 
+	if (EKPlayer->CheckPlayerDie())
+	{
+		return;
+	}
+
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump))
@@ -272,6 +287,11 @@ void AEKPlayerController::SprintAndDodgeTriggered(const FInputActionValue& Input
 void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputValue)
 {
 	if (!EKPlayer)
+	{
+		return;
+	}
+
+	if (EKPlayer->CheckPlayerDie())
 	{
 		return;
 	}
@@ -330,6 +350,11 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 		return;
 	}
 
+	if (EKPlayer->CheckPlayerDie())
+	{
+		return;
+	}
+
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Dodge))
@@ -361,6 +386,11 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 void AEKPlayerController::SkillStarted(const FInputActionValue& InputValue)
 {
 	if (!EKPlayer)
+	{
+		return;
+	}
+
+	if (EKPlayer->CheckPlayerDie())
 	{
 		return;
 	}
@@ -400,6 +430,11 @@ void AEKPlayerController::SkillStarted(const FInputActionValue& InputValue)
 void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputValue)
 {
 	if (!EKPlayer)
+	{
+		return;
+	}
+
+	if (EKPlayer->CheckPlayerDie())
 	{
 		return;
 	}
@@ -446,12 +481,22 @@ void AEKPlayerController::WeaponChangeStarted(const FInputActionValue& InputValu
 		return;
 	}
 
+	if (EKPlayer->CheckPlayerDie())
+	{
+		return;
+	}
+
 	EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
 }
 
 void AEKPlayerController::UsePotionStarted(const FInputActionValue& InputValue)
 {
 	if (!EKPlayer || !UsePotionAnim)
+	{
+		return;
+	}
+
+	if (EKPlayer->CheckPlayerDie())
 	{
 		return;
 	}
@@ -476,6 +521,11 @@ void AEKPlayerController::UsePotionStarted(const FInputActionValue& InputValue)
 void AEKPlayerController::SitDownStarted(const FInputActionValue& InputValue)
 {
 	if (!EKPlayer)
+	{
+		return;
+	}
+
+	if (EKPlayer->CheckPlayerDie())
 	{
 		return;
 	}

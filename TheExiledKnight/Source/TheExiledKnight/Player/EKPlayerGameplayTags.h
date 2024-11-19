@@ -21,6 +21,7 @@ namespace EKPlayerGameplayTags
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_Hit);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_StrongHit);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_Invincibility);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_Die);
 
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_Equip_GreatSword);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_Equip_Spear);

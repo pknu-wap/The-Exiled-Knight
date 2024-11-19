@@ -83,6 +83,11 @@ void UEKPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		bIsDefense = false;
 	}
 
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Die))
+	{
+		bIsDie = true;
+	}
+
 	Stamina = EKPlayer->GetPlayerStatusComponent()->GetStamina();
 
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword))
