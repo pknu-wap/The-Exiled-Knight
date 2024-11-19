@@ -37,12 +37,6 @@ public:
 
 	void HandleNormalAttack(float Damage);
 
-	
-	float GetSightRadius();
-
-	float GetLostSightRadius();
-
-	float GetHearingRange();
 
 	UFUNCTION(BlueprintCallable)
 	AActor *GetAttackTarget();
@@ -79,24 +73,15 @@ public:
 	UBehaviorTree* BehaviorTree;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
-	float SightRadius = 500.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
-	float LostSightRadius = 1000.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
-	float HearingRange = 2000.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
 	TArray<AActor*> AttachedActors;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
 	AActor* AttackTarget;
 	
-	virtual TObjectPtr <UEK_EnemyStatusComponent> GetStatusComponent(); 
-
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	bool bIsStunned = false;
+	
+	virtual TObjectPtr <UEK_EnemyStatusComponent> GetStatusComponent(); 
 
 	UAnimMontage* BeforeHurtMontage = nullptr;
 	
