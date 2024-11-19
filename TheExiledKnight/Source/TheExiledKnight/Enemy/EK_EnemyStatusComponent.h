@@ -26,15 +26,18 @@ public:
 	void SetHealth(float amount);
 	void SetAttackDamage(float amount);
 	void SetIsDead(bool isDead);
-	void  DamageCurrentPoise(float amount);
+	void DamageCurrentPoise(float amount);
 	void DamageCurrentHealth(float amount); 
 	void ResetCurrentPoise();
+
 	
 	float GetMaxHealth();
     float GetMaxPoise();
 	float GetCurrentHealth();
 	float GetCurrentPoise();
 	float GetAttackDamage();
+	float GetSightRange();
+	float GetHearingRange();
     bool  GetIsDead();
 	
 	UPROPERTY(BlueprintAssignable, Category = "Status")
@@ -52,26 +55,34 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Status")
 	FOnStunAnimationEnd OnStunAnimationEnd;
 private:
+	UPROPERTY(EditAnywhere, Category = Data , Meta=(AllowPrivteAccess = "true"))
+	class UDataTable* EnemyDataTable;
 
+	UPROPERTY(EditAnywhere, Category = Data, Meta = (AllowPrivteAccess = "true"))
+	FName EnemyID;
 
-
-	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
+	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = "true"))
 	float MaxHealth;
 
-	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
+	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = "true"))
 	float CurrentHealth;
-	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
+	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = "true"))
 	float MaxPoise;
 	
-	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
+	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = "true"))
 	float CurrentPoise;
 
-	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
+	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = "true"))
 	float AttackDamage;
 
-	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = true))
+	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = "true"))
 	bool bIsDead;
 
+	UPROPERTY(VisibleAnywhere, Category = AIPerception, meta = (AllowPrivateAccess = "true"))
+	float SightRadius = 800.0f;
+
+	UPROPERTY(VisibleAnywhere, Category = AIPerception, meta = (AllowPrivateAccess = "true"))
+	float HearingRange = 1000.0f;
 
 
 };
