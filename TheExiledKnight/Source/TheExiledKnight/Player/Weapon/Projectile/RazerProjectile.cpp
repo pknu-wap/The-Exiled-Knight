@@ -1,25 +1,38 @@
 // Made by Somalia Pirate
 
-#include "FireBallProjectile.h"
+#include "RazerProjectile.h"
 
-AFireBallProjectile::AFireBallProjectile()
+ARazerProjectile::ARazerProjectile()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	ProjectileMovementComponent->ProjectileGravityScale = 0.05f;
+	ProjectileMovementComponent->InitialSpeed = 0.f;
+	ProjectileMovementComponent->MaxSpeed = 0.f;
+	ProjectileMovementComponent->Velocity = FVector(0, 0, 0);
 
+	StaticMeshComponent->SetRelativeRotation(FRotator(0, 180.f, 0));
+
+	BaseParticle->SetRelativeRotation(FRotator(90.f, 0, 0));
 	BaseParticle->SetRelativeScale3D(FVector(2.f, 2.f, 2.f));
 
-	DamageValue = 0.5;
+	CapsuleComponent->SetCapsuleHalfHeight(1000.f);
+	CapsuleComponent->SetCapsuleRadius(15.f);
+	CapsuleComponent->SetRelativeRotation(FRotator(90.f, 0, 0));
+	CapsuleComponent->SetRelativeLocation(FVector(-1010.f, 0, 0));
+
+	SetLifeSpan(2.f);
+
+	DamageValue = 0.05;
 }
 
-void AFireBallProjectile::BeginPlay()
+void ARazerProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
+	EKPlayerController->RemoveAttackTagTimer(3.6f);
 }
 
-void AFireBallProjectile::Tick(float DeltaTime)
+void ARazerProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
@@ -55,9 +68,7 @@ void AFireBallProjectile::Tick(float DeltaTime)
 			{
 				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, HitEnemy->GetActorLocation(), HitEnemy->GetActorRotation());
 			}
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Fire Ball"));
-			Destroy();
-			return;
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Magenta, TEXT("Razer"));
 		}
 	}
 }
