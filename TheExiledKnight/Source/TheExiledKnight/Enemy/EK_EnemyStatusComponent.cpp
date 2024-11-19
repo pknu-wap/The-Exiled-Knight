@@ -62,6 +62,16 @@ float UEK_EnemyStatusComponent::GetAttackDamage()
 	return AttackDamage;
 }
 
+float UEK_EnemyStatusComponent::GetSightRange()
+{
+	return SightRadius;
+}
+
+float UEK_EnemyStatusComponent::GetHearingRange()
+{
+	return HearingRange;
+}
+
 bool UEK_EnemyStatusComponent::GetIsDead()
 {
 	return bIsDead;

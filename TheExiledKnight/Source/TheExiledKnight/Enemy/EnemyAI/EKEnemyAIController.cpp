@@ -5,6 +5,7 @@
 #include"Perception/AIPerceptionComponent.h"
 #include"Perception/AISenseConfig.h"
 #include"Perception/AIPerceptionTypes.h"
+#include "Enemy/EK_EnemyStatusComponent.h"
 #include"Enemy/EK_EnemyBase.h"
 
 
@@ -19,8 +20,8 @@ AEKEnemyAIController::AEKEnemyAIController()
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
 	SightConfig->SightRadius = SightRadius;
 	SightConfig->LoseSightRadius = LostSightRadius;
-	SightConfig->PeripheralVisionAngleDegrees = 60.0f;
-	SightConfig->SetMaxAge(15.f);
+	SightConfig->PeripheralVisionAngleDegrees = DefaultPeripheralVisionAngle; 
+	SightConfig->SetMaxAge(DefaultSightMaxAge);
 	SightConfig->AutoSuccessRangeFromLastSeenLocation = -1.f;
 
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
@@ -33,7 +34,7 @@ AEKEnemyAIController::AEKEnemyAIController()
 #pragma region Hearing
 	HearingConfig = CreateDefaultSubobject<UAISenseConfig_Hearing>(TEXT("HearingConfig"));
 	HearingConfig->HearingRange = HearingRange;
-	HearingConfig->SetMaxAge(15.f);
+	HearingConfig->SetMaxAge(DefaultSightMaxAge);
 
 	HearingConfig->DetectionByAffiliation.bDetectEnemies = true;
 	HearingConfig->DetectionByAffiliation.bDetectNeutrals = true;
@@ -58,14 +59,14 @@ void AEKEnemyAIController::OnPossess(APawn* InPawn)
 	{
 		if (SightConfig)
 		{
-			SightConfig->SightRadius = EnemyPerception->GetSightRadius();
-			SightConfig->LoseSightRadius = EnemyPerception->GetLostSightRadius();
-			
+			float Range= EnemyPerception->GetStatusComponent()->GetSightRange();
+			SightConfig->SightRadius = Range;
+			SightConfig->LoseSightRadius = 2 * Range;
 			AIPerception->ConfigureSense(*SightConfig);
 		}
 		if (HearingConfig)
 		{
-			HearingConfig->HearingRange = EnemyPerception->GetHearingRange();
+			HearingConfig->HearingRange = EnemyPerception->GetStatusComponent()->GetHearingRange();
 
 			AIPerception->ConfigureSense(*HearingConfig);
 		}

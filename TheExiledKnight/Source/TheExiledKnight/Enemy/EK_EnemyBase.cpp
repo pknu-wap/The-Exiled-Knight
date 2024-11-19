@@ -194,23 +194,6 @@ void AEK_EnemyBase::OnStunAnimationEnded(UAnimMontage* Montage, bool bInterrupte
 #pragma endregion
 
 
-
-
-float AEK_EnemyBase::GetSightRadius()
-{
-	return SightRadius;
-}
-
-float AEK_EnemyBase::GetLostSightRadius()
-{
-	return LostSightRadius;
-}
-
-float AEK_EnemyBase::GetHearingRange()
-{
-	return HearingRange;
-}
-
 AActor* AEK_EnemyBase::GetAttackTarget()
 {
 	return AttackTarget;
