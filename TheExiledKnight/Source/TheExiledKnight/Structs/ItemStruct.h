@@ -13,6 +13,7 @@ struct FItemStruct : public FTableRowBase
 
     FItemStruct();
     FItemStruct(const FItemStruct& Other)
+        : FTableRowBase(Other)
     {
         ID = Other.ID;
         Name = Other.Name;
