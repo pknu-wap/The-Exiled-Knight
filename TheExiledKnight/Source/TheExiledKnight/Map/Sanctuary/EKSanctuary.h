@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interfaces/UInteractableInterface.h"
 #include "EKSanctuary.generated.h"
 
 UCLASS()
-class THEEXILEDKNIGHT_API AEKSanctuary : public AActor
+class THEEXILEDKNIGHT_API AEKSanctuary : public AActor, public IUInteractableInterface
 {
 	GENERATED_BODY()
 	
@@ -24,8 +25,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
+	virtual void Interact() override;
+
+public:
 	UFUNCTION(BlueprintCallable)
 	void ActivateSantuary();
+
+private:
+	bool bActivated = false;
 
 public:
 	UFUNCTION(BlueprintCallable)

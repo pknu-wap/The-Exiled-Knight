@@ -26,8 +26,6 @@ void AEKSanctuary::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	ActivateSantuary();
-
 	SaveMap();
 }
 
@@ -36,6 +34,17 @@ void AEKSanctuary::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AEKSanctuary::Interact()
+{
+	if (!bActivated)
+	{
+		ActivateSantuary();
+		bActivated = true;
+	}
+
+	LoadMap();
 }
 
 void AEKSanctuary::ActivateSantuary()
