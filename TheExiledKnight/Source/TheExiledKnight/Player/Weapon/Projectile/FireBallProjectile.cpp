@@ -49,7 +49,7 @@ void AFireBallProjectile::Tick(float DeltaTime)
 		AEK_EnemyBase* HitEnemy = Cast<AEK_EnemyBase>(Hit.GetActor());
 		if (HitEnemy)
 		{
-			TSubclassOf<UEKPlayerDamageType> PlayerDamageType = UEKPlayerDamageType::StaticClass();
+			TSubclassOf<UEKPlayerNormalDamageType> PlayerDamageType = UEKPlayerNormalDamageType::StaticClass();
 			UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
 			if (HitParticle)
 			{
