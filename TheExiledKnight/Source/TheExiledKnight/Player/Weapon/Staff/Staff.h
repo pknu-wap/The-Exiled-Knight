@@ -54,7 +54,4 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	TObjectPtr<class UAnimMontage> StaffUnEquipAnim;
-
-protected:
-	bool bIsFirstAttackMagic = true;
 };
