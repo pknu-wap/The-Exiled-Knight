@@ -8,6 +8,9 @@
 #include "EKEnums.h"
 #include "SlotComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSlotUpdated, EItemCategory, InCategory, int, InSlotIdx);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FQuickSlotUpdated, EItemCategory, InCategory, int, InSlotIdx);
+
 USTRUCT(BlueprintType)
 struct FMagicStruct
 {
@@ -25,9 +28,6 @@ struct FMagicStruct
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture2D* Icon;
 };
-
-DECLARE_MULTICAST_DELEGATE_TwoParams(FSlotUpdated, EItemCategory, int)
-DECLARE_MULTICAST_DELEGATE_TwoParams(FQuickSlotUpdated, EItemCategory, int)
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THEEXILEDKNIGHT_API USlotComponent : public UActorComponent
@@ -83,6 +83,9 @@ public:
 	int MaxFragmentSlot = 6;
 	
 public:
+	UPROPERTY(BlueprintAssignable)
 	FSlotUpdated Delegate_SlotUpdated;
+
+	UPROPERTY(BlueprintAssignable)
 	FQuickSlotUpdated Delegate_QuickSlotUpdated;
 };

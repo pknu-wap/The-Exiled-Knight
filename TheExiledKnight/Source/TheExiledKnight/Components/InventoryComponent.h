@@ -66,7 +66,7 @@ public:
 private:
 	void InitializeInventory();
 
-private:
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> None;
 

@@ -25,6 +25,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateContents(EUpgradeItemType WidgetType);
 
+	UFUNCTION(BlueprintCallable)
+	void LevelUp_Equipment(const FItemStruct& InItem);
+
 public:
 	UFUNCTION()
 	void ShowBeforeCategory();
@@ -34,6 +37,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateDescription(const FInventorySlot& SlotData);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowConfirmWidget(const FInventorySlot& SlotData);
 
 public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
@@ -47,6 +53,10 @@ public:
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
 	UButton* Button_NextCategory;
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	EUpgradeItemType CurrentType;
 
 private:
 	TArray<UWidget_EU_CategorySlot*> CategorySlots;
