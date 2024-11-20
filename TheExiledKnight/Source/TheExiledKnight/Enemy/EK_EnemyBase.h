@@ -37,7 +37,7 @@ public:
 
 	void HandleNormalAttack(float Damage);
 
-
+	
 	UFUNCTION(BlueprintCallable)
 	AActor *GetAttackTarget();
 	

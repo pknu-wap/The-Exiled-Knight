@@ -21,16 +21,21 @@ public:
 
 	UEK_EnemyStatusComponent();
 
+	virtual void InitSetting();
 
 	void SetPoise(float amount);
 	void SetHealth(float amount);
 	void SetAttackDamage(float amount);
 	void SetIsDead(bool isDead);
+	void SetCurrentSpeed(float amount);
+	void SetMaxSpeed(float amount);
+	void SetSightRange(float amount);
+	void SetHearingRange(float amount);
+
 	void DamageCurrentPoise(float amount);
 	void DamageCurrentHealth(float amount); 
 	void ResetCurrentPoise();
 
-	
 	float GetMaxHealth();
     float GetMaxPoise();
 	float GetCurrentHealth();
@@ -38,6 +43,11 @@ public:
 	float GetAttackDamage();
 	float GetSightRange();
 	float GetHearingRange();
+	UFUNCTION(BlueprintCallable)
+	float GetMaxSpeed();
+	UFUNCTION(BlueprintCallable)
+	float GetCurrentSpeed();
+
     bool  GetIsDead();
 	
 	UPROPERTY(BlueprintAssignable, Category = "Status")
@@ -54,6 +64,8 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Status")
 	FOnStunAnimationEnd OnStunAnimationEnd;
+
+	virtual void BeginPlay()override;
 private:
 	UPROPERTY(EditAnywhere, Category = Data , Meta=(AllowPrivteAccess = "true"))
 	class UDataTable* EnemyDataTable;
@@ -84,5 +96,13 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = AIPerception, meta = (AllowPrivateAccess = "true"))
 	float HearingRange = 1000.0f;
 
+	UPROPERTY(VisibleAnywhere, Category = AIPerception, meta = (AllowPrivateAccess = "true"))
+	bool bIsBoss = false;
+
+	UPROPERTY(EditAnywhere, Category = Stat, Meta = (AllowPrivteAccess = "true"))
+	float CurrentSpeed = 100.0f;
+
+	UPROPERTY(EditAnywhere, Category = Stat, Meta = (AllowPrivteAccess = "true"))
+	float MaxSpeed = 350.0f;
 
 };
