@@ -11,10 +11,7 @@ USTRUCT(BlueprintType)
 struct FEnemyData :public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
-
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	FName Enemy_ID;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Data")
 	FName EnemyName;
@@ -24,6 +21,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	float Damage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	int32 PoiseAmount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	float  CurrentSpeed;

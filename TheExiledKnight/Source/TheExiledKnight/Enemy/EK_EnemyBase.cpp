@@ -4,6 +4,7 @@
 #include "EK_EnemyBase.h"
 #include "EK_EnemyStatusComponent.h"
 #include"Player/Weapon/DamageType/EKPlayerDamageType.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Engine/DamageEvents.h"
 #include"Animation/AnimInstance.h"
 #include"Enemy/DamageSystem/EKDamageType.h"
@@ -16,6 +17,7 @@ AEK_EnemyBase::AEK_EnemyBase()
 {
 	EnemyStat = CreateDefaultSubobject<UEK_EnemyStatusComponent>(TEXT("EnemyStat"));
 }
+
 #pragma region DamageSystem
 
 float AEK_EnemyBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInvestigator, AActor* DamageCauser)
