@@ -6,5 +6,5 @@
 FInventorySlot::FInventorySlot()
 {
 	Item = FItemStruct();
-	Quantity = 1;
+	Quantity = 0;
 }

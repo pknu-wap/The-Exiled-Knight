@@ -8,6 +8,7 @@
 #include "Subsystems/InventorySubsystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/EKPlayer/EKPlayer.h"
+#include "Player/EKPlayer/EKPlayerStatusComponent.h"
 
 // Sets default values for this component's properties
 USlotComponent::USlotComponent()
@@ -64,6 +65,10 @@ void USlotComponent::EquipWeapon(const FItemStruct& InItemData)
 	{
 		WeaponSlots[slotIdx] = InItemData;
 
+		UEKPlayerStatusComponent* statusComp = player->GetComponentByClass<UEKPlayerStatusComponent>();
+		if (!statusComp) return;
+		statusComp->Recalculate_Status();
+
 		if (slotIdx == ActiveWeaponSlot)
 		{
 			player->EquipWeapon(*weaponInfo);
@@ -85,6 +90,12 @@ void USlotComponent::EquipRune(const FItemStruct& InItemData)
 		RuneSlots[slotIdx] = InItemData;
 		Delegate_SlotUpdated.Broadcast(EItemCategory::Rune, slotIdx);
 	}
+
+	AEKPlayer* player = Cast<AEKPlayer>(UGameplayStatics::GetPlayerCharacter(this, 0));
+	if (!player) return;
+	UEKPlayerStatusComponent* statusComp = player->GetComponentByClass<UEKPlayerStatusComponent>();
+	if (!statusComp) return;
+	statusComp->Recalculate_Status();
 }
 
 void USlotComponent::EquipUseableItem(const FItemStruct& InItemData)
