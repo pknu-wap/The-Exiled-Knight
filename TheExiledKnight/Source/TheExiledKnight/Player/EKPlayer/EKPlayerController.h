@@ -171,6 +171,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class AEKItem_Base* Item = nullptr;
 
+	class IUInteractableInterface* InteractableActor = nullptr;
+
 	void DestroyItem();
 
 protected:
