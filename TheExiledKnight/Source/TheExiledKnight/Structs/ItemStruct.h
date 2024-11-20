@@ -139,22 +139,25 @@ struct FRune : public FTableRowBase
         Intelligence = Other.Intelligence;
     };
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    int32 ID;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
     int32 Vitality;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
     int32 Mental;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
     int32 Endurance;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
     int32 Strength;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
     int32 Ability;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
     int32 Intelligence;
 };
 
@@ -163,7 +166,7 @@ struct FItemObject : public FTableRowBase
 {
     GENERATED_BODY()
 
-    FItemObject() {};
+    FItemObject();
     FItemObject(const FItemObject& Other)
     {
         ID = Other.ID;
