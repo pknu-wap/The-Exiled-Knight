@@ -17,7 +17,7 @@ FEventReply UWidget_EU_CategorySlot::RedirectMouseDownToWidget(const FGeometry& 
 		if (!UISystem) return Reply;
 
 		UUserWidget* widget =
-			UISystem->GetWidget(FEKGameplayTags::Get().UI_Widget_GameMenu_Inventory);
+			UISystem->GetWidget(FEKGameplayTags::Get().UI_Widget_GameMenu_UpgradeEquipment);
 		if (!widget) return Reply;
 
 		UWidget_UpgradeEquipment* EUWidget = Cast<UWidget_UpgradeEquipment>(widget);

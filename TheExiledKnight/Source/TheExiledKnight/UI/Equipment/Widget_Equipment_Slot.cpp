@@ -21,7 +21,7 @@ void UWidget_Equipment_Slot::NativeConstruct()
 	if (!slotComp) return;
 
 	slotComp->Delegate_SlotUpdated.RemoveAll(this);
-	slotComp->Delegate_SlotUpdated.AddUObject(this, &UWidget_Equipment_Slot::SlotUpdated);
+	slotComp->Delegate_SlotUpdated.AddDynamic(this, &UWidget_Equipment_Slot::SlotUpdated);
 }
 
 FEventReply UWidget_Equipment_Slot::RedirectMouseDownToWidget(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)

@@ -34,7 +34,22 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 const TArray<FInventorySlot> UInventoryComponent::GetContents(EUpgradeItemType Category)
 {
-	return Inventory;
+	switch (Category)
+	{
+	case EUpgradeItemType::Sword:
+		break;
+	case EUpgradeItemType::Spear:
+		break;
+	case EUpgradeItemType::Staff:
+		break;
+	case EUpgradeItemType::Potion:
+		break;
+	default:
+		return Weapon;
+		break;
+	}
+
+	return Weapon;
 }
 
 const TArray<FInventorySlot>& UInventoryComponent::GetConstContents(EItemCategory Category)
@@ -253,7 +268,7 @@ bool UInventoryComponent::UpgradeItem(FItemStruct ItemToUpgrade)
 	}
 
 	// Find Upgrades 
-	FName UpgradeName = "Upgrade" + ItemToUpgrade.ItemLevel;
+	/*FName UpgradeName = "Upgrade" + ItemToUpgrade.ItemLevel;
 
 	FItemStruct Upgrade = *GetWorld()->GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfoDB()->FindRow<FItemStruct>(UpgradeName, TEXT("GetItemRow"));
 
@@ -265,9 +280,9 @@ bool UInventoryComponent::UpgradeItem(FItemStruct ItemToUpgrade)
 		return false;
 	}
 
-	Slots[index].Item.ItemLevel++;
+	DeleteItem(Upgrade, 1);*/
 
-	DeleteItem(Upgrade, 1);
+	Slots[index].Item.ItemLevel++;
 
 	return true;
 }

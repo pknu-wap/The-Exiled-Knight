@@ -26,6 +26,7 @@ public:
 	const TSubclassOf<AEKItem_Base> GetItemClass(FName ItemName);
 
 	FWeaponStruct* GetWeaponInfo(uint8 ID);
+	FRune* GetRuneInfo(uint8 ID);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
@@ -46,4 +47,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TMap<uint8, FWeaponStruct> WeaponDictionary;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<UDataTable> RuneDB;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TMap<uint8, FRune> RuneDictionary;
 };
