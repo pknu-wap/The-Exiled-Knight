@@ -27,12 +27,29 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ActivateSantuary();
 
+public:
+	UFUNCTION(BlueprintCallable)
+	void SaveMap();
+
+	UFUNCTION(BlueprintCallable)
+	void LoadMap();
+
+private:
+	TArray<AActor*> SavedActors;
+	TArray<FTransform> SavedTransforms;
+	TArray<UClass*> SavedClasses;
+
+	FTimerHandle Handle_Transform;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class UStaticMeshComponent* SMComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class UNiagaraComponent* Niagara_Santuary;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int SanctuaryID = 0;
 
 private:
 	FVector CurrentScale = FVector(0, 0, 0);
