@@ -88,4 +88,8 @@ public:
 	UPROPERTY()
 	AActor* AttackTarget;
 	
+	// Related to Sanctuary (Map)
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int SantuaryID = 0;
 };
