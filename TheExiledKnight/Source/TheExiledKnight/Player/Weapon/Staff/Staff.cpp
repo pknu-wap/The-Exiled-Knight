@@ -96,21 +96,9 @@ void AStaff::PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController
 	}
 	else
 	{
-		if (bIsFirstAttackMagic)
-		{
-			EKPlayer->StopAnimMontage(StaffAttackMagicAnim);
-			EKPlayer->PlayAnimMontage(StaffAttackMagicAnim, 1.0f, FName("Attack1"));
-			bIsFirstAttackMagic = false;
-			EKPlayerController->RemoveAttackTagTimer(1.f);
-		}
-		else
-		{
-			EKPlayer->StopAnimMontage(StaffAttackMagicAnim);
-			EKPlayer->PlayAnimMontage(StaffAttackMagicAnim, 1.0f, FName("Attack2"));
-			bIsFirstAttackMagic = true;
-			EKPlayerController->RemoveAttackTagTimer(0.69f);
-		}
-
+		EKPlayer->StopAnimMontage(StaffAttackMagicAnim);
+		EKPlayer->PlayAnimMontage(StaffAttackMagicAnim);
+		EKPlayerController->RemoveAttackTagTimer(StaffAttackMagicAnim->GetPlayLength());
 		EKPlayer->GetPlayerStatusComponent()->SetMp(-StaffAttackMp);
 	}
 }

@@ -41,5 +41,5 @@ void AStaffTypeB::PlaySkillStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerContro
 	EKPlayer->PlayAnimMontage(StaffSkillAnim, 1.0f, FName("Start"));
 	EKPlayer->GetPlayerStatusComponent()->SetMp(-StaffSkillMp);
 	EKPlayerController->ConsumtionStaminaAndTimer(StaffSkill);
-	EKPlayerController->RemoveAttackTagTimer(2.5f);
+	EKPlayerController->RemoveAttackTagTimer(StaffSkillAnim->GetPlayLength());
 }
