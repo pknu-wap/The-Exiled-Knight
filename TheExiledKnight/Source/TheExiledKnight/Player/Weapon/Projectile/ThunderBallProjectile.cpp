@@ -53,7 +53,7 @@ void AThunderBallProjectile::Tick(float DeltaTime)
 		if (HitActor)
 		{
 			AEK_EnemyBase* HitEnemy = Cast<AEK_EnemyBase>(HitActor);
-			TSubclassOf<UEKPlayerDamageType> PlayerDamageType = UEKPlayerDamageType::StaticClass();
+			TSubclassOf<UEKPlayerNormalDamageType> PlayerDamageType = UEKPlayerNormalDamageType::StaticClass();
 			if (HitEnemy)
 			{
 				UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);

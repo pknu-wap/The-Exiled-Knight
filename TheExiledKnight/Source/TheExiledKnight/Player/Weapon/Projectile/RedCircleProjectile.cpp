@@ -1,8 +1,9 @@
 // Made by Somalia Pirate
 
-#include "RazerProjectile.h"
+#include "RedCircleProjectile.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
-ARazerProjectile::ARazerProjectile()
+ARedCircleProjectile::ARedCircleProjectile()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -10,38 +11,36 @@ ARazerProjectile::ARazerProjectile()
 	ProjectileMovementComponent->MaxSpeed = 0.f;
 	ProjectileMovementComponent->Velocity = FVector(0, 0, 0);
 
-	StaticMeshComponent->SetRelativeRotation(FRotator(0, 180.f, 0));
+	BaseParticle->SetRelativeScale3D(FVector(5.f, 5.f, 5.f));
 
-	BaseParticle->SetRelativeRotation(FRotator(90.f, 0, 0));
-	BaseParticle->SetRelativeScale3D(FVector(2.f, 2.f, 2.f));
+	CapsuleComponent->SetCapsuleHalfHeight(700.f);
+	CapsuleComponent->SetCapsuleRadius(700.f);
 
-	CapsuleComponent->SetCapsuleHalfHeight(1000.f);
-	CapsuleComponent->SetCapsuleRadius(15.f);
-	CapsuleComponent->SetRelativeRotation(FRotator(90.f, 0, 0));
-	CapsuleComponent->SetRelativeLocation(FVector(-1010.f, 0, 0));
+	SetLifeSpan(10.f);
 
-	SetLifeSpan(2.f);
-
-	DamageValue = 0.05;
+	DamageValue = 0.1;
 }
 
-void ARazerProjectile::BeginPlay()
+void ARedCircleProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
-	EKPlayerController->RemoveAttackTagTimer(3.6f);
+	DamageTimer();
 }
 
-void ARazerProjectile::Tick(float DeltaTime)
+void ARedCircleProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (!bCanDamaged)
+	{
+		return;
+	}
 
 	FVector CapsuleLocation = CapsuleComponent->GetComponentLocation();
 	FRotator CapsuleRotation = CapsuleComponent->GetComponentRotation();
 	float CapsuleHalfHeight = CapsuleComponent->GetScaledCapsuleHalfHeight();
 	float CapsuleRadius = CapsuleComponent->GetScaledCapsuleRadius();
-
-	TArray<FHitResult> HitResults;
 
 	bool bIsHit = this->GetWorld()->SweepMultiByChannel(
 		HitResults,
@@ -64,11 +63,30 @@ void ARazerProjectile::Tick(float DeltaTime)
 		{
 			TSubclassOf<UEKPlayerNormalDamageType> PlayerDamageType = UEKPlayerNormalDamageType::StaticClass();
 			UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
-			if (HitParticle)
-			{
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, HitEnemy->GetActorLocation(), HitEnemy->GetActorRotation());
-			}
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Magenta, TEXT("Razer"));
+			HitEnemy->GetCharacterMovement()->MaxWalkSpeed = 100;
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Red Circle"));
 		}
 	}
+
+	DamageTimer();
+}
+
+void ARedCircleProjectile::CanDamaged()
+{
+	bCanDamaged = true;
+
+	for (auto& Hit : HitResults)
+	{
+		AEK_EnemyBase* HitEnemy = Cast<AEK_EnemyBase>(Hit.GetActor());
+		if (HitEnemy)
+		{
+			HitEnemy->GetCharacterMovement()->MaxWalkSpeed = 200;
+		}
+	}
+}
+
+void ARedCircleProjectile::DamageTimer()
+{
+	bCanDamaged = false;
+	GetWorldTimerManager().SetTimer(DamageHandle, this, &ThisClass::CanDamaged, DamageTime, true);
 }
