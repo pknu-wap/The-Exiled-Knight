@@ -84,7 +84,6 @@ private:
 
 	void Interact(const FInputActionValue& InputValue);
 
-	UFUNCTION()
 	void FindInteractableObjects();
 
 	void SkillStarted(const FInputActionValue& InputValue);
@@ -151,6 +150,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class AEKItem_Base* Item = nullptr;
 
+	UFUNCTION()
 	void DestroyItem();
 
 protected:
@@ -169,7 +169,6 @@ protected:
 
 public:
 	bool bIsEquipWeapon = false;
-	bool bCanItemInteract = false;
 
 #pragma region Timer
 
@@ -227,7 +226,7 @@ protected:
 
 	FVector2D LookAxisVector;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInventoryComponent> InventoryComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))

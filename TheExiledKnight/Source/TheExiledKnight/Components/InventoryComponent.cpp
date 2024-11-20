@@ -7,6 +7,7 @@
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
 {
+	UE_LOG(LogTemp, Warning, TEXT("UInventoryComponent() called"));
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
@@ -19,6 +20,15 @@ UInventoryComponent::UInventoryComponent()
 void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	None.Empty();
+	Weapon.Empty();
+	Rune.Empty();
+	FragmentOfGod.Empty();
+	UseableItem.Empty();
+	Magic.Empty();
+	Upgrades.Empty();
+	Hunting.Empty();
 
 	InitializeInventory();
 }
@@ -150,9 +160,9 @@ bool UInventoryComponent::AddItem(FItemStruct ItemToAdd, int Quantity)
 		{
 			Slots[indexToAdd].Quantity += Quantity;
 			UE_LOG(LogTemp, Warning, TEXT("Quantity++"));
+			AddItemDelegate.Broadcast();
 		}
 
-		AddItemDelegate.Broadcast();
 		return true;
 	}
 
