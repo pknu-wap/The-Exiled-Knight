@@ -18,7 +18,7 @@ void UWidget_QuickSlot::NativeConstruct()
 	if (!slotComp) return;
 
 	slotComp->Delegate_QuickSlotUpdated.RemoveAll(this);
-	slotComp->Delegate_QuickSlotUpdated.AddUObject(this, &UWidget_QuickSlot::SlotUpdated);
+	slotComp->Delegate_QuickSlotUpdated.AddDynamic(this, &UWidget_QuickSlot::SlotUpdated);
 }
 
 void UWidget_QuickSlot::SlotUpdated(EItemCategory inCategory, int inSlotIdx)

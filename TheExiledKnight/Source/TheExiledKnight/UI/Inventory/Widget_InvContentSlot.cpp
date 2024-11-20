@@ -64,6 +64,18 @@ FEventReply UWidget_InvContentSlot::RedirectMouseDownToWidget(const FGeometry& I
 	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton) == true)
 	{
 		// Reply = UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton);
+		if (WidgetType == EWidgetClassType::EquipUpgrade && SlotData.Quantity > 0)
+		{
+			UUISubsystem* UISystem = GetWorld()->GetGameInstance()->GetSubsystem<UUISubsystem>();
+			if (!UISystem) return Reply;
+			UUserWidget* widget = UISystem->GetWidget(FEKGameplayTags::Get().UI_Widget_GameMenu_UpgradeEquipment);
+			if (!widget) return Reply;
+			UWidget_UpgradeEquipment* UpgradeEquipmentWidget = Cast<UWidget_UpgradeEquipment>(widget);
+			if (!UpgradeEquipmentWidget) return Reply;
+
+			UpgradeEquipmentWidget->ShowConfirmWidget(SlotData);
+		}
+
 	}
 
 	return Reply;
