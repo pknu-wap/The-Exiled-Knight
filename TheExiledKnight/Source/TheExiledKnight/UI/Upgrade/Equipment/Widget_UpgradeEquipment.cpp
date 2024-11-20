@@ -6,6 +6,7 @@
 #include "UI/Inventory/Widget_InvContentList.h"
 #include "Components/ScrollBox.h"
 #include "Components/Button.h"
+#include "Components/InventoryComponent.h"
 
 void UWidget_UpgradeEquipment::NativeConstruct()
 {
@@ -36,6 +37,8 @@ void UWidget_UpgradeEquipment::NativeConstruct()
 
 void UWidget_UpgradeEquipment::UpdateContents(EUpgradeItemType Category)
 {
+	CurrentType = Category;
+
 	for (int i = 0; i < CategorySlots.Num(); i++)
 	{
 		if (CategorySlots[i]->Category == Category)
@@ -47,6 +50,19 @@ void UWidget_UpgradeEquipment::UpdateContents(EUpgradeItemType Category)
 	}
 
 	ContentList->UpdateUpgradeContents(Category);
+}
+
+void UWidget_UpgradeEquipment::LevelUp_Equipment(const FItemStruct& InItem)
+{
+	APlayerController* pc = GetOwningPlayer();
+	if (!pc) return;
+	UInventoryComponent* inventory = pc->GetComponentByClass<UInventoryComponent>();
+	if (!inventory) return;
+	inventory->UpgradeItem(InItem);
+
+	ContentList->UpdateUpgradeContents(CurrentType);
+
+	// inventory->GetContents(CurrentType);S
 }
 
 void UWidget_UpgradeEquipment::ShowBeforeCategory()
