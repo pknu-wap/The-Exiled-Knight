@@ -5,9 +5,11 @@
 
 FItemStruct::FItemStruct()
 {
+    UE_LOG(LogTemp, Warning, TEXT("FItemStruct() called"));
+
     ID = 1;
     Name = "Empty";
-    Description = "";
+    Description = TEXT("");
     ItemCategory = EItemCategory::None;
     Icon = nullptr;
     MaxStackSize = 1;
