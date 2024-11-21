@@ -81,6 +81,7 @@ struct FWeaponStruct : public FTableRowBase
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     FName Name = "Weapon";
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSubclassOf<class AEKPlayerWeapon> WeaponClass;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -94,29 +95,6 @@ struct FWeaponStruct : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float INTRate = 1.0;
-};
-
-USTRUCT(BlueprintType)
-struct FItemObject : public FTableRowBase
-{
-    GENERATED_BODY()
-
-    FItemObject();
-    FItemObject(const FItemObject& Other)
-    {
-        ID = Other.ID;
-        Name = Other.Name;
-        ItemObject = Other.ItemObject;
-    };
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    uint8 ID = 0;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FName Name = "Name";
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TSubclassOf<class AEKItem_Base> ItemObject = nullptr;
 };
 
 USTRUCT(BlueprintType)
@@ -162,21 +140,47 @@ struct FRune : public FTableRowBase
         Intelligence = Other.Intelligence;
     };
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    int32 ID;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
     int32 Vitality;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
     int32 Mental;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
     int32 Endurance;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
     int32 Strength;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
     int32 Ability;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statment|Upgrade")
     int32 Intelligence;
+};
+
+USTRUCT(BlueprintType)
+struct FItemObject : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    FItemObject();
+    FItemObject(const FItemObject& Other)
+    {
+        ID = Other.ID;
+        Name = Other.Name;
+        ItemObject = Other.ItemObject;
+    };
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    uint8 ID = 0;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FName Name = "Name";
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSubclassOf<class AEKItem_Base> ItemObject = nullptr;
 };

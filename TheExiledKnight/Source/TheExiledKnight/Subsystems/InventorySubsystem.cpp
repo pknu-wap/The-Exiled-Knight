@@ -20,21 +20,18 @@ void UInventorySubsystem::Initialize(FSubsystemCollectionBase& Collection)
 		return;
 	}
 
-	uint8 ID = 0;
-
 	for (FName RowName : ItemInfoDB->GetRowNames())
 	{
-		ID++;
 		FItemStruct* ItemInfo = ItemInfoDB->FindRow<FItemStruct>(RowName, TEXT("GetItemRow"));
 		if (ItemInfo != nullptr)
 		{
-			ItemDictionary.Add(ID, *ItemInfo);
+			ItemDictionary.Add(ItemInfo->ID, *ItemInfo);
 		}
 	}
 
 	// Item Object Dictionary Initialize
 
-	ItemClassDB = LoadObject<UDataTable>(this, TEXT("/Script/Engine.DataTable'/Game/TheExiledKnight/Inventory/DataTables/DT_ItemClass.DT_ItemClass'"));
+	ItemClassDB = LoadObject<UDataTable>(this, TEXT("/Script/Engine.DataTable'/Game/TheExiledKnight/Inventory/DataTables/ItemData/DT_ItemInfo.DT_ItemInfo'"));
 
 	if (ItemClassDB == nullptr)
 	{
@@ -42,7 +39,7 @@ void UInventorySubsystem::Initialize(FSubsystemCollectionBase& Collection)
 		return;
 	}
 
-	WeaponDB = LoadObject<UDataTable>(this, TEXT("/Script/Engine.DataTable'/Game/TheExiledKnight/Inventory/DataTables/DT_Weapon.DT_Weapon'"));
+	WeaponDB = LoadObject<UDataTable>(this, TEXT("/Script/Engine.DataTable'/Game/TheExiledKnight/Inventory/DataTables/WeaponData/DT_WeaponInfo.DT_WeaponInfo'"));
 
 	if (WeaponDB == nullptr)
 	{
@@ -58,6 +55,25 @@ void UInventorySubsystem::Initialize(FSubsystemCollectionBase& Collection)
 		if (WeaponInfo != nullptr)
 		{
 			WeaponDictionary.Add(WeaponInfo->ID, *WeaponInfo);
+		}
+	}
+
+	RuneDB = LoadObject<UDataTable>(this, TEXT("/Script/Engine.DataTable'/Game/TheExiledKnight/Inventory/DataTables/RuneData/DT_RuneInfo.DT_RuneInfo'"));
+
+	if (RuneDB == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("RuneDB is null"));
+		return;
+	}
+
+	TArray<FName> RuneNames = RuneDB->GetRowNames();
+
+	for (FName RowName : RuneNames)
+	{
+		FRune* runeInfo = RuneDB->FindRow<FRune>(RowName, TEXT("GetItemRow"));
+		if (runeInfo != nullptr)
+		{
+			RuneDictionary.Add(runeInfo->ID, *runeInfo);
 		}
 	}
 }
@@ -133,4 +149,17 @@ FWeaponStruct* UInventorySubsystem::GetWeaponInfo(uint8 ID)
 	}
 
 	return weaponInfo;
+}
+
+FRune* UInventorySubsystem::GetRuneInfo(uint8 ID)
+{
+	FRune* runeInfo = RuneDictionary.Find(ID);
+
+	if (runeInfo == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GetRuneInfo : runeInfo == nullptr"));
+		return nullptr;
+	}
+
+	return runeInfo;
 }
