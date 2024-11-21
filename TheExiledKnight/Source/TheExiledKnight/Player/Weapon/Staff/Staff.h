@@ -20,8 +20,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	virtual void PlayWeaponEquipAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController) override;
-
 	virtual void PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController) override;
 
 	virtual void AttachToDefenseSocket(AEKPlayerWeapon* Weapon, AEKPlayer* EKPlayer) override;
@@ -33,30 +31,24 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TObjectPtr<class UStaticMeshComponent> Staff;
+	UStaticMeshComponent* Staff;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TObjectPtr<class UStaticMesh> StaffMesh;
+	UStaticMesh* StaffMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TObjectPtr<class UCapsuleComponent> WeaponCapsuleComponent;
+	UCapsuleComponent* WeaponCapsuleComponent;
 
-	virtual TObjectPtr<UCapsuleComponent> GetWeaponCapsuleComponent() override { return WeaponCapsuleComponent; }
+	virtual UCapsuleComponent* GetWeaponCapsuleComponent() override { return WeaponCapsuleComponent; }
 
 protected:
 	// Staff Animation Montage
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	TObjectPtr<class UAnimMontage> StaffAttackAnim;
+	UAnimMontage* StaffAttackAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	TObjectPtr<class UAnimMontage> StaffAttackMagicAnim;
+	UAnimMontage* StaffAttackMagicAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	TObjectPtr<class UAnimMontage> StaffSkillAnim;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	TObjectPtr<class UAnimMontage> StaffEquipAnim;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	TObjectPtr<class UAnimMontage> StaffUnEquipAnim;
+	UAnimMontage* StaffSkillAnim;
 };

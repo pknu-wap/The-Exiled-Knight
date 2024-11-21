@@ -101,6 +101,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
 	int32 Stamina;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
+	int32 CurrentSouls;
+
 	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
 	float DefaultDamage;
 
