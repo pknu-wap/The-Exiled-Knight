@@ -8,9 +8,9 @@
 #include "EKEnums.h"
 #include "InventoryComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FAdd_Item_Delegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAdd_Item_Delegate);
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), Blueprintable, meta=(BlueprintSpawnableComponent) )
 class THEEXILEDKNIGHT_API UInventoryComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -60,35 +60,28 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool AddNewSlot(TArray<FInventorySlot>& Slots);
 
+	UPROPERTY(BlueprintAssignable)
 	FAdd_Item_Delegate AddItemDelegate;
 
 
 private:
 	void InitializeInventory();
 
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+private:
 	TArray<FInventorySlot> None;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> Weapon;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> Rune;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> FragmentOfGod;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> UseableItem;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> Magic;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> Upgrades;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> Hunting;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
