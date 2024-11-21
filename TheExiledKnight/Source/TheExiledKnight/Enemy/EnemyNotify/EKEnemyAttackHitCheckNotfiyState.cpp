@@ -21,7 +21,7 @@ void UEKEnemyAttackHitCheckNotfiyState::NotifyBegin(USkeletalMeshComponent* Mesh
 	HitActors.Empty(); 
 	Owner =MeshComp->GetOwner();
 	AEK_EnemyBase* OwnerEnemy = Cast<AEK_EnemyBase>(Owner); 
-	if (OwnerEnemy && OwnerEnemy->GetStatusComponent())  // OwnerEnemy¿Í StatusComponent À¯È¿¼º °Ë»ç
+	if (OwnerEnemy && OwnerEnemy->GetStatusComponent())  // OwnerEnemyï¿½ï¿½ StatusComponent ï¿½ï¿½È¿ï¿½ï¿½ ï¿½Ë»ï¿½
 	{
 		AttackDamage = OwnerEnemy->GetStatusComponent()->GetAttackDamage();
 	}
