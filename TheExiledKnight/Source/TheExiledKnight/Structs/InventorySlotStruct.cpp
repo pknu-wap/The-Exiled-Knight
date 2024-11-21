@@ -5,6 +5,8 @@
 
 FInventorySlot::FInventorySlot()
 {
+	UE_LOG(LogTemp, Warning, TEXT("FInventorySlot() called"));
+
 	Item = FItemStruct();
 	Quantity = 1;
 }

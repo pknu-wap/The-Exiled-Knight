@@ -467,8 +467,14 @@ void AEKPlayerController::UsePotionStarted(const FInputActionValue& InputValue)
 	EKPlayer->GetPlayerStatusComponent()->SetMp(10);
 	EKPlayer->PlayAnimMontage(UsePotionAnim);
 
+	//if (InventoryComponent != nullptr)
+	//	InventoryComponent->UseItem(*GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfo(3));
+
 	if (InventoryComponent != nullptr)
-		InventoryComponent->UseItem(*GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfo(3));
+	{
+		FItemStruct& ItemToUpgrade = InventoryComponent->GetContents(EItemCategory::Weapon)[0].Item;
+		InventoryComponent->UpgradeItem(ItemToUpgrade);
+	}
 
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_UseItem);
 }

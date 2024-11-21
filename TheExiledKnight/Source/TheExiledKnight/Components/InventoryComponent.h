@@ -34,7 +34,7 @@ public:
 	TArray<FInventorySlot>& GetContents(EItemCategory Category);
 
 	int GetIndexToAdd(uint8 ID, EItemCategory Category);
-	int GetDupSlotIndex(uint8 ID, EItemCategory Category);
+	int GetItemIndex(uint8 ID, EItemCategory Category);
 	int GetEmptySlotIndex(EItemCategory Category);
 
 	UFUNCTION(BlueprintCallable)

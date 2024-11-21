@@ -80,7 +80,7 @@ int UInventoryComponent::GetIndexToAdd(uint8 ID, EItemCategory Category)
 	return -1;
 }
 
-int UInventoryComponent::GetDupSlotIndex(uint8 ID, EItemCategory Category)
+int UInventoryComponent::GetItemIndex(uint8 ID, EItemCategory Category)
 {
 	const TArray<FInventorySlot>& Slots = GetConstContents(Category);
 
@@ -147,7 +147,7 @@ bool UInventoryComponent::AddItem(FItemStruct ItemToAdd, int Quantity)
 {
 	TArray<FInventorySlot>& Slots = GetContents(ItemToAdd.ItemCategory);
 
-	int indexToAdd = GetDupSlotIndex(ItemToAdd.ID, ItemToAdd.ItemCategory);
+	int indexToAdd = GetItemIndex(ItemToAdd.ID, ItemToAdd.ItemCategory);
 
 	if (indexToAdd != -1) // if there are duplicate items
 	{
@@ -211,7 +211,7 @@ bool UInventoryComponent::UseItem(FItemStruct ItemToUse, int Quantity)
 
 	TArray<FInventorySlot>& Slots = GetContents(ItemToUse.ItemCategory);
 
-	int index = GetDupSlotIndex(ItemToUse.ID, ItemToUse.ItemCategory);
+	int index = GetItemIndex(ItemToUse.ID, ItemToUse.ItemCategory);
 
 	if (index == -1)
 	{
@@ -249,7 +249,7 @@ bool UInventoryComponent::UpgradeItem(FItemStruct ItemToUpgrade)
 
 	TArray<FInventorySlot>& Slots = GetContents(ItemToUpgrade.ItemCategory);
 
-	int index = GetDupSlotIndex(ItemToUpgrade.ID, ItemToUpgrade.ItemCategory);
+	int index = GetItemIndex(ItemToUpgrade.ID, ItemToUpgrade.ItemCategory);
 
 	if (index == -1)
 	{
@@ -262,7 +262,7 @@ bool UInventoryComponent::UpgradeItem(FItemStruct ItemToUpgrade)
 
 	FItemStruct Upgrade = *GetWorld()->GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfoDB()->FindRow<FItemStruct>(UpgradeName, TEXT("GetItemRow"));
 
-	int upgradeIndex = GetDupSlotIndex(Upgrade.ID, Upgrade.ItemCategory);
+	int upgradeIndex = GetItemIndex(Upgrade.ID, Upgrade.ItemCategory);
 
 	if (upgradeIndex == -1)
 	{
@@ -271,6 +271,8 @@ bool UInventoryComponent::UpgradeItem(FItemStruct ItemToUpgrade)
 	}
 
 	Slots[index].Item.ItemLevel++;
+
+	UE_LOG(LogTemp, Warning, TEXT("Upgrade Complete."));
 
 	DeleteItem(Upgrade, 1);
 
@@ -281,7 +283,7 @@ bool UInventoryComponent::DeleteItem(FItemStruct ItemToDelete, int Quantity)
 {
 	TArray<FInventorySlot>& Slots = GetContents(ItemToDelete.ItemCategory);
 
-	int index = GetDupSlotIndex(ItemToDelete.ID, ItemToDelete.ItemCategory);
+	int index = GetItemIndex(ItemToDelete.ID, ItemToDelete.ItemCategory);
 
 	if (index == -1)
 		return false;
