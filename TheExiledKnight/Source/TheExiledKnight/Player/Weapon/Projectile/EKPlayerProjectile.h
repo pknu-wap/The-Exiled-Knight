@@ -14,6 +14,9 @@
 #include "Player/EKPlayer/EKPlayerController.h"
 #include "Player/EKPlayer/EKPlayerStatusComponent.h"
 #include "Player/Weapon/EKPlayerWeapon.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 #include "EKPlayerProjectile.generated.h"
 
 UCLASS()

@@ -6,7 +6,7 @@
 #include "Animation/AnimNotifies/AnimNotify.h"
 #include "Player/Weapon/Projectile/EKPlayerProjectile.h"
 #include "Player/EKPlayer/EKPlayer.h"
-#include "Player/Weapon/Projectile/ThunderingProjectile.h"
+#include "Player/Weapon/Projectile/Thunder/ThunderingProjectile.h"
 #include "ThunderingAttack.generated.h"
 
 UCLASS()
