@@ -23,8 +23,7 @@
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
-	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
-
+	//InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 	SlotComponent = CreateDefaultSubobject<USlotComponent>(TEXT("SlotComponent"));
 }
 
@@ -39,7 +38,9 @@ void AEKPlayerController::BeginPlay()
 		Subsystem->AddMappingContext(IMCDefault, 0);
 	}
 
-	InventoryComponent->AddItemDelegate.AddUObject(this, &AEKPlayerController::DestroyItem);
+	InventoryComponent = NewObject<UInventoryComponent>(this, TEXT("Inventory"));
+
+	InventoryComponent->AddItemDelegate.AddDynamic(this, &AEKPlayerController::DestroyItem);
 
 	TryInteractLoop();
 }
@@ -474,6 +475,7 @@ void AEKPlayerController::UsePotionStarted(const FInputActionValue& InputValue)
 
 	if (InventoryComponent != nullptr)
 		InventoryComponent->UseItem(*GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfo(3));
+
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_UseItem);
 }
 
@@ -512,7 +514,7 @@ void AEKPlayerController::Interact(const FInputActionValue& InputValue)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Interact"));
 
-	if (Item)
+	if (Item != nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Can Interact with Item"));
 
