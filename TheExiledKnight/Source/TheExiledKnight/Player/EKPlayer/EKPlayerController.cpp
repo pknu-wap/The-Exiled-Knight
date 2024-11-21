@@ -18,6 +18,7 @@
 #include "Item/EKItem_Base.h"
 #include "Subsystems/InventorySubsystem.h"
 #include "DrawDebugHelpers.h"
+#include "Interfaces/UInteractableInterface.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -84,6 +85,11 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IALockOn, ETriggerEvent::Started, this, &ThisClass::LockOnStarted);
 
 		EnhancedInputComponent->BindAction(IAGameMenu, ETriggerEvent::Started, this, &ThisClass::OnPressed_GameMenu);
+		EnhancedInputComponent->BindAction(IA_Up, ETriggerEvent::Started, this, &ThisClass::OnPressed_Up);
+		EnhancedInputComponent->BindAction(IA_Down, ETriggerEvent::Started, this, &ThisClass::OnPressed_Down);
+		EnhancedInputComponent->BindAction(IA_Left, ETriggerEvent::Started, this, &ThisClass::OnPressed_Left);
+		EnhancedInputComponent->BindAction(IA_Right, ETriggerEvent::Started, this, &ThisClass::OnPressed_Right);
+
 	}
 }
 
@@ -520,6 +526,9 @@ void AEKPlayerController::Interact(const FInputActionValue& InputValue)
 
 		InventoryComponent->AddItem(Item->GetItemInfo(), Item->GetItemQuantity());
 	}
+
+	if (InteractableActor)
+		InteractableActor->Interact();
 }
 
 void AEKPlayerController::FindInteractableObjects()
@@ -540,6 +549,7 @@ void AEKPlayerController::FindInteractableObjects()
 
 	for (FHitResult& HitResult : HitResults)
 	{
+		InteractableActor = Cast<IUInteractableInterface>(HitResult.GetActor());
 		Item = Cast<AEKItem_Base>(HitResult.GetActor());
 
 		if (Item != nullptr)
@@ -587,6 +597,29 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 	}
 }
 
+void AEKPlayerController::OnPressed_Up(const FInputActionValue& InputValue)
+{
+	if (SlotComponent)
+		SlotComponent->UpdateActiveSlot(EInputType::Up);
+}
+
+void AEKPlayerController::OnPressed_Down(const FInputActionValue& InputValue)
+{
+	if (SlotComponent)
+		SlotComponent->UpdateActiveSlot(EInputType::Down);
+}
+
+void AEKPlayerController::OnPressed_Left(const FInputActionValue& InputValue)
+{
+	if (SlotComponent)
+		SlotComponent->UpdateActiveSlot(EInputType::Left);
+}
+
+void AEKPlayerController::OnPressed_Right(const FInputActionValue& InputValue)
+{
+	if (SlotComponent)
+		SlotComponent->UpdateActiveSlot(EInputType::Right);
+}
 #pragma endregion
 
 #pragma region Timer
@@ -661,6 +694,7 @@ void AEKPlayerController::InvincibilityTimer(float Time)
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Invincibility);
 }
 
+#pragma endregion
 void AEKPlayerController::TryInteractLoop()
 {
 	GetWorldTimerManager().SetTimer(InteractCheckHandle, this, &ThisClass::FindInteractableObjects, InteractCheckTime, true);

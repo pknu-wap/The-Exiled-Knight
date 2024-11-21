@@ -28,10 +28,15 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	const TArray<FInventorySlot>& GetConstContents(EItemCategory Category);
-
 	UFUNCTION(BlueprintCallable)
 	TArray<FInventorySlot>& GetContents(EItemCategory Category);
+
+	const TArray<FInventorySlot> GetContents(EUpgradeItemType Category);
+	const TArray<FInventorySlot>& GetConstContents(EItemCategory Category);
+
+	int GetIndexToAdd(uint8 ID);
+	int GetDupSlotIndex(uint8 ID, int MaxStack);
+	int GetEmptySlotIndex();
 
 	int GetIndexToAdd(uint8 ID, EItemCategory Category);
 	int GetItemIndex(uint8 ID, EItemCategory Category);

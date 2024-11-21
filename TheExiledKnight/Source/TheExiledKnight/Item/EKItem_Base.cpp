@@ -16,7 +16,8 @@ void AEKItem_Base::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	ItemInfo = *(GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfo(ID));
+	if(const FItemStruct* itemInfo = GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfo(ID))
+		ItemInfo = *(itemInfo);
 }
 
 void AEKItem_Base::UseItem()

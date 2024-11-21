@@ -22,6 +22,7 @@ protected:
 	virtual void NativeConstruct() override;
 
 public:
+	UFUNCTION(BlueprintCallable)
 	void UpdateContents(EItemCategory Category);
 
 public:

@@ -17,15 +17,14 @@ void UWidget_QuickSlot::NativeConstruct()
 	USlotComponent* slotComp = playerController->GetComponentByClass<USlotComponent>();
 	if (!slotComp) return;
 
-	slotComp->Delegate_SlotUpdated.RemoveAll(this);
-	slotComp->Delegate_SlotUpdated.AddUObject(this, &UWidget_QuickSlot::SlotUpdated);
+	slotComp->Delegate_QuickSlotUpdated.RemoveAll(this);
+	slotComp->Delegate_QuickSlotUpdated.AddDynamic(this, &UWidget_QuickSlot::SlotUpdated);
 }
 
 void UWidget_QuickSlot::SlotUpdated(EItemCategory inCategory, int inSlotIdx)
 {
-	if (SlotCategory != inCategory || ActiveSlotIdx != inSlotIdx)
+	if (SlotCategory != inCategory)
 	{
-		Image_Item->SetOpacity(0);
 		return;
 	}
 
@@ -42,19 +41,27 @@ void UWidget_QuickSlot::SlotUpdated(EItemCategory inCategory, int inSlotIdx)
 	}
 	case EItemCategory::Weapon:
 	{
-		if (slotComp->WeaponSlots.IsValidIndex(inSlotIdx))
+		if (slotComp->WeaponSlots.IsValidIndex(inSlotIdx) && slotComp->WeaponSlots[inSlotIdx].ID > 0)
 		{
 			Image_Item->SetBrushFromTexture(slotComp->WeaponSlots[inSlotIdx].Icon);
 			Image_Item->SetOpacity(1);
+		}
+		else
+		{
+			Image_Item->SetOpacity(0);
 		}
 		break;
 	}
 	case EItemCategory::Rune:
 	{
-		if (slotComp->RuneSlots.IsValidIndex(inSlotIdx))
+		if (slotComp->RuneSlots.IsValidIndex(inSlotIdx) && slotComp->RuneSlots[inSlotIdx].ID > 0)
 		{
 			Image_Item->SetBrushFromTexture(slotComp->RuneSlots[inSlotIdx].Icon);
 			Image_Item->SetOpacity(1);
+		}
+		else
+		{
+			Image_Item->SetOpacity(0);
 		}
 		break;
 	}
@@ -64,15 +71,15 @@ void UWidget_QuickSlot::SlotUpdated(EItemCategory inCategory, int inSlotIdx)
 	}
 	case EItemCategory::UseableItem:
 	{
-		if (slotComp->UsableSlots.IsValidIndex(inSlotIdx))
+		if (slotComp->UseableSlots.IsValidIndex(inSlotIdx) && slotComp->UseableSlots[inSlotIdx].ID > 0)
 		{
-			Image_Item->SetBrushFromTexture(slotComp->UsableSlots[inSlotIdx].Icon);
+			Image_Item->SetBrushFromTexture(slotComp->UseableSlots[inSlotIdx].Icon);
 			Image_Item->SetOpacity(1);
 		}
-		break;
-	}
-	case EItemCategory::Magic:
-	{
+		else
+		{
+			Image_Item->SetOpacity(0);
+		}
 		break;
 	}
 	default:
