@@ -38,10 +38,10 @@ public:
 	float HearingRange;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	int32 DropSouls;
+	int Astral;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	FName  DropItem;
+	int DropItem;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	bool bIsBoss;
