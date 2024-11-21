@@ -11,6 +11,8 @@
 #include "../EKPlayer/EKPlayerStatusComponent.h"
 #include "../EKPlayerGameplayTags.h"
 #include "Item/EKItem_Base.h"
+#include "Engine/SkeletalMesh.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "EKPlayerWeapon.generated.h"
 
 UCLASS(Abstract)
@@ -28,7 +30,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	virtual void PlayWeaponEquipAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController) PURE_VIRTUAL(AEKPlayerWeapon::PlayWeaponEquipAnimMontage, ;);
+	void PlayWeaponEquipAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController);
 
 	virtual void PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController) PURE_VIRTUAL(AEKPlayerWeapon::PlayAttackStartAnimMontage, ;);
 
@@ -41,7 +43,7 @@ public:
 	virtual void AttachWeaponToHandSocket(AEKPlayerWeapon* Weapon, AEKPlayer* EKPlayer);
 
 public:
-	virtual TObjectPtr<UCapsuleComponent> GetWeaponCapsuleComponent() { return nullptr; }
+	virtual UCapsuleComponent* GetWeaponCapsuleComponent() { return nullptr; }
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
@@ -55,4 +57,11 @@ public:
 
 	void SetAttackComboNext();
 	void ResetAttackCombo();
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+	UAnimMontage* WeaponEquipAnim;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+	UAnimMontage* WeaponUnEquipAnim;
 };

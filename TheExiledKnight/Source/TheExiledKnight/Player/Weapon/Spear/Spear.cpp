@@ -35,21 +35,6 @@ void ASpear::Tick(float DeltaTime)
 
 }
 
-void ASpear::PlayWeaponEquipAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
-{
-	if (EKPlayer && EKPlayerController)
-	{
-		if (!EKPlayerController->bIsEquipWeapon && SpearEquipAnim)
-		{
-			EKPlayer->PlayAnimMontage(SpearEquipAnim);
-		}
-		else if (EKPlayerController->bIsEquipWeapon && SpearUnEquipAnim)
-		{
-			EKPlayer->PlayAnimMontage(SpearUnEquipAnim);
-		}
-	}
-}
-
 #pragma region Attack
 
 void ASpear::PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)

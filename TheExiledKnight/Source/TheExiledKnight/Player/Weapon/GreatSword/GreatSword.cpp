@@ -35,21 +35,6 @@ void AGreatSword::Tick(float DeltaTime)
 
 }
 
-void AGreatSword::PlayWeaponEquipAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
-{
-	if (EKPlayer && EKPlayerController)
-	{
-		if (!EKPlayerController->bIsEquipWeapon && GreatSwordEquipAnim)
-		{
-			EKPlayer->PlayAnimMontage(GreatSwordEquipAnim);
-		}
-		else if (EKPlayerController->bIsEquipWeapon && GreatSwordUnEquipAnim)
-		{
-			EKPlayer->PlayAnimMontage(GreatSwordUnEquipAnim);
-		}
-	}
-}
-
 #pragma region Attack
 
 void AGreatSword::PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
