@@ -73,12 +73,5 @@ void UWeaponSkillAttack::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequen
 {
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 
-	if (!EKPlayer)
-	{
-		return;
-	}
-
-	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
-
 	IgnoreEnemy.Empty();
 }
