@@ -15,7 +15,11 @@ class THEEXILEDKNIGHT_API UWidget_InvContentList : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable)
 	void UpdateContents(EItemCategory Category);
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateUpgradeContents(EUpgradeItemType Category);
 	
 public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
