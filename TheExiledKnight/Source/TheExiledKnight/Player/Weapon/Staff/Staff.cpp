@@ -35,21 +35,6 @@ void AStaff::Tick(float DeltaTime)
 
 }
 
-void AStaff::PlayWeaponEquipAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
-{
-	if (EKPlayer && EKPlayerController)
-	{
-		if (!EKPlayerController->bIsEquipWeapon && StaffEquipAnim)
-		{
-			EKPlayer->PlayAnimMontage(StaffEquipAnim);
-		}
-		else if (EKPlayerController->bIsEquipWeapon && StaffUnEquipAnim)
-		{
-			EKPlayer->PlayAnimMontage(StaffUnEquipAnim);
-		}
-	}
-}
-
 #pragma region Attack
 
 void AStaff::PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
