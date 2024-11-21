@@ -99,6 +99,27 @@ void ASpear::PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController
 	EKPlayerController->ConsumtionStaminaAndTimer(SpearAttackStamina);
 }
 
+void ASpear::PlaySkillStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
+{
+	if (!EKPlayerController->bIsEquipWeapon || !SpearSkillAnim)
+	{
+		return;
+	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < SpearSkill ||
+		EKPlayer->GetPlayerStatusComponent()->GetMp() < SpearSkillMp)
+	{
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+		return;
+	}
+
+	EKPlayer->StopAnimMontage(SpearSkillAnim);
+	EKPlayer->PlayAnimMontage(SpearSkillAnim);
+	EKPlayer->GetPlayerStatusComponent()->SetMp(-SpearSkillMp);
+	EKPlayerController->ConsumtionStaminaAndTimer(SpearSkill);
+	EKPlayerController->RemoveAttackTagTimer(SpearSkillAnim->GetPlayLength());
+}
+
 #pragma endregion
 
 void ASpear::AttachToDefenseSocket(AEKPlayerWeapon* Weapon, AEKPlayer* EKPlayer)

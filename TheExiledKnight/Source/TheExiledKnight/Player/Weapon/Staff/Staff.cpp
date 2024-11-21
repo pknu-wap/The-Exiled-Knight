@@ -103,6 +103,27 @@ void AStaff::PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController
 	}
 }
 
+void AStaff::PlaySkillStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
+{
+	if (!EKPlayerController->bIsEquipWeapon || !StaffSkillAnim)
+	{
+		return;
+	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < StaffSkill ||
+		EKPlayer->GetPlayerStatusComponent()->GetMp() < StaffSkillMp)
+	{
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+		return;
+	}
+
+	EKPlayer->StopAnimMontage(StaffSkillAnim);
+	EKPlayer->PlayAnimMontage(StaffSkillAnim);
+	EKPlayer->GetPlayerStatusComponent()->SetMp(-StaffSkillMp);
+	EKPlayerController->ConsumtionStaminaAndTimer(StaffSkill);
+	EKPlayerController->RemoveAttackTagTimer(StaffSkillAnim->GetPlayLength());
+}
+
 #pragma endregion
 
 #pragma region Attach to Socket
