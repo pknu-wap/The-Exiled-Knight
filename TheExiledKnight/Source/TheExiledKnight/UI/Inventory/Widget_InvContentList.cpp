@@ -40,3 +40,30 @@ void UWidget_InvContentList::UpdateContents(EItemCategory Category)
 		ContentList->AddItem(data);
 	}
 }
+
+void UWidget_InvContentList::UpdateUpgradeContents(EUpgradeItemType Category)
+{
+	APlayerController* playerController = GetOwningPlayer();
+	if (!playerController) return;
+	UInventoryComponent* inventoryComp = playerController->GetComponentByClass<UInventoryComponent>();
+	if (!inventoryComp) return;
+
+	ContentList->ClearListItems();
+
+	const TArray<FInventorySlot>& contents = inventoryComp->GetContents(Category);
+	for (int i = 0; i < contents.Num(); i += 5)
+	{
+		UInventory_ListData* data = NewObject<UInventory_ListData>(UInventory_ListData::StaticClass());
+		data->StartIdx = i;
+
+		for (int j = i; j < i + 5; j++)
+		{
+			if (contents.IsValidIndex(j))
+			{
+				data->Items.Add(contents[j]);
+			}
+		}
+
+		ContentList->AddItem(data);
+	}
+}

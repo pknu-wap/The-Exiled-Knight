@@ -10,6 +10,9 @@
 #include "Engine/SkeletalMesh.h"
 #include "Engine/StaticMesh.h"
 #include "../Weapon/EKPlayerWeapon.h"
+#include "Player/Weapon/Staff/Staff.h"
+#include "Player/Weapon/Spear/Spear.h"
+#include "Player/Weapon/GreatSword/GreatSword.h"
 #include "Animation/AnimInstance.h"
 #include "../EKPlayerGameplayTags.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -18,6 +21,7 @@
 #include "Player/Weapon/DamageType/EKPlayerDamageType.h"
 #include "Engine/DamageEvents.h"
 #include "Enemy/DamageSystem/EKDamageType.h"
+
 
 AEKPlayer::AEKPlayer()
 {
@@ -286,7 +290,13 @@ void AEKPlayer::EquipWeapon(const FWeaponStruct& InWeaponInfo)
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(InWeaponInfo.WeaponClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
-		//GetMesh()->SetAnimInstanceClass(InWeaponInfo.AnimInstance);
+
+		if (InWeaponInfo.WeaponClass.Get()->IsChildOf(AGreatSword::StaticClass()))
+			EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword);
+		else if (InWeaponInfo.WeaponClass.Get()->IsChildOf(ASpear::StaticClass()))
+			EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear);
+			
+		// GetMesh()->SetAnimInstanceClass(InWeaponInfo.AnimInstance);
 	}
 }
 

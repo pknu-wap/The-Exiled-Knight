@@ -7,6 +7,7 @@
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
 {
+	UE_LOG(LogTemp, Warning, TEXT("UInventoryComponent() called"));
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
@@ -20,6 +21,15 @@ void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	None.Empty();
+	Weapon.Empty();
+	Rune.Empty();
+	FragmentOfGod.Empty();
+	UseableItem.Empty();
+	Magic.Empty();
+	Upgrades.Empty();
+	Hunting.Empty();
+
 	InitializeInventory();
 }
 
@@ -30,6 +40,26 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+const TArray<FInventorySlot> UInventoryComponent::GetContents(EUpgradeItemType Category)
+{
+	switch (Category)
+	{
+	case EUpgradeItemType::Sword:
+		break;
+	case EUpgradeItemType::Spear:
+		break;
+	case EUpgradeItemType::Staff:
+		break;
+	case EUpgradeItemType::Potion:
+		break;
+	default:
+		return Weapon;
+		break;
+	}
+
+	return Weapon;
 }
 
 const TArray<FInventorySlot>& UInventoryComponent::GetConstContents(EItemCategory Category)
@@ -150,9 +180,9 @@ bool UInventoryComponent::AddItem(FItemStruct ItemToAdd, int Quantity)
 		{
 			Slots[indexToAdd].Quantity += Quantity;
 			UE_LOG(LogTemp, Warning, TEXT("Quantity++"));
+			AddItemDelegate.Broadcast();
 		}
 
-		AddItemDelegate.Broadcast();
 		return true;
 	}
 
@@ -248,7 +278,7 @@ bool UInventoryComponent::UpgradeItem(FItemStruct ItemToUpgrade)
 	}
 
 	// Find Upgrades 
-	FName UpgradeName = "Upgrade" + ItemToUpgrade.ItemLevel;
+	/*FName UpgradeName = "Upgrade" + ItemToUpgrade.ItemLevel;
 
 	FItemStruct Upgrade = *GetWorld()->GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfoDB()->FindRow<FItemStruct>(UpgradeName, TEXT("GetItemRow"));
 
@@ -260,9 +290,9 @@ bool UInventoryComponent::UpgradeItem(FItemStruct ItemToUpgrade)
 		return false;
 	}
 
-	Slots[index].Item.ItemLevel++;
+	DeleteItem(Upgrade, 1);*/
 
-	DeleteItem(Upgrade, 1);
+	Slots[index].Item.ItemLevel++;
 
 	return true;
 }
