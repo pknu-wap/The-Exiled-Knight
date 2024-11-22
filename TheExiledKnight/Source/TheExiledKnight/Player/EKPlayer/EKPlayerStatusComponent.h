@@ -47,13 +47,29 @@ public:
 	void Calculate_BasicStatus();
 	void Calculate_NormalStatus();
 
+#pragma region Status Function
+
 public:
-	uint32 GetMaxHp() { return MaxHp; }
-	uint32 GetHp() { return Hp; }
-	uint32 GetMaxMp() { return MaxMp; }
-	uint32 GetMp() { return Mp; }
-	uint32 GetMaxStamina() { return MaxStamina; }
-	uint32 GetStamina() { return Stamina; }
+	int32 GetMaxHp() { return MaxHp; }
+	int32 GetHp() { return Hp; }
+	int32 GetMaxMp() { return MaxMp; }
+	int32 GetMp() { return Mp; }
+	int32 GetMaxStamina() { return MaxStamina; }
+	int32 GetStamina() { return Stamina; }
+
+	int32 GetVitality() { return Vitality; }
+	int32 GetMental() { return Mental; }
+	int32 GetEndurance() { return Endurance; }
+	int32 GetStrength() { return Strength; }
+	int32 GetAbility() { return Ability; }
+	int32 GetIntelligence() { return Intelligence; }
+
+	int32 GetBaseVitality() { return BaseVitality; }
+	int32 GetBaseMental() { return BaseMental; }
+	int32 GetBaseEndurance() { return BaseEndurance; }
+	int32 GetBaseStrength() { return BaseStrength; }
+	int32 GetBaseAbility() { return BaseAbility; }
+	int32 GetBaseIntelligence() { return BaseIntelligence; }
 
 	void SetMaxHp(int32 SetData);
 	void SetHp(int32 SetData);
@@ -76,6 +92,8 @@ public:
 	void LevelUpStrength(uint8 SetData);
 	void LevelUpAbility(uint8 SetData);
 	void LevelUpIntelligence(uint8 SetData);
+
+#pragma endregion
 
 public:
 	bool bCanStaminaRecovery = true;
