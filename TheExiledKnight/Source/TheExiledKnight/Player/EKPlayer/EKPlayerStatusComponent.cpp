@@ -6,29 +6,32 @@
 #include "EKPlayerController.h"
 #include "../Weapon/EKPlayerWeapon.h"
 #include "../EKPlayerGameplayTags.h"
+#include "Components/SlotComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Subsystems/InventorySubsystem.h"
 
 UEKPlayerStatusComponent::UEKPlayerStatusComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// Edit Basic Status Value Here
-	MaxHp = 100;
-	Hp = 50;
-	MaxMp = 100;
-	Mp = 50;
+	MaxHp = 1000;
+	Hp = 1000;
+	MaxMp = 1000;
+	Mp = 1000;
 	MaxStamina = 1000;
 	Stamina = 1000;
-	DefaultDamage = 1.0f;
+	DefaultDamage = 10.f;
 	FinalDamage = DefaultDamage;
 	
 	// Edit Basic Status Value Here
-	Level = 6;
-	Vitality = 1;
-	Mental = 1;
-	Endurance = 1;
-	Strength = 1;
-	Ability = 1;
-	Intelligence = 1;
+	Level = 1;
+	Vitality = 1; BaseVitality = 1;
+	Mental = 1;	BaseMental = 1;
+	Endurance = 1; BaseEndurance = 1;
+	Strength = 1; BaseStrength = 1;
+	Ability = 1; BaseAbility = 1;
+	Intelligence = 1; BaseIntelligence = 1;
 }
 
 
@@ -60,7 +63,8 @@ void UEKPlayerStatusComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 void UEKPlayerStatusComponent::SetMaxHp(int32 SetData)
 {
-	MaxHp = FMath::Clamp(MaxHp + SetData, 0, PlayerMaxHp);
+	MaxHp = FMath::Clamp(MaxHp + SetData + (Vitality * 50), 0, PlayerMaxHp);
+	SetHp(SetData);
 }
 
 void UEKPlayerStatusComponent::SetHp(int32 SetData)
@@ -71,7 +75,8 @@ void UEKPlayerStatusComponent::SetHp(int32 SetData)
 
 void UEKPlayerStatusComponent::SetMaxMp(int32 SetData)
 {
-	MaxMp = FMath::Clamp(MaxMp + SetData, 0, PlayerMaxMp);
+	MaxMp = FMath::Clamp(MaxMp + SetData + (Mental * 50), 0, PlayerMaxMp);
+	SetMp(SetData);
 }
 
 void UEKPlayerStatusComponent::SetMp(int32 SetData)
@@ -82,13 +87,70 @@ void UEKPlayerStatusComponent::SetMp(int32 SetData)
 
 void UEKPlayerStatusComponent::SetMaxStamina(int32 SetData)
 {
-	MaxStamina = FMath::Clamp(MaxStamina + SetData, 0, PlayerMaxStamina);
+	MaxStamina = FMath::Clamp(MaxStamina + SetData + (Endurance * 50), 0, PlayerMaxStamina);
+	SetStamina(SetData);
 }
 
 void UEKPlayerStatusComponent::SetStamina(int32 SetData)
 {
 	Stamina = FMath::Clamp(Stamina + SetData, 0, MaxStamina);
 	Delegate_StaminaUpdated.Broadcast(MaxStamina, Stamina);
+}
+
+void UEKPlayerStatusComponent::Recalculate_Status()
+{
+	Calculate_NormalStatus();
+	Calculate_BasicStatus();
+}
+
+void UEKPlayerStatusComponent::Calculate_BasicStatus()
+{
+	MaxHp = 1000 + Vitality * 100;
+	MaxMp = 1000 + Mental * 100;
+	Stamina = 1000 + Endurance * 100;
+
+	UInventorySubsystem* invSystem = GetWorld()->GetGameInstance()->GetSubsystem<UInventorySubsystem>();
+	if (!invSystem) return;
+	APlayerController* pc = UGameplayStatics::GetPlayerController(this, 0);
+	if (!pc) return;
+	USlotComponent* slotComp = pc->GetComponentByClass<USlotComponent>();
+	if (!slotComp) return;
+
+	// Calculate Weapon Stat
+	FWeaponStruct* weaponInfo = invSystem->GetWeaponInfo(slotComp->WeaponSlots[slotComp->ActiveWeaponSlot].ID);
+	if (!weaponInfo) return;
+	ATK = weaponInfo->AttackPow;
+
+	// Calculate 
+	ATK *= 1 + 0.02 * Strength;
+}
+
+void UEKPlayerStatusComponent::Calculate_NormalStatus()
+{
+	// Calculate Rune Stat
+	UInventorySubsystem* invSystem = GetWorld()->GetGameInstance()->GetSubsystem<UInventorySubsystem>();
+	if (!invSystem) return;
+	APlayerController* pc = UGameplayStatics::GetPlayerController(this, 0);
+	if (!pc) return;
+	USlotComponent* slotComp = pc->GetComponentByClass<USlotComponent>();
+	if (!slotComp) return;
+
+	for (int i = 0; i < slotComp->RuneSlots.Num(); i++)
+	{
+		int itemID = slotComp->RuneSlots[i].ID;
+		if (itemID > 0)
+		{
+			FRune* runeInfo = invSystem->GetRuneInfo(itemID);
+			if (!runeInfo) return;
+
+			Vitality = BaseVitality + runeInfo->Vitality;
+			Mental = BaseMental + runeInfo->Mental;
+			Endurance = BaseEndurance + runeInfo->Endurance;
+			Strength = BaseStrength + runeInfo->Strength;
+			Ability = BaseAbility + runeInfo->Ability;
+			Intelligence = BaseIntelligence + runeInfo->Intelligence;
+		}
+	}
 }
 
 #pragma endregion
@@ -128,31 +190,37 @@ void UEKPlayerStatusComponent::LevelUp(uint8 SetData)
 void UEKPlayerStatusComponent::LevelUpVitality(uint8 SetData)
 {
 	Vitality = FMath::Clamp(Vitality + SetData, 0, PlayerMaxVitalityLevel);
+	SetMaxHp(0);
 }
 
 void UEKPlayerStatusComponent::LevelUpMental(uint8 SetData)
 {
 	Mental = FMath::Clamp(Mental + SetData, 0, PlayerMaxMentalLevel);
+	SetMaxMp(0);
 }
 
 void UEKPlayerStatusComponent::LevelUpEndurance(uint8 SetData)
 {
 	Endurance = FMath::Clamp(Endurance + SetData, 0, PlayerMaxEnduranceLevel);
+	SetMaxStamina(0);
 }
 
 void UEKPlayerStatusComponent::LevelUpStrength(uint8 SetData)
 {
 	Strength = FMath::Clamp(Strength + SetData, 0, PlayerMaxStrengthLevel);
+	SetPlayerFinalDamage();
 }
 
 void UEKPlayerStatusComponent::LevelUpAbility(uint8 SetData)
 {
 	Ability = FMath::Clamp(Ability + SetData, 0, PlayerMaxAbilityLevel);
+	SetPlayerFinalDamage();
 }
 
 void UEKPlayerStatusComponent::LevelUpIntelligence(uint8 SetData)
 {
 	Intelligence = FMath::Clamp(Intelligence + SetData, 0, PlayerMaxInteligenceLevel);
+	SetPlayerFinalDamage();
 }
 
 #pragma endregion
