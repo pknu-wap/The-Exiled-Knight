@@ -83,11 +83,11 @@ protected:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TObjectPtr<class AEKPlayerWeapon> CurrentWeapon;
+	class AEKPlayerWeapon* CurrentWeapon;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
-	TSubclassOf<class UAnimInstance> ABPEKPlayer;
+	class UAnimInstance* ABPEKPlayer;
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

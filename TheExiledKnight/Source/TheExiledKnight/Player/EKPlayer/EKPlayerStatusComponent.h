@@ -3,6 +3,9 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
+#include "EKPlayer.h"
+#include "EKPlayerController.h"
+#include "Player/GameInstance/EKPlayerGameInstance.h"
 #include "EKPlayerStatusComponent.generated.h"
 
 #pragma region Max Value
@@ -74,10 +77,19 @@ public:
 
 protected:
 	UPROPERTY()
-	TObjectPtr<class AEKPlayer> EKPlayer;
+	AEKPlayer* EKPlayer;
 
 	UPROPERTY()
-	TObjectPtr<class AEKPlayerController> EKPlayerController;
+	AEKPlayerController* EKPlayerController;
+
+	UPROPERTY()
+	UEKPlayerGameInstance* EKPlayerGameInstance;
+
+	UPROPERTY()
+	FEKPlayerLevel EKPlayerLevel;
+
+	UPROPERTY()
+	FEKPlayerStatus EKPlayerStatus;
 
 #pragma region Basic Status
 
