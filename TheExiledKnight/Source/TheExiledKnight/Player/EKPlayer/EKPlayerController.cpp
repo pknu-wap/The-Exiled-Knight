@@ -379,6 +379,13 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 
 	if (!bIsEquipWeapon)
 	{
+		if (!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword) ||
+			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear) ||
+			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff))
+		{
+			return;
+		}
+
 		EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
 	}
 	else
@@ -419,6 +426,13 @@ void AEKPlayerController::SkillStarted(const FInputActionValue& InputValue)
 
 	if (!bIsEquipWeapon)
 	{
+		if (!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword) ||
+			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear) ||
+			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff))
+		{
+			return;
+		}
+
 		EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
 	}
 	else
@@ -666,6 +680,12 @@ void AEKPlayerController::OnPressed_Right(const FInputActionValue& InputValue)
 	if (SlotComponent)
 		SlotComponent->UpdateActiveSlot(EInputType::Right);
 }
+
+void AEKPlayerController::TryInteractLoop()
+{
+	GetWorldTimerManager().SetTimer(InteractCheckHandle, this, &ThisClass::FindInteractableObjects, InteractCheckTime, true);
+}
+
 #pragma endregion
 
 #pragma region Timer
@@ -738,12 +758,6 @@ void AEKPlayerController::InvincibilityTimer(float Time)
 {
 	GetWorldTimerManager().SetTimer(InvincibilityHandle, this, &ThisClass::SetInvincibility, Time, false);
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Invincibility);
-}
-
-#pragma endregion
-void AEKPlayerController::TryInteractLoop()
-{
-	GetWorldTimerManager().SetTimer(InteractCheckHandle, this, &ThisClass::FindInteractableObjects, InteractCheckTime, true);
 }
 
 #pragma endregion

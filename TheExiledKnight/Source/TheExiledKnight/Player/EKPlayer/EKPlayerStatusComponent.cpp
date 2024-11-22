@@ -55,7 +55,6 @@ void UEKPlayerStatusComponent::BeginPlay()
 	}
 }
 
-
 void UEKPlayerStatusComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
