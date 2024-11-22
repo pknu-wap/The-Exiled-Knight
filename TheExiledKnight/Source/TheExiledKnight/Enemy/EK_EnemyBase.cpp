@@ -32,7 +32,7 @@ float AEK_EnemyBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 	}
 	
 
-	if (EnemyStat->GetCurrentHealth() > 0&&!EnemyStat->GetIsDead()) 
+	if (EnemyStat->GetCurrentHealth() > 0 && !EnemyStat->GetIsDead())
 	{
 		if (Damage > 0)
 		{
@@ -41,14 +41,11 @@ float AEK_EnemyBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 			{
 				HandleStrongAttack(Damage);
 			}
-			else if (DamageTypeClass->IsChildOf(UEKNormalDamageType::StaticClass()))
+			else
 			{
 				HandleNormalAttack(Damage);
 			}
-			else
-			{
-				HandleNormalAttack(Damage); //before merge i use 
-			}
+
 			
 			if (EnemyStat->GetCurrentHealth() <= 0)
 			{
@@ -58,10 +55,12 @@ float AEK_EnemyBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 				return 0.0f;
 			}
 
-				FVector DamageDirection = (DamageCauser->GetActorLocation() - GetActorLocation()).GetSafeNormal();
-				PlayHurtReactionAnimation(DamageDirection);
+			// 피격 애니메이션 재생
+			FVector DamageDirection = (DamageCauser->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+			PlayHurtReactionAnimation(DamageDirection);
 		}
 	}
+
 	return Damage;
 }
 #pragma endregion
@@ -69,18 +68,20 @@ float AEK_EnemyBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 void AEK_EnemyBase::HandleStrongAttack(float Damage)
 {
 	EnemyStat->DamageCurrentHealth(Damage*1.2f);
+
 	if (EnemyStat->GetCurrentPoise() > 0)
 	{
-		EnemyStat->DamageCurrentPoise(50);
+		EnemyStat->DamageCurrentPoise(Damage*0.2f);
 		
 	}
 }
 void AEK_EnemyBase::HandleNormalAttack(float Damage)
 {
 	EnemyStat->DamageCurrentHealth(Damage); 
+
 	if (EnemyStat->GetCurrentPoise() > 0)
 	{
-		EnemyStat->DamageCurrentPoise(50);
+		EnemyStat->DamageCurrentPoise(Damage*0.1f);
 	}
 }
 
@@ -149,12 +150,21 @@ void AEK_EnemyBase::OnHurtAnimationEnded(UAnimMontage* Montage, bool bInterrupte
 
 void AEK_EnemyBase::PlayDieReactionAnimation()
 {
+	
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	
 	if (AnimInstance && DeathAnimMontage)
 	{
+		bIsStunned = false;
+		if (AnimInstance->Montage_IsPlaying(StunMontage))
+		{
+			AnimInstance->Montage_Stop(0.1f,StunMontage);
+		}
+	
+		AnimInstance->StopAllMontages(0.1f);
 		FOnMontageEnded EndDelegate;
 		EndDelegate.BindUObject(this, &AEK_EnemyBase::OnDeathAnimationEnded);
-		AnimInstance->Montage_Play(DeathAnimMontage);
+		AnimInstance->Montage_Play(DeathAnimMontage, 1.0f, EMontagePlayReturnType::MontageLength, 0.0f, true);
 		AnimInstance->Montage_SetEndDelegate(EndDelegate, DeathAnimMontage);
 	} 
 }
@@ -162,6 +172,7 @@ void AEK_EnemyBase::OnDeathAnimationEnded(UAnimMontage* Montage, bool bInterrupt
 {
 	if (!bInterrupted)
 	{
+
 		for (AActor* Actor : AttachedActors)
 		{
 			if (Actor)
