@@ -72,7 +72,7 @@ void USlotComponent::EquipWeapon(const FItemStruct& InItemData)
 		if (slotIdx == ActiveWeaponSlot)
 		{
 			player->EquipWeapon(*weaponInfo);
-			Delegate_QuickSlotUpdated.Broadcast(EItemCategory::Weapon, slotIdx);
+			Delegate_QuickSlotUpdated.Broadcast(EItemCategory::Weapon, ActiveWeaponSlot);
 		}
 
 		Delegate_SlotUpdated.Broadcast(EItemCategory::Weapon, slotIdx);
@@ -108,11 +108,29 @@ void USlotComponent::EquipUseableItem(const FItemStruct& InItemData)
 	{
 		UseableSlots[slotIdx] = InItemData;
 		Delegate_SlotUpdated.Broadcast(EItemCategory::UseableItem, slotIdx);
+
+		if (slotIdx == ActiveUseableSlot)
+		{
+			Delegate_QuickSlotUpdated.Broadcast(EItemCategory::UseableItem, slotIdx);
+		}
 	}
 }
 
 void USlotComponent::EquipMagic(const FMagicStruct& InMagicData)
 {
+	UWidget_Equipment* equipWidget = GetEquipmentWidget();
+	if (!equipWidget) return;
+
+	int slotIdx = equipWidget->GetEquipSelectSlotIdx();
+
+	if (MagicSlots.IsValidIndex(slotIdx))
+	{
+		MagicSlots[slotIdx] = InMagicData;
+		if (slotIdx == ActiveMagicSlot)
+		{
+			Delegate_QuickSlotUpdated.Broadcast(EItemCategory::Magic, ActiveMagicSlot);
+		}
+	}
 }
 
 void USlotComponent::UpdateActiveSlot(EInputType InInputType)
