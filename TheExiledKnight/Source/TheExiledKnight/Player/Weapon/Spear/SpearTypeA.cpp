@@ -3,11 +3,12 @@
 #include "SpearTypeA.h"
 
 ASpearTypeA::ASpearTypeA()
-	:Super()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
 	WeaponAdditionalDamage = 10;
+
+	DamageValue = 0.6;
 }
 
 void ASpearTypeA::BeginPlay()
@@ -20,4 +21,24 @@ void ASpearTypeA::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ASpearTypeA::PlaySkillStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
+{
+	if (!EKPlayerController->bIsEquipWeapon || !SpearSkillAnim)
+	{
+		return;
+	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < SpearSkill ||
+		EKPlayer->GetPlayerStatusComponent()->GetMp() < SpearSkillMp)
+	{
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+		return;
+	}
+
+	EKPlayer->StopAnimMontage(SpearSkillAnim);
+	EKPlayer->PlayAnimMontage(SpearSkillAnim, 1.0f, FName("Start"));
+	EKPlayer->GetPlayerStatusComponent()->SetMp(-SpearSkillMp);
+	EKPlayerController->ConsumtionStaminaAndTimer(SpearSkill);
 }

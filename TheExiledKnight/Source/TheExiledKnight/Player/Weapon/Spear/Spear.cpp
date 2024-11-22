@@ -35,7 +35,7 @@ void ASpear::Tick(float DeltaTime)
 
 }
 
-void ASpear::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+void ASpear::PlayWeaponEquipAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
 {
 	if (EKPlayer && EKPlayerController)
 	{
@@ -52,7 +52,7 @@ void ASpear::PlayWeaponEquipAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 
 #pragma region Attack
 
-void ASpear::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectPtr<AEKPlayerController> EKPlayerController)
+void ASpear::PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
 {
 	if (!EKPlayerController->bIsEquipWeapon || !SpearAttackAnim)
 	{
@@ -101,7 +101,7 @@ void ASpear::PlayAttackStartAnimMontage(TObjectPtr<AEKPlayer> EKPlayer, TObjectP
 
 #pragma endregion
 
-void ASpear::AttachToDefenseSocket(TObjectPtr<AEKPlayerWeapon> Weapon, TObjectPtr<AEKPlayer> EKPlayer)
+void ASpear::AttachToDefenseSocket(AEKPlayerWeapon* Weapon, AEKPlayer* EKPlayer)
 {
 	if (Weapon)
 	{

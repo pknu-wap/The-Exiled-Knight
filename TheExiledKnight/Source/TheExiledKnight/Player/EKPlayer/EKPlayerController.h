@@ -18,7 +18,7 @@ class UAnimMontage;
 #define EKPlayerWalkSpeed 200.f
 #define EKPlayerSprintSpeed 600.f
 
-// Edit Stamina Consumption Here
+// Edit Stamina & Mp Consumption Here
 #define SprintStamina 1
 #define DodgeStamina 100
 #define BackStepStamina 50
@@ -27,16 +27,17 @@ class UAnimMontage;
 #define DefenseStamina 200
 
 #define GreatSwordAttackStamina 100
-#define GreatSwordEnhancedAttackStamina 200
-#define GreatSwordJumpAttackStamina 100
+#define GreatSwordSkill 80
+#define GreatSwordSkillMp 200
 
 #define SpearAttackStamina 50
-#define SpearEnhancedAttackStamina 50
-#define SpearJumpAttackStamina 50
+#define SpearSkill 80
+#define SpearSkillMp 200
 
 #define StaffAttackStamina 80
-#define StaffEnhancedAttackStamina 80
-#define StaffJumpAttackStamina 80
+#define StaffAttackMp 50
+#define StaffSkill 80
+#define StaffSkillMp 300
 
 #pragma endregion
 
@@ -82,15 +83,20 @@ private:
 	void SitDownStarted(const FInputActionValue& InputValue);
 
 	void Interact(const FInputActionValue& InputValue);
+
 	void FindInteractableObjects();
 
 	void SkillStarted(const FInputActionValue& InputValue);
-	void SkillRelease(const FInputActionValue& InputValue);
 
-	void TestStarted(const FInputActionValue& InputValue);
+	void LockOnStarted(const FInputActionValue& InputValue);
+
 
 public:
 	void OnPressed_GameMenu(const FInputActionValue& InputValue);
+	void OnPressed_Up(const FInputActionValue& InputValue);
+	void OnPressed_Down(const FInputActionValue& InputValue);
+	void OnPressed_Left(const FInputActionValue& InputValue);
+	void OnPressed_Right(const FInputActionValue& InputValue);
 
 #pragma endregion
 
@@ -133,19 +139,41 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
 	UInputAction* IAInteract;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
-	TObjectPtr<UInputAction> IAGameMenu;
+	UInputAction* IAGameMenu;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
+	UInputAction* IALockOn;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	UInputAction* IA_Up;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	UInputAction* IA_Down;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	UInputAction* IA_Left;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	UInputAction* IA_Right;
 
 	// Test Input
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Test")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Test")
 	UInputAction* IATest;
-
 #pragma endregion
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class AEKPlayer> EKPlayer;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class AEKItem_Base* Item = nullptr;
+
+	class IUInteractableInterface* InteractableActor = nullptr;
+
+	UFUNCTION()
+	void DestroyItem();
 
 protected:
 	// Common Animation Montage
@@ -167,20 +195,19 @@ public:
 #pragma region Timer
 
 public:
-	// About Perfect Defense
-	bool bIsPerfectDefense = false;
-	const float PerfectDefenseTime = 0.2f;
-
 	// About Battle State
 	const float BattleEndTime = 10.f;
 	bool bCanAttackNext = false;
-	bool bCanItemInteract = false;
+
+	const float InteractCheckTime = 0.5f;
 
 protected:
 	FTimerHandle StaminaRecoveryHandle;
 	FTimerHandle AttackEndHandle;
-	FTimerHandle PerfectDefenseHandle;
+	FTimerHandle StaffBaseSkillEndHandle;
 	FTimerHandle BattleStateHandle;
+	FTimerHandle InvincibilityHandle; // muzuk
+	FTimerHandle InteractCheckHandle;
 
 	// How long does it take for the player to recover after using the Stemina
 	const float StaminaRecoveryTime = 2.5f;
@@ -192,17 +219,25 @@ public:
 	// About Stamina and Attack
 	void SetStaminaRecoveryTime();
 	void ConsumtionStaminaAndTimer(int32 Stamina);
+
 	void SetAttackComboNext();
 	void ResetAttackCombo();
 	void SetAttackEndTimer(float Time);
 
-	// About Perfect Defense
-	void SetPerfectDefense();
-	void PerfectDefenseTimer();
-
+public:
 	// About Battle State
 	void SetBattleStateEnd();
 	void BattleStateTimer();
+
+	// About Staff Base Skill
+	void RemoveAttackTag();
+	void RemoveAttackTagTimer(float Time);
+
+	void SetInvincibility();
+	void InvincibilityTimer(float Time);
+
+	// About Interact 
+	void TryInteractLoop();
 
 #pragma endregion
 
@@ -212,7 +247,9 @@ protected:
 	float NeedDodgeThresholdTime = 0.2f;
 	float KeyPressDuration = 0.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	FVector2D LookAxisVector;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInventoryComponent> InventoryComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
