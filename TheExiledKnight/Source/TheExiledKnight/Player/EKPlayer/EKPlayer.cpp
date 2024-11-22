@@ -234,7 +234,7 @@ NextFunc:
 
 	CheckPlayerDie();
 
-	EKPlayerController->InvincibilityTimer(1.f);
+	EKPlayerController->InvincibilityTimer(0.5f);
 
 	return 0.f;
 }

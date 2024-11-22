@@ -8,7 +8,7 @@ AFireBallProjectile::AFireBallProjectile()
 
 	ProjectileMovementComponent->ProjectileGravityScale = 0.05f;
 
-	BaseParticle->SetRelativeScale3D(FVector(2.f, 2.f, 2.f));
+	BaseParticle->SetRelativeScale3D(FVector(0.8f, 0.8f, 0.8f));
 
 	DamageValue = 0.5;
 }
