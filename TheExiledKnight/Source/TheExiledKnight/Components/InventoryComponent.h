@@ -8,9 +8,9 @@
 #include "EKEnums.h"
 #include "InventoryComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FAdd_Item_Delegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAdd_Item_Delegate);
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), Blueprintable, meta=(BlueprintSpawnableComponent) )
 class THEEXILEDKNIGHT_API UInventoryComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -28,10 +28,15 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	const TArray<FInventorySlot>& GetConstContents(EItemCategory Category);
-
 	UFUNCTION(BlueprintCallable)
 	TArray<FInventorySlot>& GetContents(EItemCategory Category);
+
+	const TArray<FInventorySlot> GetContents(EUpgradeItemType Category);
+	const TArray<FInventorySlot>& GetConstContents(EItemCategory Category);
+
+	int GetIndexToAdd(uint8 ID);
+	int GetDupSlotIndex(uint8 ID, int MaxStack);
+	int GetEmptySlotIndex();
 
 	int GetIndexToAdd(uint8 ID, EItemCategory Category);
 	int GetDupSlotIndex(uint8 ID, EItemCategory Category);
@@ -55,6 +60,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool AddNewSlot(TArray<FInventorySlot>& Slots);
 
+	UPROPERTY(BlueprintAssignable)
 	FAdd_Item_Delegate AddItemDelegate;
 
 
@@ -62,28 +68,20 @@ private:
 	void InitializeInventory();
 
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> None;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> Weapon;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> Rune;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> FragmentOfGod;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> UseableItem;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> Magic;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> Upgrades;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TArray<FInventorySlot> Hunting;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
