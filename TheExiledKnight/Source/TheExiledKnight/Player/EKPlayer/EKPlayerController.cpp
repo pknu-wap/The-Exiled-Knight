@@ -23,7 +23,7 @@
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
-	//InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 	SlotComponent = CreateDefaultSubobject<USlotComponent>(TEXT("SlotComponent"));
 }
 
