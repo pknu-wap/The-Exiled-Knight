@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Structs/InventorySlotStruct.h"
+#include "EKEnums.h"
 #include "Widget_InvContentSlot.generated.h"
 
 class UButton;
@@ -30,6 +31,9 @@ protected:
 
 public:
 	FInventorySlot SlotData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EWidgetClassType WidgetType = EWidgetClassType::Inventory;
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
 	UButton* Button_Slot;

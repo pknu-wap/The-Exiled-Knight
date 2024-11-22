@@ -16,13 +16,14 @@
 #include "EKGameplayTags.h"
 #include "../Weapon/DamageType/EKPlayerDamageType.h"
 #include "Item/EKItem_Base.h"
+#include "Subsystems/InventorySubsystem.h"
 #include "DrawDebugHelpers.h"
+#include "Interfaces/UInteractableInterface.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
-
 	SlotComponent = CreateDefaultSubobject<USlotComponent>(TEXT("SlotComponent"));
 }
 
@@ -36,6 +37,12 @@ void AEKPlayerController::BeginPlay()
 	{
 		Subsystem->AddMappingContext(IMCDefault, 0);
 	}
+
+	InventoryComponent = NewObject<UInventoryComponent>(this, TEXT("Inventory"));
+
+	InventoryComponent->AddItemDelegate.AddDynamic(this, &AEKPlayerController::DestroyItem);
+
+	TryInteractLoop();
 }
 
 void AEKPlayerController::SetupInputComponent()
@@ -74,12 +81,15 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAInteract, ETriggerEvent::Started, this, &ThisClass::Interact);
 
 		EnhancedInputComponent->BindAction(IASkill, ETriggerEvent::Started, this, &ThisClass::SkillStarted);
-		EnhancedInputComponent->BindAction(IASkill, ETriggerEvent::Completed, this, &ThisClass::SkillRelease);
-		EnhancedInputComponent->BindAction(IASkill, ETriggerEvent::Canceled, this, &ThisClass::SkillRelease);
 
-		EnhancedInputComponent->BindAction(IATest, ETriggerEvent::Started, this, &ThisClass::TestStarted);
+		EnhancedInputComponent->BindAction(IALockOn, ETriggerEvent::Started, this, &ThisClass::LockOnStarted);
 
 		EnhancedInputComponent->BindAction(IAGameMenu, ETriggerEvent::Started, this, &ThisClass::OnPressed_GameMenu);
+		EnhancedInputComponent->BindAction(IA_Up, ETriggerEvent::Started, this, &ThisClass::OnPressed_Up);
+		EnhancedInputComponent->BindAction(IA_Down, ETriggerEvent::Started, this, &ThisClass::OnPressed_Down);
+		EnhancedInputComponent->BindAction(IA_Left, ETriggerEvent::Started, this, &ThisClass::OnPressed_Left);
+		EnhancedInputComponent->BindAction(IA_Right, ETriggerEvent::Started, this, &ThisClass::OnPressed_Right);
+
 	}
 }
 
@@ -87,7 +97,7 @@ void AEKPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
-	FindInteractableObjects();
+	//FindInteractableObjects();
 }
 
 #pragma region Move
@@ -135,20 +145,34 @@ void AEKPlayerController::MoveRelease(const FInputActionValue& InputValue)
 
 void AEKPlayerController::LookTriggered(const FInputActionValue& InputValue)
 {
-	FVector2D LookAxisVector = InputValue.Get<FVector2D>();
+	LookAxisVector = InputValue.Get<FVector2D>();
 
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Look);
 
-	if (EKPlayer)
+	if (!EKPlayer)
 	{
-		EKPlayer->AddControllerYawInput(LookAxisVector.X);
-		EKPlayer->AddControllerPitchInput(LookAxisVector.Y);
+		return;
 	}
+
+	EKPlayer->AddControllerYawInput(LookAxisVector.X);
+	EKPlayer->AddControllerPitchInput(LookAxisVector.Y);
 }
 
 void AEKPlayerController::LookRelease(const FInputActionValue& InputValue)
 {
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Look);
+}
+
+void AEKPlayerController::LockOnStarted(const FInputActionValue& InputValue)
+{
+	if (EKPlayer->GetLockOnTarget())
+	{
+		EKPlayer->SetLockOnTarget(nullptr);
+	}
+	else
+	{
+		EKPlayer->SetLockOnTarget(EKPlayer->FindNearTarget());
+	}
 }
 
 #pragma endregion
@@ -290,6 +314,8 @@ void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputVa
 			EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Dodge);
 			EKPlayer->PlayAnimMontage(DodgeAnim);
 
+			InvincibilityTimer(0.65f);
+
 			if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_BattleState))
 			{
 				ConsumtionStaminaAndTimer(DodgeStamina);
@@ -318,6 +344,12 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 		return;
 	}
 
+	// if Player sets lock on, Camera view changes
+	if (EKPlayer->GetLockOnTarget())
+	{
+		EKPlayer->SetActorRotation(EKPlayer->GetLockOnTargetRotation());
+	}
+
 	BattleStateTimer();
 
 	if (!bIsEquipWeapon)
@@ -329,27 +361,43 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
 
-		if (!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Enhance))
-		{
-			EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
-		}
-		else
-		{
-
-		}
-
-		EKPlayer->bUseControllerRotationYaw = true;
+		EKPlayer->GetCurrentWeapon()->PlayAttackStartAnimMontage(EKPlayer, this);
 	}
 }
 
 void AEKPlayerController::SkillStarted(const FInputActionValue& InputValue)
 {
-	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Enhance);
-}
+	if (!EKPlayer)
+	{
+		return;
+	}
 
-void AEKPlayerController::SkillRelease(const FInputActionValue& InputValue)
-{
-	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Enhance);
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
+		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Dodge))
+	{
+		return;
+	}
+
+	// if Player sets lock on, Camera view changes
+	if (EKPlayer->GetLockOnTarget())
+	{
+		EKPlayer->SetActorRotation(EKPlayer->GetLockOnTargetRotation());
+	}
+
+	BattleStateTimer();
+
+	if (!bIsEquipWeapon)
+	{
+		EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
+	}
+	else
+	{
+		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
+
+		EKPlayer->GetCurrentWeapon()->PlaySkillStartAnimMontage(EKPlayer, this);
+	}
 }
 
 #pragma endregion
@@ -363,6 +411,12 @@ void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputVal
 		return;
 	}
 
+	// if Player sets lock on, Camera view changes
+	if (EKPlayer->GetLockOnTarget())
+	{
+		EKPlayer->SetActorRotation(EKPlayer->GetLockOnTargetRotation());
+	}
+
 	BattleStateTimer();
 
 	if (!bIsEquipWeapon)
@@ -373,7 +427,7 @@ void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputVal
 	{
 		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
-		PerfectDefenseTimer();
+		InvincibilityTimer(0.2f);
 	}
 }
 
@@ -418,6 +472,10 @@ void AEKPlayerController::UsePotionStarted(const FInputActionValue& InputValue)
 	EKPlayer->GetPlayerStatusComponent()->SetHp(10);
 	EKPlayer->GetPlayerStatusComponent()->SetMp(10);
 	EKPlayer->PlayAnimMontage(UsePotionAnim);
+
+	if (InventoryComponent != nullptr)
+		InventoryComponent->UseItem(*GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfo(3));
+
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_UseItem);
 }
 
@@ -448,22 +506,23 @@ void AEKPlayerController::SitDownStarted(const FInputActionValue& InputValue)
 	}
 }
 
-void AEKPlayerController::TestStarted(const FInputActionValue& InputValue)
-{
-	TSubclassOf<UEKPlayerDamageType> PlayerDamageType = UEKPlayerDamageType::StaticClass();
-	UGameplayStatics::ApplyDamage(EKPlayer, 10, this, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
-}
-
 #pragma endregion
+
+#pragma region Inventory and UI
 
 void AEKPlayerController::Interact(const FInputActionValue& InputValue)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Interact"));
 
-	if (bCanItemInteract)
+	if (Item != nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Can Interact with Item"));
+
+		InventoryComponent->AddItem(Item->GetItemInfo(), Item->GetItemQuantity());
 	}
+
+	if (InteractableActor)
+		InteractableActor->Interact();
 }
 
 void AEKPlayerController::FindInteractableObjects()
@@ -471,7 +530,6 @@ void AEKPlayerController::FindInteractableObjects()
 	FVector Location;
 	FRotator Rotation;
 	TArray<FHitResult> HitResults;
-	AEKItem_Base* Item = nullptr;
 
 	EKPlayer->GetActorEyesViewPoint(Location, Rotation);
 
@@ -485,9 +543,10 @@ void AEKPlayerController::FindInteractableObjects()
 
 	for (FHitResult& HitResult : HitResults)
 	{
+		InteractableActor = Cast<IUInteractableInterface>(HitResult.GetActor());
 		Item = Cast<AEKItem_Base>(HitResult.GetActor());
 
-		if (Item != nullptr	)
+		if (Item != nullptr)
 			break;
 	}
 
@@ -499,10 +558,7 @@ void AEKPlayerController::FindInteractableObjects()
 	{
 		// Show Interact UI
 
-		bCanItemInteract = true;
 	}
-	else
-		bCanItemInteract = false;
 
 }
 
@@ -535,7 +591,38 @@ void AEKPlayerController::OnPressed_GameMenu(const FInputActionValue& InputValue
 	}
 }
 
+void AEKPlayerController::OnPressed_Up(const FInputActionValue& InputValue)
+{
+	if (SlotComponent)
+		SlotComponent->UpdateActiveSlot(EInputType::Up);
+}
+
+void AEKPlayerController::OnPressed_Down(const FInputActionValue& InputValue)
+{
+	if (SlotComponent)
+		SlotComponent->UpdateActiveSlot(EInputType::Down);
+}
+
+void AEKPlayerController::OnPressed_Left(const FInputActionValue& InputValue)
+{
+	if (SlotComponent)
+		SlotComponent->UpdateActiveSlot(EInputType::Left);
+}
+
+void AEKPlayerController::OnPressed_Right(const FInputActionValue& InputValue)
+{
+	if (SlotComponent)
+		SlotComponent->UpdateActiveSlot(EInputType::Right);
+}
+#pragma endregion
+
 #pragma region Timer
+
+void AEKPlayerController::DestroyItem()
+{
+	if (Item)
+		Item->Destroy();
+}
 
 void AEKPlayerController::SetStaminaRecoveryTime()
 {
@@ -551,7 +638,7 @@ void AEKPlayerController::ConsumtionStaminaAndTimer(int32 Stamina)
 
 void AEKPlayerController::SetAttackComboNext()
 {
-	EKPlayer->GetCurrentWeapon()->SetAttackComboNext(EKPlayer->GetCurrentWeapon()->MaxAttackCombo);
+	EKPlayer->GetCurrentWeapon()->SetAttackComboNext();
 }
 
 void AEKPlayerController::ResetAttackCombo()
@@ -562,17 +649,6 @@ void AEKPlayerController::ResetAttackCombo()
 void AEKPlayerController::SetAttackEndTimer(float Time)
 {
 	GetWorldTimerManager().SetTimer(AttackEndHandle, this, &ThisClass::ResetAttackCombo, Time, false);
-}
-
-void AEKPlayerController::SetPerfectDefense()
-{
-	bIsPerfectDefense = false;
-}
-
-void AEKPlayerController::PerfectDefenseTimer()
-{
-	bIsPerfectDefense = true;
-	GetWorldTimerManager().SetTimer(PerfectDefenseHandle, this, &ThisClass::SetPerfectDefense, PerfectDefenseTime, false);
 }
 
 void AEKPlayerController::SetBattleStateEnd()
@@ -588,6 +664,34 @@ void AEKPlayerController::BattleStateTimer()
 {
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_BattleState);
 	GetWorldTimerManager().SetTimer(BattleStateHandle, this, &ThisClass::SetBattleStateEnd, BattleEndTime, false);
+}
+
+void AEKPlayerController::RemoveAttackTag()
+{
+	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+}
+
+void AEKPlayerController::RemoveAttackTagTimer(float Time)
+{
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+	GetWorldTimerManager().SetTimer(StaffBaseSkillEndHandle, this, &ThisClass::RemoveAttackTag, Time, false);
+}
+
+void AEKPlayerController::SetInvincibility()
+{
+	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Invincibility);
+}
+
+void AEKPlayerController::InvincibilityTimer(float Time)
+{
+	GetWorldTimerManager().SetTimer(InvincibilityHandle, this, &ThisClass::SetInvincibility, Time, false);
+	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Invincibility);
+}
+
+#pragma endregion
+void AEKPlayerController::TryInteractLoop()
+{
+	GetWorldTimerManager().SetTimer(InteractCheckHandle, this, &ThisClass::FindInteractableObjects, InteractCheckTime, true);
 }
 
 #pragma endregion
