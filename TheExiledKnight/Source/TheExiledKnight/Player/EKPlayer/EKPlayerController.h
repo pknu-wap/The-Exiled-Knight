@@ -84,15 +84,19 @@ private:
 
 	void Interact(const FInputActionValue& InputValue);
 
-	UFUNCTION()
 	void FindInteractableObjects();
 
 	void SkillStarted(const FInputActionValue& InputValue);
 
 	void LockOnStarted(const FInputActionValue& InputValue);
 
+
 public:
 	void OnPressed_GameMenu(const FInputActionValue& InputValue);
+	void OnPressed_Up(const FInputActionValue& InputValue);
+	void OnPressed_Down(const FInputActionValue& InputValue);
+	void OnPressed_Left(const FInputActionValue& InputValue);
+	void OnPressed_Right(const FInputActionValue& InputValue);
 
 #pragma endregion
 
@@ -142,6 +146,21 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input|Common")
 	UInputAction* IALockOn;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	UInputAction* IA_Up;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	UInputAction* IA_Down;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	UInputAction* IA_Left;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	UInputAction* IA_Right;
+
+	// Test Input
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Test")
+	UInputAction* IATest;
 #pragma endregion
 
 protected:
@@ -151,6 +170,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class AEKItem_Base* Item = nullptr;
 
+	class IUInteractableInterface* InteractableActor = nullptr;
+
+	UFUNCTION()
 	void DestroyItem();
 
 protected:
@@ -169,7 +191,6 @@ protected:
 
 public:
 	bool bIsEquipWeapon = false;
-	bool bCanItemInteract = false;
 
 #pragma region Timer
 
@@ -203,6 +224,7 @@ public:
 	void ResetAttackCombo();
 	void SetAttackEndTimer(float Time);
 
+public:
 	// About Battle State
 	void SetBattleStateEnd();
 	void BattleStateTimer();
@@ -227,7 +249,7 @@ protected:
 
 	FVector2D LookAxisVector;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInventoryComponent> InventoryComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))

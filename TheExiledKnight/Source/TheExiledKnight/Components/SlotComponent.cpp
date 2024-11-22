@@ -8,6 +8,7 @@
 #include "Subsystems/InventorySubsystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/EKPlayer/EKPlayer.h"
+#include "Player/EKPlayer/EKPlayerStatusComponent.h"
 
 // Sets default values for this component's properties
 USlotComponent::USlotComponent()
@@ -25,13 +26,13 @@ void USlotComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	for(int i = 0; i < 2; i++)
+	for(int i = 0; i < MaxWeaponSlot; i++)
 		WeaponSlots.Add(FItemStruct());
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < MaxRuneSlot; i++)
 		RuneSlots.Add(FItemStruct());
-	for (int i = 0; i < 4; i++)
-		UsableSlots.Add(FItemStruct());
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < MaxUseableSlot; i++)
+		UseableSlots.Add(FItemStruct());
+	for (int i = 0; i < MaxMagicSlot; i++)
 		MagicSlots.Add(FMagicStruct());
 }
 
@@ -63,7 +64,17 @@ void USlotComponent::EquipWeapon(const FItemStruct& InItemData)
 	if (WeaponSlots.IsValidIndex(slotIdx))
 	{
 		WeaponSlots[slotIdx] = InItemData;
-		player->EquipWeapon(*weaponInfo);
+
+		UEKPlayerStatusComponent* statusComp = player->GetComponentByClass<UEKPlayerStatusComponent>();
+		if (!statusComp) return;
+		statusComp->Recalculate_Status();
+
+		if (slotIdx == ActiveWeaponSlot)
+		{
+			player->EquipWeapon(*weaponInfo);
+			Delegate_QuickSlotUpdated.Broadcast(EItemCategory::Weapon, slotIdx);
+		}
+
 		Delegate_SlotUpdated.Broadcast(EItemCategory::Weapon, slotIdx);
 	}
 }
@@ -79,6 +90,12 @@ void USlotComponent::EquipRune(const FItemStruct& InItemData)
 		RuneSlots[slotIdx] = InItemData;
 		Delegate_SlotUpdated.Broadcast(EItemCategory::Rune, slotIdx);
 	}
+
+	AEKPlayer* player = Cast<AEKPlayer>(UGameplayStatics::GetPlayerCharacter(this, 0));
+	if (!player) return;
+	UEKPlayerStatusComponent* statusComp = player->GetComponentByClass<UEKPlayerStatusComponent>();
+	if (!statusComp) return;
+	statusComp->Recalculate_Status();
 }
 
 void USlotComponent::EquipUseableItem(const FItemStruct& InItemData)
@@ -87,15 +104,76 @@ void USlotComponent::EquipUseableItem(const FItemStruct& InItemData)
 	if (!equipWidget) return;
 
 	int slotIdx = equipWidget->GetEquipSelectSlotIdx();
-	if (UsableSlots.IsValidIndex(slotIdx))
+	if (UseableSlots.IsValidIndex(slotIdx))
 	{
-		UsableSlots[slotIdx] = InItemData;
+		UseableSlots[slotIdx] = InItemData;
 		Delegate_SlotUpdated.Broadcast(EItemCategory::UseableItem, slotIdx);
 	}
 }
 
 void USlotComponent::EquipMagic(const FMagicStruct& InMagicData)
 {
+}
+
+void USlotComponent::UpdateActiveSlot(EInputType InInputType)
+{
+	switch (InInputType)
+	{
+	case EInputType::Up:
+	{
+		ActiveMagicSlot++;
+		if (ActiveMagicSlot >= MaxMagicSlot)
+			ActiveMagicSlot = 0;
+
+		Delegate_QuickSlotUpdated.Broadcast(EItemCategory::Magic, ActiveMagicSlot);
+
+		break;
+	}
+	case EInputType::Down:
+	{
+		ActiveUseableSlot++;
+		if (ActiveUseableSlot >= MaxUseableSlot)
+			ActiveUseableSlot = 0;
+
+		Delegate_QuickSlotUpdated.Broadcast(EItemCategory::UseableItem, ActiveUseableSlot);
+
+		break;
+	}
+	case EInputType::Left: 
+	{
+		ActiveFragmentSlot++;
+		if (ActiveFragmentSlot >= MaxFragmentSlot)
+			ActiveFragmentSlot = 0;
+
+		Delegate_QuickSlotUpdated.Broadcast(EItemCategory::FragmentOfGod, ActiveFragmentSlot);
+
+		break;
+	}
+	case EInputType::Right: 
+	{
+		ActiveWeaponSlot++;
+		if (ActiveWeaponSlot >= MaxWeaponSlot)
+			ActiveWeaponSlot = 0;
+
+		UInventorySubsystem* inventorySystem =
+			GetWorld()->GetGameInstance()->GetSubsystem<UInventorySubsystem>();
+		if (!inventorySystem) return;
+
+		FWeaponStruct* weaponInfo = inventorySystem->GetWeaponInfo(WeaponSlots[ActiveWeaponSlot].ID);
+		if (!weaponInfo) return;
+
+		AEKPlayer* player = Cast<AEKPlayer>(UGameplayStatics::GetPlayerCharacter(this, 0));
+		if (!player) return;
+
+		player->EquipWeapon(*weaponInfo);
+
+		Delegate_QuickSlotUpdated.Broadcast(EItemCategory::Weapon, ActiveWeaponSlot);
+
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 UWidget_Equipment* USlotComponent::GetEquipmentWidget()
