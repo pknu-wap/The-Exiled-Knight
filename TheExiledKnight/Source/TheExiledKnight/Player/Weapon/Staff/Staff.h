@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "../EKPlayerWeapon.h"
+#include "Player/Data/EKPlayerMagic.h"
+#include "Player/GameInstance/EKPlayerGameInstance.h"
 #include "Staff.generated.h"
 
 UCLASS()
@@ -13,6 +15,7 @@ class THEEXILEDKNIGHT_API AStaff : public AEKPlayerWeapon
 	
 public:
 	AStaff();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -29,6 +32,8 @@ public:
 
 	virtual void PlaySkillStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController) override;
 
+	void ChangeMagic(int32 Row);
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	UStaticMeshComponent* Staff;
@@ -42,13 +47,19 @@ public:
 	virtual UCapsuleComponent* GetWeaponCapsuleComponent() override { return WeaponCapsuleComponent; }
 
 protected:
-	// Staff Animation Montage
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	UAnimMontage* StaffAttackAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	UAnimMontage* StaffAttackMagicAnim;
+	UAnimMontage* StaffCurrentMagicAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	UAnimMontage* StaffSkillAnim;
+	TArray<UAnimMontage*> StaffMagicAnims;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	UEKPlayerGameInstance* EKPlayerGameInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FEKPlayerMagic EKPlayerMagic;
 };
