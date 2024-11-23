@@ -60,11 +60,14 @@ protected:
 	bool bIsHitted = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Bool")
+	bool bIsHitDowned = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Bool")
 	bool bIsDefense = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Bool")
-	bool bIsDown = false;
+	bool bIsSitted = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Info|Bool")
-	bool bIsSitted = false;
+	bool bIsDie = false;
 };

@@ -104,6 +104,11 @@ void AEKPlayerController::PlayerTick(float DeltaTime)
 
 void AEKPlayerController::MoveTriggered(const FInputActionValue& InputValue)
 {
+	if (EKPlayer->CheckPlayerDie())
+	{
+		return;
+	}
+
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense))
 	{
@@ -186,6 +191,11 @@ void AEKPlayerController::JumpStarted(const FInputActionValue& InputValue)
 		return;
 	}
 
+	if (EKPlayer->CheckPlayerDie())
+	{
+		return;
+	}
+
 	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < JumpStamina)
 	{
 		return;
@@ -239,6 +249,11 @@ void AEKPlayerController::SprintAndDodgeTriggered(const FInputActionValue& Input
 		return;
 	}
 
+	if (EKPlayer->CheckPlayerDie())
+	{
+		return;
+	}
+
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Defense) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump))
@@ -279,6 +294,11 @@ void AEKPlayerController::SprintAndDodgeTriggered(const FInputActionValue& Input
 void AEKPlayerController::SprintAndDodgeRelease(const FInputActionValue& InputValue)
 {
 	if (!EKPlayer)
+	{
+		return;
+	}
+
+	if (EKPlayer->CheckPlayerDie())
 	{
 		return;
 	}
@@ -337,6 +357,11 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 		return;
 	}
 
+	if (EKPlayer->CheckPlayerDie())
+	{
+		return;
+	}
+
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Dodge))
@@ -354,6 +379,13 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 
 	if (!bIsEquipWeapon)
 	{
+		if (!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword) &&
+			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear) &&
+			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff))
+		{
+			return;
+		}
+
 		EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
 	}
 	else
@@ -372,6 +404,11 @@ void AEKPlayerController::SkillStarted(const FInputActionValue& InputValue)
 		return;
 	}
 
+	if (EKPlayer->CheckPlayerDie())
+	{
+		return;
+	}
+
 	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Jump) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Attack) ||
 		EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_Dodge))
@@ -389,6 +426,13 @@ void AEKPlayerController::SkillStarted(const FInputActionValue& InputValue)
 
 	if (!bIsEquipWeapon)
 	{
+		if (!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword) &&
+			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear) &&
+			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff))
+		{
+			return;
+		}
+
 		EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
 	}
 	else
@@ -411,6 +455,11 @@ void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputVal
 		return;
 	}
 
+	if (EKPlayer->CheckPlayerDie())
+	{
+		return;
+	}
+
 	// if Player sets lock on, Camera view changes
 	if (EKPlayer->GetLockOnTarget())
 	{
@@ -427,6 +476,7 @@ void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputVal
 	{
 		EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
 		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_SitDown);
+		EKPlayer->GetCurrentWeapon()->AttachToDefenseSocket(EKPlayer->GetCurrentWeapon(), EKPlayer);
 		InvincibilityTimer(0.2f);
 	}
 }
@@ -438,6 +488,7 @@ void AEKPlayerController::WeaponDefenseRelease(const FInputActionValue& InputVal
 		return;
 	}
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
+	EKPlayer->GetCurrentWeapon()->AttachWeaponToHandSocket(EKPlayer->GetCurrentWeapon(), EKPlayer);
 }
 
 #pragma endregion
@@ -451,12 +502,22 @@ void AEKPlayerController::WeaponChangeStarted(const FInputActionValue& InputValu
 		return;
 	}
 
+	if (EKPlayer->CheckPlayerDie())
+	{
+		return;
+	}
+
 	EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
 }
 
 void AEKPlayerController::UsePotionStarted(const FInputActionValue& InputValue)
 {
 	if (!EKPlayer || !UsePotionAnim)
+	{
+		return;
+	}
+
+	if (EKPlayer->CheckPlayerDie())
 	{
 		return;
 	}
@@ -482,6 +543,11 @@ void AEKPlayerController::UsePotionStarted(const FInputActionValue& InputValue)
 void AEKPlayerController::SitDownStarted(const FInputActionValue& InputValue)
 {
 	if (!EKPlayer)
+	{
+		return;
+	}
+
+	if (EKPlayer->CheckPlayerDie())
 	{
 		return;
 	}
@@ -614,6 +680,12 @@ void AEKPlayerController::OnPressed_Right(const FInputActionValue& InputValue)
 	if (SlotComponent)
 		SlotComponent->UpdateActiveSlot(EInputType::Right);
 }
+
+void AEKPlayerController::TryInteractLoop()
+{
+	GetWorldTimerManager().SetTimer(InteractCheckHandle, this, &ThisClass::FindInteractableObjects, InteractCheckTime, true);
+}
+
 #pragma endregion
 
 #pragma region Timer
@@ -686,12 +758,6 @@ void AEKPlayerController::InvincibilityTimer(float Time)
 {
 	GetWorldTimerManager().SetTimer(InvincibilityHandle, this, &ThisClass::SetInvincibility, Time, false);
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_Invincibility);
-}
-
-#pragma endregion
-void AEKPlayerController::TryInteractLoop()
-{
-	GetWorldTimerManager().SetTimer(InteractCheckHandle, this, &ThisClass::FindInteractableObjects, InteractCheckTime, true);
 }
 
 #pragma endregion

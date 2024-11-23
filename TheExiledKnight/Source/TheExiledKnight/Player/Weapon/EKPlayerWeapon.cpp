@@ -25,6 +25,21 @@ void AEKPlayerWeapon::Tick(float DeltaTime)
 
 }
 
+void AEKPlayerWeapon::PlayWeaponEquipAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
+{
+	if (EKPlayer && EKPlayerController)
+	{
+		if (!EKPlayerController->bIsEquipWeapon && WeaponEquipAnim)
+		{
+			EKPlayer->PlayAnimMontage(WeaponEquipAnim);
+		}
+		else if (EKPlayerController->bIsEquipWeapon && WeaponUnEquipAnim)
+		{
+			EKPlayer->PlayAnimMontage(WeaponUnEquipAnim);
+		}
+	}
+}
+
 #pragma region Attach to Socket
 
 void AEKPlayerWeapon::AttachWeaponToSpineSocket(AEKPlayerWeapon* Weapon, AEKPlayer* EKPlayer)

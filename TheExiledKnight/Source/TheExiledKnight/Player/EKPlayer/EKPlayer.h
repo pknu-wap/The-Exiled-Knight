@@ -49,6 +49,7 @@ protected:
 
 public:
 	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	bool CheckPlayerDie();
 
 	void HitDirection(AActor* Enemy);
 	float HitAngle = 0.f;
@@ -61,44 +62,53 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class AEKPlayerWeapon> GreatSwordTypeAClass;
+	TSubclassOf<class AGreatSword> GreatSwordTypeAClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class AEKPlayerWeapon> GreatSwordTypeBClass;
+	TSubclassOf<class AGreatSword> GreatSwordTypeBClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class AEKPlayerWeapon> SpearTypeAClass;
+	TSubclassOf<class ASpear> SpearTypeAClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class AEKPlayerWeapon> SpearTypeBClass;
+	TSubclassOf<class ASpear> SpearTypeBClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class AEKPlayerWeapon> StaffTypeAClass;
+	TSubclassOf<class AStaff> StaffTypeAClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class AEKPlayerWeapon> StaffTypeBClass;
+	TSubclassOf<class AStaff> StaffTypeBClass;
 
 #pragma endregion
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TObjectPtr<class AEKPlayerWeapon> CurrentWeapon;
+	class AEKPlayerWeapon* CurrentWeapon;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
-	TSubclassOf<class UAnimInstance> ABPEKPlayer;
+	class UAnimInstance* ABPEKPlayer;
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FGameplayTagContainer EKPlayerStateContainer;
 
+#pragma region Timer
+
 protected:
 	FTimerHandle HitTagHandle;
+	FTimerHandle StrongHitTagHandle;
 
 	const float NextHitTime = 0.5f;
+	const float NextStrongHitTime = 2.f;
 
 	void RemoveHitTag();
 	void HitTimer();
+
+	void RemoveStrongHitTag();
+	void StrongHitTimer();
+
+#pragma endregion
 
 #pragma region Lock On
 
