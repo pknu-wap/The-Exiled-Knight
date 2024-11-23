@@ -15,6 +15,8 @@ public:
 	// Sets default values for this actor's properties
 	AEKEnemyProjectileBase();
 
+	class UBoxComponent* GetCollisionComponent();
+
 	void SetHomingTarget(AActor* TargetActor);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
@@ -30,9 +32,6 @@ protected:
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	void HandleImpactEffects(const FVector& ImpactLocation);
-
-
-
 
 public:	
 	 
@@ -71,5 +70,5 @@ private:
 
 	float TotalDamage = 30.0f;
 public:
-	UBoxComponent* GetCollisionComponent();
+	
 };
