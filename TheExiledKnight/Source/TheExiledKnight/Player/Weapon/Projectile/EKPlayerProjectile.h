@@ -14,6 +14,9 @@
 #include "Player/EKPlayer/EKPlayerController.h"
 #include "Player/EKPlayer/EKPlayerStatusComponent.h"
 #include "Player/Weapon/EKPlayerWeapon.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 #include "EKPlayerProjectile.generated.h"
 
 UCLASS()
@@ -58,8 +61,9 @@ protected:
 	USoundBase* HitSound;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
-	float DamageValue;
+	// Edit Editer Notify Damege Coefficient Value
+	UPROPERTY(EditAnywhere, Category = "Damage")
+	float DamageValue = 1.0;
 
 protected:
 	AEKPlayer* EKPlayer;
