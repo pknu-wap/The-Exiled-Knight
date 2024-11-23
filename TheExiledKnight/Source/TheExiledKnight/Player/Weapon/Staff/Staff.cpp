@@ -27,6 +27,7 @@ void AStaff::BeginPlay()
 {
 	Super::BeginPlay();
 
+	EKPlayerGameInstance = Cast<UEKPlayerGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
 
 void AStaff::Tick(float DeltaTime)
@@ -35,31 +36,16 @@ void AStaff::Tick(float DeltaTime)
 
 }
 
-void AStaff::PlayWeaponEquipAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
-{
-	if (EKPlayer && EKPlayerController)
-	{
-		if (!EKPlayerController->bIsEquipWeapon && StaffEquipAnim)
-		{
-			EKPlayer->PlayAnimMontage(StaffEquipAnim);
-		}
-		else if (EKPlayerController->bIsEquipWeapon && StaffUnEquipAnim)
-		{
-			EKPlayer->PlayAnimMontage(StaffUnEquipAnim);
-		}
-	}
-}
-
 #pragma region Attack
 
 void AStaff::PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
 {
-	if (!EKPlayerController->bIsEquipWeapon || !StaffAttackAnim || !StaffAttackMagicAnim)
+	if (!EKPlayerController->bIsEquipWeapon || !StaffAttackAnim)
 	{
 		return;
 	}
 
-	if (EKPlayer->GetPlayerStatusComponent()->GetMp() < StaffAttackMp)
+	if (!StaffCurrentMagicAnim)
 	{
 		if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < StaffAttackStamina)
 		{
@@ -96,23 +82,22 @@ void AStaff::PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController
 	}
 	else
 	{
-		if (bIsFirstAttackMagic)
+		if (EKPlayer->GetPlayerStatusComponent()->GetMp() < EKPlayerMagic.NeedMP)
 		{
-			EKPlayer->StopAnimMontage(StaffAttackMagicAnim);
-			EKPlayer->PlayAnimMontage(StaffAttackMagicAnim, 1.0f, FName("Attack1"));
-			bIsFirstAttackMagic = false;
-			EKPlayerController->RemoveAttackTagTimer(1.f);
-		}
-		else
-		{
-			EKPlayer->StopAnimMontage(StaffAttackMagicAnim);
-			EKPlayer->PlayAnimMontage(StaffAttackMagicAnim, 1.0f, FName("Attack2"));
-			bIsFirstAttackMagic = true;
-			EKPlayerController->RemoveAttackTagTimer(0.69f);
+			EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+			return;
 		}
 
-		EKPlayer->GetPlayerStatusComponent()->SetMp(-StaffAttackMp);
+		EKPlayer->StopAnimMontage(StaffCurrentMagicAnim);
+		EKPlayer->PlayAnimMontage(StaffCurrentMagicAnim);
+		EKPlayerController->RemoveAttackTagTimer(StaffCurrentMagicAnim->GetPlayLength());
+		EKPlayer->GetPlayerStatusComponent()->SetMp(-EKPlayerMagic.NeedMP);
 	}
+}
+
+void AStaff::PlaySkillStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
+{
+	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
 }
 
 #pragma endregion
@@ -156,3 +141,18 @@ void AStaff::AttachWeaponToHandSocket(AEKPlayerWeapon* Weapon, AEKPlayer* EKPlay
 }
 
 #pragma endregion
+
+
+void AStaff::ChangeMagic(int32 Row)
+{
+	if (EKPlayerGameInstance)
+	{
+		FEKPlayerMagic* EKPlayerStatusTemp = EKPlayerGameInstance->GetEKPlayerMagicData(Row);
+		EKPlayerMagic = *EKPlayerStatusTemp;
+		StaffCurrentMagicAnim = StaffMagicAnims[EKPlayerMagic.MagicID];
+		if (!StaffMagicAnims[EKPlayerMagic.MagicID])
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Warning"));
+		}
+	}
+}
