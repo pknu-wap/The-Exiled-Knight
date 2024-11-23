@@ -78,6 +78,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = "true"))
 	float CurrentHealth;
+
 	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = "true"))
 	float MaxPoise;
 	
@@ -105,4 +106,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = Stat, Meta = (AllowPrivteAccess = "true"))
 	float MaxSpeed = 350.0f;
 
+	UPROPERTY(EditAnywhere, Category = Item, Meta = (AllowPrivteAccess = "true"))
+	int Astral = 0;
+
+	UPROPERTY(EditAnywhere, Category = "Item", Meta = (AllowPrivateAccess = "true"))
+	FName DropItem = NAME_None;
 };

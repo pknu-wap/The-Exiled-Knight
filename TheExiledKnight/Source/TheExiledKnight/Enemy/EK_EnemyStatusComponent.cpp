@@ -37,6 +37,8 @@ void UEK_EnemyStatusComponent::InitSetting()
 			SetSightRange(FoundData->SightRange);
 			SetHearingRange(FoundData->HearingRange);
 			SetIsDead(false);
+			Astral = FoundData->Astral;
+			DropItem = FoundData->DropItem;
 			bIsBoss = FoundData->bIsBoss;
 		}
 	}

@@ -41,7 +41,7 @@ public:
 	int Astral;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	int DropItem;
+	FName DropItem;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	bool bIsBoss;

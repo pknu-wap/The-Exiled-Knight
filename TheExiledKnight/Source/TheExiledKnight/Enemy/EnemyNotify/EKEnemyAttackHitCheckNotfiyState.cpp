@@ -6,6 +6,7 @@
 #include "Enemy/EK_EnemyStatusComponent.h"
 #include"Player/EKPlayer/EKPlayer.h"
 #include"Kismet/GameplayStatics.h"
+#include"Components/CapsuleComponent.h"
 #include"Player/EKPlayer//EKPlayerStatusComponent.h"
 
 UEKEnemyAttackHitCheckNotfiyState::UEKEnemyAttackHitCheckNotfiyState()
@@ -64,7 +65,7 @@ void UEKEnemyAttackHitCheckNotfiyState::NotifyTick(USkeletalMeshComponent* MeshC
 		FVector AttackRangeEnd = SocketLocation + SocketForward * AttackHalfHeight * 2;
 		if (bAttackHitCheck) {
 			DrawDebugCapsule(MeshComp->GetWorld(), (AttackRangeStart + AttackRangeEnd) * 0.5f, AttackHalfHeight, AttackRadius,
-				FRotationMatrix::MakeFromZ(AttackRangeEnd - AttackRangeStart).ToQuat(), FColor::Red, false, 0.2f);
+				FRotationMatrix::MakeFromZ(AttackRangeEnd - AttackRangeStart).ToQuat(), FColor::Green, false, 0.5f);
 		}
 		FCollisionQueryParams Params(NAME_None, false, Owner);
 
@@ -94,6 +95,7 @@ void UEKEnemyAttackHitCheckNotfiyState::NotifyTick(USkeletalMeshComponent* MeshC
 					{
 						UGameplayStatics::ApplyDamage(HitActor, Damage, Hit.GetActor()->GetInstigatorController(), Owner, DamageTypeClass);   
 						HitActors.Add(HitActor);
+					
 					}
 				}
 			}
