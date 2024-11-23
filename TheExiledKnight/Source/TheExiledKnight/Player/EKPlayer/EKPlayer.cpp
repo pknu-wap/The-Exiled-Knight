@@ -128,13 +128,13 @@ void AEKPlayer::BeginPlay()
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
 	}*/
 
-	/*if (StaffTypeBClass)
+	if (StaffTypeBClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		CurrentWeapon = GetWorld()->SpawnActor<AEKPlayerWeapon>(StaffTypeBClass, SpawnParams);
 		AttachWeaponToSpineSocket(CurrentWeapon);
 		EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff);
-	}*/
+	}
 
 #pragma endregion
 
@@ -190,8 +190,8 @@ float AEKPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 	// if player don't equip weapon, equip weapon automatically
 	if (!EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_BattleState))
 	{
-		if (!EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword) ||
-			!EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear) ||
+		if (!EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword) &&
+			!EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear) &&
 			!EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff))
 		{
 			goto NextFunc;

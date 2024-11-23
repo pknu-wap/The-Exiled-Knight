@@ -3,19 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EKPlayerLevel.generated.h"
+#include "EKPlayerMagic.generated.h"
 
 USTRUCT(BlueprintType)
-struct FEKPlayerLevel : public FTableRowBase
+struct FEKPlayerMagic : public FTableRowBase
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 PlayerLevel;
+	int32 MagicID;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 NeedAstral;
+	FName MagicName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 DefaultDamage;
+	int32 NeedMP;
 };
