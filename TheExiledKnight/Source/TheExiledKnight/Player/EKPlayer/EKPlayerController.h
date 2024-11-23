@@ -35,9 +35,6 @@ class UAnimMontage;
 #define SpearSkillMp 200
 
 #define StaffAttackStamina 80
-#define StaffAttackMp 50
-#define StaffSkill 80
-#define StaffSkillMp 300
 
 #pragma endregion
 

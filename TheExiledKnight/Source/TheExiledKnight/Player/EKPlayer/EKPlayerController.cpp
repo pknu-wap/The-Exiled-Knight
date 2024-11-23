@@ -379,8 +379,8 @@ void AEKPlayerController::WeaponAttackStarted(const FInputActionValue& InputValu
 
 	if (!bIsEquipWeapon)
 	{
-		if (!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword) ||
-			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear) ||
+		if (!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword) &&
+			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear) &&
 			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff))
 		{
 			return;
@@ -426,8 +426,8 @@ void AEKPlayerController::SkillStarted(const FInputActionValue& InputValue)
 
 	if (!bIsEquipWeapon)
 	{
-		if (!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword) ||
-			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear) ||
+		if (!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword) &&
+			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear) &&
 			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff))
 		{
 			return;

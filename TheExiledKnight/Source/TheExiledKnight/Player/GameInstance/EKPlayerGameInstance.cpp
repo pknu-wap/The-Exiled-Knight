@@ -10,10 +10,16 @@ UEKPlayerGameInstance::UEKPlayerGameInstance()
 		EKPlayerLevelData = EKPlayerLevelDataFinder.Object;
 	}
 
-	ConstructorHelpers::FObjectFinder<UDataTable> EKPlayerStatusDataFinder(TEXT("/Game/TheExiledKnight/Player/Data/EKPlayerStatusData"));
+	ConstructorHelpers::FObjectFinder<UDataTable> EKPlayerStatusDataFinder(TEXT("/Game/TheExiledKnight/Player/Data/EKPlayerStatus"));
 	if (EKPlayerStatusDataFinder.Succeeded())
 	{
 		EKPlayerStatusData = EKPlayerStatusDataFinder.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UDataTable> EKPlayerMagicDataFinder(TEXT("/Game/TheExiledKnight/Player/Data/EKPlayerMagic"));
+	if (EKPlayerMagicDataFinder.Succeeded())
+	{
+		EKPlayerMagicData = EKPlayerMagicDataFinder.Object;
 	}
 }
 
@@ -31,4 +37,9 @@ FEKPlayerLevel* UEKPlayerGameInstance::GetEKPlayerLevelData(int32 Level)
 FEKPlayerStatus* UEKPlayerGameInstance::GetEKPlayerStatusData(int32 Level)
 {
 	return EKPlayerStatusData->FindRow<FEKPlayerStatus>(*FString::FromInt(Level), TEXT(""));
+}
+
+FEKPlayerMagic* UEKPlayerGameInstance::GetEKPlayerMagicData(int32 Level)
+{
+	return EKPlayerMagicData->FindRow<FEKPlayerMagic>(*FString::FromInt(Level), TEXT(""));
 }
