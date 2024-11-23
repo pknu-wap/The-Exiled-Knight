@@ -40,6 +40,26 @@ void UWidget_GameMenu_Button::MenuButtonClicked()
 		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Setting, ESlateVisibility::SelfHitTestInvisible);
 		break;
 	}
+	case EGameMenuCategory::Map:
+	{
+		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Santuary, ESlateVisibility::Collapsed);
+		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Map, ESlateVisibility::SelfHitTestInvisible);
+		break;
+	}
+	case EGameMenuCategory::PT_Distribute:
+	{
+		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Santuary, ESlateVisibility::Collapsed);
+		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Potion, ESlateVisibility::SelfHitTestInvisible);
+		break;
+	}
+	case EGameMenuCategory::PT_Quantity:
+	{
+		break;
+	}
+	case EGameMenuCategory::PT_HealRate:
+	{
+		break;
+	}
 	case EGameMenuCategory::Quit:
 	{
 		UKismetSystemLibrary::QuitGame(GetWorld(), UGameplayStatics::GetPlayerController(GetWorld(), 0), EQuitPreference::Type::Quit, false);

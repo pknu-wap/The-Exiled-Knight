@@ -5,6 +5,7 @@
 #include "NiagaraComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Enemy/EK_EnemyBase.h"
+#include "Subsystems/SanctuarySubsystem.h"
 
 // Sets default values
 AEKSanctuary::AEKSanctuary()
@@ -25,6 +26,14 @@ AEKSanctuary::AEKSanctuary()
 void AEKSanctuary::BeginPlay()
 {
 	Super::BeginPlay();
+
+	USanctuarySubsystem* sanctuarySystem = GetGameInstance()->GetSubsystem<USanctuarySubsystem>();
+	if (!sanctuarySystem) return;
+	bActivated = sanctuarySystem->IsActivated(SanctuaryID);
+	if (bActivated)
+	{
+		ActivateSantuary();
+	}
 	
 	SaveMap();
 }
@@ -41,6 +50,11 @@ void AEKSanctuary::Interact()
 	if (!bActivated)
 	{
 		ActivateSantuary();
+
+		USanctuarySubsystem* sanctuarySystem = GetGameInstance()->GetSubsystem<USanctuarySubsystem>();
+		if (!sanctuarySystem) return;
+		sanctuarySystem->ActivateSanctuary(SanctuaryID);
+
 		bActivated = true;
 	}
 
@@ -127,6 +141,5 @@ void AEKSanctuary::LoadMap()
 			}
 		},
 		0.5, false);
-
 }
 

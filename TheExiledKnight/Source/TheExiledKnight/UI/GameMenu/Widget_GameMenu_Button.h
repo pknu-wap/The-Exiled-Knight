@@ -13,6 +13,10 @@ enum class EGameMenuCategory : uint8
 	Equipment		UMETA(DisplayName = "Equipment"),
 	Setting			UMETA(DisplayName = "Setting"),
 	Quit			UMETA(DisplayName = "Quit"),
+	Map				UMETA(DisplayName = "Map"),
+	PT_Distribute	UMETA(DisplayName = "Potion_Distribute"),
+	PT_Quantity		UMETA(DisplayName = "Potion_Upgrade_Quantity"),
+	PT_HealRate		UMETA(DisplayName = "Potion_Upgrade_HealRate"),
 };
 
 class UButton;
