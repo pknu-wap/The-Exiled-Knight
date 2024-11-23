@@ -1,0 +1,10 @@
+Name,MagicID,MagicName,NeedMP
+1,0,FireBall,100
+2,1,FireStorm,300
+3,2,ThunderBall,120
+4,3,Thundering,250
+5,4,Razer,150
+6,5,RedCircle,280
+7,6,HealCircle,200
+8,7,WaterBall,90
+9,8,BlackHole,350

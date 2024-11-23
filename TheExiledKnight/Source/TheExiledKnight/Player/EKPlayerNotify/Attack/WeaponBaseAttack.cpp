@@ -1,12 +1,6 @@
 // Made by Somalia Pirate
 
 #include "WeaponBaseAttack.h"
-#include "../../EKPlayer/EKPlayer.h"
-#include "../../EKPlayer/EKPlayerController.h"
-#include "../../EKPlayerGameplayTags.h"
-#include "../../Weapon/EKPlayerWeapon.h"
-#include "../../../Enemy/EK_EnemyBase.h"
-#include "../../Weapon/DamageType/EKPlayerDamageType.h"
 
 void UWeaponBaseAttack::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
@@ -23,7 +17,7 @@ void UWeaponBaseAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequen
 {
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime, EventReference);
 
-	if (!EKPlayer || bIsHitOnce)
+	if (!EKPlayer)
 	{
 		return;
 	}
@@ -42,8 +36,6 @@ void UWeaponBaseAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequen
 
 	TArray<FHitResult> HitResults;
 
-	// DrawDebugCapsule(GetWorld(), CapsuleLocation, CapsuleHalfHeight, CapsuleRadius, CapsuleRotation.Quaternion(), FColor::Red, false, 0.3f);
-
 	bool bIsHit = MeshComp->GetWorld()->SweepMultiByChannel(
 		HitResults,
 		CapsuleLocation,
@@ -60,18 +52,19 @@ void UWeaponBaseAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequen
 
 	for (auto& Hit : HitResults)
 	{
-		AActor* HitActor = Hit.GetActor();
-		if (HitActor)
+		AEK_EnemyBase* HitEnemy = Cast<AEK_EnemyBase>(Hit.GetActor());
+
+		if (IgnoreEnemy.Contains(HitEnemy))
 		{
-			TObjectPtr<AEK_EnemyBase> HitEnemy = Cast<AEK_EnemyBase>(HitActor);
-			TSubclassOf<UEKPlayerDamageType> PlayerDamageType = UEKPlayerDamageType::StaticClass();
-			if (HitEnemy)
-			{
-				EKPlayer->GetPlayerStatusComponent()->SetPlayerFinalDamage();
-				UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * EKPlayer->GetCurrentWeapon()->DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
-				bIsHitOnce = true;
-				GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Attack!!!"));
-			}
+			continue;
+		}
+
+		if (HitEnemy)
+		{
+			IgnoreEnemy.Emplace(HitEnemy);
+			TSubclassOf<UEKPlayerNormalDamageType> PlayerDamageType = UEKPlayerNormalDamageType::StaticClass();
+			UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
+			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Attack"));
 		}
 	}
 }
@@ -87,5 +80,6 @@ void UWeaponBaseAttack::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenc
 
 	EKPlayerController->SetAttackComboNext();
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
-	bIsHitOnce = false;
+
+	IgnoreEnemy.Empty();
 }
