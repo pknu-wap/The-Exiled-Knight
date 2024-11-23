@@ -54,4 +54,7 @@ private:
 
 	UPROPERTY()
 	float HearingRange = 3000.0f;
+
+	static constexpr float DefaultPeripheralVisionAngle = 60.0f;
+	static constexpr float DefaultSightMaxAge = 15.0f;
 };

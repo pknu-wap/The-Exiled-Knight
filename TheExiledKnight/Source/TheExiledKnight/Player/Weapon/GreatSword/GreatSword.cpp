@@ -35,20 +35,7 @@ void AGreatSword::Tick(float DeltaTime)
 
 }
 
-void AGreatSword::PlayWeaponEquipAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
-{
-	if (EKPlayer && EKPlayerController)
-	{
-		if (!EKPlayerController->bIsEquipWeapon && GreatSwordEquipAnim)
-		{
-			EKPlayer->PlayAnimMontage(GreatSwordEquipAnim);
-		}
-		else if (EKPlayerController->bIsEquipWeapon && GreatSwordUnEquipAnim)
-		{
-			EKPlayer->PlayAnimMontage(GreatSwordUnEquipAnim);
-		}
-	}
-}
+#pragma region Attack
 
 void AGreatSword::PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
 {
@@ -84,6 +71,29 @@ void AGreatSword::PlayAttackStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerContr
 
 	EKPlayerController->ConsumtionStaminaAndTimer(GreatSwordAttackStamina);
 }
+
+void AGreatSword::PlaySkillStartAnimMontage(AEKPlayer* EKPlayer, AEKPlayerController* EKPlayerController)
+{
+	if (!EKPlayerController->bIsEquipWeapon || !GreatSwordSkillAnim)
+	{
+		return;
+	}
+
+	if (EKPlayer->GetPlayerStatusComponent()->GetStamina() < GreatSwordSkill ||
+		EKPlayer->GetPlayerStatusComponent()->GetMp() < GreatSwordSkillMp)
+	{
+		EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Attack);
+		return;
+	}
+
+	EKPlayer->StopAnimMontage(GreatSwordSkillAnim);
+	EKPlayer->PlayAnimMontage(GreatSwordSkillAnim);
+	EKPlayer->GetPlayerStatusComponent()->SetMp(-GreatSwordSkillMp);
+	EKPlayerController->ConsumtionStaminaAndTimer(GreatSwordSkill);
+	EKPlayerController->RemoveAttackTagTimer(GreatSwordSkillAnim->GetPlayLength());
+}
+
+#pragma endregion
 
 void AGreatSword::AttachToDefenseSocket(AEKPlayerWeapon* Weapon, AEKPlayer* EKPlayer)
 {

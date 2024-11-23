@@ -4,6 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotifyState.h"
+#include "Player/EKPlayer/EKPlayer.h"
+#include "Player/EKPlayer/EKPlayerController.h"
+#include "Player/EKPlayerGameplayTags.h"
+#include "Player/Weapon/EKPlayerWeapon.h"
+#include "Player/Weapon/DamageType/EKPlayerDamageType.h"
+#include "Enemy/EK_EnemyBase.h"
 #include "WeaponBaseAttack.generated.h"
 
 UCLASS()
@@ -17,10 +23,15 @@ protected:
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
 
 protected:
-	class AEKPlayer* EKPlayer;
+	AEKPlayer* EKPlayer;
 
-	class AEKPlayerController* EKPlayerController;
+	AEKPlayerController* EKPlayerController;
 
 protected:
-	bool bIsHitOnce = false;
+	TArray<AEK_EnemyBase*> IgnoreEnemy;
+
+protected:
+	// Edit Editer Notify Damege Coefficient Value
+	UPROPERTY(EditAnywhere, Category = "Damage")
+	float DamageValue = 1.0;
 };
