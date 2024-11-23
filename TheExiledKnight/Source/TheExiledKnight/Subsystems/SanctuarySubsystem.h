@@ -21,6 +21,9 @@ struct FSanctuaryStruct : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FText MapName_Korean;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	ULevel* MapAsset;
 };
 
 UCLASS()

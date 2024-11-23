@@ -6,6 +6,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "Enemy/EK_EnemyBase.h"
 #include "Subsystems/SanctuarySubsystem.h"
+#include "UI/UISubsystem.h"
+#include "EKGameplayTags.h"
+#include "Blueprint/UserWidget.h"
 
 // Sets default values
 AEKSanctuary::AEKSanctuary()
@@ -59,6 +62,19 @@ void AEKSanctuary::Interact()
 	}
 
 	LoadMap();
+
+	UUISubsystem* UISystem = GetGameInstance()->GetSubsystem<UUISubsystem>();
+	if (!UISystem) return;
+	UISystem->SetLayerVisibility(FEKGameplayTags::Get().UI_Layer_GameMenu, ESlateVisibility::SelfHitTestInvisible);
+	UISystem->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Santuary, ESlateVisibility::SelfHitTestInvisible);
+	
+	APlayerController* pc = UGameplayStatics::GetPlayerController(this, 0);
+	if (pc)
+	{
+		FInputModeUIOnly UIInputMode;
+		pc->SetInputMode(UIInputMode);
+		pc->SetShowMouseCursor(true);
+	}
 }
 
 void AEKSanctuary::ActivateSantuary()

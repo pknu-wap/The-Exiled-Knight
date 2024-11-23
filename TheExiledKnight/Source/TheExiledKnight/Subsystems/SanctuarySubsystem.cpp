@@ -24,6 +24,9 @@ void USanctuarySubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("USanctuarySubsystem : Failed to get SanctuaryDB."));
 	}
+
+	ActivatedSanctuary.Add(1);
+	ActivatedSanctuary.Add(2);
 }
 
 void USanctuarySubsystem::ActivateSanctuary(int SanctuaryID)
