@@ -64,7 +64,7 @@ public:
 	int ActiveWeaponSlot = 0;
 	int MaxWeaponSlot = 2;
 
-	// Rune
+	// Rune	
 	TArray<FItemStruct> RuneSlots;
 	int MaxRuneSlot = 4;
 

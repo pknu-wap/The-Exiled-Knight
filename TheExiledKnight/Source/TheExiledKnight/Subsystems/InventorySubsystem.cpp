@@ -31,11 +31,19 @@ void UInventorySubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 	// Item Object Dictionary Initialize
 
-	ItemClassDB = LoadObject<UDataTable>(this, TEXT("/Script/Engine.DataTable'/Game/TheExiledKnight/Inventory/DataTables/ItemData/DT_ItemInfo.DT_ItemInfo'"));
+	ItemClassDB = LoadObject<UDataTable>(this, TEXT("/Script/Engine.DataTable'/Game/TheExiledKnight/Inventory/DataTables/ItemData/DT_ItemClass.DT_ItemClass'"));
 
 	if (ItemClassDB == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ItemClassDB is null"));
+		return;
+	}
+
+	LevelRateDB = LoadObject<UDataTable>(this, TEXT("/Script/Engine.DataTable'/Game/TheExiledKnight/Inventory/DataTables/DT_LevelRate.DT_LevelRate'"));
+
+	if (ItemClassDB == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("LevelRateDB is null"));
 		return;
 	}
 
@@ -136,6 +144,24 @@ const TSubclassOf<AEKItem_Base> UInventorySubsystem::GetItemClass(FName ItemName
 
 	return ItemObject->ItemObject;
 
+}
+
+FLevelRate* UInventorySubsystem::GetLevelRateInfo(int level)
+{
+	if (LevelRateDB == nullptr)
+		return nullptr;
+
+	FName fnameLevel = FName(*FString::FromInt(level));
+
+	FLevelRate* levelInfo = LevelRateDB->FindRow<FLevelRate>(fnameLevel, TEXT("GetItemRow"));
+
+	if (levelInfo == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GetItemInfo : ItemInfo == nullptr"));
+		return nullptr;
+	}
+
+	return levelInfo;
 }
 
 FWeaponStruct* UInventorySubsystem::GetWeaponInfo(uint8 ID)

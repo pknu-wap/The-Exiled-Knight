@@ -7,6 +7,7 @@
 #include "../../Weapon/EKPlayerWeapon.h"
 #include "../../../Enemy/EK_EnemyBase.h"
 #include "../../Weapon/DamageType/EKPlayerDamageType.h"
+#include "Subsystems/InventorySubsystem.h"
 
 void UWeaponBaseAttack::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
@@ -68,7 +69,33 @@ void UWeaponBaseAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequen
 			if (HitEnemy)
 			{
 				EKPlayer->GetPlayerStatusComponent()->SetPlayerFinalDamage();
-				UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * EKPlayer->GetCurrentWeapon()->DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
+				USlotComponent* slotcomponent = EKPlayerController->GetSlotComponent();
+				int activeWeaponSlot = slotcomponent->ActiveWeaponSlot;
+				uint8 weaponID = slotcomponent->WeaponSlots[activeWeaponSlot].ID;
+				FWeaponStruct* currentWeaponInfo = EKPlayerController->GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetWeaponInfo(weaponID);
+				FLevelRate* currentWeaponLevel = EKPlayerController->GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetLevelRateInfo(slotcomponent->WeaponSlots[activeWeaponSlot].ItemLevel);
+				
+				float damageRateByWeaponType = 0.0f;
+				
+				if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword))
+				{
+					damageRateByWeaponType = currentWeaponLevel->SwordRate;
+				}
+				else if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear))
+				{
+					damageRateByWeaponType = currentWeaponLevel->SpearRate;
+				}
+				else if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff))
+				{
+					damageRateByWeaponType = currentWeaponLevel->StaffRate;
+				}
+
+				float finalWeaponATK = currentWeaponInfo->AttackPow * damageRateByWeaponType;
+				float finalPlayerATK = EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage();
+				float finalApplyDamage = finalPlayerATK * finalWeaponATK;
+				UGameplayStatics::ApplyDamage(HitEnemy, finalApplyDamage, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
+				UE_LOG(LogTemp, Warning, TEXT("ApplyDamge : %.2f"), finalApplyDamage);
+				//UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * EKPlayer->GetCurrentWeapon()->DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
 				bIsHitOnce = true;
 				GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Attack!!!"));
 			}

@@ -108,6 +108,11 @@ void USlotComponent::EquipUseableItem(const FItemStruct& InItemData)
 	{
 		UseableSlots[slotIdx] = InItemData;
 		Delegate_SlotUpdated.Broadcast(EItemCategory::UseableItem, slotIdx);
+
+		if (slotIdx == ActiveUseableSlot)
+		{
+			Delegate_QuickSlotUpdated.Broadcast(EItemCategory::UseableItem, slotIdx);
+		}
 	}
 }
 

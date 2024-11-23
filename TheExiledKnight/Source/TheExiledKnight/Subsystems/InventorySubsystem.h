@@ -25,6 +25,8 @@ public:
 	AEKItem_Base* GetOrCreateItemInstance(FName ItemName);
 	const TSubclassOf<AEKItem_Base> GetItemClass(FName ItemName);
 
+	FLevelRate* GetLevelRateInfo(int level);
+
 	FWeaponStruct* GetWeaponInfo(uint8 ID);
 	FRune* GetRuneInfo(uint8 ID);
 
@@ -34,6 +36,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TObjectPtr<UDataTable> ItemClassDB;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	TObjectPtr<UDataTable> LevelRateDB;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	TMap<uint8, FItemStruct> ItemDictionary;

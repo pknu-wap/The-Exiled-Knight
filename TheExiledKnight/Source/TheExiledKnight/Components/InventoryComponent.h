@@ -49,7 +49,7 @@ public:
 	bool UseItem(FItemStruct ItemToUse, int Quantity = 1);
 
 	UFUNCTION(BlueprintCallable)
-	bool UpgradeItem(FItemStruct ItemToUpgrade);
+	bool UpgradeItem(FItemStruct ItemToUpgrade, int MaterialCount = 1);
 
 	UFUNCTION(BlueprintCallable)
 	bool DeleteItem(FItemStruct ItemToDelete, int Quantity = 0);
@@ -59,6 +59,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool AddNewSlot(TArray<FInventorySlot>& Slots);
+
+	UFUNCTION(BlueprintCallable)
+	bool UseAstral(int Cost);
+
+	UFUNCTION(BlueprintCallable)
+	bool AddAstral(int Amount);
 
 	UPROPERTY(BlueprintAssignable)
 	FAdd_Item_Delegate AddItemDelegate;
@@ -88,7 +94,7 @@ private:
 	int ExpansionSize = 5;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	int64 Astral = 0;
+	int Astral = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	int TotalPotionQuantity = 4;

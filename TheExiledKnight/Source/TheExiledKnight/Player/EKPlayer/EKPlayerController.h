@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/SlotComponent.h"
 #include "EKPlayerController.generated.h"
 
 struct FInputActionValue;
@@ -192,6 +193,7 @@ protected:
 public:
 	bool bIsEquipWeapon = false;
 
+	class USlotComponent* GetSlotComponent() { return SlotComponent; }
 #pragma region Timer
 
 public:

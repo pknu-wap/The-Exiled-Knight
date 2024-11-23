@@ -10,7 +10,6 @@
 #include "EKPlayerStatusComponent.h"
 #include "../EKPlayerGameplayTags.h"
 #include "Components/InventoryComponent.h"
-#include "Components/SlotComponent.h"
 #include "UI/UISubsystem.h"
 #include "Blueprint/UserWidget.h"
 #include "EKGameplayTags.h"
@@ -479,7 +478,9 @@ void AEKPlayerController::UsePotionStarted(const FInputActionValue& InputValue)
 	if (InventoryComponent != nullptr)
 	{
 		FItemStruct& ItemToUpgrade = InventoryComponent->GetContents(EItemCategory::Weapon)[0].Item;
-		InventoryComponent->UpgradeItem(ItemToUpgrade);
+
+		if (ItemToUpgrade.ID != 1)
+			InventoryComponent->UpgradeItem(ItemToUpgrade);
 	}
 
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_UseItem);
