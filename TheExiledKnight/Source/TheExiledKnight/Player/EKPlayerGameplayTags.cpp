@@ -17,7 +17,9 @@ namespace EKPlayerGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_State_UseItem, "EKPlayer.State.UseItem");
 	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_State_SitDown, "EKPlayer.State.SitDown");
 	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_State_Hit, "EKPlayer.State.Hit");
+	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_State_StrongHit, "EKPlayer.State.StrongHit");
 	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_State_Invincibility, "EKPlayer.State.Invincibility");
+	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_State_Die, "EKPlayer.State.Die");
 
 	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_Equip_GreatSword, "EKPlayer.Equip.GreatSword");
 	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_Equip_Spear, "EKPlayer.Equip.Spear");

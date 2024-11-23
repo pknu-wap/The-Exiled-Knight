@@ -1,9 +1,6 @@
 // Made by Somalia Pirate
 
-
 #include "EKPlayerStatusComponent.h"
-#include "EKPlayer.h"
-#include "EKPlayerController.h"
 #include "../Weapon/EKPlayerWeapon.h"
 #include "../EKPlayerGameplayTags.h"
 #include "Components/SlotComponent.h"
@@ -45,8 +42,18 @@ void UEKPlayerStatusComponent::BeginPlay()
 	{
 		EKPlayerController = Cast<AEKPlayerController>(EKPlayer->GetController());
 	}
-}
 
+	EKPlayerGameInstance = Cast<UEKPlayerGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+	if (EKPlayerGameInstance)
+	{
+		FEKPlayerLevel* EKPlayerLevelTemp = EKPlayerGameInstance->GetEKPlayerLevelData(Level);
+		EKPlayerLevel = *EKPlayerLevelTemp;
+
+		FEKPlayerStatus* EKPlayerStatusTemp = EKPlayerGameInstance->GetEKPlayerStatusData(Level);
+		EKPlayerStatus = *EKPlayerStatusTemp;
+	}
+}
 
 void UEKPlayerStatusComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {

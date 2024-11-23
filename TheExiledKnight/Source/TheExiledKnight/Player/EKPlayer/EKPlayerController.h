@@ -36,9 +36,6 @@ class UAnimMontage;
 #define SpearSkillMp 200
 
 #define StaffAttackStamina 80
-#define StaffAttackMp 50
-#define StaffSkill 80
-#define StaffSkillMp 300
 
 #pragma endregion
 
@@ -166,7 +163,7 @@ protected:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<class AEKPlayer> EKPlayer;
+	class AEKPlayer* EKPlayer;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class AEKItem_Base* Item = nullptr;
@@ -179,16 +176,16 @@ protected:
 protected:
 	// Common Animation Montage
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
-	TObjectPtr<UAnimMontage> UsePotionAnim;
+	UAnimMontage* UsePotionAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
-	TObjectPtr<UAnimMontage> DodgeAnim;
+	UAnimMontage* DodgeAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
-	TObjectPtr<UAnimMontage> BackStepAnim;
+	UAnimMontage* BackStepAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
-	TObjectPtr<UAnimMontage> DieAnim;
+	UAnimMontage* DieAnim;
 
 public:
 	bool bIsEquipWeapon = false;

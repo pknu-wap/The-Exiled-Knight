@@ -11,6 +11,18 @@ class THEEXILEDKNIGHT_API UEKPlayerDamageType : public UDamageType
 {
 	GENERATED_BODY()
 	
-public:
-	UEKPlayerDamageType();
+};
+
+UCLASS()
+class THEEXILEDKNIGHT_API UEKPlayerNormalDamageType : public UEKPlayerDamageType
+{
+	GENERATED_BODY()
+
+};
+
+UCLASS()
+class THEEXILEDKNIGHT_API UEKPlayerStrongDamageType : public UEKPlayerDamageType
+{
+	GENERATED_BODY()
+
 };
