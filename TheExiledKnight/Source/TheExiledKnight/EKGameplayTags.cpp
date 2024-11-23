@@ -73,6 +73,11 @@ void FEKGameplayTags::InitializeNativeGameplayTags()
 		FString("Potion")
 	);
 
+	GameplayTags.UI_Widget_GameMenu_Loading = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("UI.Widget.GameMenu.Loading"),
+		FString("Loading")
+	);
+
 	GameplayTags.UI_Widget_Game_Status = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("UI.Widget.Game.Status"),
 		FString("Status")
@@ -92,5 +97,7 @@ void FEKGameplayTags::InitializeNativeGameplayTags()
 		FName("UI.Widget.Menu.Setting"),
 		FString("Setting")
 	);
+
+
 
 }
