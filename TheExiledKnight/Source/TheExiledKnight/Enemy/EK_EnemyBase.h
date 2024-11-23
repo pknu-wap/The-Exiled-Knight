@@ -8,7 +8,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "EK_EnemyBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHitAnimationEnd);   
+ 
 
 UCLASS()
 class THEEXILEDKNIGHT_API AEK_EnemyBase : public ACharacter
@@ -21,23 +21,23 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInvestigator, AActor* DamageCauser)override;
 	
-	UPROPERTY(BlueprintAssignable, Category = "HitAnimation")
-	FOnHitAnimationEnd OnHurtAnimationEnd;  
-
 	void PlayHurtReactionAnimation(const FVector& DamageDirection);   
 	
 	void OnHurtAnimationEnded(UAnimMontage* Montage, bool bInterrupted);
 
+	void PlayDieReactionAnimation(); 
+
 	void OnDeathAnimationEnded(UAnimMontage* Montage, bool bInterrupted);
 
-	void PlayDieReactionAnimation();
+	void PlayStunReactionAnimation();
+
+	void OnStunAnimationEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	void HandleStrongAttack(float Damage);
+
+	void HandleNormalAttack(float Damage);
+
 	
-	float GetSightRadius();
-
-	float GetLostSightRadius();
-
-	float GetHearingRange();
-
 	UFUNCTION(BlueprintCallable)
 	AActor *GetAttackTarget();
 	
@@ -63,7 +63,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"));
 	UAnimMontage* DeathAnimMontage;
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"));
+	UAnimMontage* StunMontage;
 public:	
 	UPROPERTY(VisibleAnywhere, Category = Stat)
 	class UEK_EnemyStatusComponent* EnemyStat;
@@ -71,22 +72,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BehaviorTree");
 	UBehaviorTree* BehaviorTree;
 	
-	virtual TObjectPtr <UEK_EnemyStatusComponent> GetStatusComponent();
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
-	float SightRadius = 500.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
-	float LostSightRadius = 1000.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
-	float HearingRange = 2000.0f;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
 	TArray<AActor*> AttachedActors;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Perception", meta = (AllowPrivateAccess = "true"))
 	AActor* AttackTarget;
+	
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	bool bIsStunned = false;
+	
+	virtual TObjectPtr <UEK_EnemyStatusComponent> GetStatusComponent(); 
+
+	UAnimMontage* BeforeHurtMontage = nullptr;
 	
 	// Related to Sanctuary (Map)
 public:
