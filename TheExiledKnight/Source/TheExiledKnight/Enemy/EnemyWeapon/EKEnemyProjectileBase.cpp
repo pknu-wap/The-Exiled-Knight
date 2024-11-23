@@ -22,6 +22,7 @@ AEKEnemyProjectileBase::AEKEnemyProjectileBase()
 
 
     ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Projectile_Mesh"));
+    ProjectileMesh->SetCollisionProfileName(FName("NoCollision"));
     ProjectileMesh->SetupAttachment(RootComponent);
 
 
@@ -66,7 +67,6 @@ void AEKEnemyProjectileBase::BeginPlay()
     SetLifeSpan(10.0f);
 }
 
-// 충돌 처리 함수 - 개선된 버전
 void AEKEnemyProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
     if (!OtherActor || OtherActor == this)
@@ -74,19 +74,16 @@ void AEKEnemyProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* Ot
         return;
     }
 
-
     HandleImpactEffects(Hit.Location);
 
-
     AEKPlayer* HitPlayer = Cast<AEKPlayer>(OtherActor);
-    if (HitPlayer)
+    if (HitPlayer) 
     {
-        UGameplayStatics::ApplyDamage(HitPlayer, TotalDamage, Hit.GetActor()->GetInstigatorController(), Owner, DamageTypeClass);
+        UGameplayStatics::ApplyDamage(HitPlayer, TotalDamage, Hit.GetActor()->GetInstigatorController(), this, DamageTypeClass);
     }
-
+    
     Destroy();
 }
-
 
 void AEKEnemyProjectileBase::HandleImpactEffects(const FVector& ImpactLocation)
 {
@@ -102,8 +99,6 @@ void AEKEnemyProjectileBase::HandleImpactEffects(const FVector& ImpactLocation)
         UGameplayStatics::PlaySoundAtLocation(this, HitSound, ImpactLocation);
     }
 }
-
-
 
 void AEKEnemyProjectileBase::SetHomingTarget(AActor* TargetActor)
 {
