@@ -59,7 +59,7 @@ void AThunderingProjectile::Tick(float DeltaTime)
 			TSubclassOf<UEKPlayerStrongDamageType> PlayerDamageType = UEKPlayerStrongDamageType::StaticClass();
 			if (HitEnemy)
 			{
-				UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * DamageValue, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
+				UGameplayStatics::ApplyDamage(HitEnemy, EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage() * DamageValue, EKPlayerController, EKPlayer, PlayerDamageType);
 				if (HitParticle)
 				{
 					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, HitEnemy->GetActorLocation(), HitEnemy->GetActorRotation());
