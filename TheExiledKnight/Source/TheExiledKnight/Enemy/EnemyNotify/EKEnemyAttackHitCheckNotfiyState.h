@@ -60,6 +60,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Attack, Meta = (AllowPrivteAccess = true))
 	FName StartSocketName;
-	
+
 
 };
