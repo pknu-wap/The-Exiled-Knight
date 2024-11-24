@@ -3,24 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Item/EKItem_Base.h"
-#include "EKPotion_Base.generated.h"
+#include "Item/EKPotion_Base.h"
+#include "EKHealthPotion.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class THEEXILEDKNIGHT_API AEKPotion_Base : public AEKItem_Base
+class THEEXILEDKNIGHT_API AEKHealthPotion : public AEKPotion_Base
 {
 	GENERATED_BODY()
-	
+
 public:
-	AEKPotion_Base();
+	AEKHealthPotion();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
-	virtual void UseItem(UWorld* WorldContext, int level = 1) override;
+	virtual void UseItem(UWorld* WorldContext, int level) override;
 };

@@ -3,6 +3,7 @@
 
 #include "Item/EKItem_Base.h"
 #include "Subsystems/InventorySubsystem.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AEKItem_Base::AEKItem_Base()
@@ -18,9 +19,10 @@ void AEKItem_Base::BeginPlay()
 	
 	if(const FItemStruct* itemInfo = GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfo(ID))
 		ItemInfo = *(itemInfo);
+
 }
 
-void AEKItem_Base::UseItem()
+void AEKItem_Base::UseItem(UWorld* WorldContext, int level)
 {
 
 }

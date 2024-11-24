@@ -5,8 +5,6 @@
 
 FItemStruct::FItemStruct()
 {
-    UE_LOG(LogTemp, Warning, TEXT("FItemStruct() called"));
-
     ID = 1;
     Name = "Empty";
     Description = TEXT("");

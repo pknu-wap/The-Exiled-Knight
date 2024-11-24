@@ -62,7 +62,7 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IAJump, ETriggerEvent::Triggered, this, &ThisClass::JumpTriggered);
 
 		EnhancedInputComponent->BindAction(IAWeaponChange, ETriggerEvent::Triggered, this, &ThisClass::WeaponChangeStarted);
-		EnhancedInputComponent->BindAction(IAUsePotion, ETriggerEvent::Started, this, &ThisClass::UsePotionStarted);
+		EnhancedInputComponent->BindAction(IAUsePotion, ETriggerEvent::Started, this, &ThisClass::UseItem);
 
 		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Started, this, &ThisClass::SprintAndDodgeStarted);
 		EnhancedInputComponent->BindAction(IASprintAndDodge, ETriggerEvent::Triggered, this, &ThisClass::SprintAndDodgeTriggered);
@@ -509,9 +509,9 @@ void AEKPlayerController::WeaponChangeStarted(const FInputActionValue& InputValu
 	EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
 }
 
-void AEKPlayerController::UsePotionStarted(const FInputActionValue& InputValue)
+void AEKPlayerController::UseItem(const FInputActionValue& InputValue)
 {
-	if (!EKPlayer || !UsePotionAnim)
+	if (!EKPlayer)
 	{
 		return;
 	}
@@ -529,20 +529,28 @@ void AEKPlayerController::UsePotionStarted(const FInputActionValue& InputValue)
 		return;
 	}
 
-	EKPlayer->GetPlayerStatusComponent()->SetHp(10);
-	EKPlayer->GetPlayerStatusComponent()->SetMp(10);
-	EKPlayer->PlayAnimMontage(UsePotionAnim);
+	if (SlotComponent == nullptr || InventoryComponent == nullptr)
+		return;
+
+	uint8 useableItemID = SlotComponent->UseableSlots[SlotComponent->ActiveUseableSlot].ID;
+
+	if (useableItemID == EMPTY_ID)
+		return;
+
+	InventoryComponent->UseItem(*GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfo(useableItemID));
+
+	//EKPlayer->PlayAnimMontage(UsePotionAnim);
 
 	//if (InventoryComponent != nullptr)
 	//	InventoryComponent->UseItem(*GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfo(3));
 
-	if (InventoryComponent != nullptr)
-	{
-		FItemStruct& ItemToUpgrade = InventoryComponent->GetContents(EItemCategory::Weapon)[0].Item;
+	//if (InventoryComponent != nullptr)
+	//{
+	//	FItemStruct& ItemToUpgrade = InventoryComponent->GetContents(EItemCategory::Weapon)[0].Item;
 
-		if (ItemToUpgrade.ID != 1)
-			InventoryComponent->UpgradeItem(ItemToUpgrade);
-	}
+	//	if (ItemToUpgrade.ID != 1)
+	//		InventoryComponent->UpgradeItem(ItemToUpgrade);
+	//}
 
 	EKPlayer->EKPlayerStateContainer.AddTag(EKPlayerGameplayTags::EKPlayer_State_UseItem);
 }

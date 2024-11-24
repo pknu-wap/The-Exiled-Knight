@@ -71,7 +71,7 @@ private:
 	void SprintAndDodgeTriggered(const FInputActionValue& InputValue);
 	void SprintAndDodgeRelease(const FInputActionValue& InputValue);
 
-	void UsePotionStarted(const FInputActionValue& InputValue);
+	void UseItem(const FInputActionValue& InputValue);
 
 	void WeaponAttackStarted(const FInputActionValue& InputValue);
 
@@ -175,9 +175,6 @@ protected:
 
 protected:
 	// Common Animation Montage
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
-	UAnimMontage* UsePotionAnim;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
 	UAnimMontage* DodgeAnim;
 

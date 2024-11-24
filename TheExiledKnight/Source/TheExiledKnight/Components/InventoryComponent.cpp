@@ -7,7 +7,6 @@
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
 {
-	UE_LOG(LogTemp, Warning, TEXT("UInventoryComponent() called"));
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
@@ -91,13 +90,13 @@ int UInventoryComponent::GetIndexToAdd(uint8 ID, EItemCategory Category)
 
 	for (int index = 0; index < slots.Num(); index++)
 	{
-		if (slots[index].Item.ID == 1)
+		if (slots[index].Item.ID == EMPTY_ID)
 			return index;
 		else if (slots[index].Item.ID > ID)
 			return index;
 	}
 
-	return -1;
+	return INVALID_INDEX;
 }
 
 int UInventoryComponent::GetItemIndex(uint8 ID, EItemCategory Category)
@@ -110,7 +109,7 @@ int UInventoryComponent::GetItemIndex(uint8 ID, EItemCategory Category)
 			return index;
 	}
 
-	return -1;
+	return INVALID_INDEX;
 }
 
 int UInventoryComponent::GetEmptySlotIndex(EItemCategory Category)
@@ -119,11 +118,11 @@ int UInventoryComponent::GetEmptySlotIndex(EItemCategory Category)
 
 	for (int index = 0; index < slots.Num(); index++)
 	{
-		if (slots[index].Item.ID == 1)
+		if (slots[index].Item.ID == EMPTY_ID)
 			return index;
 	}
 
-	return -1;
+	return INVALID_INDEX;
 }
 
 void UInventoryComponent::InitializeInventory()
@@ -169,7 +168,7 @@ bool UInventoryComponent::AddItem(FItemStruct ItemToAdd, int Quantity)
 
 	int indexToAdd = GetItemIndex(ItemToAdd.ID, ItemToAdd.ItemCategory);
 
-	if (indexToAdd != -1) // if there are duplicate items
+	if (indexToAdd != INVALID_INDEX) // if there are duplicate items
 	{
 		if (slots[indexToAdd].Quantity + Quantity > slots[indexToAdd].Item.MaxStackSize)
 		{
@@ -186,23 +185,23 @@ bool UInventoryComponent::AddItem(FItemStruct ItemToAdd, int Quantity)
 		return true;
 	}
 
-	indexToAdd = GetEmptySlotIndex(ItemToAdd.ItemCategory);
+	indexToAdd = GetIndexToAdd(ItemToAdd.ID, ItemToAdd.ItemCategory);
+	//indexToAdd = GetEmptySlotIndex(ItemToAdd.ItemCategory);
 
-	if (indexToAdd == -1) // if inventory is full
+	if (indexToAdd == INVALID_INDEX) // if inventory is full
 	{
 		// extand inventory
 		UE_LOG(LogTemp, Warning, TEXT("Expand Inventory Slot"));
 
 		AddNewSlot(slots);
+		indexToAdd = GetIndexToAdd(ItemToAdd.ID, ItemToAdd.ItemCategory);
 	}
 
 	// if empty slot exists
 	// Sort
-	indexToAdd = GetIndexToAdd(ItemToAdd.ID, ItemToAdd.ItemCategory);
-
-	if (indexToAdd == -1)
+	if (indexToAdd == INVALID_INDEX)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("GetIndexToAdd returns -1"))
+		UE_LOG(LogTemp, Warning, TEXT("GetIndexToAdd returns INVALID_INDEX"))
 		return false;
 	}
 
@@ -212,9 +211,6 @@ bool UInventoryComponent::AddItem(FItemStruct ItemToAdd, int Quantity)
 
 	for (int index = indexToAdd + 1; index < slots.Num(); index++)
 	{
-		if (slots[index].Item.ID == 1)
-			break;
-
 		tmp1 = slots[index];
 		slots[index] = tmp2;
 		tmp2 = tmp1;
@@ -236,7 +232,7 @@ bool UInventoryComponent::UseItem(FItemStruct ItemToUse, int Quantity)
 
 	int index = GetItemIndex(ItemToUse.ID, ItemToUse.ItemCategory);
 
-	if (index == -1)
+	if (index == INVALID_INDEX)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("You don't have that item."));
 		return false;
@@ -245,58 +241,51 @@ bool UInventoryComponent::UseItem(FItemStruct ItemToUse, int Quantity)
 	if (slots[index].Quantity < Quantity)
 		return false;
 	
-	AEKItem_Base* ItemInstance = GetWorld()->GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetOrCreateItemInstance(ItemToUse.Name);
+	AEKItem_Base* ItemInstance = GetWorld()->GetGameInstance()->GetSubsystem<UInventorySubsystem>()->CreateItemInstance(ItemToUse.ID);
 	if (ItemInstance == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("UseItem : ItemInstance is nullptr"));
 		return false;
 	}
 
-	ItemInstance->UseItem();
+	ItemInstance->UseItem(GetWorld());
 
 	DeleteItem(ItemToUse, Quantity);
-
-	//Slots[index].Item;
-	//Slots[index].Quantity -= Quantity;
-
-	//if (Slots[index].Quantity == 0)
-	//	DeleteItem(ItemToUse);
 
 	return true;
 }
 
-bool UInventoryComponent::UpgradeItem(FItemStruct ItemToUpgrade, int MaterialCount)
+bool UInventoryComponent::UpgradeItem(FItemStruct ItemToUpgrade, FItemStruct Upgrade, int MaterialCount)
 {
-	if (ItemToUpgrade.ItemLevel > 10)
+	if (ItemToUpgrade.ItemLevel > MAX_ITEM_LEVEL)
 		return false;
 
 	TArray<FInventorySlot>& slots = GetContents(ItemToUpgrade.ItemCategory);
 
 	int index = GetItemIndex(ItemToUpgrade.ID, ItemToUpgrade.ItemCategory);
 
-	if (index == -1)
+	if (index == INVALID_INDEX)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("You don't have that item."));
 		return false;
 	}
 
-	// Find Upgrades 
-	FName upgradeName;
+	FItemStruct upgrade;
 
-	switch (ItemToUpgrade.ItemCategory)
+	if (Upgrade.ID == EMPTY_ID)
 	{
-	case EItemCategory::Weapon :
-		upgradeName = FName(*FString::Printf(TEXT("Upgrade%d"), ItemToUpgrade.ItemLevel));
-		break;
-	default :
-		upgradeName = FName(TEXT("HolyWater"));
+		FName upgradeName;
+		upgradeName = FName(*FString::Printf(TEXT(UPGRADE"% d"), ItemToUpgrade.ItemLevel));
+
+		upgrade = *GetWorld()->GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfoDB()->FindRow<FItemStruct>(upgradeName, TEXT("GetItemRow"));
 	}
+	else
+		upgrade = Upgrade;
 
-	FItemStruct upgrade = *GetWorld()->GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetItemInfoDB()->FindRow<FItemStruct>(upgradeName, TEXT("GetItemRow"));
-
+	// Find Upgrades 
 	int upgradeIndex = GetItemIndex(upgrade.ID, upgrade.ItemCategory);
 
-	if (upgradeIndex == -1)
+	if (upgradeIndex == INVALID_INDEX)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("You don't have upgrade."));
 		return false;
@@ -308,8 +297,19 @@ bool UInventoryComponent::UpgradeItem(FItemStruct ItemToUpgrade, int MaterialCou
 		return false;
 	}
 
-	DeleteItem(upgrade, MaterialCount);
-	slots[index].Item.ItemLevel++;
+	if (DeleteItem(upgrade, MaterialCount))
+		return false;
+
+	if (upgrade.ID == OLIVELEAF_ID)
+	{
+		TotalPotionQuantity++;
+		MaxHealthPotionQuantity++;
+
+		// Potion Count Reset
+		DividePotion(MaxHealthPotionQuantity, MaxManaPotionQuantity);
+	}
+	else
+		slots[index].Item.ItemLevel++;
 
 	UE_LOG(LogTemp, Warning, TEXT("Upgrade Complete."));
 
@@ -322,7 +322,7 @@ bool UInventoryComponent::DeleteItem(FItemStruct ItemToDelete, int Quantity)
 
 	int index = GetItemIndex(ItemToDelete.ID, ItemToDelete.ItemCategory);
 
-	if (index == -1)
+	if (index == INVALID_INDEX)
 		return false;
 
 	slots[index].Quantity -= Quantity;
@@ -377,7 +377,6 @@ bool UInventoryComponent::UpdateSlots(TArray<FInventorySlot>& Slots)
 
 bool UInventoryComponent::AddNewSlot(TArray<FInventorySlot>& Slots)
 {
-	UE_LOG(LogTemp, Warning, TEXT("AddNewSlot"))
 	Slots.AddDefaulted(ExpansionSize);
 
 	return true;
@@ -402,6 +401,36 @@ bool UInventoryComponent::AddAstral(int Amount)
 	}
 
 	Astral += Amount;
+
+	return true;
+}
+
+bool UInventoryComponent::RestorePotionQuantity()
+{
+	int healthPotionIndex = GetItemIndex(HEALTH_POTION_ID, EItemCategory::UseableItem);
+	int manaPotionIndex = GetItemIndex(HEALTH_POTION_ID, EItemCategory::UseableItem);
+	
+	if (healthPotionIndex == INVALID_INDEX || manaPotionIndex == INVALID_INDEX)
+		return false;
+
+	UseableItem[healthPotionIndex].Quantity = MaxHealthPotionQuantity;
+	UseableItem[manaPotionIndex].Quantity = MaxManaPotionQuantity;
+
+	return true;
+}
+
+bool UInventoryComponent::DividePotion(int HealthPotionQuantity, int ManaPotionQuantity)
+{
+	if (HealthPotionQuantity < 0 || ManaPotionQuantity < 0)
+		return false;
+
+	if (TotalPotionQuantity != HealthPotionQuantity + ManaPotionQuantity)
+		return false;
+
+	MaxHealthPotionQuantity = HealthPotionQuantity;
+	MaxManaPotionQuantity = ManaPotionQuantity;
+
+	RestorePotionQuantity();
 
 	return true;
 }

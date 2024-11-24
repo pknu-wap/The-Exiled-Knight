@@ -3,19 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Item/EKItem_Base.h"
-#include "EKPotion_Base.generated.h"
+#include "Item/EKPotion_Base.h"
+#include "EKManaPotion.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class THEEXILEDKNIGHT_API AEKPotion_Base : public AEKItem_Base
+class THEEXILEDKNIGHT_API AEKManaPotion : public AEKPotion_Base
 {
 	GENERATED_BODY()
-	
+
 public:
-	AEKPotion_Base();
+	AEKManaPotion();
 
 protected:
 	// Called when the game starts or when spawned

@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Structs/ItemStruct.h"
 #include "EKEnums.h"
+#include "Player/EKPlayer/EKPlayerController.h"
+#include "Player/EKPlayer/EKPlayer.h"
 #include "EKItem_Base.generated.h"
 
 UCLASS()
@@ -30,7 +32,7 @@ public:
 	const uint8 GetItemQuantity() { return Quantity; }
 
 	UFUNCTION(BlueprintCallable)
-	virtual void UseItem();
+	virtual void UseItem(UWorld* WorldContext, int level = 1);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
@@ -41,4 +43,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	uint8 Quantity = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAnimMontage* ItemUseAnimMontage = nullptr;
 };

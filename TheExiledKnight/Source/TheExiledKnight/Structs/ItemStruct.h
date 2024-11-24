@@ -6,6 +6,9 @@
 #include "EKEnums.h"
 #include "ItemStruct.generated.h"
 
+#define INVALID_INDEX -1
+#define EMPTY_ID 1
+
 USTRUCT(BlueprintType)
 struct FItemStruct : public FTableRowBase
 {
@@ -105,14 +108,14 @@ struct FLevelRate : public FTableRowBase
     FLevelRate();
     FLevelRate(const FLevelRate& Other)
     {
-        PotionRate = Other.PotionRate;
+        PotionHealRate = Other.PotionHealRate;
         SwordRate = Other.SwordRate;
         StaffRate = Other.StaffRate;
         SpearRate = Other.SpearRate;
     };
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    float PotionRate = 0.0f;
+    float PotionHealRate = 0.0f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float SwordRate = 0.0f;

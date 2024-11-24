@@ -10,6 +10,12 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAdd_Item_Delegate);
 
+#define UPGRADE "Upgrade"
+#define HEALTH_POTION_ID 2
+#define MANA_POTION_ID 3
+#define OLIVELEAF_ID 5
+#define MAX_ITEM_LEVEL 10
+
 UCLASS( ClassGroup=(Custom), Blueprintable, meta=(BlueprintSpawnableComponent) )
 class THEEXILEDKNIGHT_API UInventoryComponent : public UActorComponent
 {
@@ -34,10 +40,6 @@ public:
 	const TArray<FInventorySlot> GetContents(EUpgradeItemType Category);
 	const TArray<FInventorySlot>& GetConstContents(EItemCategory Category);
 
-	int GetIndexToAdd(uint8 ID);
-	int GetDupSlotIndex(uint8 ID, int MaxStack);
-	int GetEmptySlotIndex();
-
 	int GetIndexToAdd(uint8 ID, EItemCategory Category);
 	int GetItemIndex(uint8 ID, EItemCategory Category);
 	int GetEmptySlotIndex(EItemCategory Category);
@@ -49,7 +51,7 @@ public:
 	bool UseItem(FItemStruct ItemToUse, int Quantity = 1);
 
 	UFUNCTION(BlueprintCallable)
-	bool UpgradeItem(FItemStruct ItemToUpgrade, int MaterialCount = 1);
+	bool UpgradeItem(FItemStruct ItemToUpgrade, FItemStruct Upgrade = FItemStruct(), int MaterialCount = 1);
 
 	UFUNCTION(BlueprintCallable)
 	bool DeleteItem(FItemStruct ItemToDelete, int Quantity = 0);
@@ -65,6 +67,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool AddAstral(int Amount);
+
+	UFUNCTION(BlueprintCallable)
+	bool RestorePotionQuantity();
+
+	UFUNCTION(BlueprintCallable)
+	bool DividePotion(int HealthPotionQuantity, int ManaPotionQuantity);
 
 	UPROPERTY(BlueprintAssignable)
 	FAdd_Item_Delegate AddItemDelegate;
@@ -98,4 +106,10 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
 	int TotalPotionQuantity = 4;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	int MaxHealthPotionQuantity = 3;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
+	int MaxManaPotionQuantity = 1;
 };
