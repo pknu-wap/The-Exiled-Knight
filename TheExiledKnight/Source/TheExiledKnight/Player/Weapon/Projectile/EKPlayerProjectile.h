@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/BoxComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Enemy/EK_EnemyBase.h"
 #include "Player/Weapon/DamageType/EKPlayerDamageType.h"

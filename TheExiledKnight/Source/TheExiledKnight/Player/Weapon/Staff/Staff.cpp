@@ -33,7 +33,6 @@ void AStaff::BeginPlay()
 void AStaff::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 #pragma region Attack

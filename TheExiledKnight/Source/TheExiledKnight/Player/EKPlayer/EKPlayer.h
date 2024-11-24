@@ -122,6 +122,7 @@ public:
 	void SetLockOnTarget(AActor* Target);
 	AActor* FindNearTarget();
 	FRotator GetLockOnTargetRotation() { return LockOnTargetRotation; }
+	class UBoxComponent* GetTargetFindLockOnBox() { return TargetFindLockOnBox; }
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "LockOn")
