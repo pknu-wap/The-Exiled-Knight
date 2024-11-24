@@ -7,6 +7,7 @@
 #include "Player/Data/EKPlayerLevel.h"
 #include "Player/Data/EKPlayerStatus.h"
 #include "Player/Data/EKPlayerMagic.h"
+#include "Player/Data/EKPlayerDomainExpansion.h"
 #include "Engine/DataTable.h"
 #include "EKPlayerGameInstance.generated.h"
 
@@ -25,6 +26,7 @@ public:
 	FEKPlayerLevel* GetEKPlayerLevelData(int32 Level);
 	FEKPlayerStatus* GetEKPlayerStatusData(int32 Level);
 	FEKPlayerMagic* GetEKPlayerMagicData(int32 Level);
+	FEKPlayerDomainExpansion* GetEKPlayerDomainExpansion(int32 Level);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -35,4 +37,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UDataTable* EKPlayerMagicData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UDataTable* EKPlayerDomainExpansionData;
 };

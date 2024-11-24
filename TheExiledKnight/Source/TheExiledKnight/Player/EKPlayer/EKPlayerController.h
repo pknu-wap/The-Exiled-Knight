@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Player/GameInstance/EKPlayerGameInstance.h"
 #include "EKPlayerController.generated.h"
 
 struct FInputActionValue;
@@ -162,8 +163,9 @@ protected:
 #pragma endregion
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class AEKPlayer* EKPlayer;
+
+	class UEKPlayerGameInstance* EKPlayerGameInstance;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class AEKItem_Base* Item = nullptr;
@@ -173,11 +175,23 @@ protected:
 	UFUNCTION()
 	void DestroyItem();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DomainExpansion")
-	TSubclassOf<class ADomainExpansionBase> DomainExpansion;
+#pragma region Domain Expansion
 
 protected:
-	// Common Animation Montage
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DomainExpansion")
+	TArray<TSubclassOf<class ADomainExpansionBase>> DomainExpansions;
+
+	TSubclassOf<class ADomainExpansionBase> CurrentDomainExpansion;
+
+	FEKPlayerDomainExpansion EKPlayerDomainExpansionData;
+
+	void ChangeDomainExpansion(int32 Row);
+
+#pragma endregion
+
+#pragma region Animation
+
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
 	UAnimMontage* UsePotionAnim;
 
@@ -186,6 +200,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
 	UAnimMontage* BackStepAnim;
+
+#pragma endregion
 
 public:
 	bool bIsEquipWeapon = false;

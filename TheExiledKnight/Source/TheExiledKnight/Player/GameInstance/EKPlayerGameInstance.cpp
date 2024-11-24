@@ -21,6 +21,12 @@ UEKPlayerGameInstance::UEKPlayerGameInstance()
 	{
 		EKPlayerMagicData = EKPlayerMagicDataFinder.Object;
 	}
+
+	ConstructorHelpers::FObjectFinder<UDataTable> EKPlayerDomainExpansionDataFinder(TEXT("/Game/TheExiledKnight/Player/Data/EKPlayerDomainExpansion"));
+	if (EKPlayerDomainExpansionDataFinder.Succeeded())
+	{
+		EKPlayerDomainExpansionData = EKPlayerDomainExpansionDataFinder.Object;
+	}
 }
 
 void UEKPlayerGameInstance::Init()
@@ -42,4 +48,9 @@ FEKPlayerStatus* UEKPlayerGameInstance::GetEKPlayerStatusData(int32 Level)
 FEKPlayerMagic* UEKPlayerGameInstance::GetEKPlayerMagicData(int32 Level)
 {
 	return EKPlayerMagicData->FindRow<FEKPlayerMagic>(*FString::FromInt(Level), TEXT(""));
+}
+
+FEKPlayerDomainExpansion* UEKPlayerGameInstance::GetEKPlayerDomainExpansion(int32 Level)
+{
+	return EKPlayerDomainExpansionData->FindRow<FEKPlayerDomainExpansion>(*FString::FromInt(Level), TEXT(""));
 }

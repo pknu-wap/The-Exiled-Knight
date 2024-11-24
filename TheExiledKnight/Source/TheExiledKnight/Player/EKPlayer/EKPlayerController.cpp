@@ -447,16 +447,6 @@ void AEKPlayerController::SkillStarted(const FInputActionValue& InputValue)
 	}
 }
 
-void AEKPlayerController::DomainExpansionStarted(const FInputActionValue& InputValue)
-{
-	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_DomainExpansion))
-	{
-		return;
-	}
-
-	EKPlayer->GetWorld()->SpawnActor<ADomainExpansionBase>(DomainExpansion, EKPlayer->GetActorLocation(), EKPlayer->GetActorRotation());
-}
-
 #pragma endregion
 
 #pragma region Defense
@@ -483,6 +473,13 @@ void AEKPlayerController::WeaponDefenseStarted(const FInputActionValue& InputVal
 
 	if (!bIsEquipWeapon)
 	{
+		if (!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword) &&
+			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear) &&
+			!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff))
+		{
+			return;
+		}
+
 		EKPlayer->GetCurrentWeapon()->PlayWeaponEquipAnimMontage(EKPlayer, this);
 	}
 	else
@@ -500,8 +497,45 @@ void AEKPlayerController::WeaponDefenseRelease(const FInputActionValue& InputVal
 	{
 		return;
 	}
+
+	if (!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_GreatSword) &&
+		!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Spear) &&
+		!EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_Equip_Staff))
+	{
+		return;
+	}
+
 	EKPlayer->EKPlayerStateContainer.RemoveTag(EKPlayerGameplayTags::EKPlayer_State_Defense);
 	EKPlayer->GetCurrentWeapon()->AttachWeaponToHandSocket(EKPlayer->GetCurrentWeapon(), EKPlayer);
+}
+
+#pragma endregion
+
+#pragma region Domain Expansion
+
+void AEKPlayerController::DomainExpansionStarted(const FInputActionValue& InputValue)
+{
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_DomainExpansion))
+	{
+		return;
+	}
+
+	if (!CurrentDomainExpansion)
+	{
+		return;
+	}
+
+	EKPlayer->GetWorld()->SpawnActor<ADomainExpansionBase>(CurrentDomainExpansion, EKPlayer->GetActorLocation(), EKPlayer->GetActorRotation());
+}
+
+void AEKPlayerController::ChangeDomainExpansion(int32 Row)
+{
+	if (EKPlayerGameInstance)
+	{
+		FEKPlayerDomainExpansion* EKPlayerDomainExpansionDataTemp = EKPlayerGameInstance->GetEKPlayerDomainExpansion(Row);
+		EKPlayerDomainExpansionData = *EKPlayerDomainExpansionDataTemp;
+		CurrentDomainExpansion = DomainExpansions[EKPlayerDomainExpansionData.DomainExpansionID];
+	}
 }
 
 #pragma endregion

@@ -5,6 +5,9 @@
 ADomainExpansionBase::ADomainExpansionBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
+	RootComponent = SphereComponent;
 }
 
 void ADomainExpansionBase::BeginPlay()
@@ -35,6 +38,7 @@ void ADomainExpansionBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	SpawnedDomainExpansion->SetWorldScale3D(FVector(DomainSize, DomainSize, DomainSize));
+	SphereComponent->SetWorldScale3D(FVector(DomainSize, DomainSize, DomainSize));
 }
 
 void ADomainExpansionBase::DomainExpansion()
@@ -44,7 +48,7 @@ void ADomainExpansionBase::DomainExpansion()
 		return;
 	}
 
-	DomainSize += 0.01f;
+	DomainSize += 0.04f;
 }
 
 void ADomainExpansionBase::DomainExpansionTimer()

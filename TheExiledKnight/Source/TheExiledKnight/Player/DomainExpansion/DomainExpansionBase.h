@@ -14,6 +14,7 @@
 #include "Player/Weapon/DamageType/EKPlayerDamageType.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/EKPlayerGameplayTags.h"
+#include "Components/SphereComponent.h"
 #include "DomainExpansionBase.generated.h"
 
 UCLASS()
@@ -42,6 +43,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	UNiagaraComponent* SpawnedDomainExpansion;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	USphereComponent* SphereComponent;
+
 protected:
 	FTimerHandle DomainExpansionTimeHandle;
 	FTimerHandle RemoveEffectTimeHandle;
@@ -49,7 +53,7 @@ protected:
 	float DomainSize = 0.1f;
 	float DomainMaxSize = 10.f;
 	float DomainExpansionTime = 0.01f;
-	float DomainDuration = 20.f;
+	float DomainDuration = 30.f;
 
 	void DomainExpansion();
 	void DomainExpansionTimer();
