@@ -66,7 +66,7 @@ public:
 	bool UseAstral(int Cost);
 
 	UFUNCTION(BlueprintCallable)
-	bool AddAstral(int Amount);
+	void AddAstral(int Amount);
 
 	UFUNCTION(BlueprintCallable)
 	bool RestorePotionQuantity();

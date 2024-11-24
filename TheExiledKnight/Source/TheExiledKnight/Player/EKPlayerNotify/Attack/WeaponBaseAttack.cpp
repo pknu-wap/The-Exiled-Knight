@@ -94,7 +94,7 @@ void UWeaponBaseAttack::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequen
 			}
 			float finalWeaponATK = currentWeaponInfo->AttackPow * damageRateByWeaponType;
 			float finalPlayerATK = EKPlayer->GetPlayerStatusComponent()->GetPlayerFinalDamage();
-			float finalApplyDamage = finalPlayerATK * finalWeaponATK;
+			float finalApplyDamage = finalPlayerATK + finalWeaponATK;
 			UGameplayStatics::ApplyDamage(HitEnemy, finalApplyDamage, EKPlayerController, EKPlayer->GetCurrentWeapon(), PlayerDamageType);
 
 			UE_LOG(LogTemp, Warning, TEXT("ApplyDamge : %.2f"), finalApplyDamage);

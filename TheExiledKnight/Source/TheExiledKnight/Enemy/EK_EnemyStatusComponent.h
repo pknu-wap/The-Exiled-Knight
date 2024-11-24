@@ -6,7 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "EK_EnemyStatusComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHPIsZero);  
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHPIsZero);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHPIsZeroOneParam, int, AstralAmount);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDamageTaken);    
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHitAnimationEnd);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPoiseIsZero); 
@@ -57,6 +58,9 @@ public:
 	FOnHPIsZero OnHPIsZero;
 
 	UPROPERTY(BlueprintAssignable, Category = "Status")
+	FOnHPIsZeroOneParam OnHPIsZeroOneParam;
+
+	UPROPERTY(BlueprintAssignable, Category = "Status")
 	FOnHitAnimationEnd OnHurtAnimationEnd; 
 
 	UPROPERTY(BlueprintAssignable, Category = "Status")
@@ -78,6 +82,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = "true"))
 	float CurrentHealth;
+
 	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = "true"))
 	float MaxPoise;
 	

@@ -52,6 +52,7 @@ float AEK_EnemyBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 				EnemyStat->SetIsDead(true);
 				PlayDieReactionAnimation();
 				EnemyStat->OnHPIsZero.Broadcast();
+				EnemyStat->OnHPIsZeroOneParam.Broadcast(50);
 				return 0.0f;
 			}
 

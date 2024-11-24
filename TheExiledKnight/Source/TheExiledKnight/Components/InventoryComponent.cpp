@@ -392,17 +392,19 @@ bool UInventoryComponent::UseAstral(int Cost)
 	return true;
 }
 
-bool UInventoryComponent::AddAstral(int Amount)
+void UInventoryComponent::AddAstral(int Amount)
 {
-	if (Astral + Amount < INT_MAX)
+	if (Astral + Amount > INT_MAX)
 	{
 		Astral = INT_MAX;
-		return false;
+		return;
 	}
 
 	Astral += Amount;
 
-	return true;
+	UE_LOG(LogTemp, Warning, TEXT("AddAstral"));
+
+	return;
 }
 
 bool UInventoryComponent::RestorePotionQuantity()

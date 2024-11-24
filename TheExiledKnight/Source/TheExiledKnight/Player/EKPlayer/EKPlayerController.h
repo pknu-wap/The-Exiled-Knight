@@ -188,6 +188,7 @@ public:
 	bool bIsEquipWeapon = false;
 
 	class USlotComponent* GetSlotComponent() { return SlotComponent; }
+	class UInventoryComponent* GetInventoryComponent() { return InventoryComponent; }
 #pragma region Timer
 
 public:
