@@ -85,13 +85,13 @@ public:
 	float GetPlayerFinalDamage() { return FinalDamage; }
 	void SetPlayerFinalDamage();
 
-	void LevelUp(uint8 SetData);
-	void LevelUpVitality(uint8 SetData);
-	void LevelUpMental(uint8 SetData);
-	void LevelUpEndurance(uint8 SetData);
-	void LevelUpStrength(uint8 SetData);
-	void LevelUpAbility(uint8 SetData);
-	void LevelUpIntelligence(uint8 SetData);
+	void LevelUp(uint8 IncreaseLevel);
+	void LevelUpVitality(uint8 IncreaseLevel);
+	void LevelUpMental(uint8 IncreaseLevel);
+	void LevelUpEndurance(uint8 IncreaseLevel);
+	void LevelUpStrength(uint8 IncreaseLevel);
+	void LevelUpAbility(uint8 IncreaseLevel);
+	void LevelUpIntelligence(uint8 IncreaseLevel);
 
 #pragma endregion
 
@@ -143,7 +143,7 @@ protected:
 	int DEF;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statment|Basic")
-	int32 CurrentSouls;
+	int32 CurrentAstral;
 
 	UPROPERTY(VisibleAnywhere, Category = "Statment|Basic")
 	float DefaultDamage;
