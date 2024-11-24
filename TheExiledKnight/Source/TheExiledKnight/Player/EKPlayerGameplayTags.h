@@ -9,6 +9,8 @@ namespace EKPlayerGameplayTags
 	// About EKPlayer Current State
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_BattleState);
 
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_DomainExpansion);
+
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_Move);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_Look);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(EKPlayer_State_Sprint);

@@ -19,6 +19,7 @@
 #include "Subsystems/InventorySubsystem.h"
 #include "DrawDebugHelpers.h"
 #include "Interfaces/UInteractableInterface.h"
+#include "Player/DomainExpansion/DomainExpansionBase.h"
 
 AEKPlayerController::AEKPlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -83,6 +84,8 @@ void AEKPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(IASkill, ETriggerEvent::Started, this, &ThisClass::SkillStarted);
 
 		EnhancedInputComponent->BindAction(IALockOn, ETriggerEvent::Started, this, &ThisClass::LockOnStarted);
+
+		EnhancedInputComponent->BindAction(IADomainExpansion, ETriggerEvent::Started, this, &ThisClass::DomainExpansionStarted);
 
 		EnhancedInputComponent->BindAction(IAGameMenu, ETriggerEvent::Started, this, &ThisClass::OnPressed_GameMenu);
 		EnhancedInputComponent->BindAction(IA_Up, ETriggerEvent::Started, this, &ThisClass::OnPressed_Up);
@@ -442,6 +445,16 @@ void AEKPlayerController::SkillStarted(const FInputActionValue& InputValue)
 
 		EKPlayer->GetCurrentWeapon()->PlaySkillStartAnimMontage(EKPlayer, this);
 	}
+}
+
+void AEKPlayerController::DomainExpansionStarted(const FInputActionValue& InputValue)
+{
+	if (EKPlayer->EKPlayerStateContainer.HasTag(EKPlayerGameplayTags::EKPlayer_State_DomainExpansion))
+	{
+		return;
+	}
+
+	EKPlayer->GetWorld()->SpawnActor<ADomainExpansionBase>(DomainExpansion, EKPlayer->GetActorLocation(), EKPlayer->GetActorRotation());
 }
 
 #pragma endregion

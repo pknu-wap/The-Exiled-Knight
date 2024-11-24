@@ -147,7 +147,7 @@ void AEKPlayer::Tick(float DeltaTime)
 	// Test
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("HP : %d / %d"), PlayerStatusComponent->GetHp(), PlayerStatusComponent->GetMaxHp()));
 	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("MP : %d / %d"), PlayerStatusComponent->GetMp(), PlayerStatusComponent->GetMaxMp()));
-	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("Stamina : %d / %d"), PlayerStatusComponent->GetStamina(), PlayerStatusComponent->GetMaxStamina()));
+	// GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Cyan, FString::Printf(TEXT("Stamina : %d / %d"), PlayerStatusComponent->GetStamina(), PlayerStatusComponent->GetMaxStamina()));
 
 	if (LockOnTarget)
 	{
@@ -265,19 +265,6 @@ void AEKPlayer::HitDirection(AActor* Enemy)
 
 	if (CrossProduct.Z < 0) {
 		Angle = -Angle;
-	}
-
-	if (Angle > -45 && Angle <= 45) {
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Hit Front"));
-	}
-	else if (Angle > 45 && Angle <= 135) {
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Hit Right"));
-	}
-	else if (Angle < -45 && Angle >= -135) {
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Hit Left"));
-	}
-	else {
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Hit Back"));
 	}
 
 	HitAngle = Angle;

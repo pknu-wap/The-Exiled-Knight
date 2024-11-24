@@ -7,6 +7,8 @@ namespace EKPlayerGameplayTags
 	// About EKPlayer Current State
 	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_State_BattleState, "EKPlayer.State.Battle");
 
+	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_State_DomainExpansion, "EKPlayer.State.DomainExpansion");
+
 	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_State_Move, "EKPlayer.State.Move");
 	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_State_Look, "EKPlayer.State.Look");
 	UE_DEFINE_GAMEPLAY_TAG(EKPlayer_State_Sprint, "EKPlayer.State.Sprint");

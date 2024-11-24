@@ -87,6 +87,7 @@ private:
 
 	void LockOnStarted(const FInputActionValue& InputValue);
 
+	void DomainExpansionStarted(const FInputActionValue& InputValue);
 
 public:
 	void OnPressed_GameMenu(const FInputActionValue& InputValue);
@@ -155,9 +156,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
 	UInputAction* IA_Right;
 
-	// Test Input
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Test")
-	UInputAction* IATest;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Common")
+	UInputAction* IADomainExpansion;
+	
 #pragma endregion
 
 protected:
@@ -172,6 +173,9 @@ protected:
 	UFUNCTION()
 	void DestroyItem();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DomainExpansion")
+	TSubclassOf<class ADomainExpansionBase> DomainExpansion;
+
 protected:
 	// Common Animation Montage
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
@@ -182,9 +186,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
 	UAnimMontage* BackStepAnim;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation|Common")
-	UAnimMontage* DieAnim;
 
 public:
 	bool bIsEquipWeapon = false;
