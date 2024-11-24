@@ -16,13 +16,13 @@
 #define PlayerMaxStamina 10000
 
 // Edit Player Max Level Here
-#define PlayerMaxLevel 120
-#define PlayerMaxVitalityLevel 20
-#define PlayerMaxMentalLevel 20
-#define PlayerMaxEnduranceLevel 20
-#define PlayerMaxStrengthLevel 20
-#define PlayerMaxAbilityLevel 20
-#define PlayerMaxInteligenceLevel 20
+#define PlayerMaxLevel 594
+#define PlayerMaxVitalityLevel 99
+#define PlayerMaxMentalLevel 99
+#define PlayerMaxEnduranceLevel 99
+#define PlayerMaxStrengthLevel 99
+#define PlayerMaxAbilityLevel 99
+#define PlayerMaxInteligenceLevel 99
 
 #pragma endregion
 
@@ -40,6 +40,7 @@ public:
 
 public:
 	virtual void BeginPlay() override;
+
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
@@ -80,7 +81,6 @@ public:
 
 public:
 	float GetPlayerDefaultDamage() { return DefaultDamage; }
-	void SetPlayerDefaultDamage();
 
 	float GetPlayerFinalDamage() { return FinalDamage; }
 	void SetPlayerFinalDamage();
@@ -109,10 +109,10 @@ protected:
 	UEKPlayerGameInstance* EKPlayerGameInstance;
 
 	UPROPERTY()
-	FEKPlayerLevel EKPlayerLevel;
+	FEKPlayerLevel EKPlayerLevelData;
 
 	UPROPERTY()
-	FEKPlayerStatus EKPlayerStatus;
+	FEKPlayerStatus EKPlayerStatusData;
 
 #pragma region Basic Status
 

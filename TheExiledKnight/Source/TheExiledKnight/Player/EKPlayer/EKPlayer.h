@@ -8,6 +8,8 @@
 #include "Structs/ItemStruct.h"
 #include "EKPlayer.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnPlayerDieDelegate)
+
 UCLASS()
 class AEKPlayer : public ACharacter
 {
@@ -92,6 +94,9 @@ protected:
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FGameplayTagContainer EKPlayerStateContainer;
+
+protected:
+	FOnPlayerDieDelegate OnPlayerDieDelegate;
 
 #pragma region Timer
 
