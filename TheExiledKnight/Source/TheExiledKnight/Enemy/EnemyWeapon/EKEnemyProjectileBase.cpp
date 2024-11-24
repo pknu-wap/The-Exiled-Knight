@@ -21,9 +21,9 @@ AEKEnemyProjectileBase::AEKEnemyProjectileBase()
     CollisionBox->OnComponentHit.AddDynamic(this, &AEKEnemyProjectileBase::OnHit);
 
 
-    ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Projectile_Mesh"));
-    ProjectileMesh->SetCollisionProfileName(FName("NoCollision"));
-    ProjectileMesh->SetupAttachment(RootComponent);
+    WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Projectile_Mesh"));
+    WeaponMesh->SetCollisionProfileName(FName("NoCollision"));
+    WeaponMesh->SetupAttachment(RootComponent);
 
 
     ProjectileComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile_Component"));
@@ -31,11 +31,11 @@ AEKEnemyProjectileBase::AEKEnemyProjectileBase()
     ProjectileComponent->bShouldBounce = false;
 
 
-    ProjectileMesh->SetupAttachment(CollisionBox);
+    WeaponMesh->SetupAttachment(CollisionBox);
 
 
     TrailParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("TrailParticle"));
-    TrailParticle->SetupAttachment(ProjectileMesh);
+    TrailParticle->SetupAttachment(WeaponMesh);
     TrailParticle->bAutoActivate = true;
 
 #pragma endregion

@@ -22,7 +22,7 @@ void UEKEnemyAttackHitCheckNotfiyState::NotifyBegin(USkeletalMeshComponent* Mesh
 	HitActors.Empty(); 
 	Owner =MeshComp->GetOwner();
 	AEK_EnemyBase* OwnerEnemy = Cast<AEK_EnemyBase>(Owner); 
-	if (OwnerEnemy && OwnerEnemy->GetStatusComponent())  // OwnerEnemy�� StatusComponent ��ȿ�� �˻�
+	if (OwnerEnemy && OwnerEnemy->GetStatusComponent())  
 	{
 		AttackDamage = OwnerEnemy->GetStatusComponent()->GetAttackDamage();
 	}
@@ -67,6 +67,7 @@ void UEKEnemyAttackHitCheckNotfiyState::NotifyTick(USkeletalMeshComponent* MeshC
 			DrawDebugCapsule(MeshComp->GetWorld(), (AttackRangeStart + AttackRangeEnd) * 0.5f, AttackHalfHeight, AttackRadius,
 				FRotationMatrix::MakeFromZ(AttackRangeEnd - AttackRangeStart).ToQuat(), FColor::Green, false, 0.5f);
 		}
+		
 		FCollisionQueryParams Params(NAME_None, false, Owner);
 
 		TArray<FHitResult> HitResults;
@@ -77,8 +78,9 @@ void UEKEnemyAttackHitCheckNotfiyState::NotifyTick(USkeletalMeshComponent* MeshC
 			AttackRangeStart,
 			AttackRangeEnd,
 			FQuat::Identity,
-			ECC_Pawn,
+			ECC_Pawn,	
 			FCollisionShape::MakeCapsule(AttackRadius, AttackHalfHeight)
+			
 		);
 
 		if (bHit)
@@ -91,7 +93,7 @@ void UEKEnemyAttackHitCheckNotfiyState::NotifyTick(USkeletalMeshComponent* MeshC
 				if (HitActor&&!HitActors.Contains(HitActor))
 				{
 					AEKPlayer* DetectedPlayer = Cast<AEKPlayer>(HitActor);
-					if (DetectedPlayer)
+					if (DetectedPlayer&& Hit.GetComponent()->GetCollisionObjectType() != ECC_WorldDynamic)
 					{
 						UGameplayStatics::ApplyDamage(HitActor, Damage, Hit.GetActor()->GetInstigatorController(), Owner, DamageTypeClass);   
 						HitActors.Add(HitActor);

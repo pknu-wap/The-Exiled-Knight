@@ -110,15 +110,14 @@ void AEK_EnemyBase::PlayHurtReactionAnimation(const FVector& DamageDirection)
 		else HurtMontage = hurtBAnimMontage;
 	}
 
-	 EnemyStat->OnDamageTaken.Broadcast();  
+	 
 	if (HurtMontage) 
 	{
-		
 		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-		if (AnimInstance->IsAnyMontagePlaying())AnimInstance->StopAllMontages(0.1f); //  stun or attacking 
-
-		if (AnimInstance)
+		if (AnimInstance&&BeforeHurtMontage==nullptr)
 		{
+			if (AnimInstance->IsAnyMontagePlaying())AnimInstance->StopAllMontages(0.1f);  
+			EnemyStat->OnDamageTaken.Broadcast();  
 			FOnMontageEnded MontageEndedDelegate;
 			MontageEndedDelegate.BindUObject(this, &AEK_EnemyBase::OnHurtAnimationEnded);
 			AnimInstance->Montage_Play(HurtMontage); 
@@ -126,7 +125,10 @@ void AEK_EnemyBase::PlayHurtReactionAnimation(const FVector& DamageDirection)
 			AnimInstance->Montage_SetEndDelegate(MontageEndedDelegate, HurtMontage);
 		
 		}
-		
+	}
+	else //don't have hurt montage 
+	{
+		EnemyStat->OnDamageTaken.Broadcast();
 	}
 			
 }
@@ -137,6 +139,7 @@ void AEK_EnemyBase::OnHurtAnimationEnded(UAnimMontage* Montage, bool bInterrupte
 	{	
 		UE_LOG(LogTemp, Warning, TEXT("OnHurtAnimationEnded called"));
 		EnemyStat->OnHurtAnimationEnd.Broadcast();
+		BeforeHurtMontage = nullptr;
 		
 	}
 	if (EnemyStat->GetCurrentPoise() <= 0 && !bIsStunned) //stun animation montage 

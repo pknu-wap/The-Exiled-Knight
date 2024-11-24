@@ -78,7 +78,7 @@ void UEKEnergyBeamNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAni
 				if (HitActor)
 				{
 					AEKPlayer* DetectedPlayer = Cast<AEKPlayer>(HitActor);
-					if (DetectedPlayer)
+					if (DetectedPlayer && Hit.GetComponent()->GetCollisionObjectType() != ECC_WorldDynamic)
 					{
 						UGameplayStatics::ApplyDamage(HitActor, Damage, Hit.GetActor()->GetInstigatorController(), HitActor, DamageTypeClass);
 					}

@@ -36,7 +36,7 @@ protected:
 public:	
 	 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh");
-	class UStaticMeshComponent* ProjectileMesh; 
+	class UStaticMeshComponent* WeaponMesh; 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TrailParticle");
 	class UParticleSystemComponent* TrailParticle; 

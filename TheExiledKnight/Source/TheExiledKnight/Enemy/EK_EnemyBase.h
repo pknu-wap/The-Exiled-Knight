@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "GameplayTagContainer.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include"EnemyWeapon/EKEnemyWeaponBase.h"
 #include "EK_EnemyBase.generated.h"
 
  
@@ -80,7 +81,7 @@ public:
 	
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	bool bIsStunned = false;
-	
+
 	virtual TObjectPtr <UEK_EnemyStatusComponent> GetStatusComponent(); 
 
 	UAnimMontage* BeforeHurtMontage = nullptr;
