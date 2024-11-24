@@ -73,7 +73,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = Data, Meta = (AllowPrivteAccess = "true"))
 	FName EnemyID;
 
-	UPROPERTY(VisibAnywhere, Category = Data, Meta = (AllowPrivteAccess = "true"))
+	UPROPERTY(VisibleAnywhere, Category = Data, Meta = (AllowPrivteAccess = "true"))
 	FName EnemyName;
 
 	UPROPERTY(VisibleAnywhere, Category = Stat, Meta = (AllowPrivteAccess = "true"))
