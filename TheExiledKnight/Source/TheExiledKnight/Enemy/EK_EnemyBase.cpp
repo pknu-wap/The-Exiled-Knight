@@ -8,6 +8,7 @@
 #include "Engine/DamageEvents.h"
 #include"Animation/AnimInstance.h"
 #include"Enemy/DamageSystem/EKDamageType.h"
+#include"Player/EKPlayer/EKPlayer.h"
 #include"Enemy/EKEnemyGamePlayTags.h"
 
 
@@ -228,6 +229,7 @@ void AEK_EnemyBase::SetAttackTarget(AActor* Actor)
 		AttackTarget = Actor;
 	}
 }
+
 
 
 

@@ -44,6 +44,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable) 
 	void SetAttackTarget(AActor* Actor);
+
+	
 protected:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "AnimMontage", meta = (AllowPrivateAccess = "true"));
