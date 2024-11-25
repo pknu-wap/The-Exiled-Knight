@@ -6,10 +6,13 @@
 #include "Blueprint/UserWidget.h"
 #include "EKEnums.h"
 #include "Structs/InventorySlotStruct.h"
+#include "Player/Data/EKPlayerMagic.h"
 #include "Widget_EquipSelectWindow.generated.h"
 
 class UTextBlock;
 class UImage;
+class UOverlay;
+class UWidgetSwitcher;
 class UWidget_EquipSelect_ContentList;
 
 UCLASS()
@@ -25,7 +28,16 @@ public:
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
-	void UpdateDescription(const FInventorySlot& SlotData);
+	void UpdateDescription_Item(const FInventorySlot& SlotData);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateDescription_Magic(const FEKPlayerMagic& SlotData);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateDescription_Weapon(const FInventorySlot& SlotData);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateDescription_Rune(const FInventorySlot& SlotData);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void UpdateStatusInfo();
@@ -42,4 +54,23 @@ public:
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
 	UWidget_EquipSelect_ContentList* ContentList;
+
+public:
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
+	UWidgetSwitcher* WidgetSwitcher;
+
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
+	UOverlay* Overlay_Item;
+
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
+	UOverlay* Overlay_Weapon;
+
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
+	UOverlay* Overlay_Rune;
+
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
+	UOverlay* Overlay_Fragment;
+
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)
+	UOverlay* Overlay_Magic;
 };

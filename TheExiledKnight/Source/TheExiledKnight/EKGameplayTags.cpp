@@ -73,6 +73,11 @@ void FEKGameplayTags::InitializeNativeGameplayTags()
 		FString("Potion")
 	);
 
+	GameplayTags.UI_Widget_GameMenu_EquipMagic = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("UI.Widget.GameMenu.EquipMagic"),
+		FString("EquipMagic")
+	);
+
 	GameplayTags.UI_Widget_GameMenu_Loading = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("UI.Widget.GameMenu.Loading"),
 		FString("Loading")

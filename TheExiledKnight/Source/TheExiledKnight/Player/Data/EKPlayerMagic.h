@@ -16,6 +16,12 @@ struct FEKPlayerMagic : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName MagicName;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FString MagicDescription;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 NeedMP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UTexture2D* Icon;
 };

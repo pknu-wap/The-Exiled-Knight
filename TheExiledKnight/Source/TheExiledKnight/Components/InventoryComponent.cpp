@@ -75,7 +75,7 @@ const TArray<FInventorySlot>& UInventoryComponent::GetConstContents(EItemCategor
 	case EItemCategory::UseableItem:
 		return UseableItem;
 	case EItemCategory::Magic:
-		return Magic;
+		return None;
 	case EItemCategory::Upgrades:
 		return Upgrades;
 	case EItemCategory::Hunting:
@@ -153,7 +153,7 @@ TArray<FInventorySlot>& UInventoryComponent::GetContents(EItemCategory Category)
 	case EItemCategory::UseableItem:
 		return UseableItem;
 	case EItemCategory::Magic:
-		return Magic;
+		return None;
 	case EItemCategory::Upgrades:
 		return Upgrades;
 	case EItemCategory::Hunting:

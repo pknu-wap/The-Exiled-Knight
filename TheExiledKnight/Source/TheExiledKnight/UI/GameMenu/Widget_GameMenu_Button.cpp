@@ -40,6 +40,12 @@ void UWidget_GameMenu_Button::MenuButtonClicked()
 		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Setting, ESlateVisibility::SelfHitTestInvisible);
 		break;
 	}
+	case EGameMenuCategory::EquipMagic:
+	{
+		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Santuary, ESlateVisibility::Collapsed);
+		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_EquipMagic, ESlateVisibility::SelfHitTestInvisible);
+		break;
+	}
 	case EGameMenuCategory::Map:
 	{
 		UIManager->SetWidgetVisibility(FEKGameplayTags::Get().UI_Widget_GameMenu_Santuary, ESlateVisibility::Collapsed);

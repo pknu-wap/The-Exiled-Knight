@@ -33,7 +33,7 @@ void USlotComponent::BeginPlay()
 	for (int i = 0; i < MaxUseableSlot; i++)
 		UseableSlots.Add(FItemStruct());
 	for (int i = 0; i < MaxMagicSlot; i++)
-		MagicSlots.Add(FMagicStruct());
+		MagicSlots.Add(FEKPlayerMagic());
 }
 
 
@@ -116,7 +116,7 @@ void USlotComponent::EquipUseableItem(const FItemStruct& InItemData)
 	}
 }
 
-void USlotComponent::EquipMagic(const FMagicStruct& InMagicData)
+void USlotComponent::EquipMagic(const FEKPlayerMagic& InMagicData)
 {
 	UWidget_Equipment* equipWidget = GetEquipmentWidget();
 	if (!equipWidget) return;

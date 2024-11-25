@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Structs/InventorySlotStruct.h"
 #include "EKEnums.h"
+#include "Player/Data/EKPlayerMagic.h"
 #include "Widget_EquipSelect_ContentSlot.generated.h"
 
 class UButton;
@@ -21,6 +22,7 @@ public:
 	virtual void NativeConstruct() override;
 
 public:
+	void UpdateSlot(EItemCategory inCategory, const FEKPlayerMagic& inData);
 	void UpdateSlot(EItemCategory inCategory, const FInventorySlot& inData);
 
 protected:
@@ -32,6 +34,7 @@ protected:
 public:
 	EItemCategory Category;
 
+	FEKPlayerMagic MagicData;
 	FInventorySlot SlotData;
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, EditAnywhere)

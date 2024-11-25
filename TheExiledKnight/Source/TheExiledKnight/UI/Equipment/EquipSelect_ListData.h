@@ -7,6 +7,7 @@
 #include "Structs/ItemStruct.h"
 #include "Structs/InventorySlotStruct.h"
 #include "EKEnums.h"
+#include "Player/Data/EKPlayerMagic.h"
 #include "EquipSelect_ListData.generated.h"
 
 /**
@@ -21,4 +22,5 @@ public:
 	EItemCategory Category;
 
 	TArray<FInventorySlot> Items;
+	TArray<FEKPlayerMagic> Magics;
 };

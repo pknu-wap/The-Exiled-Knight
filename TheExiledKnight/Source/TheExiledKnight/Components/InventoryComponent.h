@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "Structs/InventorySlotStruct.h"
 #include "EKEnums.h"
+#include "Player/Data/EKPlayerMagic.h"
 #include "InventoryComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAdd_Item_Delegate);
@@ -33,6 +34,7 @@ public:
 
 	const TArray<FInventorySlot> GetContents(EUpgradeItemType Category);
 	const TArray<FInventorySlot>& GetConstContents(EItemCategory Category);
+	const TArray<FEKPlayerMagic>& GetMagics() { return Magic; }
 
 	int GetIndexToAdd(uint8 ID);
 	int GetDupSlotIndex(uint8 ID, int MaxStack);
@@ -78,7 +80,7 @@ private:
 
 	TArray<FInventorySlot> UseableItem;
 
-	TArray<FInventorySlot> Magic;
+	TArray<FEKPlayerMagic> Magic;
 
 	TArray<FInventorySlot> Upgrades;
 
